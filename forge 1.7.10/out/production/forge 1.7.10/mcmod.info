@@ -1,0 +1,16 @@
+[
+{
+  "modid": "minedonate",
+  "name": "Donate UI",
+  "description": "Allows to monetize your server",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Alastar"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
