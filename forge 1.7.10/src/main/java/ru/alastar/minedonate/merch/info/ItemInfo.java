@@ -65,7 +65,7 @@ public class ItemInfo extends Merch {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        ByteBufUtils.readItemStack(buf).writeToNBT(stack_data);
+        stack_data = ByteBufUtils.readTag(buf);
     }
     public ItemInfo(int _shopId, int _catId, int mid, int cos, String n, String inf, int lim, ItemStack data) {
     	this.shopId = _shopId;

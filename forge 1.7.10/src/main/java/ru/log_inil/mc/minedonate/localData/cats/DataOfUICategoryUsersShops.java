@@ -1,7 +1,7 @@
 package ru.log_inil.mc.minedonate.localData.cats;
 
-import ru.log_inil.mc.minedonate.localData.DataOfUIElement;
 import ru.log_inil.mc.minedonate.localData.DataOfUICategoryAbstract;
+import ru.log_inil.mc.minedonate.localData.DataOfUIElement;
 
 public class DataOfUICategoryUsersShops extends DataOfUICategoryAbstract {
 

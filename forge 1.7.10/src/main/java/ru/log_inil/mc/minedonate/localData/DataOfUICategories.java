@@ -1,10 +1,6 @@
 package ru.log_inil.mc.minedonate.localData;
 
-import ru.log_inil.mc.minedonate.localData.cats.DataOfUICategoryEntites;
-import ru.log_inil.mc.minedonate.localData.cats.DataOfUICategoryItemsNBlocks;
-import ru.log_inil.mc.minedonate.localData.cats.DataOfUICategoryPrivelegies;
-import ru.log_inil.mc.minedonate.localData.cats.DataOfUICategoryRegions;
-import ru.log_inil.mc.minedonate.localData.cats.DataOfUICategoryUsersShops;
+import ru.log_inil.mc.minedonate.localData.cats.*;
 
 public class DataOfUICategories {
 

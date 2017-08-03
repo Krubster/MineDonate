@@ -565,7 +565,9 @@ public class MineDonate {
         shops.get(0).cats[0].addMerch(info);
         try {
             ByteBuf buf = Unpooled.buffer();
-            ByteBufUtils.writeItemStack(buf, heldItem);
+            NBTTagCompound nbt = new NBTTagCompound();
+            heldItem.writeToNBT(nbt);
+            ByteBufUtils.writeTag(buf, nbt);
             InputStream stream = new ByteArrayInputStream(buf.array());
             PreparedStatement statement = m_DB_Connection.prepareStatement("INSERT INTO " + cfg.dbItems + " (name, info, cost, lim, stack_data) VALUES(?,?,?,?,?)");
             statement.setString(1, name);
