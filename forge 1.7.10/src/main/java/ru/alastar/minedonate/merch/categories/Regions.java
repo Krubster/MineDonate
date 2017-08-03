@@ -5,9 +5,8 @@ import net.minecraft.server.MinecraftServer;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import ru.alastar.minedonate.MineDonate;
-import ru.alastar.minedonate.merch.IMerch;
+import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.merch.info.RegionInfo;
-import ru.alastar.minedonate.network.MineDonateNetwork;
 import ru.alastar.minedonate.network.packets.AddMerchPacket;
 
 import java.lang.reflect.InvocationTargetException;
@@ -58,13 +57,13 @@ public class Regions extends MerchCategory {
         try {
             stmt = MineDonate.m_DB_Connection.createStatement();
             String sql;
-            sql = "INSERT INTO " + MineDonate.db_regions + " (world, name, cost) VALUES('" + regionInfo.name + "', '" + regionInfo.world_name + "', " + regionInfo.getCost() + ")";
+            sql = "INSERT INTO " + MineDonate.cfg.dbRegions + " (world, name, cost) VALUES('" + regionInfo.name + "', '" + regionInfo.world_name + "', " + regionInfo.getCost() + ")";
             stmt.execute(sql);
             stmt.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        MineDonateNetwork.INSTANCE.sendToAll(new AddMerchPacket(regionInfo));
+        MineDonate.networkChannel.sendToAll(new AddMerchPacket(regionInfo));
 
     }
 
@@ -84,22 +83,22 @@ public class Regions extends MerchCategory {
     }
 
     @Override
-    public IMerch constructMerch() {
+    public Merch constructMerch() {
         return new RegionInfo();
     }
 
     @Override
     public String getDatabase() {
-        return MineDonate.db_regions;
+        return MineDonate.cfg.dbRegions;
     }
 
     @Override
     public boolean isEnabled() {
-        return MineDonate.m_Use_Regions;
+        return MineDonate.cfg.sellRegions;
     }
 
     @Override
-    public void GiveMerch(EntityPlayerMP player, IMerch merch, int amount) {
+    public void GiveMerch(EntityPlayerMP player, Merch merch, int amount) {
         final RegionInfo info = (RegionInfo) merch;
         try {
             World bukkit_world = Bukkit.getWorld(info.world_name);
@@ -129,7 +128,7 @@ public class Regions extends MerchCategory {
         try {
             Statement stmt = MineDonate.m_DB_Connection.createStatement();
             String sql;
-            sql = "DELETE FROM " + MineDonate.db_regions + " WHERE name='" + name + "' AND world='" + world_name + "';";
+            sql = "DELETE FROM " + MineDonate.cfg.dbRegions + " WHERE name='" + name + "' AND world='" + world_name + "';";
             stmt.execute(sql);
             stmt.close();
         } catch (SQLException e) {

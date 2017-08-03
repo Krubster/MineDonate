@@ -16,7 +16,7 @@ public class RemoveMerchPacketHandler  implements IMessageHandler<RemoveMerchPac
 
     }
     @Override public IMessage onMessage(RemoveMerchPacket message, MessageContext ctx) {
-        MineDonate.RemoveMerch(message.category_id, message.merch_id);
+        MineDonate.RemoveMerch(message.shopId, message.category_id, message.merch_id);
         if(ShopGUI.instance != null){
             ShopGUI.instance.updateBtns();
         }

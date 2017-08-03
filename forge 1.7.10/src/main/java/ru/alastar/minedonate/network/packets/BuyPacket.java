@@ -11,11 +11,13 @@ public class BuyPacket implements IMessage {
     public BuyPacket() {
     }
 
+    public int shopId;
     public int merchId;
     public int category;
     public int amount = 1;
 
-    public BuyPacket(int merchId, int category, int amountToBuy) {
+    public BuyPacket(int _shopId, int merchId, int category, int amountToBuy) {
+        this.shopId = _shopId;
         this.merchId = merchId;
         this.category = category;
         this.amount = amountToBuy;
@@ -23,6 +25,7 @@ public class BuyPacket implements IMessage {
 
     @Override
     public void toBytes(ByteBuf buf) {
+        buf.writeInt(shopId);
         buf.writeInt(merchId);
         buf.writeInt(category);
         buf.writeInt(amount);
@@ -30,8 +33,10 @@ public class BuyPacket implements IMessage {
 
     @Override
     public void fromBytes(ByteBuf buf) {
+    	shopId = buf.readInt();
         merchId = buf.readInt();
         category = buf.readInt();
         amount = buf.readInt();
     }
+    
 }

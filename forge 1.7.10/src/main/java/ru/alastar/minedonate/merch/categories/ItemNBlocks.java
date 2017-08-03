@@ -1,14 +1,19 @@
 package ru.alastar.minedonate.merch.categories;
 
+import cpw.mods.fml.common.network.ByteBufUtils;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufAllocator;
+import io.netty.buffer.EmptyByteBuf;
+import io.netty.buffer.PooledByteBufAllocator;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import ru.alastar.minedonate.MineDonate;
-import ru.alastar.minedonate.merch.IMerch;
+import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.merch.info.ItemInfo;
-import ru.alastar.minedonate.network.MineDonateNetwork;
 import ru.alastar.minedonate.network.packets.MerchInfoPacket;
 
 import java.sql.ResultSet;
@@ -19,6 +24,15 @@ import java.sql.Statement;
  * Created by Alastar on 21.07.2017.
  */
 public class ItemNBlocks extends MerchCategory {
+
+    int shopId;
+
+    public ItemNBlocks(int _shopId) {
+
+        shopId = _shopId;
+
+    }
+
     @Override
     public boolean canReverse() {
         return false;
@@ -34,14 +48,13 @@ public class ItemNBlocks extends MerchCategory {
         int i = 0;
         try {
             while (rs.next()) {
-                final ItemInfo info = new ItemInfo(i, rs.getInt(
-                        "item_id"),
-                        rs.getInt("count"),
-                        rs.getByte("sub"),
+                final ItemInfo info = new ItemInfo(i,
                         rs.getInt("cost"),
                         rs.getString("name"),
                         rs.getString("info"),
-                        rs.getInt("limit"));
+                        rs.getInt("lim"),
+                        rs.getBlob("stack_data"));
+                info.setShopId(shopId);
                 this.addMerch(info);
                 ++i;
             }
@@ -51,29 +64,27 @@ public class ItemNBlocks extends MerchCategory {
         MinecraftServer.getServer().logInfo("Loaded " + m_Merch.length + " lots");
     }
 
+    String dbTable = MineDonate.cfg.dbItems;
+
     @Override
     public String getDatabase() {
-        return MineDonate.db_items;
+
+        return dbTable;
+
     }
 
     @Override
     public boolean isEnabled() {
-        return MineDonate.m_Use_Items;
+        return MineDonate.cfg.sellItems;
     }
 
     @Override
-    public void GiveMerch(EntityPlayerMP player, IMerch merch, int amount) {
+    public void GiveMerch(EntityPlayerMP player, Merch merch, int amount) {
 
         ItemInfo info = (ItemInfo) merch;
         if (info.limit > -1)
-            info.limit -= amount * info.count;
-        Object obj = Item.itemRegistry.getObjectById(info.item_id);
-        ItemStack stack = null;
-        if (obj instanceof Block) {
-            stack = new ItemStack((Block) obj, info.count * amount, info.sub_id);
-        } else if (obj instanceof Item) {
-            stack = new ItemStack((Item) obj, info.count * amount, info.sub_id);
-        }
+            info.limit -= amount * info.stack_data.getInteger("Count");
+        ItemStack stack = ItemStack.loadItemStackFromNBT(info.stack_data);
         stack.setStackDisplayName(info.name);
 
         player.inventory.addItemStackToInventory(stack);
@@ -87,17 +98,26 @@ public class ItemNBlocks extends MerchCategory {
         try {
             stmt = MineDonate.m_DB_Connection.createStatement();
             String sql;
-            sql = "UPDATE " + getDatabase() + " SET " + getDatabase() + ".limit=" + info.limit + " WHERE name='" + info.name + "' and item_id=" + info.item_id + " and count=" + info.count + " and cost=" + info.cost + " and sub=" + info.sub_id + " and info='" + info.info + "';";
+            sql = "UPDATE " + getDatabase() + " SET " + getDatabase() + ".lim=" + info.limit + " WHERE name='" + info.name + "', and cost=" + info.cost + "  and info='" + info.info + "';";
             stmt.executeUpdate(sql);
             stmt.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        MineDonateNetwork.INSTANCE.sendToAll(new MerchInfoPacket(info));
+        MineDonate.networkChannel.sendToAll(new MerchInfoPacket(info));
     }
 
     @Override
-    public IMerch constructMerch() {
+    public Merch constructMerch() {
         return new ItemInfo();
     }
+
+    public MerchCategory setCustomDBTable(String _dbTable) {
+
+        dbTable = _dbTable;
+
+        return this;
+
+    }
+
 }

@@ -1,28 +1,46 @@
 package ru.alastar.minedonate.merch.info;
 
+import cpw.mods.fml.common.network.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.player.EntityPlayerMP;
-import ru.alastar.minedonate.merch.IMerch;
+import io.netty.buffer.Unpooled;
+import net.minecraft.entity.Entity;
+import net.minecraft.nbt.NBTTagCompound;
+import ru.alastar.minedonate.merch.Merch;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.sql.Blob;
+import java.sql.SQLException;
 
 /**
  * Created by Alastar on 21.07.2017.
  */
-public class EntityInfo implements IMerch {
+public class EntityInfo extends Merch {
 
-    public int merch_id;
-    public int cost;
     public String classpath;
     public String name;
+    public NBTTagCompound entity_data;
 
-    public EntityInfo(int merch_id, int cost, String classpath, String name) {
+    public EntityInfo(int merch_id, int cost, Blob data, String name) {
         this.merch_id = merch_id;
         this.cost = cost;
-        this.classpath = classpath;
+        ByteBuf buf = Unpooled.buffer();
+        try {
+            buf.writeBytes(data.getBinaryStream(), (int)data.length());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        ByteBufUtils.readItemStack(buf).writeToNBT(entity_data);
         this.name = name;
     }
-
+    public EntityInfo(int merch_id, int cost, Entity entity, String name) {
+        this.merch_id = merch_id;
+        this.cost = cost;
+        entity.writeToNBT(entity_data);
+        this.name = name;
+    }
     public EntityInfo() {
         
     }
@@ -42,6 +60,7 @@ public class EntityInfo implements IMerch {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+        entity_data = ByteBufUtils.readTag(buf);
     }
 
     @Override
@@ -50,6 +69,7 @@ public class EntityInfo implements IMerch {
         buf.writeInt(cost);
         buf.writeInt(name.getBytes().length);
         buf.writeBytes(name.getBytes());
+        ByteBufUtils.writeTag(buf, entity_data);
     }
 
     @Override
@@ -57,28 +77,11 @@ public class EntityInfo implements IMerch {
         return "bought entity " + name;
     }
 
-    @Override
-    public int getCost() {
-        return cost;
-    }
 
-    @Override
-    public int getId() {
-        return merch_id;
-    }
-
-    @Override
-    public boolean canBuy(EntityPlayerMP serverPlayer, int amount) {
-        return true;
-    }
 
     @Override
     public int getAmountToBuy() {
         return 1;
     }
-
-    @Override
-    public void setId(int i) {
-        merch_id = i;
-    }
+    
 }

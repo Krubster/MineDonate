@@ -7,8 +7,8 @@
   "mcversion": "${mcversion}",
   "url": "",
   "updateUrl": "",
-  "authorList": ["Alastar"],
-  "credits": "",
+  "authorList": ["Alastar", "log_inil"],
+  "credits": "Thanks to rubukkit guys for this mod",
   "logoFile": "",
   "screenshots": [],
   "dependencies": []

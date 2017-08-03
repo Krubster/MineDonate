@@ -15,9 +15,13 @@ public class MineDonateGUIHandler implements IGuiHandler {
 
     @Override
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+
         if (ID == GUI_ID)
+
             return new ShopGUI();
 
         return null;
+
     }
+
 }

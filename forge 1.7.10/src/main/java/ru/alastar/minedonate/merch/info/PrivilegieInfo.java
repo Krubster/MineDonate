@@ -2,19 +2,17 @@ package ru.alastar.minedonate.merch.info;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;
-import ru.alastar.minedonate.merch.IMerch;
+import ru.alastar.minedonate.merch.Merch;
 
 import java.io.UnsupportedEncodingException;
 
 /**
  * Created by Alastar on 19.07.2017.
  */
-public class PrivilegieInfo implements IMerch {
+public class PrivilegieInfo extends Merch {
     public String picture_url;
     public String name;
     public String description;
-    public int cost;
-    public int merch_id;
     public long seconds;
 
     public PrivilegieInfo(int merch_id, String n, String desc, String picture_url, int cost, long seconds) {
@@ -28,19 +26,6 @@ public class PrivilegieInfo implements IMerch {
 
     public PrivilegieInfo() {
 
-    }
-    @Override
-    public void setId(int i) {
-        merch_id = i;
-    }
-    @Override
-    public int getId() {
-        return merch_id;
-    }
-
-    @Override
-    public boolean canBuy(EntityPlayerMP serverPlayer, int amount) {
-        return true;
     }
 
     @Override
@@ -63,11 +48,6 @@ public class PrivilegieInfo implements IMerch {
     @Override
     public String getBoughtMessage() {
         return "bought privelegie -" + name;
-    }
-
-    @Override
-    public int getCost() {
-        return cost;
     }
 
     @Override

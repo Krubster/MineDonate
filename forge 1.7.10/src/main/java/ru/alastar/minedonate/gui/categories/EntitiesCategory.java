@@ -5,28 +5,41 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.RenderHelper;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.gui.BuyButton;
+import ru.alastar.minedonate.gui.CountButton;
 import ru.alastar.minedonate.gui.ShopCategory;
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.merch.info.EntityInfo;
+import ru.alastar.minedonate.merch.info.ItemInfo;
+import ru.log_inil.mc.minedonate.gui.DrawType;
+import ru.log_inil.mc.minedonate.gui.GuiAbstractItemEntry;
+import ru.log_inil.mc.minedonate.gui.GuiItemsScrollArea;
+import ru.log_inil.mc.minedonate.gui.GuiScrollingList;
+import ru.log_inil.mc.minedonate.gui.items.GuiItemEntryOfEntityMerch;
+import ru.log_inil.mc.minedonate.gui.items.GuiItemEntryOfItemMerch;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Alastar on 20.07.2017.
  */
 public class EntitiesCategory implements ShopCategory {
 
+	int catId = 3 ;
+	
     private static int m_Per_Row = 4;
     private static int m_Per_Col = 2;
-
+    
     @Override
     public boolean getEnabled() {
-        return MineDonate.m_Use_Entities;
+        return MineDonate.cfg.sellEntities;
     }
 
     @Override
-    public int getSourceCount() {
-        return MineDonate.m_Categories[3].getMerch().length;
+    public int getSourceCount(int shopId) {
+    	
+    	return MineDonate . shops . containsKey ( shopId ) ? MineDonate . shops . get ( shopId ) . cats [ catId ] . getMerch ( ) . length : 0 ;
+   
     }
 
     @Override
@@ -34,57 +47,180 @@ public class EntitiesCategory implements ShopCategory {
         return "Entities";
     }
 
+    ScaledResolution resolution ;
+    
     @Override
-    public void draw(ShopGUI relative, int m_Page, int mouseX, int mouseY, float partialTicks) {
-        ScaledResolution resolution = new ScaledResolution(relative.mc, relative.mc.displayWidth, relative.mc.displayHeight);
+    public void draw(ShopGUI relative, int m_Page, int mouseX, int mouseY, float partialTicks, DrawType dt) {
 
-        RenderHelper.enableGUIStandardItemLighting();
-        int drawn = 0;
-        ArrayList list = new ArrayList();
-        for (int i = 0; i < m_Per_Row; ++i) {
-            for (int j = 0; j < m_Per_Col; ++j) {
-                if (m_Page * m_Per_Col * m_Per_Row + drawn < MineDonate.m_Categories[3].getMerch().length) {
-
-                    int x_offset = (int) (resolution.getScaledWidth() * 0.5 - 75 * 1.5) + 75 * i;
-                    int y_offset = (int) (resolution.getScaledHeight() * 0.35) + 80 * j;
-                    final EntityInfo info = (EntityInfo) MineDonate.m_Categories[3].getMerch()[m_Page * m_Per_Col * m_Per_Row + drawn];
-                    relative.drawCenteredString(relative.getFontRenderer(), info.name, x_offset, y_offset - 15, 16777215);
-                    relative.drawCenteredString(relative.getFontRenderer(), "Price: " + info.cost, x_offset, y_offset, 16777215);
-
-                    ++drawn;
-                }
-            }
-        }
-        RenderHelper.disableStandardItemLighting();
-        if (list.size() > 0)
-            relative.drawHoveringText(list, mouseX, mouseY, relative.getFontRenderer());
+    	resolution = new ScaledResolution(relative.mc, relative.mc.displayWidth, relative.mc.displayHeight);
+    	gi.drawScreen(mouseX, mouseY, partialTicks, dt);
+    	
     }
 
     @Override
     public void updateButtons(ShopGUI relative, int m_Page) {
-        int drawn = 0;
-        ScaledResolution resolution = new ScaledResolution(relative.mc, relative.mc.displayWidth, relative.mc.displayHeight);
+    	
+    	refreshGui ( ) ; 
 
-        for (int i = 0; i < m_Per_Row; ++i) {
-            for (int j = 0; j < m_Per_Col; ++j) {
-                if (m_Page * m_Per_Col * m_Per_Row + drawn < MineDonate.m_Categories[3].getMerch().length) {
-                    int x_offset = (int) (resolution.getScaledWidth() * 0.5 - 75 * 1.5) + 75 * i;
-                    int y_offset = (int) (resolution.getScaledHeight() * 0.35) + 80 * j;
-                    final EntityInfo info = (EntityInfo) MineDonate.m_Categories[3].getMerch()[m_Page * m_Per_Col * m_Per_Row + drawn];
-                    relative.addBtn(new BuyButton(info.merch_id, ShopGUI.get_last_button_id(), x_offset - 22, y_offset + 30, 44, 20, "Buy"));
-                    ++drawn;
-                }
-            }
-        }
     }
 
     @Override
     public int elements_per_page() {
-        return m_Per_Col * m_Per_Row;
+        return 0;
     }
 
     @Override
     public void actionPerformed(GuiButton button) {
         
     }
+    
+    // #LOG
+    
+	@Override
+	public int getButtonWidth ( ) {
+		
+		return MineDonate.cfgUI.cats.entities.categoryButtonWidth;
+		
+	}
+	
+	@Override 
+	public String getButtonText ( ) {
+		
+		return MineDonate.cfgUI.cats.entities.categoryButtonText ;
+		
+	}
+
+	@Override
+	public int getRowCount() {
+		return 0;
+	}
+
+	@Override
+	public void setRowCount(int i) {
+	}
+
+	@Override
+	public int getColCount() {
+		return 0;
+	}
+
+	@Override
+	public void setColCount(int i) {
+	}
+
+	@Override
+	public int getItemWidth() {
+		return 0;
+	}
+
+	@Override
+	public int getItemHeight() {
+		return 0;
+	}
+
+
+	GuiItemsScrollArea gi ;
+	List < GuiAbstractItemEntry > entrs = new ArrayList <GuiAbstractItemEntry > ( ) ;
+	
+	ShopGUI gui ;
+	
+	@Override
+	public void init ( ShopGUI _shopGUI ) {
+
+		gui = _shopGUI ;
+		
+	}
+	
+	@Override
+	public void initGui ( ) {
+	
+		refreshGui ( ) ;
+		
+	}
+	
+	EntityInfo eim ;
+
+	public void refreshGui ( ) {
+		
+		resolution = new ScaledResolution(gui.mc, gui.mc.displayWidth, gui.mc.displayHeight);
+
+		gi = new GuiItemsScrollArea ( resolution, gui, entrs, 0 ) ;
+	
+		for ( GuiAbstractItemEntry gie : entrs ) {
+
+			gie . undraw ( ) ;
+			
+		}
+		
+		entrs . clear ( ) ;
+		
+		if ( MineDonate . shops . containsKey ( gui . getCurrentShopId ( ) ) ) {
+	
+	    	if ( search ) {
+	    		
+	    		for ( int i = 0 ; i < MineDonate . shops . get ( gui . getCurrentShopId ( ) ) . cats [ catId ] . getMerch ( ) . length ; i ++ ) {
+	        		
+	        		eim = ( EntityInfo ) MineDonate . shops . get ( gui . getCurrentShopId ( ) ) . cats [ catId ] . getMerch ( ) [ i ] ; 
+	        		
+	        		if ( eim . name . toLowerCase ( ) . contains ( searchValue ) ) {
+	        			
+	            		entrs . add ( new GuiItemEntryOfEntityMerch ( eim, this ) . addButtons ( gui ) . updateDrawData ( ) ) ;
+	        			
+	        		}
+	        		
+	        	} 
+	        		
+	    	} else {
+	    		
+	        	for ( int i = 0 ; i <  MineDonate . shops . get ( gui . getCurrentShopId ( ) ) . cats [ catId ] . getMerch ( ) . length ; i ++ ) {
+	        		
+	        		eim = ( EntityInfo ) MineDonate . shops . get ( gui . getCurrentShopId ( ) ) . cats [ catId ] . getMerch ( ) [ i ] ; 
+	        		entrs . add ( new GuiItemEntryOfEntityMerch ( eim, this ) . addButtons ( gui ) . updateDrawData ( ) ) ;
+	        		
+	        	}
+	    		
+	    	}
+		
+		}
+		
+		/*
+    	for ( int i = 0 ; i < MineDonate . m_Categories [ catId ] . getMerch ( ) . length ; i ++ ) {
+    		
+    		eim = ( EntityInfo ) MineDonate . m_Categories [ catId ] . getMerch ( ) [ i ] ; 
+    		entrs . add ( new GuiItemEntryOfEntityMerch ( eim, this ) . addButtons ( gui ) . updateDrawData ( ) ) ;
+    		
+    	} */
+    	
+    	gi . entrs = entrs ;
+    	gi . applyScrollLimits ( ) ;
+    	
+	}
+
+	boolean search = false ;
+	String searchValue = "" ;
+	
+	@Override
+	public void search ( String text ) {
+		
+		search = ! ( text == null || text . trim ( ) . isEmpty ( ) ) ;
+		
+		if ( search ) {
+			
+			searchValue = text . toLowerCase ( ) . trim ( ) ;
+			
+		} else {
+			
+			searchValue = "" ;
+			
+		}
+		
+		refreshGui ( ) ;
+		
+	}
+	
+	@Override
+	public GuiScrollingList getScrollList() {
+		return null;
+	}
+	
 }

@@ -18,9 +18,12 @@ public class AccountInfoPacketHandler     implements IMessageHandler<AccountInfo
     }
 
     @Override public IMessage onMessage(AccountInfoPacket message, MessageContext ctx) {
+    	
         MineDonate.SetMoney(message.money);
-        Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new ChatComponentText("Your money: " + message.money));
+        
+        // Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new ChatComponentText("Your money: " + message.money));
 
         return null;
+        
     }
 }

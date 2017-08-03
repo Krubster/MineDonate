@@ -4,7 +4,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import ru.alastar.minedonate.MineDonate;
-import ru.alastar.minedonate.merch.IMerch;
+import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.merch.info.EntityInfo;
 
 import java.lang.reflect.InvocationTargetException;
@@ -30,7 +30,7 @@ public class Entities extends MerchCategory {
         int i = 0;
         try {
             while (rs.next()) {
-                final EntityInfo info = new EntityInfo(i, rs.getInt("cost"), rs.getString("classpath"), rs.getString("name"));
+                final EntityInfo info = new EntityInfo(i, rs.getInt("cost"), rs.getBlob("data"), rs.getString("name"));
                 this.addMerch(info);
                 ++i;
             }
@@ -42,16 +42,16 @@ public class Entities extends MerchCategory {
 
     @Override
     public String getDatabase() {
-        return MineDonate.db_entities;
+        return MineDonate.cfg.dbEntities;
     }
 
     @Override
     public boolean isEnabled() {
-        return MineDonate.m_Use_Entities;
+        return MineDonate.cfg.sellEntities;
     }
 
     @Override
-    public void GiveMerch(EntityPlayerMP serverPlayer, IMerch merch, int amount) {
+    public void GiveMerch(EntityPlayerMP serverPlayer, Merch merch, int amount) {
         try {
             EntityInfo info = (EntityInfo)merch;
             Entity entity = (Entity) Class.forName(info.classpath).getDeclaredConstructor(net.minecraft.world.World.class).newInstance(serverPlayer.getEntityWorld());
@@ -71,7 +71,7 @@ public class Entities extends MerchCategory {
     }
 
     @Override
-    public IMerch constructMerch() {
+    public Merch constructMerch() {
         return new EntityInfo();
     }
 }

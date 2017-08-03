@@ -2,6 +2,7 @@ package ru.alastar.minedonate.gui;
 
 import net.minecraft.client.gui.GuiButton;
 import ru.alastar.minedonate.merch.info.ItemInfo;
+import ru.log_inil.mc.minedonate.gui.GuiAbstractItemEntry;
 
 /**
  * Created by Alastar on 23.07.2017.
@@ -10,6 +11,7 @@ public class CountButton extends GuiButton {
     private int mod;
     private ItemInfo info;
     private static int max_mul = 10;
+    GuiAbstractItemEntry ie;
 
     public CountButton(int mod, ItemInfo info, int p_i1020_1_, int p_i1020_2_, int p_i1020_3_, String p_i1020_4_) {
         super(p_i1020_1_, p_i1020_2_, p_i1020_3_, p_i1020_4_);
@@ -24,10 +26,44 @@ public class CountButton extends GuiButton {
     }
 
     public void tryModify() {
-       if(info.modified + mod > 0 && info.modified + mod < max_mul){
+
+        if (canModify()) {
+
+            info.modified += mod;
+            if (ie != null) {
+                ie.updateDrawData();
+            }
+
+        }
+
+    	/*if(info.modified + mod > 0 && info.modified + mod < max_mul){ // #LOG
            if(info.limit != -1 && (info.modified + mod) * info.count <= info.limit || info.limit == -1){
                info.modified  += mod;
            }
-       }
+       }*/
     }
+
+    public boolean canModify() { //#LOG
+
+        if (info.limit != -1) {
+
+            return ((info.modified + mod) * info.stack_data.getInteger("Count") <= info.limit && (info.modified + mod) > 0);
+
+        } else {
+
+            return (info.modified + mod > 0 && info.modified + mod < max_mul);
+
+        }
+
+        //return (info.modified + mod > 0 && info.modified + mod < max_mul) &&
+        //	   (info.limit != -1 && (info.modified + mod) * info.count <= info.limit || info.limit == -1) ;
+
+    }
+
+    public void setEntityOnUpdate(GuiAbstractItemEntry _ie) {
+
+        ie = _ie;
+
+    }
+
 }

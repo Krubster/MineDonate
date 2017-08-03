@@ -7,7 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import ru.alastar.minedonate.MineDonate;
-import ru.alastar.minedonate.merch.IMerch;
+import ru.alastar.minedonate.merch.Merch;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
@@ -15,11 +15,9 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * Created by Alastar on 20.07.2017.
  */
-public class RegionInfo implements IMerch {
+public class RegionInfo extends Merch {
 
-    public int merch_id;
     public String world_name;
-    public int cost;
     public String name;
 
     public RegionInfo(int mid, int cost, String name, String world_name) {
@@ -29,10 +27,6 @@ public class RegionInfo implements IMerch {
         this.world_name = world_name;
     }
 
-    @Override
-    public int getId() {
-        return merch_id;
-    }
 
     @Override
     public boolean canBuy(EntityPlayerMP serverPlayer, int amount) {
@@ -72,11 +66,6 @@ public class RegionInfo implements IMerch {
         return 1;
     }
 
-    @Override
-    public void setId(int i) {
-        merch_id = i;
-    }
-
     public RegionInfo() {
 
     }
@@ -109,10 +98,5 @@ public class RegionInfo implements IMerch {
     @Override
     public String getBoughtMessage() {
         return " bought region " + name + "=" + world_name;
-    }
-
-    @Override
-    public int getCost() {
-        return cost;
     }
 }

@@ -9,22 +9,25 @@ import io.netty.buffer.ByteBuf;
 public class RemoveMerchPacket implements IMessage {
 
     public RemoveMerchPacket(){}
-
+    public int shopId ;
     public int merch_id;
     public int category_id;
 
-    public RemoveMerchPacket(int merch_id, int cat) {
+    public RemoveMerchPacket(int _shopId, int merch_id, int cat) {
+    	this.shopId = _shopId;
         this.merch_id = merch_id;
         this.category_id =cat;
     }
 
     @Override public void toBytes(ByteBuf buf) {
-        buf.writeByte(merch_id);
-        buf.writeByte(category_id);
+    	buf.writeInt(shopId);
+        buf.writeInt(merch_id);//????? writeByte
+        buf.writeInt(category_id);//????? writeByte
     }
 
     @Override public void fromBytes(ByteBuf buf) {
-        merch_id = buf.readByte();
-        category_id = buf.readByte();
+    	shopId = buf.readInt();
+        merch_id = buf.readInt();//????? readByte
+        category_id = buf.readInt();//????? readByte
     }
 }

@@ -5,7 +5,7 @@ import net.minecraft.server.MinecraftServer;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import ru.alastar.minedonate.MineDonate;
-import ru.alastar.minedonate.merch.IMerch;
+import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.merch.info.PrivilegieInfo;
 import ru.alastar.minedonate.proxies.ClientProxy;
 
@@ -39,12 +39,12 @@ public class Privelegies extends MerchCategory {
     }
 
     @Override
-    public IMerch constructMerch() {
+    public Merch constructMerch() {
         return new PrivilegieInfo();
     }
 
     @Override
-    public void addMerch(IMerch merch) {
+    public void addMerch(Merch merch) {
         super.addMerch(merch);
         final PrivilegieInfo info = (PrivilegieInfo) merch;
         ClientProxy.loadIcon(info.picture_url, info.merch_id);
@@ -68,16 +68,16 @@ public class Privelegies extends MerchCategory {
 
     @Override
     public String getDatabase() {
-        return MineDonate.db_privelegies;
+        return MineDonate.cfg.dbPrivelegies;
     }
 
     @Override
     public boolean isEnabled() {
-        return MineDonate.m_Use_Privelegies;
+        return MineDonate.cfg.sellPrivelegies;
     }
 
     @Override
-    public void GiveMerch(EntityPlayerMP serverPlayer, IMerch merch, int amount) {
+    public void GiveMerch(EntityPlayerMP serverPlayer, Merch merch, int amount) {
         try {
             final PrivilegieInfo info = (PrivilegieInfo) merch;
             for (World world : Bukkit.getWorlds()) {

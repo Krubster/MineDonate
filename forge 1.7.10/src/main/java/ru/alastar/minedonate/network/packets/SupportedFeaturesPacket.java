@@ -14,26 +14,37 @@ public class SupportedFeaturesPacket implements IMessage {
     public boolean privelegies;
     public boolean regions;
     public boolean entities;
+    public boolean userShops;
 
-    public SupportedFeaturesPacket(boolean i, boolean p, boolean r, boolean e) {
-        this.items = i;
-        this.privelegies = p;
-        this.regions = r;
-        this.entities = e;
+    public SupportedFeaturesPacket(boolean _items, boolean _privelegies, boolean _regions, boolean _entities, boolean _userShops) {
+
+    	this.items = _items;
+        this.privelegies = _privelegies;
+        this.regions = _regions;
+        this.entities = _entities;
+        this.userShops = _userShops;
+        
     }
 
-    @Override public void toBytes(ByteBuf buf) {
+    @Override 
+    public void toBytes(ByteBuf buf) {
+    	
         buf.writeBoolean(items);
         buf.writeBoolean(privelegies);
         buf.writeBoolean(regions);
         buf.writeBoolean(entities);
+        buf.writeBoolean(userShops);
 
     }
 
-    @Override public void fromBytes(ByteBuf buf) {
+    @Override 
+    public void fromBytes(ByteBuf buf) {
+    	
         this.items = buf.readBoolean();
         this.privelegies = buf.readBoolean();
         this.regions = buf.readBoolean();
         this.entities = buf.readBoolean();
+        this.userShops = buf.readBoolean();
+
     }
 }

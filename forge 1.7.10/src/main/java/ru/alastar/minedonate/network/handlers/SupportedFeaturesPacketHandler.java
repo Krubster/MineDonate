@@ -19,10 +19,11 @@ public class SupportedFeaturesPacketHandler implements IMessageHandler<Supported
     @Override
     @SideOnly(Side.CLIENT)
     public IMessage onMessage(SupportedFeaturesPacket message, MessageContext ctx) {
-        MineDonate.m_Use_Items = message.items;
-        MineDonate.m_Use_Privelegies = message.privelegies;
-        MineDonate.m_Use_Regions = message.regions;
-        MineDonate.m_Use_Entities = message.entities;
+        MineDonate.cfg.sellItems = message.items;
+        MineDonate.cfg.sellPrivelegies = message.privelegies;
+        MineDonate.cfg.sellRegions = message.regions;
+        MineDonate.cfg.sellEntities = message.entities;
+        MineDonate.cfg.userShops = message.userShops;
         return null;
     }
 }

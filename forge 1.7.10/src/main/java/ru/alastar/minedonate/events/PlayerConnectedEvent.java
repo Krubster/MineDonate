@@ -25,13 +25,13 @@ public class PlayerConnectedEvent {
                 if (!MineDonate.ExistsAccount((EntityPlayer) event.player)) {
                     MineDonate.RegisterPlayer((EntityPlayerMP) event.player);
                 }
-                SupportedFeaturesPacket features_packet = new SupportedFeaturesPacket(MineDonate.m_Use_Items, MineDonate.m_Use_Privelegies, MineDonate.m_Use_Regions, MineDonate.m_Use_Entities);
+                SupportedFeaturesPacket features_packet = new SupportedFeaturesPacket(MineDonate.cfg.sellItems, MineDonate.cfg.sellPrivelegies, MineDonate.cfg.sellRegions, MineDonate.cfg.sellEntities, MineDonate.cfg.userShops);
                 MineDonateNetwork.INSTANCE.sendTo(features_packet, (EntityPlayerMP) event.player);
                 AccountInfoPacket info_packet = new AccountInfoPacket(MineDonate.getInstance().getMoneyFor(event.player.getDisplayName()));
                 MineDonateNetwork.INSTANCE.sendTo(info_packet, (EntityPlayerMP) event.player);
-                for (int i = 0; i < MineDonate.m_Categories.length; ++i) {
-                    for (int j = 0; j < MineDonate.m_Categories[i].getMerch().length; ++j) {
-                        AddMerchPacket packet = new AddMerchPacket(MineDonate.m_Categories[i].getMerch()[j]);
+                for (int i = 0; i < MineDonate.shops.get(0).cats.length; ++i) {
+                    for (int j = 0; j < MineDonate.shops.get(0).cats[i].getMerch().length; ++j) {
+                        AddMerchPacket packet = new AddMerchPacket(MineDonate.shops.get(0).cats[i].getMerch()[j]);
                         MineDonateNetwork.INSTANCE.sendTo(packet, (EntityPlayerMP) event.player);
                     }
                 }
