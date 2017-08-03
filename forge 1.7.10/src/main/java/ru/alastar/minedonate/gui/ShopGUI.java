@@ -460,11 +460,11 @@ public class ShopGUI extends GuiScreen {
 
         returnButton . enabled = returnButton . visible = displayReturnButton ;
         		
-        if ( getCurrentCategory ( ) . elements_per_page ( ) != 0 && getCurrentCategory ( ) . getSourceCount ( getCurrentShopId ( ) ) > getCurrentCategory ( ) . elements_per_page ( ) ) {
+        if ( getCurrentCategory ( ) . elementsOnPage ( ) != 0 && getCurrentCategory ( ) . getSourceCount ( getCurrentShopId ( ) ) > getCurrentCategory ( ) . elementsOnPage ( ) ) {
 
             pb . enabled = ( m_Page > 0) ;
 
-            nb . enabled = getCurrentCategory ( ) . elements_per_page ( ) > 0 && m_Page < (int) Math.ceil(getCurrentCategory ( ).getSourceCount(getCurrentShopId()) / (getCurrentCategory ( ).elements_per_page()));
+            nb . enabled = getCurrentCategory ( ) . elementsOnPage ( ) > 0 && m_Page < (int) Math.ceil(getCurrentCategory ( ).getSourceCount(getCurrentShopId()) / (getCurrentCategory ( ) . elementsOnPage ( ) ) ) ;
 
         } else {
         	

@@ -1,6 +1,5 @@
 package ru.alastar.minedonate.gui.categories;
 
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.Tessellator;
 import org.lwjgl.opengl.GL11;
@@ -11,7 +10,6 @@ import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.merch.info.PrivilegieInfo;
 import ru.log_inil.mc.minedonate.gui.DrawType;
-import ru.log_inil.mc.minedonate.gui.GuiScrollingList;
 import ru.log_inil.mc.minedonate.gui.painters.PrivilegieGridItemPainter;
 
 import java.util.ArrayList;
@@ -22,16 +20,15 @@ import java.util.Map;
 /**
  * Created by Alastar on 20.07.2017.
  */
-public class PrivilegieCategory implements ShopCategory {
-
-    int catId = 1;
+public class PrivilegieCategory extends ShopCategory {
 
     PrivilegieGridItemPainter pip;
 
     public PrivilegieCategory() {
 
         pip = new PrivilegieGridItemPainter(this);
-
+        catId = 1 ;
+        
     }
 
     @Override
@@ -50,14 +47,9 @@ public class PrivilegieCategory implements ShopCategory {
     }
 
     @Override
-    public int elements_per_page() {
+    public int elementsOnPage ( ) {
 
         return 1;
-
-    }
-
-    @Override
-    public void actionPerformed(GuiButton button) {
 
     }
 
@@ -137,11 +129,6 @@ public class PrivilegieCategory implements ShopCategory {
 
     }
 
-    @Override
-    public void undraw ( ) {
-    	
-    }
-    
     public BuyButton bb;
 
     List<PrivilegieInfo> list = new ArrayList<PrivilegieInfo>();
@@ -216,87 +203,6 @@ public class PrivilegieCategory implements ShopCategory {
 	public String getButtonText ( ) {
 		
 		return MineDonate.cfgUI.cats.privelegies.categoryButtonText ;
-		
-	}
-	
-	@Override
-	public int getRowCount() {
-		return 0;
-	}
-
-	@Override
-	public void setRowCount(int i) {
-	}
-
-	@Override
-	public int getColCount() {
-		
-		return 0;
-		
-	}
-
-	@Override
-	public void setColCount(int i) {
-	}
-
-	@Override
-	public int getItemWidth() {
-		
-		return 0;
-
-	}
-
-	@Override
-	public int getItemHeight() {
-		
-		return 0;
-		
-	}
-
-	ShopGUI gui ;
-	
-	@Override
-	public void init(ShopGUI shopGUI) {
-		
-		gui = shopGUI ;
-		
-	}
-
-	@Override
-	public void initGui() {		
-	}
-
-	boolean search = false ;
-	String searchValue = "" ;
-	
-	@Override
-	public void search ( String text ) {
-		
-		search = ! ( text == null || text . trim ( ) . isEmpty ( ) ) ;
-		
-		if ( search ) {
-			
-			searchValue = text . toLowerCase ( ) . trim ( ) ;
-			
-		} else {
-			
-			searchValue = "" ;
-			
-		}
-				
-		updateButtons ( gui, lastPage ) ;
-
-	}
-	
-	@Override
-	public GuiScrollingList getScrollList() {
-		return null;
-	}
-	
-	@Override
-	public String getCatMoneyType ( ) {
-		
-		return  MineDonate . getMoneyType ( ShopGUI . instance . getCurrentShopId ( ), catId ) ;
 		
 	}
 

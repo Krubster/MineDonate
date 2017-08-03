@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * Created by Alastar on 19.07.2017.
  */
-public class ItemNBlockCategory implements ShopCategory {
+public class ItemNBlockCategory extends ShopCategory {
 
 	int catId = 0 ;
 	int shopId = 0 ;
@@ -75,11 +75,6 @@ public class ItemNBlockCategory implements ShopCategory {
     	initGui ( ) ;
     	
     }
-
-    @Override
-    public int elements_per_page() {
-        return 0 ;
-    }
     
     @Override
     public void actionPerformed(GuiButton button) {
@@ -108,46 +103,9 @@ public class ItemNBlockCategory implements ShopCategory {
 		return MineDonate.cfgUI.cats.itemsAndBlocks.categoryButtonText ;
 		
 	}
-	
-	@Override
-	public int getRowCount() {
-		return 0;
-	}
-
-	@Override
-	public void setRowCount(int i) {
-	}
-
-	@Override
-	public int getColCount() {
-		return 0;
-	}
-
-	@Override
-	public void setColCount(int i) {
-	}
-
-	@Override
-	public int getItemWidth() {
-		return 0;
-	}
-
-	@Override
-	public int getItemHeight() {	
-		return 0;	
-	}
 
 	GuiItemsScrollArea gi ;
 	List < GuiAbstractItemEntry > entrs = new ArrayList <GuiAbstractItemEntry > ( ) ;
-	
-	ShopGUI gui ;
-	
-	@Override
-	public void init ( ShopGUI _shopGUI ) {
-
-		gui = _shopGUI ;
-		
-	}
 
 	ItemInfo iim ;
 	
@@ -200,46 +158,9 @@ public class ItemNBlockCategory implements ShopCategory {
     	gi. applyScrollLimits ( ) ;		
 	}
 	
-
-	boolean search = false ;
-	String searchValue = "" ;
-	
-	@Override
-	public void search ( String text ) {
-		
-		search = ! ( text == null || text . trim ( ) . isEmpty ( ) ) ;
-		
-		if ( search ) {
-			
-			searchValue = text . toLowerCase ( ) . trim ( ) ;
-			
-		} else {
-			
-			searchValue = "" ;
-			
-		}
-		
-		initGui ( ) ;
-		
-	}
-
-	@Override
-	public GuiScrollingList getScrollList ( ) {
-		
-		return gi ;
-		
-	}
-
 	public void setShopId ( int _shopId ) { 
 		
 		shopId = _shopId ;
-		
-	}
-	
-	@Override
-	public String getCatMoneyType ( ) {
-		
-		return  MineDonate . getMoneyType ( shopId, catId ) ;
 		
 	}
 	

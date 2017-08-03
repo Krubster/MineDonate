@@ -15,7 +15,7 @@ import ru.log_inil.mc.minedonate.gui.GuiItemsScrollArea;
 import ru.log_inil.mc.minedonate.gui.GuiScrollingList;
 import ru.log_inil.mc.minedonate.gui.items.GuiItemEntryOfUserShopMerch;
 
-public class UsersShopsCategory implements ShopCategory {
+public class UsersShopsCategory extends ShopCategory {
 
 	int catId = 4 ;
 	ShopCategory userSC ;
@@ -62,11 +62,6 @@ public class UsersShopsCategory implements ShopCategory {
     }
     
     @Override
-    public void undraw ( ) {
-    	
-    }
-
-    @Override
     public void updateButtons ( ShopGUI relative, int m_Page ) {
     	
     	refreshGui ( ) ;
@@ -81,11 +76,6 @@ public class UsersShopsCategory implements ShopCategory {
 
     }
 
-    @Override
-    public int elements_per_page() {
-        return 0 ;
-    }
-    
     @Override
     public void actionPerformed(GuiButton button) {
         
@@ -121,47 +111,10 @@ public class UsersShopsCategory implements ShopCategory {
 		return MineDonate.cfgUI.cats.usersShops.categoryButtonText ;
 		
 	}
-	
-	@Override
-	public int getRowCount() {
-		return 0;
-	}
-
-	@Override
-	public void setRowCount(int i) {
-	}
-
-	@Override
-	public int getColCount() {
-		return 0;
-	}
-
-	@Override
-	public void setColCount(int i) {
-	}
-
-	@Override
-	public int getItemWidth() {
-		return 0;
-	}
-
-	@Override
-	public int getItemHeight() {	
-		return 0;	
-	}
 
 	GuiItemsScrollArea gi ;
 	List < GuiAbstractItemEntry > entrs = new ArrayList < > ( ) ;
 	
-	ShopGUI gui ;
-	
-	@Override
-	public void init ( ShopGUI _shopGUI ) {
-
-		gui = _shopGUI ;
-		
-	}
-
 	ShopInfo iim ;
 	
 	@Override
@@ -270,48 +223,11 @@ public class UsersShopsCategory implements ShopCategory {
 		}
 		
 	}
-	
-	boolean search = false ;
-	String searchValue = "" ;
-	
-	@Override
-	public void search ( String text ) {
-		
-		if ( userSC != null ) { 
-			
-			userSC . search ( text ) ;
-			return ;
-			
-		}
-			
-		search = ! ( text == null || text . trim ( ) . isEmpty ( ) ) ;
-		
-		if ( search ) {
-			
-			searchValue = text . toLowerCase ( ) . trim ( ) ;
-			
-		} else {
-			
-			searchValue = "" ;
-			
-		}
-			
-		refreshGui ( ) ;
-	
-		
-	}
 
 	@Override
 	public GuiScrollingList getScrollList ( ) {
 		
 		return gi;
-		
-	}
-
-	@Override
-	public String getCatMoneyType ( ) {
-		
-		return  MineDonate . getMoneyType ( ShopGUI . instance . getCurrentShopId ( ), catId ) ;
 		
 	}
 	

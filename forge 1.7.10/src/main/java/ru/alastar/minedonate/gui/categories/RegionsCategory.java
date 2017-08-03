@@ -25,42 +25,36 @@ import org.lwjgl.opengl.GL12;
 /**
  * Created by Alastar on 20.07.2017.
  */
-public class RegionsCategory implements ShopCategory {
-
-	int catId = 2 ;
-
-    private static int m_Per_Row = 4;
-    private static int m_Per_Col = 2;
+public class RegionsCategory extends ShopCategory {
 
     RegionGridItemPainter rip ;
     public RegionsCategory ( ) {
     	
     	 rip = new RegionGridItemPainter ( this ) ;
-		 
+    	 catId = 2 ;
+    	 rowCount = 4 ;
+    	 colCount = 2 ;
+    	 
     }
     
     @Override
-    public boolean getEnabled() {
-        return MineDonate.cfg.sellRegions;
+    public boolean getEnabled ( ) {
+    	
+        return MineDonate . cfg . sellRegions ;
+        
     }
 
     @Override
-    public int getSourceCount(int shopId) {
-        return list . size ( )  ; // MineDonate.m_Categories[2].getMerch().length;
+    public int getSourceCount ( int shopId ) {
+    	
+        return list . size ( )  ;
+        
     }
 
     @Override
-    public String getName() {
-        return "Regions";
-    }
-    
-    @Override
-    public int elements_per_page() {
-        return m_Per_Col * m_Per_Row;
-    }
-
-    @Override
-    public void actionPerformed(GuiButton button) {
+    public String getName ( ) {
+    	
+        return "Regions" ;
         
     }
     
@@ -80,11 +74,11 @@ public class RegionsCategory implements ShopCategory {
     		
             rip . drawn = 0 ;
             
-            for (int i = 0; i < m_Per_Row; ++i) {
-                for (int j = 0; j < m_Per_Col; ++j) {
-                    if (m_Page * m_Per_Col * m_Per_Row + rip . drawn < list . size ( ) ) {
+            for (int i = 0; i < rowCount; ++i) {
+                for (int j = 0; j < colCount; ++j) {
+                    if (m_Page * colCount * rowCount + rip . drawn < list . size ( ) ) {
                
-                    	rip.draw(relative, resolution, m_Page, mouseX, mouseY, partialTicks, list.get(m_Page * m_Per_Col * m_Per_Row + rip.drawn), i, j);
+                    	rip.draw(relative, resolution, m_Page, mouseX, mouseY, partialTicks, list.get(m_Page * colCount * rowCount + rip.drawn), i, j);
                     	
                     	rip . drawn ++ ;
                     	
@@ -146,11 +140,6 @@ public class RegionsCategory implements ShopCategory {
  
     }
 
-    @Override
-    public void undraw ( ) {
-    	
-    }
-    
     List < RegionInfo > list = new ArrayList < > ( ) ;
     Map < Integer, BuyButton > buttonsMap = new HashMap < > ( ) ; // holy shi~
 
@@ -205,14 +194,14 @@ public class RegionsCategory implements ShopCategory {
         int x_offset ;
         int y_offset ;
 
-        for (int i = 0; i < m_Per_Row; ++i) {
-            for (int j = 0; j < m_Per_Col; ++j) {
-                if (m_Page * m_Per_Col * m_Per_Row + drawn < list.size()) {
+        for (int i = 0; i < rowCount ; ++i) {
+            for (int j = 0; j < colCount; ++j) {
+                if (m_Page * colCount * rowCount + drawn < list.size()) {
  
                 	x_offset = ( ( resolution . getScaledWidth ( ) / 2 - ( getColCount ( ) * 75 ) / 2 ) / 2 ) + 75 * ( j + 1 );
                 	y_offset = ( ( resolution . getScaledHeight ( ) / 2 - ( getRowCount ( ) * 75 ) / 2 ) / 2 ) + 75 * ( i + 1 );
                 
-                    info = list.get(m_Page * m_Per_Col * m_Per_Row + drawn);
+                    info = list.get(m_Page * colCount * rowCount + drawn);
                   
                     bb = new BuyButton ( info . getShopId ( ), info . getCategory ( ), info . merch_id, ShopGUI.getNextButtonId(), x_offset - 22, y_offset + 15, MineDonate.cfgUI.cats.regions.itemBuyButton.width, MineDonate.cfgUI.cats.regions.itemBuyButton.height, MineDonate.cfgUI.cats.regions.itemBuyButton.text);
                     buttonsMap.put(info.merch_id, bb);
@@ -225,9 +214,7 @@ public class RegionsCategory implements ShopCategory {
             }
         }
     }
-    
-    // #LOG
-    
+        
 	@Override
 	public int getButtonWidth ( ) {
 		
@@ -242,27 +229,6 @@ public class RegionsCategory implements ShopCategory {
 		
 	}
 	
-	
-	@Override
-	public int getRowCount() {
-		return m_Per_Row;
-	}
-
-	@Override
-	public void setRowCount(int i) {
-		m_Per_Row = i;
-	}
-
-	@Override
-	public int getColCount() {
-		return m_Per_Col;
-	}
-
-	@Override
-	public void setColCount(int i) {
-		m_Per_Col = i;
-	}
-
 	@Override
 	public int getItemWidth() {
 		
@@ -274,53 +240,6 @@ public class RegionsCategory implements ShopCategory {
 	public int getItemHeight() {
 		
 		return Math.max(MineDonate.cfgUI.cats.regions.itemBuyButton.height, 95);
-		
-	}
-
-	ShopGUI gui ;
-	
-	@Override
-	public void init(ShopGUI shopGUI) {
-		
-		gui = shopGUI ;
-		
-	}
-
-	@Override
-	public void initGui() {
-	}
-
-	boolean search = false ;
-	String searchValue = "" ;
-	
-	@Override
-	public void search ( String text ) {
-		
-		search = ! ( text == null || text . trim ( ) . isEmpty ( ) ) ;
-		
-		if ( search ) {
-			
-			searchValue = text . toLowerCase ( ) . trim ( ) ;
-			
-		} else {
-			
-			searchValue = "" ;
-			
-		}
-			
-		updateButtons ( gui, 0 ) ;
-		
-	}
-	
-	@Override
-	public GuiScrollingList getScrollList() {
-		return null;
-	}
-	
-	@Override
-	public String getCatMoneyType ( ) {
-		
-		return  MineDonate . getMoneyType ( ShopGUI . instance . getCurrentShopId ( ), catId ) ;
 		
 	}
 	
