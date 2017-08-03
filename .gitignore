@@ -1,0 +1,6 @@
+.bat
+.gradle
+logs/
+out/
+gradle/
+libs/
