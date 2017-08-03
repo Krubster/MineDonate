@@ -21,7 +21,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import org.bukkit.Bukkit;
-
 import ru.alastar.minedonate.commands.AddEntityCommand;
 import ru.alastar.minedonate.commands.AddItemCommand;
 import ru.alastar.minedonate.commands.AdminCommand;
@@ -42,14 +41,10 @@ import ru.log_inil.mc.minedonate.localData.LocalDataInterchange;
 
 import java.io.*;
 import java.sql.*;
+import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Mod(modid = MineDonate.MODID, version = MineDonate.VERSION, bukkitPlugin = "Vault")
 public class MineDonate {
@@ -451,7 +446,7 @@ public class MineDonate {
     
     public static AdminSession getAdminSession(EntityPlayerMP entityPlayer) {
         if(m_Admin_Sessions.containsKey(entityPlayer))
-            return m_Admin_Sessions.get(m_Admin_Sessions);
+            return m_Admin_Sessions.get(entityPlayer);
         return null;
     }
 
@@ -644,18 +639,18 @@ public class MineDonate {
         int cost = Integer.parseInt(session.params[1]);
         int limit = Integer.parseInt(session.params[2]);
 
-        EntityInfo info = new EntityInfo(0, 3, shops.get(0).cats[3].getMerch().length, Integer.valueOf(cost), target, name);
+        EntityInfo info = new EntityInfo(0, 3, shops.get(0).cats[3].getMerch().length, Integer.valueOf(cost), target, name, limit);
         shops.get(0).cats[3].addMerch(info);
         try {
             ByteBuf buf = Unpooled.buffer();
-            NBTTagCompound tag = new NBTTagCompound();
-            target.writeToNBT(tag);
-            ByteBufUtils.writeTag(buf, tag);
+            ByteBufUtils.writeTag(buf, info.entity_data);
             InputStream stream = new ByteArrayInputStream(buf.array());
-            PreparedStatement statement = m_DB_Connection.prepareStatement("INSERT INTO " + cfg.dbEntities + " (name, data, cost) VALUES(?,?,?)");
+            PreparedStatement statement = m_DB_Connection.prepareStatement("INSERT INTO " + cfg.dbEntities + " (name, data, cost, lim) VALUES(?,?,?,?)");
             statement.setString(1, name);
             statement.setBlob(2, stream);
-            statement.setInt(3, Integer.valueOf(cost));
+            statement.setInt(3, cost);
+            statement.setInt(4, limit);
+
             statement.execute();
             statement.close();
         } catch (SQLException e) {
