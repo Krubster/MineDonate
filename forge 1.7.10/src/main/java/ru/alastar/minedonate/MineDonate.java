@@ -57,8 +57,6 @@ public class MineDonate {
 
     static GregorianCalendar calendar = new GregorianCalendar();
 
-    //Merch categories
-    //List < Shop > shops = new ArrayList < > ( ) ;
     public static Map<Integer, Shop> shops = new HashMap<Integer, Shop>();
     // public static MerchCategory[] m_Categories = new MerchCategory[]{new ItemNBlocks(0), new Privelegies(), new Regions(), new Entities(), new UsersShops()};
     //
