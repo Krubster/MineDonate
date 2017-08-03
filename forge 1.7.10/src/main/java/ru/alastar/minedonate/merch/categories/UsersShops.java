@@ -4,8 +4,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
-import ru.alastar.minedonate.merch.info.RegionInfo;
-import ru.alastar.minedonate.merch.info.UserShopInfo;
+import ru.alastar.minedonate.merch.info.ShopInfo;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,16 +20,12 @@ public class UsersShops extends MerchCategory {
     public void reverseFor(String log_msg, String player) {
     }
 
-    private void returnToStock(RegionInfo regionInfo) {
-
-    }
-
     @Override
     public void loadMerchFromDB(ResultSet rs) {
         int i = 0;
         try {
             while (rs.next()) {
-                final UserShopInfo info = new UserShopInfo(i, rs.getInt("id"), rs.getString("owner"), rs.getString("name"), rs.getBoolean("isFreezed"));
+                final ShopInfo info = new ShopInfo(i, rs.getInt("id"), rs.getString("owner"), rs.getString("name"), rs.getBoolean("isFreezed"), rs.getString("moneyType"));
                 this.addMerch(info);
                 ++i;
             }
@@ -42,7 +37,7 @@ public class UsersShops extends MerchCategory {
 
     @Override
     public Merch constructMerch() {
-        return new UserShopInfo();
+        return new ShopInfo();
     }
 
     @Override
@@ -59,5 +54,12 @@ public class UsersShops extends MerchCategory {
     public void GiveMerch(EntityPlayerMP player, Merch merch, int amount) {
 
     }
+    
+	@Override
+	public String getMoneyType ( ) {
+		
+		return null ;
+		
+	}
 
 }

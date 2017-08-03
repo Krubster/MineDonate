@@ -16,12 +16,14 @@ import java.sql.SQLException;
  * Created by Alastar on 21.07.2017.
  */
 public class EntityInfo extends Merch {
-
+    
     public String classpath;
     public String name;
     public NBTTagCompound entity_data;
 
-    public EntityInfo(int merch_id, int cost, Blob data, String name) {
+    public EntityInfo(int _shopId, int _catId, int merch_id, int cost, Blob data, String name) {
+    	this.shopId = _shopId;
+    	this.catId = _catId;
         this.merch_id = merch_id;
         this.cost = cost;
         ByteBuf buf = Unpooled.buffer();
@@ -35,7 +37,7 @@ public class EntityInfo extends Merch {
         ByteBufUtils.readItemStack(buf).writeToNBT(entity_data);
         this.name = name;
     }
-    public EntityInfo(int merch_id, int cost, Entity entity, String name) {
+    public EntityInfo(int _shopId, int _catId, int merch_id, int cost, Entity entity, String name) {
         this.merch_id = merch_id;
         this.cost = cost;
         entity.writeToNBT(entity_data);
@@ -52,6 +54,8 @@ public class EntityInfo extends Merch {
 
     @Override
     public void read(ByteBuf buf) {
+    	shopId = buf.readInt();
+    	catId = buf.readInt();
         merch_id = buf.readInt();
         cost = buf.readInt();
         int info_length = buf.readInt();
@@ -65,6 +69,8 @@ public class EntityInfo extends Merch {
 
     @Override
     public void write(ByteBuf buf) {
+    	buf.writeInt(shopId);
+        buf.writeInt(catId);
         buf.writeInt(merch_id);
         buf.writeInt(cost);
         buf.writeInt(name.getBytes().length);

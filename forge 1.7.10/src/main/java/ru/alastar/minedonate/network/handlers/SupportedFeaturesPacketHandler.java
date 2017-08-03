@@ -19,11 +19,21 @@ public class SupportedFeaturesPacketHandler implements IMessageHandler<Supported
     @Override
     @SideOnly(Side.CLIENT)
     public IMessage onMessage(SupportedFeaturesPacket message, MessageContext ctx) {
+    	
         MineDonate.cfg.sellItems = message.items;
+        MineDonate.cfg.itemsMoneyType = message.itemsMoneyType;
         MineDonate.cfg.sellPrivelegies = message.privelegies;
+        MineDonate.cfg.privelegiesMoneyType = message.privelegiesMoneyType;
         MineDonate.cfg.sellRegions = message.regions;
+        MineDonate.cfg.regionMoneyType = message.regionsMoneyType;
         MineDonate.cfg.sellEntities = message.entities;
+        MineDonate.cfg.entitiesMoneyType = message.entitiesMoneyType;
         MineDonate.cfg.userShops = message.userShops;
+
+        MineDonate . loadMerchClient ( ) ;
+        
         return null;
+        
     }
+    
 }

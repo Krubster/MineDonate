@@ -3,6 +3,7 @@ package ru.log_inil.mc.minedonate.gui.painters;
 import java.util.ArrayList;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.RenderHelper;
@@ -10,9 +11,9 @@ import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.gui.categories.PrivilegieCategory;
 import ru.alastar.minedonate.merch.Merch;
+import ru.alastar.minedonate.merch.info.EntityInfo;
 import ru.alastar.minedonate.merch.info.PrivilegieInfo;
 import ru.alastar.minedonate.proxies.ClientProxy;
-import ru.log_inil.mc.minedonate.gui.IGridItemPainter;
 
 public class PrivilegieGridItemPainter implements IGridItemPainter {
 
@@ -36,7 +37,7 @@ public class PrivilegieGridItemPainter implements IGridItemPainter {
 	String [ ] strings ;
 
 	@Override
-	public void draw (ShopGUI relative, ScaledResolution resolution, int m_Page, int mouseX, int mouseY, float partialTicks, Merch _info, int gridI, int gridJ) {
+	public void draw ( ShopGUI relative, ScaledResolution resolution, int m_Page, int mouseX, int mouseY, float partialTicks, Merch _info, int gridI, int gridJ) {
 
 	   info = ( PrivilegieInfo ) _info;
 
@@ -47,10 +48,10 @@ public class PrivilegieGridItemPainter implements IGridItemPainter {
  	  
        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
        GL11.glBindTexture(GL11.GL_TEXTURE_2D, ClientProxy.getImage(info.merch_id).getGlTextureId());
-       relative.drawTexturedModalRect(x_offset, y_offset, 0, 0, 75, 75);
-
+       relative.drawTexturedModalRectNormal(x_offset, y_offset, 75, 75);
+       
        relative.drawString(relative.getFontRenderer(), info.name, x_offset + (75/2)- relative.getFontRenderer().getStringWidth(info.name)/2, y_offset + 80, 0xFFFFFF);
-       relative.drawCenteredString(relative.getFontRenderer(), MineDonate.cfgUI.cats.privelegies.pricePrefix + info.cost + MineDonate.cfgUI.cats.privelegies.priceSuffix, x_offset+36, y_offset+75+20+24, 16777215);
+       relative . moneyArea . drawPriceArea ( x_offset, y_offset + 75+20+24, info . cost, info . getMoneyType ( ) ) ;
 
 	   list . clear ( ) ;
 
@@ -60,7 +61,7 @@ public class PrivilegieGridItemPainter implements IGridItemPainter {
 
        for (int i = 0; i < strings.length; ++i) {
 
-    	   list.add(strings[i]);
+    	   // list.add(strings[i]);
            
            if ( maxStringWidth < relative . getFontRenderer ( ). getStringWidth ( strings [ i ] )) {
         	   

@@ -6,23 +6,21 @@ import org.lwjgl.opengl.GL12;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import ru.alastar.minedonate.MineDonate;
-import ru.alastar.minedonate.gui.BuyButton;
 import ru.alastar.minedonate.gui.GoButton;
 import ru.alastar.minedonate.gui.ShopCategory;
 import ru.alastar.minedonate.gui.ShopGUI;
-import ru.alastar.minedonate.merch.info.EntityInfo;
-import ru.alastar.minedonate.merch.info.UserShopInfo;
+import ru.alastar.minedonate.merch.info.ShopInfo;
 import ru.log_inil.mc.minedonate.gui.GuiAbstractItemEntry;
 import ru.log_inil.mc.minedonate.gui.GuiItemsScrollArea;
 
 public class GuiItemEntryOfUserShopMerch extends GuiAbstractItemEntry {
 
-	public UserShopInfo info ;
+	public ShopInfo info ;
 	public ShopCategory sc ;
 	
 	GoButton go ;
 
-	public GuiItemEntryOfUserShopMerch ( UserShopInfo _usi, ShopCategory _sc ) {
+	public GuiItemEntryOfUserShopMerch ( ShopInfo _usi, ShopCategory _sc ) {
 
 		info = _usi ;
 		sc = _sc ;
@@ -34,7 +32,7 @@ public class GuiItemEntryOfUserShopMerch extends GuiAbstractItemEntry {
 	@Override
 	public GuiAbstractItemEntry updateDrawData ( ) {
 			
-		shopTitle = info . owner + ( info . name != null && ! info . name . isEmpty ( ) ? " ? " + info . name : "" ) ;
+		shopTitle = info . owner + ( info . name != null && ! info . name . isEmpty ( ) ? " — " + info . name : "" ) ;
 		
 		return this ;
 		

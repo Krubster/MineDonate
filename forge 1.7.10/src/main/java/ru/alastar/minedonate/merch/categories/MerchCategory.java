@@ -79,4 +79,7 @@ public abstract class MerchCategory {
     public void updateMerch(int id, Merch info) {
         m_Merch[id] = info;
     }
+    
+    public abstract String getMoneyType ( ) ;
+
 }

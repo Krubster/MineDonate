@@ -21,28 +21,65 @@ public class BuyPacketHandler implements IMessageHandler<BuyPacket, IMessage> {
 
     @Override
     public IMessage onMessage(BuyPacket message, MessageContext ctx) {
+
         byte resp = 0;
-        if (MineDonate.m_Enabled) {
-            EntityPlayerMP serverPlayer = ctx.getServerHandler().playerEntity;
-            //sender          ^^^^
-            int category = message.category;
-            int merchId = message.merchId;
-            if (category < MineDonate.shops.get(message.shopId).cats.length) {
-                Merch info = MineDonate.shops.get(message.shopId).cats[category].getMerch(merchId);
-                if (info != null) {
-                    int playerMoney = MineDonate.getMoneyFor(serverPlayer.getDisplayName());
-                    if (info.getCost() * message.amount <= playerMoney && info.canBuy(serverPlayer, message.amount)) {
-                        MineDonate.logBuy(info, serverPlayer, message.amount);
-                        MineDonate.WithdrawMoney(playerMoney - info.getCost() * message.amount, serverPlayer);
-                        MineDonate.networkChannel.sendTo(new AccountInfoPacket(playerMoney - info.getCost() * message.amount), (EntityPlayerMP) serverPlayer);
-                        MineDonate.shops.get(message.shopId).cats[category].GiveMerch(serverPlayer, info, message.amount);
-                        resp = 0;
-                    } else {
-                        resp = 1;
+        
+        if ( MineDonate . m_Enabled ) {
+        	
+            try {
+            	
+            	EntityPlayerMP serverPlayer = ctx . getServerHandler ( ) . playerEntity ;
+                //sender          ^^^^
+                int category = message . category ;
+                int merchId = message . merchId ;
+
+                if ( category < MineDonate . shops . get ( message . shopId ) . cats . length ) {
+                	
+                    Merch info = MineDonate. shops . get ( message . shopId ) . cats [ category ] . getMerch ( merchId ) ;
+                    
+                    if ( info != null ) {
+                    	
+                        //int playerMoney = MineDonate.getMoneyFor(serverPlayer.getDisplayName());
+                    	
+                        if ( info . canBuy ( serverPlayer, message . amount ) ) { // info . getCost ( ) * message.amount <= playerMoney && 
+                        	
+                        	int procMoney = -1 ;
+                        	
+                        	if ( ( procMoney = MineDonate . getMoneyProcessor ( info . getMoneyType ( ) ) . canBuy ( info, serverPlayer . getDisplayName ( ), message . amount ) ) != -1 ) {
+                        		
+	                            MineDonate . logBuy ( info, serverPlayer, message . amount, info . getMoneyType ( ) ) ;
+	                            int currentMoney = info . withdrawMoney ( serverPlayer . getDisplayName ( ), procMoney ) ;
+	                                
+	                            MineDonate . networkChannel . sendTo ( new AccountInfoPacket ( currentMoney, info . getMoneyType ( ) ), ( EntityPlayerMP ) serverPlayer ) ;
+	                        
+	                            MineDonate . shops . get ( message . shopId ) . cats [ category ] . GiveMerch ( serverPlayer, info, message . amount ) ;
+	                            
+	                            resp = 0;
+	                            
+                        	} else {
+                        		
+                        		resp = 1 ;
+                        		
+                        	}
+                        	
+                        } else {
+                        	
+                            resp = 1;
+                            
+                        }
                     }
                 }
+            
+            
+            } catch ( Exception ex ) {
+            	
+            	ex . printStackTrace ( ) ;
+            	
             }
+            
         }
-        return new BuyResponsePacket((byte) resp);
+        
+        return new BuyResponsePacket ( ( byte ) resp ) ;
+        
     }
 }

@@ -36,14 +36,9 @@ public class CountButton extends GuiButton {
 
         }
 
-    	/*if(info.modified + mod > 0 && info.modified + mod < max_mul){ // #LOG
-           if(info.limit != -1 && (info.modified + mod) * info.count <= info.limit || info.limit == -1){
-               info.modified  += mod;
-           }
-       }*/
     }
 
-    public boolean canModify() { //#LOG
+    public boolean canModify() {
 
         if (info.limit != -1) {
 
@@ -54,9 +49,6 @@ public class CountButton extends GuiButton {
             return (info.modified + mod > 0 && info.modified + mod < max_mul);
 
         }
-
-        //return (info.modified + mod > 0 && info.modified + mod < max_mul) &&
-        //	   (info.limit != -1 && (info.modified + mod) * info.count <= info.limit || info.limit == -1) ;
 
     }
 

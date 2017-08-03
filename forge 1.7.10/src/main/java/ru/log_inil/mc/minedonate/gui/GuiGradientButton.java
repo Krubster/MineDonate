@@ -3,13 +3,9 @@ package ru.log_inil.mc.minedonate.gui;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.util.ResourceLocation;
 
 public class GuiGradientButton extends GuiButton {
 
@@ -59,9 +55,8 @@ public class GuiGradientButton extends GuiButton {
 			int rgba0 = (r0 << 16) + (g0 << 8) + (b0) + (a0<<24);
 			//System.err.println(rgba0);
 			 * */
-            
 			int rgba = ( k == 0 ? -939458303 : k == 1 ? 1761673473 : -1694433023 ) ;
-	
+			
 			this.drawGradientRect ( xPosition, yPosition, xPosition + width, yPosition+height, gradientVector ? 0 : rgba, gradientVector ? rgba : 0);
 
             this.mouseDragged(p_146112_1_, p_146112_2_, p_146112_3_);

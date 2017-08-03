@@ -5,7 +5,6 @@ import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.gui.ShopGUI;
-import ru.alastar.minedonate.network.packets.AddMerchPacket;
 import ru.alastar.minedonate.network.packets.RemoveMerchPacket;
 
 /**

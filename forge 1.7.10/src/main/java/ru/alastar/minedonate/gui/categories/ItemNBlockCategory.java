@@ -25,10 +25,8 @@ import java.util.List;
 public class ItemNBlockCategory implements ShopCategory {
 
 	int catId = 0 ;
+	int shopId = 0 ;
 	
-    private static int m_Per_Row = 4;
-    private static int m_Per_Col = 2;
-
     @SideOnly(Side.CLIENT)
     ResourceLocation background = new ResourceLocation(MineDonate.MODID, "test.png");
 
@@ -58,6 +56,17 @@ public class ItemNBlockCategory implements ShopCategory {
          
     	gi.drawScreen(mouseX, mouseY, partialTicks, dt);
     	
+    }
+    
+    @Override
+    public void undraw ( ) {
+    	
+		for ( GuiAbstractItemEntry gie : entrs ) {
+
+			gie . undraw ( ) ;
+			
+		}
+		
     }
 
     @Override
@@ -145,7 +154,7 @@ public class ItemNBlockCategory implements ShopCategory {
 	@Override
 	public void initGui ( ) {
 	
-		resolution = new ScaledResolution(gui.mc, gui.mc.displayWidth, gui.mc.displayHeight);
+		resolution = new ScaledResolution(gui.mc, gui.mc.displayWidth, gui.mc.displayHeight); // bull shit
 
 		gi = new GuiItemsScrollArea ( resolution, gui, entrs, 0 ) ;
 	
@@ -161,11 +170,11 @@ public class ItemNBlockCategory implements ShopCategory {
 	
 	    	if ( search ) {
 	    		
-	    		for ( int i = 0 ; i < MineDonate . shops . get ( gui . getCurrentShopId ( ) ) . cats [ catId ] . getMerch ( ) . length ; i ++ ) {
+	    		for ( int i = 0 ; i < MineDonate . shops . get ( shopId ) . cats [ catId ] . getMerch ( ) . length ; i ++ ) {
 	        		
-	        		iim = ( ItemInfo ) MineDonate . shops . get ( gui . getCurrentShopId ( ) ) . cats [ catId ] . getMerch ( ) [ i ] ; 
-	        		
-	        		if ( ( iim . m_stack != null ? iim . m_stack . getDisplayName ( ) . contains( searchValue ) : false ) || iim . name . toLowerCase ( ) . contains ( searchValue ) ) {
+	        		iim = ( ItemInfo ) MineDonate . shops . get ( shopId ) . cats [ catId ] . getMerch ( ) [ i ] ; 
+
+	        		if ( ( iim . m_stack != null ? iim . m_stack . getDisplayName ( ) . contains ( searchValue ) : false ) || iim . name . toLowerCase ( ) . contains ( searchValue ) ) {
 	        			
 	        			entrs . add ( new GuiItemEntryOfItemMerch ( iim, this ) . addButtons ( gui ) . updateDrawData ( ) ) ;
 	        			
@@ -175,9 +184,10 @@ public class ItemNBlockCategory implements ShopCategory {
 	        		
 	    	} else {
 	    		
-	    		for ( int i = 0 ; i < MineDonate . shops . get ( gui . getCurrentShopId ( ) ) . cats [ catId ] . getMerch ( ) . length ; i ++ ) {
+	    		for ( int i = 0 ; i < MineDonate . shops . get ( shopId ) . cats [ catId ] . getMerch ( ) . length ; i ++ ) {
 	        		
-	        		iim = ( ItemInfo ) MineDonate . shops . get ( gui . getCurrentShopId ( ) ) . cats [ catId ] . getMerch ( ) [ i ] ; 
+	        		iim = ( ItemInfo ) MineDonate . shops . get ( shopId ) . cats [ catId ] . getMerch ( ) [ i ] ; 
+	        		
 	        		entrs . add ( new GuiItemEntryOfItemMerch ( iim, this ) . addButtons ( gui ) . updateDrawData ( ) ) ;
 	        		
 	        	} 
@@ -214,8 +224,23 @@ public class ItemNBlockCategory implements ShopCategory {
 	}
 
 	@Override
-	public GuiScrollingList getScrollList() {
-		return gi;
+	public GuiScrollingList getScrollList ( ) {
+		
+		return gi ;
+		
 	}
 
+	public void setShopId ( int _shopId ) { 
+		
+		shopId = _shopId ;
+		
+	}
+	
+	@Override
+	public String getCatMoneyType ( ) {
+		
+		return  MineDonate . getMoneyType ( shopId, catId ) ;
+		
+	}
+	
 }

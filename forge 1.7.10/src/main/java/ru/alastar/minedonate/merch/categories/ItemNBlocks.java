@@ -1,15 +1,7 @@
 package ru.alastar.minedonate.merch.categories;
 
-import cpw.mods.fml.common.network.ByteBufUtils;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufAllocator;
-import io.netty.buffer.EmptyByteBuf;
-import io.netty.buffer.PooledByteBufAllocator;
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
@@ -25,13 +17,19 @@ import java.sql.Statement;
  */
 public class ItemNBlocks extends MerchCategory {
 
-    int shopId;
-
-    public ItemNBlocks(int _shopId) {
-
-        shopId = _shopId;
-
-    }
+    public int shopId;
+    public int catId;
+    
+    String moneyType ;
+	
+	public ItemNBlocks ( int _shopId, int _catId, String _moneyType ) {
+	
+    	this.shopId = _shopId;
+    	this.catId = _catId;
+    	
+		moneyType = _moneyType ;
+		
+	}
 
     @Override
     public boolean canReverse() {
@@ -48,13 +46,12 @@ public class ItemNBlocks extends MerchCategory {
         int i = 0;
         try {
             while (rs.next()) {
-                final ItemInfo info = new ItemInfo(i,
+                final ItemInfo info = new ItemInfo(shopId, catId, i,
                         rs.getInt("cost"),
                         rs.getString("name"),
                         rs.getString("info"),
                         rs.getInt("lim"),
                         rs.getBlob("stack_data"));
-                info.setShopId(shopId);
                 this.addMerch(info);
                 ++i;
             }
@@ -112,6 +109,13 @@ public class ItemNBlocks extends MerchCategory {
         return new ItemInfo();
     }
 
+	@Override
+	public String getMoneyType ( ) {
+		
+		return moneyType ;
+		
+	}
+	
     public MerchCategory setCustomDBTable(String _dbTable) {
 
         dbTable = _dbTable;

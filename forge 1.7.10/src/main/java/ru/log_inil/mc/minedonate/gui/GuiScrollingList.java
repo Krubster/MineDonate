@@ -6,7 +6,6 @@ import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 
@@ -257,31 +256,10 @@ public abstract class GuiScrollingList
 	         
 	        this.applyScrollLimits();
 	        Tessellator var18 = Tessellator.instance;
-	        if (this.client.theWorld != null)
-	        {
-	
-	        	/*
-	        	Tessellator tessellator = Tessellator.instance;
-	            int _x = 0;
-	            int tmpX = 0;
-	            int x = 12;
-	            int y = 12;
-	           // tessellator.setVertexState( TesselatorVertexState);
-	            tessellator.startDrawing(7);
-	            tessellator.setColorOpaque_I(110010);
-	            int var1777 = 160;
-	            tessellator.addVertexWithUV((double)this.left, (double)this.bottom, 0.0D, (double)((float)this.left / var1777), (double)((float)(this.bottom + (int)this.scrollDistance) / var1777));
-	            tessellator.addVertexWithUV((double)this.right, (double)this.bottom, 0.0D, (double)((float)this.right / var1777), (double)((float)(this.bottom + (int)this.scrollDistance) / var1777));
-	            tessellator.addVertexWithUV((double)this.right, (double)this.top, 0.0D, (double)((float)this.right / var1777), (double)((float)(this.top + (int)this.scrollDistance) / var1777));
-	            tessellator.addVertexWithUV((double)this.left, (double)this.top, 0.0D, (double)((float)this.left / var1777), (double)((float)(this.top + (int)this.scrollDistance) / var1777));
-	             tessellator . draw ( ) ;*/
-	          //  this.drawGradientRect(this.left, this.top, this.right, this.bottom, -1072689136, -804253680);
-	        }
-	        else
-	        {
+	        if (this.client.theWorld == null) {
 	            GL11.glDisable(GL11.GL_LIGHTING);
 	            GL11.glDisable(GL11.GL_FOG);
-	            this.client.renderEngine.bindTexture(Gui.optionsBackground);
+	            this.client.renderEngine.bindTexture(GuiStaticVariables.options);
 	            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	            float var17 = 32.0F;
 	            var18.startDrawingQuads();
@@ -294,7 +272,7 @@ public abstract class GuiScrollingList
 	        }
 	
 	 
-	        var10 = this.top +4 - (int)this.scrollDistance;
+	        var10 = this.top + 4 - (int)this.scrollDistance;
 	
 	        if (this.field_27262_q)
 	        {
@@ -341,7 +319,7 @@ public abstract class GuiScrollingList
 	        }
 	
 	        GL11.glDisable(GL11.GL_DEPTH_TEST);
-	        byte var20 = 12;
+	        //byte var20 = 12;
 	        if (this.client.theWorld == null)
 	        {
 	            this.overlayBackground(0, this.top, 255, 255);

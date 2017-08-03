@@ -1,7 +1,6 @@
 package ru.alastar.minedonate.gui;
 
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
 import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.gui.GuiScrollingList;
 
@@ -17,14 +16,14 @@ public interface ShopCategory {
     String getName();
 
     void draw(ShopGUI relative, int page, int mouseX, int mouseY, float partialTicks, DrawType dt);
-
+    void undraw ( ) ;
+    
     void updateButtons(ShopGUI relative, int page);
 
     int elements_per_page();
 
     void actionPerformed(GuiButton button);
     
-    //#LOG
     int getButtonWidth ( ) ;
     String getButtonText ( ) ;
 
@@ -44,5 +43,6 @@ public interface ShopCategory {
 	void search(String text);
 
 	GuiScrollingList getScrollList();
-    
+    String getCatMoneyType ( ) ;
+
 }

@@ -2,20 +2,15 @@ package ru.alastar.minedonate.gui.categories;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.RenderHelper;
 import ru.alastar.minedonate.MineDonate;
-import ru.alastar.minedonate.gui.BuyButton;
-import ru.alastar.minedonate.gui.CountButton;
 import ru.alastar.minedonate.gui.ShopCategory;
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.merch.info.EntityInfo;
-import ru.alastar.minedonate.merch.info.ItemInfo;
 import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.gui.GuiAbstractItemEntry;
 import ru.log_inil.mc.minedonate.gui.GuiItemsScrollArea;
 import ru.log_inil.mc.minedonate.gui.GuiScrollingList;
 import ru.log_inil.mc.minedonate.gui.items.GuiItemEntryOfEntityMerch;
-import ru.log_inil.mc.minedonate.gui.items.GuiItemEntryOfItemMerch;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,9 +21,6 @@ import java.util.List;
 public class EntitiesCategory implements ShopCategory {
 
 	int catId = 3 ;
-	
-    private static int m_Per_Row = 4;
-    private static int m_Per_Col = 2;
     
     @Override
     public boolean getEnabled() {
@@ -56,7 +48,12 @@ public class EntitiesCategory implements ShopCategory {
     	gi.drawScreen(mouseX, mouseY, partialTicks, dt);
     	
     }
-
+    
+    @Override
+    public void undraw ( ) {
+    	
+    }
+    
     @Override
     public void updateButtons(ShopGUI relative, int m_Page) {
     	
@@ -120,7 +117,7 @@ public class EntitiesCategory implements ShopCategory {
 
 
 	GuiItemsScrollArea gi ;
-	List < GuiAbstractItemEntry > entrs = new ArrayList <GuiAbstractItemEntry > ( ) ;
+	List < GuiAbstractItemEntry > entrs = new ArrayList < > ( ) ;
 	
 	ShopGUI gui ;
 	
@@ -182,14 +179,6 @@ public class EntitiesCategory implements ShopCategory {
 	    	}
 		
 		}
-		
-		/*
-    	for ( int i = 0 ; i < MineDonate . m_Categories [ catId ] . getMerch ( ) . length ; i ++ ) {
-    		
-    		eim = ( EntityInfo ) MineDonate . m_Categories [ catId ] . getMerch ( ) [ i ] ; 
-    		entrs . add ( new GuiItemEntryOfEntityMerch ( eim, this ) . addButtons ( gui ) . updateDrawData ( ) ) ;
-    		
-    	} */
     	
     	gi . entrs = entrs ;
     	gi . applyScrollLimits ( ) ;
@@ -221,6 +210,13 @@ public class EntitiesCategory implements ShopCategory {
 	@Override
 	public GuiScrollingList getScrollList() {
 		return null;
+	}
+
+	@Override
+	public String getCatMoneyType ( ) {
+		
+		return  MineDonate . getMoneyType ( ShopGUI . instance . getCurrentShopId ( ), catId ) ;
+		
 	}
 	
 }

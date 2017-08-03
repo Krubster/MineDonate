@@ -71,7 +71,6 @@ public class RegionsCategory implements ShopCategory {
 		
     	if ( dt == DrawType . BG ){
     		
-      	    // relative.drawRect(30, (int) (resolution.getScaledHeight() * 0.1) + 15+24, resolution.getScaledWidth()-30,  (int) ( (resolution.getScaledHeight()) - (resolution.getScaledHeight() * 0.1) ) - 5, 1258291200);
     	    relative.drawGradientRectAccess(30, (int) (resolution.getScaledHeight() * 0.1) + 15+24, resolution.getScaledWidth()-30,  (int) ( (resolution.getScaledHeight()) - (resolution.getScaledHeight() * 0.1) ) - 5,  -1072689136, -804253680);
 
     	} else if ( dt == DrawType.POST ) {
@@ -81,7 +80,6 @@ public class RegionsCategory implements ShopCategory {
     		
             rip . drawn = 0 ;
             
-            //ArrayList list0 = new ArrayList();
             for (int i = 0; i < m_Per_Row; ++i) {
                 for (int j = 0; j < m_Per_Col; ++j) {
                     if (m_Page * m_Per_Col * m_Per_Row + rip . drawn < list . size ( ) ) {
@@ -96,11 +94,6 @@ public class RegionsCategory implements ShopCategory {
             
     		RenderHelper . disableStandardItemLighting ( ) ;
     		GL11 . glDisable ( GL12 . GL_RESCALE_NORMAL ) ;
-    		//if(list0.size() > 0)
-            //    relative.drawHoveringText(list0, mouseX, mouseY, relative.getFontRenderer());
-    		
-    		
-    		//
     		
     	    GL11.glEnable(GL11.GL_BLEND);
   	        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -113,8 +106,6 @@ public class RegionsCategory implements ShopCategory {
 	        Tessellator var18 = Tessellator.instance;
 	        byte var20 = 12;
 	        
-	        // 30, (int) (resolution.getScaledHeight() * 0.1) + 15+24, resolution.getScaledWidth()-30,  (int) ( (resolution.getScaledHeight()) - (resolution.getScaledHeight() * 0.1) ) - 5,  -1072689136, -804253680);
-
 	        var18.startDrawingQuads();
 	        
 	        var18.setColorRGBA_I(0, 0);
@@ -154,9 +145,14 @@ public class RegionsCategory implements ShopCategory {
         }
  
     }
+
+    @Override
+    public void undraw ( ) {
+    	
+    }
     
-    List < RegionInfo > list = new ArrayList <RegionInfo > ( ) ;
-    Map < Integer, BuyButton > buttonsMap = new HashMap < Integer, BuyButton> ( ) ; // holy shi~
+    List < RegionInfo > list = new ArrayList < > ( ) ;
+    Map < Integer, BuyButton > buttonsMap = new HashMap < > ( ) ; // holy shi~
 
     int lastPage = 0 ;
     BuyButton bb ;
@@ -166,7 +162,7 @@ public class RegionsCategory implements ShopCategory {
         
 		for ( RegionInfo ri : list ) {
 			
-			if ( buttonsMap . containsKey ( ri.merch_id ) ) relative . removeButton ( buttonsMap . get ( ri . merch_id ) ) ;
+			if ( buttonsMap . containsKey ( ri . merch_id ) ) relative . removeButton ( buttonsMap . get ( ri . merch_id ) ) ;
 
     	}
 		
@@ -177,7 +173,7 @@ public class RegionsCategory implements ShopCategory {
 
 	    	if ( search ) {
 	    		
-	    		for ( Merch ri:  MineDonate . shops . get ( gui . getCurrentShopId ( ) ) . cats [ catId ] . getMerch ( ) ) {
+	    		for ( Merch ri : MineDonate . shops . get ( gui . getCurrentShopId ( ) ) . cats [ catId ] . getMerch ( ) ) {
 	    			
 	        		if ( ( ( RegionInfo ) ri ) . name . contains ( searchValue ) ) {
 	        			
@@ -189,7 +185,7 @@ public class RegionsCategory implements ShopCategory {
 	    		
 	    	} else {
 	    		
-	    		for ( Merch ri:  MineDonate . shops . get ( gui . getCurrentShopId ( ) ) . cats [ catId ] . getMerch ( ) ) {
+	    		for ( Merch ri: MineDonate . shops . get ( gui . getCurrentShopId ( ) ) . cats [ catId ] . getMerch ( ) ) {
 	    			
 	    			list . add ( ( RegionInfo ) ri ) ;
 	  
@@ -202,19 +198,23 @@ public class RegionsCategory implements ShopCategory {
 		}
 		
     	int drawn = 0;
-        //MineDonate.m_Categories[2].getMerch().length
-        ScaledResolution resolution= new ScaledResolution( relative.mc, relative.mc.displayWidth, relative.mc.displayHeight);
+
+    	ScaledResolution resolution= new ScaledResolution( relative.mc, relative.mc.displayWidth, relative.mc.displayHeight); // bull shit
+    	
+        RegionInfo info ;
+        int x_offset ;
+        int y_offset ;
 
         for (int i = 0; i < m_Per_Row; ++i) {
             for (int j = 0; j < m_Per_Col; ++j) {
                 if (m_Page * m_Per_Col * m_Per_Row + drawn < list.size()) {
  
-                	int x_offset = ( ( resolution . getScaledWidth ( ) / 2 - ( getColCount ( ) * 75 ) / 2 ) / 2 ) + 75 * ( j + 1 );
-                	int y_offset = ( ( resolution . getScaledHeight ( ) / 2 - ( getRowCount ( ) * 75 ) / 2 ) / 2 ) + 75 * ( i + 1 );
+                	x_offset = ( ( resolution . getScaledWidth ( ) / 2 - ( getColCount ( ) * 75 ) / 2 ) / 2 ) + 75 * ( j + 1 );
+                	y_offset = ( ( resolution . getScaledHeight ( ) / 2 - ( getRowCount ( ) * 75 ) / 2 ) / 2 ) + 75 * ( i + 1 );
                 
-                    final RegionInfo info = list.get(m_Page * m_Per_Col * m_Per_Row + drawn);
+                    info = list.get(m_Page * m_Per_Col * m_Per_Row + drawn);
                   
-                    bb = new BuyButton(info . getShopId ( ), info.merch_id, ShopGUI.getNextButtonId(), x_offset - 22, y_offset + 15, MineDonate.cfgUI.cats.regions.itemBuyButton.width, MineDonate.cfgUI.cats.regions.itemBuyButton.height, MineDonate.cfgUI.cats.regions.itemBuyButton.text);
+                    bb = new BuyButton ( info . getShopId ( ), info . getCategory ( ), info . merch_id, ShopGUI.getNextButtonId(), x_offset - 22, y_offset + 15, MineDonate.cfgUI.cats.regions.itemBuyButton.width, MineDonate.cfgUI.cats.regions.itemBuyButton.height, MineDonate.cfgUI.cats.regions.itemBuyButton.text);
                     buttonsMap.put(info.merch_id, bb);
 
                     relative.addBtn(bb);
@@ -315,6 +315,13 @@ public class RegionsCategory implements ShopCategory {
 	@Override
 	public GuiScrollingList getScrollList() {
 		return null;
+	}
+	
+	@Override
+	public String getCatMoneyType ( ) {
+		
+		return  MineDonate . getMoneyType ( ShopGUI . instance . getCurrentShopId ( ), catId ) ;
+		
 	}
 	
 }

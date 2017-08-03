@@ -1,7 +1,6 @@
 package ru.alastar.minedonate.merch.info;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.player.EntityPlayerMP;
 import ru.alastar.minedonate.merch.Merch;
 
 import java.io.UnsupportedEncodingException;
@@ -15,8 +14,10 @@ public class PrivilegieInfo extends Merch {
     public String description;
     public long seconds;
 
-    public PrivilegieInfo(int merch_id, String n, String desc, String picture_url, int cost, long seconds) {
-        this.merch_id = merch_id;
+    public PrivilegieInfo(int _shopId, int _catId, int merch_id, String n, String desc, String picture_url, int cost, long seconds) {
+    	this.shopId = _shopId;
+    	this.catId = _catId;
+    	this.merch_id = merch_id;
         this.name = n;
         this.description = desc;
         this.cost = cost;
@@ -35,6 +36,8 @@ public class PrivilegieInfo extends Merch {
 
     @Override
     public void write(ByteBuf buf) {
+    	buf.writeInt(shopId);
+        buf.writeInt(catId);
         buf.writeInt(merch_id);
         buf.writeInt(cost);
         buf.writeInt(name.getBytes().length);
@@ -57,6 +60,8 @@ public class PrivilegieInfo extends Merch {
 
     @Override
     public void read(ByteBuf buf) {
+    	shopId = buf.readInt();
+    	catId = buf.readInt();
         merch_id = buf.readInt();
         cost = buf.readInt();
         int name_length = buf.readInt();

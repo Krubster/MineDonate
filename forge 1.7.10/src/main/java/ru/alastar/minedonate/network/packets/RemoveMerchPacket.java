@@ -21,13 +21,13 @@ public class RemoveMerchPacket implements IMessage {
 
     @Override public void toBytes(ByteBuf buf) {
     	buf.writeInt(shopId);
-        buf.writeInt(merch_id);//????? writeByte
-        buf.writeInt(category_id);//????? writeByte
+        buf.writeInt(merch_id);
+        buf.writeInt(category_id);
     }
 
     @Override public void fromBytes(ByteBuf buf) {
     	shopId = buf.readInt();
-        merch_id = buf.readInt();//????? readByte
-        category_id = buf.readInt();//????? readByte
+        merch_id = buf.readInt();
+        category_id = buf.readInt();
     }
 }

@@ -18,6 +18,21 @@ import java.sql.Statement;
  * Created by Alastar on 21.07.2017.
  */
 public class Regions extends MerchCategory {
+	
+    public int shopId;
+    public int catId;
+    
+	String moneyType ;
+	
+	public Regions ( int _shopId, int _catId, String _moneyType ) {
+	
+    	this.shopId = _shopId;
+    	this.catId = _catId;
+    	
+		moneyType = _moneyType ;
+		
+	}
+
     @Override
     public boolean canReverse() {
         return true;
@@ -48,7 +63,7 @@ public class Regions extends MerchCategory {
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
-        returnToStock(new RegionInfo(m_Merch.length, Integer.valueOf(log_msg.split(":")[4]), name, world_name));
+        returnToStock(new RegionInfo(shopId, catId, m_Merch.length, Integer.valueOf(log_msg.split(":")[4]), name, world_name));
     }
 
     private void returnToStock(RegionInfo regionInfo) {
@@ -72,7 +87,7 @@ public class Regions extends MerchCategory {
         int i = 0;
         try {
             while (rs.next()) {
-                final RegionInfo info = new RegionInfo(i, rs.getInt("cost"), rs.getString("name"), rs.getString("world"));
+                final RegionInfo info = new RegionInfo(shopId, catId, i, rs.getInt("cost"), rs.getString("name"), rs.getString("world"));
                 this.addMerch(info);
                 ++i;
             }
@@ -135,4 +150,12 @@ public class Regions extends MerchCategory {
             e.printStackTrace();
         }
     }
+    
+	@Override
+	public String getMoneyType ( ) {
+		
+		return moneyType ;
+		
+	}
+	
 }
