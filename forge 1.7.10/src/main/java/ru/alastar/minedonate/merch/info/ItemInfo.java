@@ -4,8 +4,6 @@ import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.EmptyByteBuf;
-import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.buffer.Unpooled;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -51,7 +49,9 @@ public class ItemInfo extends Merch {
         return modified;
     }
 
-    public ItemInfo(int mid, int cos, String n, String inf, int lim, java.sql.Blob data) {
+    public ItemInfo(int _shopId, int _catId, int mid, int cos, String n, String inf, int lim, java.sql.Blob data) {
+    	this.shopId = _shopId;
+    	this.catId = _catId;
         this.merch_id = mid;
         this.cost = cos;
         this.name = n;
@@ -67,7 +67,9 @@ public class ItemInfo extends Merch {
         }
         ByteBufUtils.readItemStack(buf).writeToNBT(stack_data);
     }
-    public ItemInfo(int mid, int cos, String n, String inf, int lim, ItemStack data) {
+    public ItemInfo(int _shopId, int _catId, int mid, int cos, String n, String inf, int lim, ItemStack data) {
+    	this.shopId = _shopId;
+    	this.catId = _catId;
         this.merch_id = mid;
         this.cost = cos;
         this.name = n;
@@ -82,6 +84,8 @@ public class ItemInfo extends Merch {
 
     @Override
     public void write(ByteBuf buf) {
+    	buf.writeInt(shopId);
+        buf.writeInt(catId);
         buf.writeInt(merch_id);
         buf.writeInt(cost);
         buf.writeInt(name.getBytes().length);
@@ -99,6 +103,8 @@ public class ItemInfo extends Merch {
 
     @Override
     public void read(ByteBuf buf) {
+    	shopId = buf.readInt();
+    	catId = buf.readInt();
         merch_id = buf.readInt();
         this.cost = buf.readInt();
         int name_length = buf.readInt();

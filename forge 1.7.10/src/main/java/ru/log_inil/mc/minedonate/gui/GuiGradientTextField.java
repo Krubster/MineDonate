@@ -5,7 +5,6 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.ChatAllowedCharacters;
 
@@ -38,16 +37,27 @@ public class GuiGradientTextField extends Gui
     /** True if this textbox is visible */
     private boolean visible = true;
     private static final String __OBFID = "CL_00000670";
-
-    public GuiGradientTextField(FontRenderer p_i1032_1_, int p_i1032_2_, int p_i1032_3_, int p_i1032_4_, int p_i1032_5_)
+    public boolean bgIsGradient = false ;
+    public boolean isHoldered = false ;
+    public String textHolder ;
+    
+    public GuiGradientTextField(FontRenderer p_i1032_1_, int p_i1032_2_, int p_i1032_3_, int p_i1032_4_, int p_i1032_5_, boolean _bgIsGradient)
     {
         this.field_146211_a = p_i1032_1_;
         this.xPosition = p_i1032_2_;
         this.yPosition = p_i1032_3_;
         this.width = p_i1032_4_;
         this.height = p_i1032_5_;
+        this . bgIsGradient = _bgIsGradient ;
     }
-
+    
+    
+    public void setTextHolder ( String _textHolder ) {
+    	
+    	textHolder = _textHolder ;
+    	isHoldered = textHolder != null ;
+    	
+    }
     /**
      * Increments the cursor counter
      */
@@ -101,7 +111,6 @@ public class GuiGradientTextField extends Gui
         int i = this.cursorPosition < this.selectionEnd ? this.cursorPosition : this.selectionEnd;
         int j = this.cursorPosition < this.selectionEnd ? this.selectionEnd : this.cursorPosition;
         int k = this.maxStringLength - this.text.length() - (i - this.selectionEnd);
-        boolean flag = false;
 
         if (this.text.length() > 0)
         {
@@ -477,11 +486,26 @@ public class GuiGradientTextField extends Gui
         {
             if (this.getEnableBackgroundDrawing())
             {
+            	if ( bgIsGradient ) {
+            		
+            		this.drawGradientRect ( xPosition, yPosition, xPosition + width, yPosition+height, GuiStaticVariables.guiGradientTextField_GradientStartColor, GuiStaticVariables.guiGradientTextField_GradientEndColor);
+            		
+            	} else {
+            		
+		            drawRect(this.xPosition - 1, this.yPosition - 1, this.xPosition + this.width + 1, this.yPosition + this.height + 1, GuiStaticVariables.guiGradientTextField_BgRectColor0 ) ;
+		            drawRect(this.xPosition, this.yPosition, this.xPosition + this.width, this.yPosition + this.height, GuiStaticVariables.guiGradientTextField_BgRectColor1 ) ;
+		            
+            	}
             	
-    			this.drawGradientRect ( xPosition, yPosition, xPosition + width, yPosition+height, 1761673473, 0);
-
-   //             drawRect(this.xPosition - 1, this.yPosition - 1, this.xPosition + this.width + 1, this.yPosition + this.height + 1, -6250336);
+	//             drawRect(this.xPosition - 1, this.yPosition - 1, this.xPosition + this.width + 1, this.yPosition + this.height + 1, -6250336);
    //             drawRect(this.xPosition, this.yPosition, this.xPosition + this.width, this.yPosition + this.height, -16777216);
+         
+            }
+            
+            if ( isHoldered && getText ( ) == null || getText ( ) . trim ( ) . isEmpty ( ) ) {
+            	
+            	this . drawString ( field_146211_a, textHolder, xPosition + 4, yPosition + 5, GuiStaticVariables . guiGradientTextField_HolderColor ) ;
+            	
             }
 
             int i = this.isEnabled ? this.enabledColor : this.disabledColor;

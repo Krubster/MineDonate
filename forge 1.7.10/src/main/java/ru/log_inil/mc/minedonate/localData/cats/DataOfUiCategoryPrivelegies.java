@@ -1,10 +1,10 @@
 package ru.log_inil.mc.minedonate.localData.cats;
 
-import ru.log_inil.mc.minedonate.localData.DataOfUiCategoryAbstract;
+import ru.log_inil.mc.minedonate.localData.DataOfUICategoryAbstract;
 
-public class DataOfUiCategoryPrivelegies extends DataOfUiCategoryAbstract {
+public class DataOfUICategoryPrivelegies extends DataOfUICategoryAbstract {
 
-	public DataOfUiCategoryPrivelegies ( ) {
+	public DataOfUICategoryPrivelegies ( ) {
 		
 		super ( ) ;
 

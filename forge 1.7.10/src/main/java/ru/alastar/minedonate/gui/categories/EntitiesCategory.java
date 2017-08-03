@@ -1,21 +1,15 @@
 package ru.alastar.minedonate.gui.categories;
 
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.RenderHelper;
 import ru.alastar.minedonate.MineDonate;
-import ru.alastar.minedonate.gui.BuyButton;
-import ru.alastar.minedonate.gui.CountButton;
 import ru.alastar.minedonate.gui.ShopCategory;
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.merch.info.EntityInfo;
-import ru.alastar.minedonate.merch.info.ItemInfo;
 import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.gui.GuiAbstractItemEntry;
 import ru.log_inil.mc.minedonate.gui.GuiItemsScrollArea;
 import ru.log_inil.mc.minedonate.gui.GuiScrollingList;
 import ru.log_inil.mc.minedonate.gui.items.GuiItemEntryOfEntityMerch;
-import ru.log_inil.mc.minedonate.gui.items.GuiItemEntryOfItemMerch;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,13 +17,14 @@ import java.util.List;
 /**
  * Created by Alastar on 20.07.2017.
  */
-public class EntitiesCategory implements ShopCategory {
-
-	int catId = 3 ;
-	
-    private static int m_Per_Row = 4;
-    private static int m_Per_Col = 2;
+public class EntitiesCategory extends ShopCategory {
     
+	public EntitiesCategory ( ) {
+		
+		catId = 3 ;
+		
+	}
+	
     @Override
     public boolean getEnabled() {
         return MineDonate.cfg.sellEntities;
@@ -43,8 +38,10 @@ public class EntitiesCategory implements ShopCategory {
     }
 
     @Override
-    public String getName() {
-        return "Entities";
+    public String getName ( ) {
+        
+    	return "Entities" ;
+        
     }
 
     ScaledResolution resolution ;
@@ -56,22 +53,12 @@ public class EntitiesCategory implements ShopCategory {
     	gi.drawScreen(mouseX, mouseY, partialTicks, dt);
     	
     }
-
+    
     @Override
     public void updateButtons(ShopGUI relative, int m_Page) {
     	
     	refreshGui ( ) ; 
 
-    }
-
-    @Override
-    public int elements_per_page() {
-        return 0;
-    }
-
-    @Override
-    public void actionPerformed(GuiButton button) {
-        
     }
     
     // #LOG
@@ -90,47 +77,9 @@ public class EntitiesCategory implements ShopCategory {
 		
 	}
 
-	@Override
-	public int getRowCount() {
-		return 0;
-	}
-
-	@Override
-	public void setRowCount(int i) {
-	}
-
-	@Override
-	public int getColCount() {
-		return 0;
-	}
-
-	@Override
-	public void setColCount(int i) {
-	}
-
-	@Override
-	public int getItemWidth() {
-		return 0;
-	}
-
-	@Override
-	public int getItemHeight() {
-		return 0;
-	}
-
-
 	GuiItemsScrollArea gi ;
-	List < GuiAbstractItemEntry > entrs = new ArrayList <GuiAbstractItemEntry > ( ) ;
-	
-	ShopGUI gui ;
-	
-	@Override
-	public void init ( ShopGUI _shopGUI ) {
-
-		gui = _shopGUI ;
+	List < GuiAbstractItemEntry > entrs = new ArrayList < > ( ) ;
 		
-	}
-	
 	@Override
 	public void initGui ( ) {
 	
@@ -182,45 +131,17 @@ public class EntitiesCategory implements ShopCategory {
 	    	}
 		
 		}
-		
-		/*
-    	for ( int i = 0 ; i < MineDonate . m_Categories [ catId ] . getMerch ( ) . length ; i ++ ) {
-    		
-    		eim = ( EntityInfo ) MineDonate . m_Categories [ catId ] . getMerch ( ) [ i ] ; 
-    		entrs . add ( new GuiItemEntryOfEntityMerch ( eim, this ) . addButtons ( gui ) . updateDrawData ( ) ) ;
-    		
-    	} */
     	
     	gi . entrs = entrs ;
     	gi . applyScrollLimits ( ) ;
     	
 	}
-
-	boolean search = false ;
-	String searchValue = "" ;
 	
 	@Override
-	public void search ( String text ) {
+	public GuiScrollingList getScrollList ( ) {
 		
-		search = ! ( text == null || text . trim ( ) . isEmpty ( ) ) ;
+		return gi ;
 		
-		if ( search ) {
-			
-			searchValue = text . toLowerCase ( ) . trim ( ) ;
-			
-		} else {
-			
-			searchValue = "" ;
-			
-		}
-		
-		refreshGui ( ) ;
-		
-	}
-	
-	@Override
-	public GuiScrollingList getScrollList() {
-		return null;
 	}
 	
 }

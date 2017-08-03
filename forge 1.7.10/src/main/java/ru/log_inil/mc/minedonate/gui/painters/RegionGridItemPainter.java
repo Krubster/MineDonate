@@ -1,12 +1,14 @@
 package ru.log_inil.mc.minedonate.gui.painters;
 
+import java.util.ArrayList;
+
 import net.minecraft.client.gui.ScaledResolution;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.gui.ShopCategory;
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.merch.Merch;
+import ru.alastar.minedonate.merch.info.ItemInfo;
 import ru.alastar.minedonate.merch.info.RegionInfo;
-import ru.log_inil.mc.minedonate.gui.IGridItemPainter;
 
 public class RegionGridItemPainter implements IGridItemPainter {
 
@@ -34,8 +36,9 @@ public class RegionGridItemPainter implements IGridItemPainter {
       info = ( RegionInfo ) _info ;
 
       relative.drawCenteredString(relative.getFontRenderer(), info.name, x_offset, y_offset - 15, 16777215);
-      relative.drawCenteredString(relative.getFontRenderer(), MineDonate.cfgUI.cats.regions.pricePrefix + info.cost + MineDonate.cfgUI.cats.regions.priceSuffix, x_offset, y_offset, 16777215);
-       
+     //relative.drawCenteredString(relative.getFontRenderer(), MineDonate.cfgUI.cats.regions.pricePrefix + info.cost + MineDonate.cfgUI.cats.regions.priceSuffix, x_offset, y_offset, 16777215);
+      relative . moneyArea . drawPriceArea ( x_offset, y_offset, info . cost, info . getMoneyType ( ) ) ;
+
 	}
 	
 }

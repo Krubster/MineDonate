@@ -28,7 +28,7 @@ public class ClientProxy extends CommonProxy {
     public static KeyBinding refreshCfg;
 
     public static DynamicTexture[] m_Privelegies_Icons = new DynamicTexture[0];
-    public static KeyBinding openAdmin = new KeyBinding("minedonate.open.admin", Keyboard.KEY_MINUS, "key.minedonate.main.admin");
+    public static KeyBinding openAdmin = new KeyBinding("minedonate.open.admin", Keyboard.KEY_MINUS, "key.minedonate.main");
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
@@ -38,15 +38,13 @@ public class ClientProxy extends CommonProxy {
         FMLCommonHandler.instance().bus().register(new KeyInputEvent());
 
         MineDonate.loadClientConfig();
-        MineDonate.loadMerchClient();
 
         ClientRegistry.registerKeyBinding(openHUD);
         ClientRegistry.registerKeyBinding(openAdmin);
 
         if (MineDonate.cfgUI.bindF5RefreshButton) {
 
-            // FMLCommonHandler.instance().bus().register(new KeyInputEvent.Refresh());
-            refreshCfg = new KeyBinding("minedonate.refresh", Keyboard.KEY_F5, "key.minedonate.refresh");
+            refreshCfg = new KeyBinding("minedonate.refresh", Keyboard.KEY_F5, "key.minedonate.main");
             ClientRegistry.registerKeyBinding(refreshCfg);
 
         }

@@ -7,8 +7,6 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import ru.alastar.minedonate.MineDonate;
-import ru.alastar.minedonate.gui.ShopGUI;
-import ru.alastar.minedonate.network.packets.NeedUpdatePacket;
 import ru.alastar.minedonate.proxies.ClientProxy;
 
 /**
@@ -16,23 +14,6 @@ import ru.alastar.minedonate.proxies.ClientProxy;
  */
 public class KeyInputEvent {
 	
-	/*
-    public static class Refresh {
-    	
-    	@SideOnly(Side.CLIENT)
-        @SubscribeEvent(priority= EventPriority.NORMAL, receiveCanceled=true)
-        public void onEvent(InputEvent.KeyInputEvent event) {
-        	
-        	if ( ClientProxy . refreshCfg . isPressed ( ) ) {
-            	
-        		MineDonate . loadClientConfig ( ) ;
-               
-            }
-            
-        }
-    	
-	}*/
-
 	@SideOnly(Side.CLIENT)
     @SubscribeEvent(priority= EventPriority.NORMAL, receiveCanceled=true)
     public void onEvent(InputEvent.KeyInputEvent event) {

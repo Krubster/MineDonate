@@ -1,24 +1,24 @@
 package ru.log_inil.mc.minedonate.localData.cats;
 
-import ru.log_inil.mc.minedonate.localData.DataOfUiButton;
-import ru.log_inil.mc.minedonate.localData.DataOfUiCategoryAbstract;
+import ru.log_inil.mc.minedonate.localData.DataOfUIElement;
+import ru.log_inil.mc.minedonate.localData.DataOfUICategoryAbstract;
 
-public class DataOfUiCategoryUsersShops extends DataOfUiCategoryAbstract {
+public class DataOfUICategoryUsersShops extends DataOfUICategoryAbstract {
 
 	public boolean dontShowFreezed ;
 	public boolean lockGoShopButtonWhenFreezed ;
-	public DataOfUiButton lockedGoButton ;
+	public DataOfUIElement lockedGoButton ;
 
-	public DataOfUiCategoryUsersShops ( ) {
+	public DataOfUICategoryUsersShops ( ) {
 		
 		super ( ) ;
 
 		categoryButtonText = "Users shops" ;
 		categoryButtonWidth = 95 ;
-		itemBuyButton = new DataOfUiButton ( "Open", 44, 20 ) ;
+		itemBuyButton = new DataOfUIElement ( "Open", 44, 20 ) ;
 		dontShowFreezed = false ;
 		lockGoShopButtonWhenFreezed = true ;
-		lockedGoButton = new DataOfUiButton ( "Locked", 54, 20 ) ;
+		lockedGoButton = new DataOfUIElement ( "Locked", 54, 20 ) ;
 
 	}
 	

@@ -1,48 +1,148 @@
 package ru.alastar.minedonate.gui;
 
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
+import ru.alastar.minedonate.MineDonate;
 import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.gui.GuiScrollingList;
 
 /**
  * Created by Alastar on 19.07.2017.
  */
-public interface ShopCategory {
+public abstract class ShopCategory {
 
-    boolean getEnabled();
+	protected int catId ;
+	
+	public boolean getEnabled ( ) {
+		
+		return false ;
+		
+	}
 
-    int getSourceCount(int shopId);
+    public int getSourceCount ( int shopId ) {
+    	
+    	return 0 ;
+    	
+    }
 
-    String getName();
+    public String getName ( ) {
+    	
+    	return "generic" ;
+    	
+    }
 
-    void draw(ShopGUI relative, int page, int mouseX, int mouseY, float partialTicks, DrawType dt);
-
-    void updateButtons(ShopGUI relative, int page);
-
-    int elements_per_page();
-
-    void actionPerformed(GuiButton button);
+    public abstract void draw(ShopGUI relative, int page, int mouseX, int mouseY, float partialTicks, DrawType dt ) ;
+    public void undraw ( ) {
+    	
+    }
     
-    //#LOG
-    int getButtonWidth ( ) ;
-    String getButtonText ( ) ;
+    public void updateButtons ( ShopGUI relative, int page ) {
+    	
+    }
 
-    int getRowCount ( ) ;
-    void setRowCount ( int i ) ;
+    public int elementsOnPage ( ) {
+    	
+    	return rowCount * colCount ;
+    	
+    }
+
+    public void actionPerformed ( GuiButton button ) {
+    	
+    }
     
-    int getColCount ( ) ;
-    void setColCount ( int i ) ;
-
-    int getItemWidth ( ) ;
-    int getItemHeight ( ) ;
-
-	void init(ShopGUI shopGUI);
-
-	void initGui();
-
-	void search(String text);
-
-	GuiScrollingList getScrollList();
+    public int getButtonWidth ( ) {
+    	
+    	return 0 ;
+    	
+    }
     
+    public String getButtonText ( ) {
+    	
+    	return "?" ;
+    	
+    }
+
+    protected int rowCount ;
+    
+    public int getRowCount ( ) {
+    	
+    	return rowCount ;
+    	
+    }
+    
+    public void setRowCount ( int i ) {
+    	
+    	rowCount = i ;
+    	
+    }
+    
+    protected int colCount ;
+    public int getColCount ( ) { 
+    	
+    	return colCount ;
+    	
+    }
+    
+    public void setColCount ( int i ) {
+    	
+    	colCount = i ;
+    	
+    }
+
+    public int getItemWidth ( ) {
+    	
+    	return 0 ;
+    	
+    }
+    
+    public int getItemHeight ( ) {
+    	
+    	return 0 ;
+    	
+    }
+    
+    protected ShopGUI gui ;
+    
+	public void init ( ShopGUI _shopGUI ) {
+		
+		gui = _shopGUI ;
+		
+	}
+
+	public void initGui ( ) {
+		
+	}
+
+	protected boolean search ;
+	protected String searchValue ;
+	
+	public void search ( String text ) {
+		
+		search = ! ( text == null || text . trim ( ) . isEmpty ( ) ) ;
+		
+		if ( search ) {
+			
+			searchValue = text . toLowerCase ( ) . trim ( ) ;
+			
+		} else {
+			
+			searchValue = "" ;
+			
+		}
+			
+		updateButtons ( gui, 0 ) ;
+		
+	}
+
+	public GuiScrollingList getScrollList ( ) {
+		
+		return null ;
+		
+	}
+	
+	public String getCatMoneyType ( ) {
+    
+		return  MineDonate . getMoneyType ( ShopGUI . instance . getCurrentShopId ( ), catId ) ;
+    	
+    }
+
 }

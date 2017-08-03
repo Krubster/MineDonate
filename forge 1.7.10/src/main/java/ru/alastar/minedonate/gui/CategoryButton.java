@@ -1,6 +1,5 @@
 package ru.alastar.minedonate.gui;
 
-import net.minecraft.client.gui.GuiButton;
 import ru.log_inil.mc.minedonate.gui.GuiGradientButton;
 
 /**

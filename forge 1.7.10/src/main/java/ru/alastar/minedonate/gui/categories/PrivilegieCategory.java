@@ -1,6 +1,5 @@
 package ru.alastar.minedonate.gui.categories;
 
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.Tessellator;
 import org.lwjgl.opengl.GL11;
@@ -11,8 +10,6 @@ import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.merch.info.PrivilegieInfo;
 import ru.log_inil.mc.minedonate.gui.DrawType;
-import ru.log_inil.mc.minedonate.gui.GuiAbstractItemEntry;
-import ru.log_inil.mc.minedonate.gui.GuiScrollingList;
 import ru.log_inil.mc.minedonate.gui.painters.PrivilegieGridItemPainter;
 
 import java.util.ArrayList;
@@ -23,16 +20,15 @@ import java.util.Map;
 /**
  * Created by Alastar on 20.07.2017.
  */
-public class PrivilegieCategory implements ShopCategory {
+public class PrivilegieCategory extends ShopCategory {
 
-    int catId = 1;
-
-    PrivilegieGridItemPainter pip; // #LOG
+    PrivilegieGridItemPainter pip;
 
     public PrivilegieCategory() {
 
         pip = new PrivilegieGridItemPainter(this);
-
+        catId = 1 ;
+        
     }
 
     @Override
@@ -42,7 +38,7 @@ public class PrivilegieCategory implements ShopCategory {
 
     @Override
     public int getSourceCount(int shopId) {
-        return list.size(); // MineDonate.m_Categories[1].getMerch().length;
+        return list.size();
     }
 
     @Override
@@ -51,14 +47,9 @@ public class PrivilegieCategory implements ShopCategory {
     }
 
     @Override
-    public int elements_per_page() {
+    public int elementsOnPage ( ) {
 
         return 1;
-
-    }
-
-    @Override
-    public void actionPerformed(GuiButton button) {
 
     }
 
@@ -79,15 +70,13 @@ public class PrivilegieCategory implements ShopCategory {
 
             if (page < list.size()) {
 
-                info = list.get(page);//MineDonate.m_Categories[1].getMerch()[page];
+                info = list.get(page);
 
                 pip.draw(relative, resolution, 0, mouseX, mouseY, partialTicks, info, 0, 0);
 
             }
 
         } else if (dt == DrawType.POST) {
-
-            // relative.drawRect(30, (int) (resolution.getScaledHeight() * 0.1) + 15+24, resolution.getScaledWidth()-30,  (int) ( (resolution.getScaledHeight()) - (resolution.getScaledHeight() * 0.1) ) - 5, 1258291200);
 
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -99,8 +88,6 @@ public class PrivilegieCategory implements ShopCategory {
 
             Tessellator var18 = Tessellator.instance;
             byte var20 = 12;
-
-            // 30, (int) (resolution.getScaledHeight() * 0.1) + 15+24, resolution.getScaledWidth()-30,  (int) ( (resolution.getScaledHeight()) - (resolution.getScaledHeight() * 0.1) ) - 5,  -1072689136, -804253680);
 
             var18.startDrawingQuads();
 
@@ -151,147 +138,72 @@ public class PrivilegieCategory implements ShopCategory {
 
     @Override
     public void updateButtons(ShopGUI relative, int page) {
+        
+		for ( PrivilegieInfo ri : list ) {
+			
+			if ( buttonsMap . containsKey ( ri.merch_id ) ) relative . removeButton ( buttonsMap . get ( ri . merch_id ) ) ;
 
-        for (PrivilegieInfo ri : list) {
+    	}
+		
+		buttonsMap . clear ( ) ;
+    	list . clear ( ) ;
+    	
+		if ( MineDonate . shops . containsKey ( gui . getCurrentShopId ( ) ) ) {
 
-            if (buttonsMap.containsKey(ri.merch_id)) relative.removeButton(buttonsMap.get(ri.merch_id));
-
-        }
-
-        buttonsMap.clear();
-        list.clear();
-
-        if (MineDonate.shops.containsKey(gui.getCurrentShopId())) {
-
-            if (search) {
-
-                for (Merch ri : MineDonate.shops.get(gui.getCurrentShopId()).cats[catId].getMerch()) {
-
-                    if (((PrivilegieInfo) ri).name.contains(searchValue)) {
-
-                        list.add((PrivilegieInfo) ri);
-
-                    }
-
-                }
-
-            } else {
-
-                for (Merch ri : MineDonate.shops.get(gui.getCurrentShopId()).cats[catId].getMerch()) {
-
-                    list.add((PrivilegieInfo) ri);
-
-                }
-
-                lastPage = page;
-
-            }
-
-        }
-
+	    	if ( search ) {
+	    		
+	    		for ( Merch ri:  MineDonate . shops . get ( gui . getCurrentShopId ( ) ) . cats [ catId ] . getMerch ( ) ) {
+	    			
+	        		if ( ( ( PrivilegieInfo ) ri ) . name . contains ( searchValue ) ) {
+	        			
+	        			list . add (  ( PrivilegieInfo ) ri ) ;
+	        			
+	        		}
+	        		
+	        	}
+	    		
+	    	} else {
+	    		
+	    		for ( Merch ri: MineDonate . shops . get ( gui . getCurrentShopId ( ) ) . cats [ catId ] . getMerch ( ) ) {
+	    			
+	    			list . add ( ( PrivilegieInfo ) ri ) ;
+	  
+	        	}
+	    		
+	    		lastPage = page ; 
+	    		
+	    	}
+    	        
+		}
+		
+		
         if (page < list.size()) {
-
+        	
             PrivilegieInfo info = list.get(page);
-            ScaledResolution resolution = new ScaledResolution(relative.mc, relative.mc.displayWidth, relative.mc.displayHeight);
+            ScaledResolution resolution = new ScaledResolution(relative.mc, relative.mc.displayWidth, relative.mc.displayHeight);// bull shit
 
             int y_offset = (int) (resolution.getScaledHeight() * 0.30);
-
-            bb = new BuyButton(info.getShopId(), info.merch_id, ShopGUI.getNextButtonId(), (bb != null ? bb.xPosition : resolution.getScaledWidth() / 2 - MineDonate.cfgUI.cats.privelegies.itemBuyButton.width / 2), y_offset + 93, MineDonate.cfgUI.cats.privelegies.itemBuyButton.width, MineDonate.cfgUI.cats.privelegies.itemBuyButton.height, MineDonate.cfgUI.cats.privelegies.itemBuyButton.text);
+                       
+            bb = new BuyButton( info . getShopId ( ), info . getCategory ( ), info . merch_id, ShopGUI.getNextButtonId(), (bb!=null?bb.xPosition: resolution . getScaledWidth ( ) / 2 - MineDonate.cfgUI.cats.privelegies.itemBuyButton.width / 2), y_offset +  93, MineDonate.cfgUI.cats.privelegies.itemBuyButton.width, MineDonate.cfgUI.cats.privelegies.itemBuyButton.height, MineDonate.cfgUI.cats.privelegies.itemBuyButton.text);
             buttonsMap.put(info.merch_id, bb);
 
-            relative.addBtn(bb);
-
+            relative . addBtn ( bb ) ;
+            
         }
     }
-
-    // #LOG
-
-    @Override
-    public int getButtonWidth() {
-
-        return MineDonate.cfgUI.cats.privelegies.categoryButtonWidth;
-
-    }
-
-    @Override
-    public String getButtonText() {
-
-        return MineDonate.cfgUI.cats.privelegies.categoryButtonText;
-
-    }
-
-    @Override
-    public int getRowCount() {
-        return 0;
-    }
-
-    @Override
-    public void setRowCount(int i) {
-    }
-
-    @Override
-    public int getColCount() {
-
-        return 0;
-
-    }
-
-    @Override
-    public void setColCount(int i) {
-    }
-
-    @Override
-    public int getItemWidth() {
-
-        return 0;
-
-    }
-
-    @Override
-    public int getItemHeight() {
-
-        return 0;
-
-    }
-
-    ShopGUI gui;
-
-    @Override
-    public void init(ShopGUI shopGUI) {
-
-        gui = shopGUI;
-
-    }
-
-    @Override
-    public void initGui() {
-    }
-
-    boolean search = false;
-    String searchValue = "";
-
-    @Override
-    public void search(String text) {
-
-        search = !(text == null || text.trim().isEmpty());
-
-        if (search) {
-
-            searchValue = text.toLowerCase().trim();
-
-        } else {
-
-            searchValue = "";
-
-        }
-
-        updateButtons(gui, lastPage);
-
-    }
-
-    @Override
-    public GuiScrollingList getScrollList() {
-        return null;
-    }
+    
+	@Override
+	public int getButtonWidth ( ) {
+		
+		return MineDonate.cfgUI.cats.privelegies.categoryButtonWidth;
+		
+	}
+	
+	@Override 
+	public String getButtonText ( ) {
+		
+		return MineDonate.cfgUI.cats.privelegies.categoryButtonText ;
+		
+	}
 
 }

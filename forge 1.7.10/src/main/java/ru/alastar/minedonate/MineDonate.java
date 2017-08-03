@@ -16,7 +16,6 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -24,14 +23,17 @@ import net.minecraft.server.MinecraftServer;
 import org.bukkit.Bukkit;
 import ru.alastar.minedonate.commands.AddItemCommand;
 import ru.alastar.minedonate.commands.AdminCommand;
+import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.merch.categories.*;
 import ru.alastar.minedonate.merch.info.EntityInfo;
 import ru.alastar.minedonate.merch.info.ItemInfo;
+import ru.alastar.minedonate.mproc.AbstractMoneyProcessor;
 import ru.alastar.minedonate.network.handlers.*;
 import ru.alastar.minedonate.network.packets.*;
 import ru.alastar.minedonate.proxies.CommonProxy;
 import ru.log_inil.mc.minedonate.localData.DataOfConfig;
+import ru.log_inil.mc.minedonate.localData.DataOfMoneyProcessor;
 import ru.log_inil.mc.minedonate.localData.DataOfUIConfig;
 import ru.log_inil.mc.minedonate.localData.LocalDataInterchange;
 
@@ -57,9 +59,10 @@ public class MineDonate {
 
     static GregorianCalendar calendar = new GregorianCalendar();
 
-    public static Map<Integer, Shop> shops = new HashMap<Integer, Shop>();
-    // public static MerchCategory[] m_Categories = new MerchCategory[]{new ItemNBlocks(0), new Privelegies(), new Regions(), new Entities(), new UsersShops()};
-    //
+    public static Map < Integer, Shop > shops = new HashMap < > ( ) ;
+    public static Map < String, AbstractMoneyProcessor > moneyProcessors = new HashMap < > ( ) ;
+    
+    public static Map < String, Integer > clientMoney = new HashMap < > ( ) ;
 
     public static Map<EntityPlayerMP, AdminSession> m_Admin_Sessions = new HashMap<EntityPlayerMP, AdminSession>();
 
@@ -69,10 +72,10 @@ public class MineDonate {
     @SideOnly(Side.SERVER)
     private static BufferedWriter m_log;
 
-    public static DataOfConfig cfg; // #LOG
+    public static DataOfConfig cfg;
 
     @SideOnly(Side.CLIENT)
-    public static DataOfUIConfig cfgUI; // #LOG
+    public static DataOfUIConfig cfgUI;
 
     @Mod.Instance("MineDonate")
     private static MineDonate instance;
@@ -162,7 +165,12 @@ public class MineDonate {
 
     }
 
-
+    public static Statement getNewStatement ( ) throws SQLException {
+    	
+    	return m_DB_Connection . createStatement ( ) ;
+    	
+    }
+    
     @SideOnly(Side.SERVER)
     public static void InitDataBase() {
 
@@ -209,93 +217,69 @@ public class MineDonate {
     }
 
     @SideOnly(Side.SERVER)
-    private static void loadMerchServer() {
-
+    private static void loadMerchServer ( ) {
+    	
         try {
+        	
+        	if ( shops . isEmpty ( ) ) {
+        	
+        		shops . put ( 0, new Shop ( 0, new MerchCategory [ ] { new ItemNBlocks ( 0, 0, cfg . itemsMoneyType ), new Privelegies ( 0, 1, cfg . privelegiesMoneyType ), new Regions ( 0, 2, cfg . regionMoneyType ), new Entities ( 0, 3, cfg . entitiesMoneyType ), new UsersShops ( ) }, "SERVER", "Server shop", false ) ) ;
+        	
+        	}
 
-            if (shops.isEmpty()) {
-
-                shops.put(0, new Shop(0, new MerchCategory[]{new ItemNBlocks(0), new Privelegies(), new Regions(), new Entities(), new UsersShops()}, "SERVER", "Server shop", false));
-
-            }
-
-            for (int i = 0; i < shops.get(0).cats.length; ++i) {
-                if (shops.get(0).cats[i].isEnabled()) {
-                    Statement stmt = m_DB_Connection.createStatement();
-                    ResultSet rs = stmt.executeQuery("SELECT * FROM " + shops.get(0).cats[i].getDatabase() + ";");
-                    shops.get(0).cats[i].loadMerchFromDB(rs);
-                    rs.close();
-                    stmt.close();
+        	Statement stmt ;
+        	ResultSet rs ;
+        	
+            for ( int i = 0; i < shops . get ( 0 ) . cats . length ; i ++ ) {
+            	
+                if ( shops . get ( 0 ) . cats [ i ] . isEnabled ( ) ) {
+                	
+                    stmt = m_DB_Connection . createStatement ( ) ;
+                    
+                    rs = stmt . executeQuery ( "SELECT * FROM " + shops . get ( 0 ) . cats [ i ] . getDatabase ( ) + ";" ) ;
+                    
+                    shops . get ( 0 ) . cats [ i ] . loadMerchFromDB ( rs ) ;
+                    
+                    rs . close ( ) ;
+                    stmt . close ( ) ;
+                    
                 }
             }
+            
+            for ( DataOfMoneyProcessor domp : cfg . moneyProcessors ) {
+            	
+            	if ( domp != null ) {
+            		
+            		try {
+
+                		moneyProcessors . put ( domp . moneyType, ( AbstractMoneyProcessor ) MineDonate . class . getClassLoader ( ) . loadClass ( domp . className ) . getConstructor ( new Class [ ] { DataOfMoneyProcessor . class } ) . newInstance ( domp ) ) ;
+    				
+                	} catch ( Exception ex ) {
+    					
+    					ex . printStackTrace ( ) ;
+    					
+    				}
+            		
+            	}
+            	
+            	
+            }
+            
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        
     }
 
     @SideOnly(Side.CLIENT)
     public static void loadMerchClient() {
 
-        if (shops.isEmpty()) {
-
-            shops.put(0, new Shop(0, new MerchCategory[]{new ItemNBlocks(0), new Privelegies(), new Regions(), new Entities(), new UsersShops()}, "SERVER", "Server shop", false));
-
-        }
+    	shops . put ( 0, new Shop ( 0, new MerchCategory[]{new ItemNBlocks(0, 0,  cfg.itemsMoneyType), new Privelegies(0, 1, cfg.privelegiesMoneyType), new Regions(0, 2, cfg.regionMoneyType), new Entities(0, 3, cfg.entitiesMoneyType), new UsersShops()}, "SERVER", "Server shop", false ) ) ;
 
     }
 
     @SideOnly(Side.SERVER)
-    public static void RegisterPlayer(EntityPlayerMP player) {
-        String name = player.getDisplayName();
-        Statement stmt;
-        try {
-            stmt = m_DB_Connection.createStatement();
-            String sql;
-            sql = "INSERT INTO " + cfg.dbAccounts + " (" + cfg.dbAccountsNameColumn + ", " + cfg.dbAccountsMoneyColumn + ") VALUES('" + name + "', " + cfg.regMoney + ")";
-            stmt.execute(sql);
-            stmt.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @SideOnly(Side.SERVER)
-    public static int getMoneyFor(String player) {
-        int money = 0;
-        Statement stmt;
-        try {
-            stmt = m_DB_Connection.createStatement();
-            String sql;
-            sql = "SELECT " + cfg.dbAccountsMoneyColumn + " FROM " + cfg.dbAccounts + " WHERE " + cfg.dbAccountsNameColumn + "='" + player + "';";
-            ResultSet rs = stmt.executeQuery(sql);
-            while (rs.next()) {
-                money = rs.getInt(cfg.dbAccountsMoneyColumn);
-            }
-            rs.close();
-            stmt.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return money;
-    }
-
-    @SideOnly(Side.SERVER)
-    public static void WithdrawMoney(int result, EntityPlayerMP serverPlayer) {
-        Statement stmt;
-        String name = serverPlayer.getDisplayName();
-        try {
-            stmt = m_DB_Connection.createStatement();
-            String sql;
-            sql = "UPDATE " + cfg.dbAccounts + " SET " + cfg.dbAccountsMoneyColumn + "=" + result + " WHERE " + cfg.dbAccountsNameColumn + "='" + name + "';";
-            stmt.executeUpdate(sql);
-            stmt.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @SideOnly(Side.SERVER)
-    public static void logBuy(Merch bought, EntityPlayerMP by, int amount) {
+    public static void logBuy(Merch bought, EntityPlayerMP by, int amount, String moneyType) {
         if (!cfg.db_log) {
             try {
                 m_log.write(calendar.getTime().toString() + ":" + by.getDisplayName() + ":" + bought.getCategory() + ":" + bought.getBoughtMessage() + ":" + bought.getCost() * amount + ":x" + amount + "\r\n");
@@ -334,10 +318,10 @@ public class MineDonate {
                         final int cost = Integer.valueOf(line.split(":")[4]);
                         final int category = Integer.valueOf(line.split(":")[2]);
                         final String bought_msg = line.split(":")[3];
-                        returnMoney(player_name, cost);
-                        if (shops.get(0).cats[category].canReverse()) {
-                            shops.get(0).cats[category].reverseFor(line, player_name);
-                        }
+                      //  returnMoney(player_name, cost);
+                      //  if (shops.get(0).cats[category].canReverse()) {
+                      //      shops.get(0).cats[category].reverseFor(line, player_name);
+                      //  }
                     }
                     reader.close();
                 }
@@ -348,22 +332,6 @@ public class MineDonate {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
-    }
-
-    @SideOnly(Side.SERVER)
-    private static void returnMoney(String player_name, int cost) {
-        Statement stmt;
-        try {
-            stmt = m_DB_Connection.createStatement();
-            String sql;
-            int reversed = getMoneyFor(player_name) + cost;
-            sql = "UPDATE " + cfg.dbAccounts + " SET " + cfg.dbAccountsMoneyColumn + "=" + reversed + " WHERE " + cfg.dbAccountsNameColumn + "='" + player_name + "';";
-            logReverse(player_name, cost, reversed);
-            stmt.executeUpdate(sql);
-            stmt.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 
@@ -394,10 +362,10 @@ public class MineDonate {
                         final String bought_msg = line.split(":")[3];
 
                         if (player_name == by.getDisplayName()) {
-                            returnMoney(player_name, cost);
-                            if (shops.get(0).cats[category].canReverse()) {
-                                shops.get(0).cats[category].reverseFor(line, player_name);
-                            }
+                            //returnMoney(player_name, cost);
+                            //if (shops.get(0).cats[category].canReverse()) {
+                            //   shops.get(0).cats[category].reverseFor(line, player_name);
+                            //}
                         }
                     }
                     reader.close();
@@ -414,29 +382,12 @@ public class MineDonate {
 
     ///End reverse section
 
-    @SideOnly(Side.SERVER)
-    public static boolean ExistsAccount(EntityPlayer player) {
-        String name = player.getDisplayName();
-        Statement stmt = null;
-        try {
-            stmt = m_DB_Connection.createStatement();
-            String sql;
-            sql = "SELECT " + cfg.dbAccountsMoneyColumn + " FROM " + cfg.dbAccounts + " WHERE " + cfg.dbAccountsNameColumn + "='" + name + "';";
-            ResultSet rs = stmt.executeQuery(sql);
-            while (rs.next()) {
-                rs.close();
-                stmt.close();
-                return true;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
     @SideOnly(Side.CLIENT)
-    public static void SetMoney(int money) {
-        m_Client_Money = money;
+    public static void SetMoney ( String moneyType, int money ) {
+
+    	clientMoney . put ( moneyType, money ) ;
+    	ShopGUI . instance . moneyArea . updateDrawData ( ) ;
+    	
     }
 
     @SideOnly(Side.CLIENT)
@@ -480,30 +431,26 @@ public class MineDonate {
             m_Admin_Sessions.remove(player);
     }
 
-    public static void RemoveMerch(int shop, int category_id, int merch_id) {
+	public static boolean checkCatExists ( int shopId, int catId ) {
+    	
+    	return ( ! shops . containsKey ( shopId ) ? false : shops . get ( shopId ) . cats . length < catId ) ? false : true ;
+    	
+	}
+	
+    public static void RemoveMerch(int shopId, int category_id, int merch_id) {
 
-        if (!shops.containsKey(shop)) {
-            return;
-        }
-        if (shops.get(shop).cats.length < category_id) {
-            return;
-        }
+    	if ( ! checkCatExists ( shopId, category_id ) ) { return ; }
 
-        if (category_id < shops.get(shop).cats.length && category_id >= 0) {
-            shops.get(shop).cats[category_id].removeMerch(merch_id);
+        if ( category_id >= 0) {
+            shops.get(shopId).cats[category_id].removeMerch(merch_id);
         }
     }
 
-    public static void modify(int shop, int m_category, int id, Merch info) {
+    public static void modify(int shopId, int category, int id, Merch info) {
 
-        if (!shops.containsKey(shop)) {
-            return;
-        }
-        if (shops.get(shop).cats.length < m_category) {
-            return;
-        }
+    	if ( ! checkCatExists ( shopId, category ) ) { return ; }
 
-        shops.get(shop).cats[m_category].updateMerch(id, info);
+        shops.get(shopId).cats[category].updateMerch(id, info);
 
     }
 
@@ -552,38 +499,37 @@ public class MineDonate {
 
     }
 
-    public static void loadUserShop(int shopId) {
+	public static void loadUserShop ( int shopId ) {
 
-        ResultSet sdata = getShopData(shopId);
+		ResultSet sdata = getShopData ( shopId ) ;
+		
+		if ( sdata == null ) {
+			
+			return ;
+			
+		}
+		
+		Shop s = null ;
+		
+		try {
+			
+			s = new Shop ( shopId, new MerchCategory [ ] { new ItemNBlocks ( shopId, 0, sdata . getString ( "moneyType" ) ) . setCustomDBTable ( cfg . dbUserItems ) }, sdata . getString ( "owner" ), sdata . getString ( "name" ), sdata . getBoolean ( "isFreezed") );
+			sdata . close ( ) ;
+			
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		
+		if ( s == null ) {
+			
+			return ;
+			
+		}
+		
+		shops . put ( shopId, s ) ;
 
-        if (sdata == null) {
-
-            return;
-
-        }
-
-        Shop s = null;
-
-        try {
-
-            s = new Shop(shopId, new MerchCategory[]{new ItemNBlocks(shopId).setCustomDBTable(cfg.dbUserItems)}, sdata.getString("owner"), sdata.getString("name"), sdata.getBoolean("isFreezed"));
-            sdata.close();
-
-        } catch (SQLException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
-
-        if (s == null) {
-
-            return;
-
-        }
-
-        shops.put(shopId, s);
-
-        try {
-
+		try {
+        	
             for (int i = 0; i < shops.get(shopId).cats.length; ++i) {
                 if (shops.get(shopId).cats[i].isEnabled()) {
                     Statement stmt = m_DB_Connection.createStatement();
@@ -593,18 +539,30 @@ public class MineDonate {
                     stmt.close();
                 }
             }
-
+            
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        
+	}
 
-    }
-
-
+	public static String getMoneyType ( int shopId, int catId ) {
+		
+    	if ( ! checkCatExists ( shopId, catId ) ) { return null ; }
+ 
+		return shops . get ( shopId ) . cats [ catId ] . getMoneyType ( ) ;
+		
+	}
+	
+	public static AbstractMoneyProcessor getMoneyProcessor ( String moneyType ) {
+		
+    	return moneyProcessors . get ( moneyType ) ;
+		
+	}
+	
     public static void AddItemToStock(ItemStack heldItem, String name, String cost, String limit) {
-        ItemInfo info = new ItemInfo(shops.get(0).cats[0].getMerch().length, Integer.valueOf(cost), name, "new merch", Integer.valueOf(limit), heldItem);
+        ItemInfo info = new ItemInfo(0, 0, shops.get(0).cats[0].getMerch().length, Integer.valueOf(cost), name, "new merch", Integer.valueOf(limit), heldItem);
         shops.get(0).cats[0].addMerch(info);
-        Statement stmt;
         try {
             ByteBuf buf = Unpooled.buffer();
             ByteBufUtils.writeItemStack(buf, heldItem);
@@ -634,9 +592,8 @@ public class MineDonate {
         int cost = Integer.parseInt(session.params[1]);
         int limit = Integer.parseInt(session.params[2]);
 
-        EntityInfo info = new EntityInfo(shops.get(0).cats[3].getMerch().length, Integer.valueOf(cost), target, name);
+        EntityInfo info = new EntityInfo(0, 3, shops.get(0).cats[3].getMerch().length, Integer.valueOf(cost), target, name);
         shops.get(0).cats[3].addMerch(info);
-        Statement stmt;
         try {
             ByteBuf buf = Unpooled.buffer();
             NBTTagCompound tag = new NBTTagCompound();

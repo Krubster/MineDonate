@@ -1,8 +1,6 @@
 package ru.alastar.minedonate.gui;
 
 import net.minecraft.client.gui.GuiButton;
-import ru.alastar.minedonate.MineDonate;
-import ru.alastar.minedonate.network.packets.BuyPacket;
 
 public class GoButton extends GuiButton {
 	

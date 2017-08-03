@@ -8,7 +8,7 @@ import ru.alastar.minedonate.Shop;
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.merch.categories.ItemNBlocks;
 import ru.alastar.minedonate.merch.categories.MerchCategory;
-import ru.alastar.minedonate.merch.info.UserShopInfo;
+import ru.alastar.minedonate.merch.info.ShopInfo;
 import ru.alastar.minedonate.network.packets.AddMerchPacket;
 
 /**
@@ -22,30 +22,35 @@ public class AddMerchPacketHandler implements IMessageHandler<AddMerchPacket, IM
 
     @Override
     public IMessage onMessage(AddMerchPacket message, MessageContext ctx) {
-        // System.err.println(message.shopId + "> " + message.m_category + "> " + message.info);
-
-        if (message.info instanceof UserShopInfo) {
-
-            UserShopInfo us = (UserShopInfo) message.info;
-            if (us.shopId == 0) {
-
-                if (ShopGUI.instance != null) {
-                    ShopGUI.instance.updateBtns();
+    	
+        if ( message . info instanceof ShopInfo ) {
+        	
+        	ShopInfo us = ( ShopInfo ) message . info ;
+        	
+        	if ( us . shopId == 0 ) {
+        		
+        	    if ( ShopGUI . instance != null ) {
+        	    	
+                    ShopGUI . instance . updateBtns ( ) ;
+                    
                 }
-
-                return null;
-
-            }
-
-            MineDonate.shops.put(us.shopId, new Shop(us.shopId, new MerchCategory[]{new ItemNBlocks(us.shopId)}, us.owner, us.name, us.isFreezed));
-
+        	    
+        		return null ;
+        		
+        	}
+        	
+        	MineDonate . shops . put ( us . shopId, new Shop ( us . shopId, new MerchCategory [ ] { new ItemNBlocks ( us . shopId, us . getCategory ( ), us . moneyType ) }, us . owner, us . name, us . isFreezed ) ) ;
+        	
         }
+        
+        MineDonate . AddMerch ( message . shopId, message . m_category, message . info ) ;
 
-        MineDonate.AddMerch(message.shopId, message.m_category, message.info);
-
-        if (ShopGUI.instance != null) {
-            ShopGUI.instance.updateBtns();
+        if ( ShopGUI . instance != null ) {
+        
+        	ShopGUI . instance . updateBtns ( ) ;
+        
         }
+        
         return null;
     }
 

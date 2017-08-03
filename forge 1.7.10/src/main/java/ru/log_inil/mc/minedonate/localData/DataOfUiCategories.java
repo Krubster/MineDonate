@@ -1,26 +1,26 @@
 package ru.log_inil.mc.minedonate.localData;
 
-import ru.log_inil.mc.minedonate.localData.cats.DataOfUiCategoryEntites;
-import ru.log_inil.mc.minedonate.localData.cats.DataOfUiCategoryItemsNBlocks;
-import ru.log_inil.mc.minedonate.localData.cats.DataOfUiCategoryPrivelegies;
-import ru.log_inil.mc.minedonate.localData.cats.DataOfUiCategoryRegions;
-import ru.log_inil.mc.minedonate.localData.cats.DataOfUiCategoryUsersShops;
+import ru.log_inil.mc.minedonate.localData.cats.DataOfUICategoryEntites;
+import ru.log_inil.mc.minedonate.localData.cats.DataOfUICategoryItemsNBlocks;
+import ru.log_inil.mc.minedonate.localData.cats.DataOfUICategoryPrivelegies;
+import ru.log_inil.mc.minedonate.localData.cats.DataOfUICategoryRegions;
+import ru.log_inil.mc.minedonate.localData.cats.DataOfUICategoryUsersShops;
 
-public class DataOfUiCategories {
+public class DataOfUICategories {
 
-	public DataOfUiCategoryEntites entities ;
-	public DataOfUiCategoryItemsNBlocks itemsAndBlocks ;
-	public DataOfUiCategoryPrivelegies privelegies ;
-	public DataOfUiCategoryRegions regions ;
-	public DataOfUiCategoryUsersShops usersShops ;
+	public DataOfUICategoryEntites entities ;
+	public DataOfUICategoryItemsNBlocks itemsAndBlocks ;
+	public DataOfUICategoryPrivelegies privelegies ;
+	public DataOfUICategoryRegions regions ;
+	public DataOfUICategoryUsersShops usersShops ;
 
-	public DataOfUiCategories ( ) {
+	public DataOfUICategories ( ) {
 		
-		entities = new DataOfUiCategoryEntites ( ) ;
-		itemsAndBlocks = new DataOfUiCategoryItemsNBlocks ( ) ;
-		privelegies = new DataOfUiCategoryPrivelegies ( ) ;
-		regions = new DataOfUiCategoryRegions ( ) ;
-		usersShops = new DataOfUiCategoryUsersShops ( ) ;
+		entities = new DataOfUICategoryEntites ( ) ;
+		itemsAndBlocks = new DataOfUICategoryItemsNBlocks ( ) ;
+		privelegies = new DataOfUICategoryPrivelegies ( ) ;
+		regions = new DataOfUICategoryRegions ( ) ;
+		usersShops = new DataOfUICategoryUsersShops ( ) ;
 		
 	}
 	

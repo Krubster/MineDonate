@@ -15,6 +15,21 @@ import java.sql.SQLException;
  * Created by Alastar on 21.07.2017.
  */
 public class Entities extends MerchCategory {
+		
+    public int shopId;
+    public int catId;
+    
+	String moneyType ;
+	
+	public Entities ( int _shopId, int _catId, String _moneyType ) {
+	
+    	this.shopId = _shopId;
+    	this.catId = _catId;
+    	
+		moneyType = _moneyType ;
+		
+	}
+	
     @Override
     public boolean canReverse() {
         return false;
@@ -30,7 +45,7 @@ public class Entities extends MerchCategory {
         int i = 0;
         try {
             while (rs.next()) {
-                final EntityInfo info = new EntityInfo(i, rs.getInt("cost"), rs.getBlob("data"), rs.getString("name"));
+                final EntityInfo info = new EntityInfo(shopId, catId, i, rs.getInt("cost"), rs.getBlob("data"), rs.getString("name"));
                 this.addMerch(info);
                 ++i;
             }
@@ -74,4 +89,12 @@ public class Entities extends MerchCategory {
     public Merch constructMerch() {
         return new EntityInfo();
     }
+    
+	@Override
+	public String getMoneyType ( ) {
+		
+		return moneyType ;
+		
+	}
+	
 }

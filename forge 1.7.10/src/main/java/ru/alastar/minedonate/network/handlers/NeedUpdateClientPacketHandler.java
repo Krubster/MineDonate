@@ -14,47 +14,51 @@ public class NeedUpdateClientPacketHandler implements IMessageHandler<NeedUpdate
 
     }
 
-    @Override
+    @Override 
     public IMessage onMessage(NeedUpdatePacket message, MessageContext ctx) {
+    	
+    	if ( message . r == 1 ) {
+	           
+			if ( ShopGUI . instance != null ) {
+				 
+				ShopGUI . instance . needNetUpdate = false ;
+				ShopGUI . instance . loading = false ;
 
-        if (message.r == 1) {
+			}      
+    			
+    	}
+    	
+    	if ( message . r == 2 ) {
+	           
+			if ( ShopGUI . instance != null ) {
+				 
+				ShopGUI . instance . loading = false ;
+								
+				if ( ShopGUI . instance . getCurrentCategory ( ) instanceof UsersShopsCategory ) {
+					
+					UsersShopsCategory usc = ( UsersShopsCategory ) ShopGUI . instance . getCurrentCategory ( )  ;
+					
+					if ( usc . selectedShop != 0 ) {
 
-            if (ShopGUI.instance != null) {
-
-                ShopGUI.instance.needNetUpdate = false;
-                ShopGUI.instance.loading = false;
-
-            }
-
-        }
-
-        if (message.r == 2) {
-
-            if (ShopGUI.instance != null) {
-
-                ShopGUI.instance.loading = false;
-
-                if (ShopGUI.instance.getCurrentCategory() instanceof UsersShopsCategory) {
-
-                    UsersShopsCategory usc = (UsersShopsCategory) ShopGUI.instance.getCurrentCategory();
-
-                    if (usc.selectedShop != 0) {
-
-                        ShopGUI.instance.currentShop = usc.selectedShop;
-
-                        usc.updateUserShopCategory(new ItemNBlockCategory(), true);
-                        usc.initGui();
-
-                    }
-
-                }
-
-            }
-
-        }
-
-        return null;
-
+						ShopGUI . instance . currentShop = usc . selectedShop ;
+						
+						ItemNBlockCategory cat = new ItemNBlockCategory ( ) ;
+						cat . setShopId ( usc . selectedShop ) ;
+						
+						usc . updateUserShopCategory ( cat, true ) ;
+						usc . initGui ( ) ; 
+						
+					}
+			
+				}
+				
+			}      
+    			
+    	}
+    	
+        return null ;
+        
     }
+    
 
 }
