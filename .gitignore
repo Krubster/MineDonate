@@ -1,5 +1,4 @@
 .bat
-.gradle
 logs/
 out/
 libs/
