@@ -168,10 +168,13 @@ public class GuiMoneyArea {
 			
 		}
 		
+		int tmpX ;
+		int tmpY ;
+		
 		public void drawBalance ( int i, int max, int count, int offsetX, int offsetY, int mouseX, int mouseY ) {
 		
-			int tmpY = offsetY - ( max * 5 ) + ( i * 10 ) ; // ( 10 / 2 = 5 )
-			int tmpX = offsetX - 20 - ( gui . getFontRenderer ( ) . getStringWidth ( count + ( balanceSuff != null ? balanceSuff : "" ) ) ) ;
+			tmpX = offsetX - 20 - ( gui . getFontRenderer ( ) . getStringWidth ( count + ( balanceSuff != null ? balanceSuff : "" ) ) ) ;
+			tmpY = offsetY - ( max * 5 ) + ( i * 10 ) ; // ( 10 / 2 = 5 )
 			
 			tmp = 0 ;
 			

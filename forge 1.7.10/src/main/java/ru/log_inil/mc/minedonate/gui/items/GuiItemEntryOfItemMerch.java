@@ -115,7 +115,7 @@ public class GuiItemEntryOfItemMerch extends GuiAbstractItemEntry {
 	}
 	
 	@Override
-	public void undraw ( ) {
+	public void unDraw ( ) {
 		
 		if ( pl != null ) {
 			

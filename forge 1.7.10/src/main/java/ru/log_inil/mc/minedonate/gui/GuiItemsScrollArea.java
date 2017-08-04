@@ -57,9 +57,9 @@ public class GuiItemsScrollArea extends GuiScrollingList {
     
     
     @Override
-    protected void undrawSlot ( int listIndex ) {
+    protected void unDrawSlot ( int listIndex ) {
     	
-    	entrs . get ( listIndex ) . undraw ( ) ;
+    	entrs . get ( listIndex ) . unDraw ( ) ;
   
     }
     

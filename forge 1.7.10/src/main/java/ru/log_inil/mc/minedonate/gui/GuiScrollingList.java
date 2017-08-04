@@ -313,7 +313,7 @@ public abstract class GuiScrollingList
 	                
 	            } else {
 	            	
-	                this.undrawSlot(var11);
+	                this.unDrawSlot(var11);
 	
 	            }
 	        }
@@ -517,7 +517,7 @@ public abstract class GuiScrollingList
         GL11.glEnable(GL11.GL_TEXTURE_2D);
     }
 
-	protected void undrawSlot(int listIndex) {
+	protected void unDrawSlot(int listIndex) {
 		
 	}
 }

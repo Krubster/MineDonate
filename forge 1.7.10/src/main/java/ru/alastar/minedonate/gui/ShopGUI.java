@@ -39,21 +39,29 @@ public class ShopGUI extends GuiScreen {
     public static int m_Page = 0 ;
     
     public int currentShop = 0 ;
-    private int m_Selected_Category = 0;   // 0 - blocks & items, 1 - privilegies, 2 - wg regions, 3 - entities
+    private int m_Selected_Category = 0;
+    public int lastCategory = -1 ;
     
     private ShopCategory[] cats ;
-    public GuiGradientTextField searchField ;
-    public GuiMoneyArea moneyArea ;
     
-   // public boolean displayReturnButton = false; 
+    public List < GuiGradientTextField > listTextFields = new ArrayList < > ( ) ;
 
+    public ScaledResolution resolution ;
+
+    public GuiMoneyArea moneyArea ;
+    public GuiGradientTextField searchField ;
+    public PreviousButton pb ;
+    public NextButton nb ;
+    public GuiGradientButton exitButton ;
+    public GuiGradientButton searchButton ;
+    
     public ShopGUI ( ) {
 
     	cats = new ShopCategory [ ] { new ItemNBlockCategory ( ), new PrivilegieCategory ( ), new RegionsCategory ( ), new EntitiesCategory ( ), new UsersShopsCategory ( ) } ;
     
     	for ( ShopCategory sc: cats ) {
     		
-    		sc . init ( this ) ;
+    		sc . preShow ( this ) ;
     		
     	}
     	
@@ -105,6 +113,16 @@ public class ShopGUI extends GuiScreen {
     		
     	}
     	
+  		for ( GuiGradientTextField ggtf: listTextFields ) {
+			
+  			if ( ggtf . isFocused ( ) ) {
+			
+  				ggtf . textboxKeyTyped ( p_73869_1_, p_73869_2_ ) ;		
+  				
+			}
+  			
+		}
+  		
     	if ( ClientProxy . refreshCfg != null && ClientProxy . refreshCfg . getKeyCode ( ) == p_73869_2_ ) { 
     		
     		MineDonate . loadClientConfig ( ) ;
@@ -139,12 +157,12 @@ public class ShopGUI extends GuiScreen {
     @Override
     protected void mouseClicked ( int p_73864_1_, int p_73864_2_, int p_73864_3_ ) {
     	
-    	if ( searchField != null ) {
-        	
-    		searchField . mouseClicked ( p_73864_1_, p_73864_2_, p_73864_3_ ) ;	
-    		
-    	}
-    	
+  		for ( GuiGradientTextField ggtf: listTextFields ) {
+			
+  			ggtf . mouseClicked ( p_73864_1_, p_73864_2_, p_73864_3_ ) ;		
+
+		}
+  			
     	super . mouseClicked ( p_73864_1_, p_73864_2_, p_73864_3_ ) ;
     	
     }
@@ -152,8 +170,6 @@ public class ShopGUI extends GuiScreen {
     @Override
     public void drawScreen ( int mouseX, int mouseY, float partialTicks ) {    	
     	
-        ScaledResolution resolution = new ScaledResolution(this.mc, this.mc.displayWidth, this.mc.displayHeight); // bull shit
-
         this . drawRect ( 0, 0, resolution . getScaledWidth ( ), resolution . getScaledHeight ( ), 1258291200 ) ;
 
         if ( ! needNetUpdate ) {
@@ -174,8 +190,12 @@ public class ShopGUI extends GuiScreen {
 	        	
 		        super . drawScreen ( mouseX, mouseY, partialTicks ) ;  
 		
-		        if ( searchField != null ) { searchField . drawTextBox ( ) ; }
-		            
+		  		for ( GuiGradientTextField ggtf: listTextFields ) {
+					
+		  			ggtf . drawTextBox ( ) ;		
+
+				}
+		  		
 		        getCurrentCategory ( ) . draw ( this, m_Page, mouseX, mouseY, partialTicks, DrawType . POST ) ;   
 
 		        //
@@ -261,12 +281,18 @@ public class ShopGUI extends GuiScreen {
                     	( ( UsersShopsCategory ) cats [ m_Selected_Category ] ) . updateUserShopCategory ( null, false ) ;
                    
                     }
+                                		
+            	}
+
+            	if ( lastCategory != -1 ) {
+            		
+            		cats [ lastCategory ] . unShow ( ) ;  
             		
             	}
-            	
+
             	currentShop = 0 ;
                 m_Page = 0;
-                m_Selected_Category = ((CategoryButton) button).getCategory();
+                lastCategory = m_Selected_Category = ((CategoryButton) button).getCategory();
 
                 MineDonate . networkChannel . sendToServer ( new NeedShopCategoryPacket ( getCurrentShopId ( ), m_Selected_Category ) ) ;
                 loading = true ;
@@ -302,12 +328,21 @@ public class ShopGUI extends GuiScreen {
                     		searchField . setVisible ( false ) ;
                         	searchField . setEnabled ( false ) ;
 
+                			getCurrentCategory ( ) . search ( null ) ;
+                			
+                            updateGrid ( ) ;
+                            updateBtns ( ) ;
+                            
                     	} else {
                     		
                     		searchField . setVisible ( true ) ;
                         	searchField . setEnabled ( true ) ;
                         	searchField . setFocused ( true ) ;
                         	
+                			getCurrentCategory ( ) . search ( searchField . getText () ) ;
+                			
+                            updateGrid ( ) ;
+                            updateBtns ( ) ;
                     	}
                     	       
             		}
@@ -331,7 +366,7 @@ public class ShopGUI extends GuiScreen {
     	
         instance = this ;
         
-        resolution = new ScaledResolution(this.mc, this.mc.displayWidth, this.mc.displayHeight); // bull shit
+        resolution = new ScaledResolution ( this . mc, this . mc . displayWidth, this . mc . displayHeight ) ;
         
         m_Page = 0 ;
         
@@ -350,7 +385,7 @@ public class ShopGUI extends GuiScreen {
 		
 		//
 		
-        getCurrentCategory ( ) . initGui ( ) ;
+        getCurrentCategory ( ) . postShow ( ) ;
         
 		if ( needNetUpdate && ! loading ) {
 
@@ -363,7 +398,7 @@ public class ShopGUI extends GuiScreen {
 
     private void addCategories ( ) {
 
-    	ScaledResolution resolution = new ScaledResolution(this.mc, this.mc.displayWidth, this.mc.displayHeight);
+    	resolution = new ScaledResolution(this.mc, this.mc.displayWidth, this.mc.displayHeight); // bull shit
 
         int posX = 30 ; //( resolution . getScaledWidth ( ) / 2 ) - ( widthCatsBlock / 2 ) ;
         
@@ -395,7 +430,7 @@ public class ShopGUI extends GuiScreen {
 
 
     public void addBtn ( GuiButton b ) {
-        
+    	        
     	this . buttonList . add ( b ) ;
         
     }
@@ -405,12 +440,6 @@ public class ShopGUI extends GuiScreen {
     	this . buttonList . remove ( but ) ;
     	
     }
-
-    PreviousButton pb ;
-    NextButton nb ;
-    public ScaledResolution resolution ;
-    public GuiButton exitButton ;
-    public GuiGradientButton searchButton ;
 
     public void updateBtns ( ) {
     	
@@ -423,7 +452,7 @@ public class ShopGUI extends GuiScreen {
         
         	if ( searchField == null ) {
         		
-        		searchField = new GuiGradientTextField ( this . fontRendererObj, 30 + MineDonate.cfgUI.searchButton.width, (int) ( (resolution.getScaledHeight()) - (resolution.getScaledHeight() * 0.1) )-5, MineDonate . cfgUI . searchField . width, MineDonate . cfgUI . searchField . height, true ) ;
+        		listTextFields . add( searchField = new GuiGradientTextField ( this . fontRendererObj, 30 + MineDonate.cfgUI.searchButton.width, (int) ( (resolution.getScaledHeight()) - (resolution.getScaledHeight() * 0.1) )-5, MineDonate . cfgUI . searchField . width, MineDonate . cfgUI . searchField . height, true ) ) ;
 
         		searchField . setText ( MineDonate . cfgUI . searchField . text ) ;
         		searchField . setTextHolder ( MineDonate . cfgUI . searchField . textHolder ) ;
@@ -515,4 +544,10 @@ public class ShopGUI extends GuiScreen {
 		
 	}
 
+	public ScaledResolution getScaledResolution ( ) {
+
+		return resolution ;
+
+	}
+	
 }

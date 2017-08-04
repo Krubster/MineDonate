@@ -72,7 +72,7 @@ public class GuiItemEntryOfUserShopMerch extends GuiAbstractItemEntry {
 	}
 	
 	@Override
-	public void undraw ( ) {
+	public void unDraw ( ) {
 
 		if ( go != null ) {
 			

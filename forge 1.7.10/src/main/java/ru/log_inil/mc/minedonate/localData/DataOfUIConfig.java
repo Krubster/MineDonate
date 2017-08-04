@@ -3,8 +3,8 @@ package ru.log_inil.mc.minedonate.localData;
 public class DataOfUIConfig {
 
 	public DataOfUICategories cats ;
-	public String moneyLinePrefix ;
-	public String moneyLineSuffix ;
+
+	public int subCategoryButtonHeight ;
 	
 	public DataOfUIElement exitButton ;
 	public DataOfUIElement returnButton ;
@@ -23,8 +23,7 @@ public class DataOfUIConfig {
 		
 		cats = new DataOfUICategories ( ) ;
 		
-		moneyLinePrefix = "Your money: " ;
-		moneyLineSuffix = "" ;
+		subCategoryButtonHeight = 20 ;
 		
 		exitButton = new DataOfUIElement ( "Exit", 26, 20 ) ;
 		returnButton = new DataOfUIElement ( "Return", 36, 20 ) ;

@@ -45,9 +45,9 @@
       "pricePrefix": "Цена: ",
 	  "priceSuffix": "руб."
     },
-    "usersShops": {
-      "categoryButtonText": "Магазины пользователей",
-      "categoryButtonWidth": 110,
+    "shops": {
+      "categoryButtonText": "Другие магазины",
+      "categoryButtonWidth": 80,
       "itemBuyButton": {
         "text": "Перейти",
         "width": 44,
@@ -59,6 +59,22 @@
         "text": "Заблокирован",
         "width": 64,
         "height": 20
+      },
+	   "viewMyShopsButton": {
+        "text": "Мои магазины",
+        "width": 64,
+        "height": 20
+      },
+	   "createNewShopButton": {
+        "text": "Создать магазин",
+        "width": 75,
+        "height": 20
+      },
+	   "createNewShopNameField": {
+		"text": "",
+        "textHolder": "Введите имя магазина",
+        "width": 160,
+        "height": 20
       }
     }
   },
@@ -66,21 +82,27 @@
   "moneyLineSuffix": "руб.",
   "loadingText": "Загрузка данных...",
   "exitButton": {
-        "text": "Выход",
-        "width": 44,
-        "height": 20
+	"text": "Выход",
+	"width": 44,
+	"height": 20
   },
   "returnButton": {
-		"text": "Обратно",
-		"width": 46,
-		"height": 20
+	"text": "Обратно",
+	"width": 46,
+	"height": 20
   },
   "bindF5RefreshButton": true,
-    "addSearchButton": true,
+  "addSearchButton": true,
   "searchButton": {
     "text": "Поиск",
     "width": 40,
     "height": 20
+  },
+  "searchField": {
+	"text": "",
+	"textHolder": "Введите искомое имя",
+	"width": 160,
+	height: 20
   },
   "bindF5RefreshButton": true,
   "moneyGroups": [

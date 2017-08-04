@@ -185,7 +185,7 @@ public class PrivilegieCategory extends ShopCategory {
     	
 		for ( PrivilegieInfo ri : list ) {
 			
-			if ( buttonsMap . containsKey ( ri.merch_id ) ) relative . removeButton ( buttonsMap . get ( ri . merch_id ) ) ;
+			if ( buttonsMap . containsKey ( ri . merch_id ) ) relative . removeButton ( buttonsMap . get ( ri . merch_id ) ) ;
 
     	}
 		
@@ -197,10 +197,10 @@ public class PrivilegieCategory extends ShopCategory {
 	    	if ( search ) {
 	    		
 	    		for ( Merch ri:  MineDonate . shops . get ( gui . getCurrentShopId ( ) ) . cats [ catId ] . getMerch ( ) ) {
-	    			
-	        		if ( ( ( PrivilegieInfo ) ri ) . name . contains ( searchValue ) ) {
+
+	    			if ( ( ( PrivilegieInfo ) ri ) . name . contains ( searchValue ) ) {
 	        			
-	        			list . add (  ( PrivilegieInfo ) ri ) ;
+	        			list . add ( ( PrivilegieInfo ) ri ) ;
 	        			
 	        		}
 	        		

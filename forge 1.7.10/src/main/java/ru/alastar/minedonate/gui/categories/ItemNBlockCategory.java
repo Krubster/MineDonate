@@ -64,11 +64,11 @@ public class ItemNBlockCategory extends ShopCategory {
     }
     
     @Override
-    public void undraw ( ) {
+    public void unDraw ( ) {
     	
 		for ( GuiAbstractItemEntry gie : entrs ) {
 
-			gie . undraw ( ) ;
+			gie . unDraw ( ) ;
 			
 		}
 		
@@ -76,9 +76,7 @@ public class ItemNBlockCategory extends ShopCategory {
 
     @Override
     public void updateButtons(ShopGUI relative, int m_Page ) {
-    	
-    	initGui ( ) ;
-    	
+    	    	
     }
     
     @Override
@@ -115,7 +113,7 @@ public class ItemNBlockCategory extends ShopCategory {
 	ItemInfo iim ;
 	
 	@Override
-	public void initGui ( ) {
+	public void postShow ( ) {
 	
 		if ( subCatId == -1 ) {
 			
@@ -129,7 +127,7 @@ public class ItemNBlockCategory extends ShopCategory {
 	
 		for ( GuiAbstractItemEntry gie : entrs ) {
 
-			gie . undraw ( ) ;
+			gie . unDraw ( ) ;
 			
 		}
 		
@@ -168,6 +166,8 @@ public class ItemNBlockCategory extends ShopCategory {
     	gi . entrs = entrs ;
     	gi . applyScrollLimits ( ) ;
     	
+		super . postShow ( ) ;
+
 	}
 	
 	public void setShopId ( int _shopId ) { 

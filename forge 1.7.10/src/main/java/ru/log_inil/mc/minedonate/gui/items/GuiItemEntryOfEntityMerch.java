@@ -73,7 +73,7 @@ public class GuiItemEntryOfEntityMerch extends GuiAbstractItemEntry {
 	}
 	
 	@Override
-	public void undraw ( ) {
+	public void unDraw ( ) {
 		
 		if ( buy != null ) {
 			

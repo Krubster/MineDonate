@@ -1,6 +1,15 @@
 .bat
-.gradle
 logs/
 out/
-gradle/
 libs/
+gradle/
+eclipse/
+build/
+.idea/
+.gradle/
+logs/
+mods/
+out/
+.ipr
+.lnk
+.iws

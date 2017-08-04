@@ -84,7 +84,7 @@ public class EntitiesCategory extends ShopCategory {
 	List < GuiAbstractItemEntry > entrs = new ArrayList < > ( ) ;
 		
 	@Override
-	public void initGui ( ) {
+	public void postShow ( ) {
 	
 		if ( subCatId == -1 ) {
 			
@@ -93,6 +93,8 @@ public class EntitiesCategory extends ShopCategory {
 		}
 		
 		refreshGui ( ) ;
+		
+		super . postShow ( ) ;
 		
 	}
 	
@@ -128,7 +130,7 @@ public class EntitiesCategory extends ShopCategory {
 	
 		for ( GuiAbstractItemEntry gie : entrs ) {
 
-			gie . undraw ( ) ;
+			gie . unDraw ( ) ;
 			
 		}
 		

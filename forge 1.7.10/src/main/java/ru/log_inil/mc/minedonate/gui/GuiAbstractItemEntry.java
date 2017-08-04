@@ -20,7 +20,7 @@ public abstract class GuiAbstractItemEntry {
 		
 	}
 
-	public void undraw ( ) {
+	public void unDraw ( ) {
 		
 	}
 	
