@@ -42,6 +42,7 @@ public abstract class ShopCategory {
     }
 
     public abstract void draw(ShopGUI relative, int page, int mouseX, int mouseY, float partialTicks, DrawType dt ) ;
+    
     public void undraw ( ) {
     	
     }

@@ -75,7 +75,7 @@ public class ItemNBlockCategory extends ShopCategory {
     }
 
     @Override
-    public void updateButtons(ShopGUI relative, int m_Page) {
+    public void updateButtons(ShopGUI relative, int m_Page ) {
     	
     	initGui ( ) ;
     	

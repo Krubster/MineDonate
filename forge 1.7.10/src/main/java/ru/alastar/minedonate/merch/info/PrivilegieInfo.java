@@ -15,9 +15,7 @@ public class PrivilegieInfo extends Merch {
     public long seconds;
 
     public PrivilegieInfo(int _shopId, int _catId, int merch_id, String n, String desc, String picture_url, int cost, long seconds) {
-    	this.shopId = _shopId;
-    	this.catId = _catId;
-    	this.merch_id = merch_id;
+    	super(_shopId, _catId, merch_id);
         this.name = n;
         this.description = desc;
         this.cost = cost;
@@ -26,7 +24,7 @@ public class PrivilegieInfo extends Merch {
     }
 
     public PrivilegieInfo() {
-
+    	super();
     }
 
     @Override

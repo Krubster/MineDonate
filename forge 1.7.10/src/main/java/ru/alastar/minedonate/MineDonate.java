@@ -448,6 +448,12 @@ public class MineDonate {
         if (m_Admin_Sessions.containsKey(player))
             m_Admin_Sessions.remove(player);
     }
+    
+    public static AdminSession getAdminSession(EntityPlayerMP entityPlayer) {
+        if(m_Admin_Sessions.containsKey(entityPlayer))
+            return m_Admin_Sessions.get(m_Admin_Sessions);
+        return null;
+    }
 
 	public static boolean checkCatExists ( int shopId, int catId ) {
 
@@ -630,12 +636,6 @@ public class MineDonate {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    public static AdminSession getAdminSession(EntityPlayerMP entityPlayer) {
-        if(m_Admin_Sessions.containsKey(entityPlayer))
-            return m_Admin_Sessions.get(m_Admin_Sessions);
-        return null;
     }
 
     public static void AddEntityBy(AdminSession session, Entity target) {

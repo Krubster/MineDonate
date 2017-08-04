@@ -22,10 +22,11 @@ public class EntityInfo extends Merch {
     public NBTTagCompound entity_data;
 
     public EntityInfo(int _shopId, int _catId, int merch_id, int cost, Blob data, String name) {
-    	this.shopId = _shopId;
-    	this.catId = _catId;
-        this.merch_id = merch_id;
+    	
+    	super(_shopId, _catId, merch_id);
+    	
         this.cost = cost;
+        
         ByteBuf buf = Unpooled.buffer();
         try {
             buf.writeBytes(data.getBinaryStream(), (int)data.length());
@@ -34,17 +35,23 @@ public class EntityInfo extends Merch {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        ByteBufUtils.readItemStack(buf).writeToNBT(entity_data);
+        
+        entity_data = ByteBufUtils.readTag(buf);
+        
         this.name = name;
+        
     }
     public EntityInfo(int _shopId, int _catId, int merch_id, int cost, Entity entity, String name) {
-        this.merch_id = merch_id;
+    	
+    	super(_shopId, _catId, merch_id);
+    	
         this.cost = cost;
+        this.entity_data = new NBTTagCompound ( ) ;
         entity.writeToNBT(entity_data);
         this.name = name;
     }
     public EntityInfo() {
-        
+    	super();
     }
 
     @Override

@@ -85,8 +85,8 @@ public class GuiItemEntryOfUserShopMerch extends GuiAbstractItemEntry {
 	@Override
 	public GuiAbstractItemEntry addButtons ( ShopGUI gui ) {
 
-		go = new GoButton ( info . shopId, ShopGUI . getNextButtonId ( ), gui . resolution . getScaledWidth ( ) - 16 - 30 - ( info . isFreezed ? MineDonate . cfgUI . cats . usersShops . lockedGoButton . width : MineDonate . cfgUI . cats . usersShops . itemBuyButton . width ), -100, info . isFreezed ? MineDonate . cfgUI . cats . usersShops . lockedGoButton . width : MineDonate . cfgUI . cats . usersShops . itemBuyButton . width, info . isFreezed ? MineDonate . cfgUI . cats . usersShops . lockedGoButton . height : MineDonate . cfgUI . cats . usersShops . itemBuyButton . height, info . isFreezed ? MineDonate . cfgUI . cats . usersShops . lockedGoButton . text : MineDonate . cfgUI . cats . usersShops . itemBuyButton . text ) ;
-		go . enabled = info . isFreezed ? ! MineDonate . cfgUI . cats . usersShops . lockGoShopButtonWhenFreezed : true ;
+		go = new GoButton ( info . shopId, ShopGUI . getNextButtonId ( ), gui . resolution . getScaledWidth ( ) - 16 - 30 - ( info . isFreezed ? MineDonate . cfgUI . cats . shops . lockedGoButton . width : MineDonate . cfgUI . cats . shops . itemBuyButton . width ), -100, info . isFreezed ? MineDonate . cfgUI . cats . shops . lockedGoButton . width : MineDonate . cfgUI . cats . shops . itemBuyButton . width, info . isFreezed ? MineDonate . cfgUI . cats . shops . lockedGoButton . height : MineDonate . cfgUI . cats . shops . itemBuyButton . height, info . isFreezed ? MineDonate . cfgUI . cats . shops . lockedGoButton . text : MineDonate . cfgUI . cats . shops . itemBuyButton . text ) ;
+		go . enabled = info . isFreezed ? ! MineDonate . cfgUI . cats . shops . lockGoShopButtonWhenFreezed : true ;
 		
         gui . addBtn ( go ) ;
                 

@@ -21,9 +21,7 @@ public class RegionInfo extends Merch {
     public String name;
 
     public RegionInfo(int _shopId, int _catId, int mid, int cost, String name, String world_name) {
-    	this.shopId = _shopId;
-    	this.catId = _catId;
-        this.merch_id = mid;
+    	super(_shopId, _catId, mid);
         this.cost = cost;
         this.name = name;
         this.world_name = world_name;
@@ -69,7 +67,7 @@ public class RegionInfo extends Merch {
     }
 
     public RegionInfo() {
-
+    	super();
     }
 
     @Override

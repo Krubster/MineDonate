@@ -12,6 +12,7 @@ import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.merch.info.PrivilegieInfo;
 import ru.alastar.minedonate.proxies.ClientProxy;
 import ru.log_inil.mc.minedonate.gui.DrawType;
+import ru.log_inil.mc.minedonate.gui.GuiGradientButton;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -148,7 +149,7 @@ public class PrivilegieCategory extends ShopCategory {
        relative.drawString(relative.getFontRenderer(), _info.name, x_offset + (75/2)- relative.getFontRenderer().getStringWidth(_info.name)/2, y_offset + 80, 0xFFFFFF);
        relative . moneyArea . drawPriceArea ( x_offset, y_offset + 75+20+24, _info . cost, _info . getMoneyType ( ) ) ;
 
-	   list . clear ( ) ;
+       listDescription . clear ( ) ;
 
 	   maxStringWidth = 0 ;
 	   
@@ -178,10 +179,10 @@ public class PrivilegieCategory extends ShopCategory {
     Map<Integer, BuyButton> buttonsMap = new HashMap<Integer, BuyButton>(); // holy shi~
 
     int lastPage = 0;
-
+    
     @Override
-    public void updateButtons(ShopGUI relative, int page) {
-        
+    public void updateButtons(ShopGUI relative, int page ) {
+    	
 		for ( PrivilegieInfo ri : list ) {
 			
 			if ( buttonsMap . containsKey ( ri.merch_id ) ) relative . removeButton ( buttonsMap . get ( ri . merch_id ) ) ;

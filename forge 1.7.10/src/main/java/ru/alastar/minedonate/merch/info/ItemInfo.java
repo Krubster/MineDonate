@@ -34,7 +34,9 @@ public class ItemInfo extends Merch {
 
 
     public ItemInfo() {
-
+    	
+    	super();
+    	
     }
 
     @Override
@@ -50,9 +52,7 @@ public class ItemInfo extends Merch {
     }
 
     public ItemInfo(int _shopId, int _catId, int mid, int cos, String n, String inf, int lim, java.sql.Blob data) {
-    	this.shopId = _shopId;
-    	this.catId = _catId;
-        this.merch_id = mid;
+    	super(_shopId, _catId, mid);
         this.cost = cos;
         this.name = n;
         this.info = inf;
@@ -68,13 +68,13 @@ public class ItemInfo extends Merch {
         stack_data = ByteBufUtils.readTag(buf);
     }
     public ItemInfo(int _shopId, int _catId, int mid, int cos, String n, String inf, int lim, ItemStack data) {
-    	this.shopId = _shopId;
-    	this.catId = _catId;
-        this.merch_id = mid;
+    	super(_shopId, _catId, mid);
+    	
         this.cost = cos;
         this.name = n;
         this.info = inf;
         this.limit = lim;
+        this.stack_data = new NBTTagCompound ( ) ;
         data.writeToNBT(stack_data);
     }
     @Override

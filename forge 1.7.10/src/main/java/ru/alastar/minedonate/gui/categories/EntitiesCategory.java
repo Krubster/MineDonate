@@ -58,7 +58,7 @@ public class EntitiesCategory extends ShopCategory {
     }
     
     @Override
-    public void updateButtons(ShopGUI relative, int m_Page) {
+    public void updateButtons(ShopGUI relative, int m_Page ) {
     	
     	refreshGui ( ) ; 
 

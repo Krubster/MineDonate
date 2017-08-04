@@ -15,6 +15,16 @@ public abstract class Merch {
     public int catId;
 	public int subCatId ;
 
+	public Merch ( ) { }
+
+	public Merch ( int _shopId, int _catId, int _merch_id ) {
+		
+		this.shopId = _shopId;
+    	this.catId = _catId;
+        this.merch_id = _merch_id;
+        
+	}
+	
     public int getCategory() {
         return -1;
     }

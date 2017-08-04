@@ -7,6 +7,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import ru.alastar.minedonate.merch.Merch;
 
 public class ShopInfo extends Merch {
+	
     public int merch_id ;
     public int shopId ;
     public String owner ;
@@ -16,8 +17,12 @@ public class ShopInfo extends Merch {
     
     public ShopInfo ( int _merch_id, int _shopId, String _owner, String _name, boolean _isFreezed, String _moneyType ) {
     	
-        this . merch_id = _merch_id ;
-        this . shopId = _shopId ;
+       	super();
+       	
+        this.merch_id = _merch_id;
+    	this.catId = 4;
+       	shopId = _shopId;
+       	
         this . owner = _owner ;
         this . name = _name ;
         this . isFreezed = _isFreezed ;
@@ -26,7 +31,9 @@ public class ShopInfo extends Merch {
     }	
 
     public ShopInfo ( ) {
-        
+       	
+    	super();
+       	
     }
 
     @Override

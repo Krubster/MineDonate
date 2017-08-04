@@ -8,7 +8,9 @@ public class DataOfUICategoryUsersShops extends DataOfUICategoryAbstract {
 	public boolean dontShowFreezed ;
 	public boolean lockGoShopButtonWhenFreezed ;
 	public DataOfUIElement lockedGoButton ;
-
+	public DataOfUIElement viewMyShopsButton ;
+	public DataOfUIElement createNewShopButton ;
+	
 	public DataOfUICategoryUsersShops ( ) {
 		
 		super ( ) ;
@@ -16,9 +18,14 @@ public class DataOfUICategoryUsersShops extends DataOfUICategoryAbstract {
 		categoryButtonText = "Users shops" ;
 		categoryButtonWidth = 95 ;
 		itemBuyButton = new DataOfUIElement ( "Open", 44, 20 ) ;
+		
 		dontShowFreezed = false ;
 		lockGoShopButtonWhenFreezed = true ;
+		
 		lockedGoButton = new DataOfUIElement ( "Locked", 54, 20 ) ;
+
+		viewMyShopsButton = new DataOfUIElement ( "My shops", 54, 20 ) ;
+		createNewShopButton = new DataOfUIElement ( "Create shop", 64, 20 ) ;
 
 	}
 	

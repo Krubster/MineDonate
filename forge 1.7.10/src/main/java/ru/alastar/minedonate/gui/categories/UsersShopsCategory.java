@@ -3,6 +3,7 @@ package ru.alastar.minedonate.gui.categories;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.ScaledResolution;
 import ru.alastar.minedonate.MineDonate;
@@ -12,6 +13,7 @@ import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.merch.info.ShopInfo;
 import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.gui.GuiAbstractItemEntry;
+import ru.log_inil.mc.minedonate.gui.GuiGradientButton;
 import ru.log_inil.mc.minedonate.gui.GuiItemsScrollArea;
 import ru.log_inil.mc.minedonate.gui.GuiScrollingList;
 import ru.log_inil.mc.minedonate.gui.items.GuiItemEntryOfUserShopMerch;
@@ -68,10 +70,23 @@ public class UsersShopsCategory extends ShopCategory {
         }
     	
     }
-    
+
+    GuiGradientButton returnButton;
+    GuiGradientButton viewMyShopsButton;
+    GuiGradientButton createNewShopButton;
+
+    public boolean displayReturnButton = false; 
+
     @Override
     public void updateButtons ( ShopGUI relative, int m_Page ) {
     	
+        gui = relative ;
+        
+    	relative . getButtonList ( ) . add ( returnButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), relative.exitButton.xPosition -  MineDonate . cfgUI . returnButton . width, relative . exitButton . yPosition, MineDonate . cfgUI . returnButton . width, MineDonate . cfgUI . returnButton . height, MineDonate . cfgUI . returnButton . text, false ) ) ;
+        
+    	relative . getButtonList ( ) . add ( viewMyShopsButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), relative.exitButton.xPosition -  MineDonate . cfgUI . cats . shops . viewMyShopsButton . width, relative . exitButton . yPosition, MineDonate . cfgUI . cats . shops . viewMyShopsButton . width, MineDonate . cfgUI . cats . shops . viewMyShopsButton . height, MineDonate . cfgUI . cats . shops . viewMyShopsButton . text, false ) ) ;
+    	relative . getButtonList ( ) . add ( createNewShopButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), viewMyShopsButton.xPosition -  MineDonate . cfgUI . cats . shops . createNewShopButton . width, viewMyShopsButton . yPosition, MineDonate . cfgUI . cats . shops . createNewShopButton . width, MineDonate . cfgUI . cats . shops . createNewShopButton . height, MineDonate . cfgUI . cats . shops . createNewShopButton . text, false ) ) ;
+
     	refreshGui ( ) ;
     	
     	if ( userSC != null ) {
@@ -80,26 +95,71 @@ public class UsersShopsCategory extends ShopCategory {
     	
     	}
 
-    	updateReturnButton ( ) ;
+    	updateButtons ( ) ;
 
     }
 
+    boolean viewMyShops = false ;
+    
     @Override
     public void actionPerformed(GuiButton button) {
-        
+    	
     	if ( userSC != null ) {
     		
     		userSC . actionPerformed ( button ) ;
     		
-    		if ( button . id == ShopGUI . instance . returnButton . id ) {
+    		if ( button . id == returnButton . id ) {
+    			
+    			gui . lockProcess ( ) ;
+
+    			if ( viewMyShops ) {
+    				
+    				actionPerformed ( viewMyShopsButton ) ;
+        			gui . updateBtns ( ) ;
+
+    				return ;
+    				
+    			}
     			
 				ShopGUI . instance . currentShop = selectedShop = 0 ;
 
     			updateUserShopCategory ( null, true ) ;
-        		//relative . returnButton . enabled = relative . returnButton . visible =ShopGUI .instance . displayReturnButton = false ;
+    			gui . updateBtns ( ) ;
     			
-    		}
+        		//relative . returnButton . enabled = relative . returnButton . visible =ShopGUI .instance . displayReturnButton = false ;
+    			return ;
+    			
+			}
     		
+    	}
+
+		if ( button . id == this . viewMyShopsButton . id ) {
+
+			gui . lockProcess ( ) ;
+			
+			if ( ! viewMyShops ) {
+
+				super . search ( Minecraft . getMinecraft ( ) . thePlayer . getDisplayName ( ) ) ;
+				
+			} else {
+				
+				super . search ( null ) ;
+				
+			}
+			
+			viewMyShops = ! viewMyShops ;
+
+			gui . updateBtns ( ) ;
+
+    	}
+        
+		if ( button . id == this . createNewShopButton . id ) {
+
+			gui . lockProcess ( ) ;
+			
+
+			gui . updateBtns ( ) ;
+
     	}
         
     }
@@ -109,14 +169,14 @@ public class UsersShopsCategory extends ShopCategory {
 	@Override
 	public int getButtonWidth ( ) {
 		
-		return MineDonate.cfgUI.cats.usersShops.categoryButtonWidth;
+		return MineDonate.cfgUI.cats.shops.categoryButtonWidth;
 		
 	}
 	
 	@Override 
 	public String getButtonText ( ) {
 		
-		return MineDonate.cfgUI.cats.usersShops.categoryButtonText ;
+		return MineDonate.cfgUI.cats.shops.categoryButtonText ;
 		
 	}
 
@@ -141,7 +201,7 @@ public class UsersShopsCategory extends ShopCategory {
 			
 		}
 		
-		updateReturnButton ( ) ;
+		updateButtons ( ) ;
 		refreshGui ( ) ;
 		
 	}
@@ -172,7 +232,7 @@ public class UsersShopsCategory extends ShopCategory {
 		        		
 		        		if ( iim != null ) {
 
-			        		if ( ( iim . isFreezed ? ! MineDonate . cfgUI . cats . usersShops . dontShowFreezed : true ) && ( iim . owner . toLowerCase ( ) . contains ( searchValue ) ||  iim . name . toLowerCase ( ) . contains ( searchValue ) ) ) {
+			        		if ( ( iim . isFreezed ? ! MineDonate . cfgUI . cats . shops . dontShowFreezed : true ) && ( viewMyShops ? ( iim . owner . equalsIgnoreCase ( searchValue ) ) : ( iim . owner . toLowerCase ( ) . contains ( searchValue ) ||  iim . name . toLowerCase ( ) . contains ( searchValue ) ) ) ) {
 			        			
 			        			entrs . add ( new GuiItemEntryOfUserShopMerch ( iim, this ) . addButtons ( gui ) . updateDrawData ( ) ) ;
 			        			
@@ -190,7 +250,7 @@ public class UsersShopsCategory extends ShopCategory {
 		        		
 		        		if ( iim != null ) {
 		        		
-		        			if ( ( iim . isFreezed ? ! MineDonate . cfgUI . cats . usersShops . dontShowFreezed : true ) ) {
+		        			if ( ( iim . isFreezed ? ! MineDonate . cfgUI . cats . shops . dontShowFreezed : true ) ) {
 		        			
 		        				entrs . add ( new GuiItemEntryOfUserShopMerch ( iim, this ) . addButtons ( gui ) . updateDrawData ( ) ) ;
 		        			
@@ -220,28 +280,52 @@ public class UsersShopsCategory extends ShopCategory {
 
 		userSC = sc ;
 		if ( r ) { refreshGui ( ) ; }
-		updateReturnButton ( ) ;
+		updateButtons ( ) ;
 		
 	}
 
-	public void updateReturnButton ( ) {
-		
+    public void updateButtons ( ) {
+    	
 		if ( userSC != null ) {
 
-			ShopGUI . instance . returnButton . enabled =  ShopGUI . instance . returnButton . visible = ShopGUI . instance . displayReturnButton = true ;
+			returnButton . enabled = returnButton . visible = displayReturnButton = true ;
 			
 		} else {
 
-			ShopGUI . instance . returnButton . enabled =  ShopGUI . instance . returnButton . visible = ShopGUI . instance . displayReturnButton = false ;
+			returnButton . enabled = returnButton . visible = displayReturnButton = false ;
 
 		}
 		
-	}
+		if ( displayReturnButton ) {
+			
+			viewMyShopsButton . yPosition = -100 ;
+			createNewShopButton . yPosition = -100 ;
+			
+		} else {
 
+			viewMyShopsButton . xPosition = gui . exitButton . xPosition - viewMyShopsButton . width ;
+			viewMyShopsButton . yPosition = gui . exitButton . yPosition ;
+			createNewShopButton . xPosition = viewMyShopsButton . xPosition - viewMyShopsButton . width ;
+			createNewShopButton . yPosition = viewMyShopsButton . yPosition ;
+
+
+		}
+		
+    }
+    
 	@Override
 	public GuiScrollingList getScrollList ( ) {
 		
 		return gi;
+		
+	}
+	
+	@Override
+	public void search ( String s ) {
+		
+		viewMyShops = false ;
+		
+		super . search( s ) ;
 		
 	}
 	
