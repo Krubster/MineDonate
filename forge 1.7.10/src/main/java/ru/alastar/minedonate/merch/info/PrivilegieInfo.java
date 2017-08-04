@@ -15,9 +15,7 @@ public class PrivilegieInfo extends Merch {
     public long seconds;
 
     public PrivilegieInfo(int _shopId, int _catId, int merch_id, String n, String desc, String picture_url, int cost, long seconds) {
-    	this.shopId = _shopId;
-    	this.catId = _catId;
-    	this.merch_id = merch_id;
+    	super(_shopId, _catId, merch_id);
         this.name = n;
         this.description = desc;
         this.cost = cost;
@@ -26,7 +24,7 @@ public class PrivilegieInfo extends Merch {
     }
 
     public PrivilegieInfo() {
-
+    	super();
     }
 
     @Override
@@ -36,9 +34,7 @@ public class PrivilegieInfo extends Merch {
 
     @Override
     public void write(ByteBuf buf) {
-    	buf.writeInt(shopId);
-        buf.writeInt(catId);
-        buf.writeInt(merch_id);
+    	super.write(buf);
         buf.writeInt(cost);
         buf.writeInt(name.getBytes().length);
         buf.writeBytes(name.getBytes());
@@ -60,9 +56,7 @@ public class PrivilegieInfo extends Merch {
 
     @Override
     public void read(ByteBuf buf) {
-    	shopId = buf.readInt();
-    	catId = buf.readInt();
-        merch_id = buf.readInt();
+    	super.read(buf);
         cost = buf.readInt();
         int name_length = buf.readInt();
         this.name = new String(buf.readBytes(name_length).array());

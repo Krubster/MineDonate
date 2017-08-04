@@ -8,7 +8,7 @@ import io.netty.buffer.ByteBuf;
 /**
  * Created by Alastar on 18.07.2017.
  */
-public class AccountInfoPacket  implements IMessage {
+public class AccountInfoPacket implements IMessage {
     // A default constructor is always required
     public AccountInfoPacket(){}
 

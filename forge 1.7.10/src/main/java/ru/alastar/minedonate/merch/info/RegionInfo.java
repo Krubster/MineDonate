@@ -21,9 +21,7 @@ public class RegionInfo extends Merch {
     public String name;
 
     public RegionInfo(int _shopId, int _catId, int mid, int cost, String name, String world_name) {
-    	this.shopId = _shopId;
-    	this.catId = _catId;
-        this.merch_id = mid;
+    	super(_shopId, _catId, mid);
         this.cost = cost;
         this.name = name;
         this.world_name = world_name;
@@ -69,7 +67,7 @@ public class RegionInfo extends Merch {
     }
 
     public RegionInfo() {
-
+    	super();
     }
 
     @Override
@@ -79,9 +77,7 @@ public class RegionInfo extends Merch {
 
     @Override
     public void read(ByteBuf buf) {
-    	shopId = buf.readInt();
-    	catId = buf.readInt();
-        merch_id = buf.readInt();
+    	super.read(buf);
         cost = buf.readInt();
         int info_length = buf.readInt();
         try {
@@ -93,9 +89,7 @@ public class RegionInfo extends Merch {
 
     @Override
     public void write(ByteBuf buf) {
-    	buf.writeInt(shopId);
-        buf.writeInt(catId);
-        buf.writeInt(merch_id);
+    	super.write(buf);
         buf.writeInt(cost);
         buf.writeInt(name.getBytes().length);
         buf.writeBytes(name.getBytes());

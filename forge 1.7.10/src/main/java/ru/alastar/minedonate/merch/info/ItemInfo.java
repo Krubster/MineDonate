@@ -34,7 +34,9 @@ public class ItemInfo extends Merch {
 
 
     public ItemInfo() {
-
+    	
+    	super();
+    	
     }
 
     @Override
@@ -50,9 +52,7 @@ public class ItemInfo extends Merch {
     }
 
     public ItemInfo(int _shopId, int _catId, int mid, int cos, String n, String inf, int lim, java.sql.Blob data) {
-    	this.shopId = _shopId;
-    	this.catId = _catId;
-        this.merch_id = mid;
+    	super(_shopId, _catId, mid);
         this.cost = cos;
         this.name = n;
         this.info = inf;
@@ -68,13 +68,13 @@ public class ItemInfo extends Merch {
         stack_data = ByteBufUtils.readTag(buf);
     }
     public ItemInfo(int _shopId, int _catId, int mid, int cos, String n, String inf, int lim, ItemStack data) {
-    	this.shopId = _shopId;
-    	this.catId = _catId;
-        this.merch_id = mid;
+    	super(_shopId, _catId, mid);
+    	
         this.cost = cos;
         this.name = n;
         this.info = inf;
         this.limit = lim;
+        this.stack_data = new NBTTagCompound ( ) ;
         data.writeToNBT(stack_data);
     }
     @Override
@@ -84,9 +84,7 @@ public class ItemInfo extends Merch {
 
     @Override
     public void write(ByteBuf buf) {
-    	buf.writeInt(shopId);
-        buf.writeInt(catId);
-        buf.writeInt(merch_id);
+    	super.write(buf);
         buf.writeInt(cost);
         buf.writeInt(name.getBytes().length);
         buf.writeBytes(name.getBytes());
@@ -103,9 +101,7 @@ public class ItemInfo extends Merch {
 
     @Override
     public void read(ByteBuf buf) {
-    	shopId = buf.readInt();
-    	catId = buf.readInt();
-        merch_id = buf.readInt();
+    	super.read(buf);
         this.cost = buf.readInt();
         int name_length = buf.readInt();
         try {
@@ -118,6 +114,13 @@ public class ItemInfo extends Merch {
         limit = buf.readInt();
         stack_data = ByteBufUtils.readTag(buf);
         m_stack = ItemStack.loadItemStackFromNBT(stack_data);
+        
+        if ( name == null || name . isEmpty ( ) ) {
+        	
+        	name = m_stack . getDisplayName ( ) ;
+        	
+        }
+        
     }
 	
 }

@@ -169,14 +169,41 @@ public class GuiMoneyArea {
 		}
 		
 		public void drawBalance ( int i, int max, int count, int offsetX, int offsetY, int mouseX, int mouseY ) {
+		
+			int tmpY = offsetY - ( max * 5 ) + ( i * 10 ) ; // ( 10 / 2 = 5 )
+			int tmpX = offsetX - 20 - ( gui . getFontRenderer ( ) . getStringWidth ( count + ( balanceSuff != null ? balanceSuff : "" ) ) ) ;
 			
+			tmp = 0 ;
 			
+			if ( balancePref != null ) {
+				
+				gui . getFontRenderer ( ) . drawString ( balancePref, tmpX - gui . getFontRenderer ( ) . getStringWidth ( balancePref ), tmpY, 14737632 ) ;
+				
+			}
+
+			if ( texture != null ) {
+				
+			 	RenderHelper . enableGUIStandardItemLighting ( ) ;
+				
+			 	Minecraft . getMinecraft ( ) . renderEngine . bindTexture ( texture ) ;
+			 	gui . drawTexturedModalRectNormal ( tmpX, tmpY, 8, 8 ) ;
+						
+			 	RenderHelper . disableStandardItemLighting ( ) ;
+
+				tmp += 10 ;
+				
+			}
+			
+			gui . getFontRenderer ( ) . drawString ( count + ( balanceSuff != null ? balanceSuff : "" ), tmpX + tmp, tmpY, 14737632 ) ;
+
 		}
 		
 		int tmp = 0 ;
 		
 		public void drawPrice ( int price, int offsetX, int offsetY ) {
 			
+			tmp = 0 ;
+
 			if ( pricePref != null ) {
 				
 				gui . getFontRenderer ( ) . drawString ( pricePref, offsetX - gui . getFontRenderer ( ) . getStringWidth ( pricePref ), offsetY, 14737632 ) ;
@@ -195,8 +222,6 @@ public class GuiMoneyArea {
 			}
 
 			gui . getFontRenderer ( ) . drawString ( price + ( priceSuff != null ? priceSuff : "" ), offsetX + tmp, offsetY, 14737632 ) ;
-
-			tmp = 0 ;
 			
 		}
 		

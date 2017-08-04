@@ -17,17 +17,9 @@ import java.sql.Statement;
  */
 public class ItemNBlocks extends MerchCategory {
 
-    public int shopId;
-    public int catId;
-    
-    String moneyType ;
-	
 	public ItemNBlocks ( int _shopId, int _catId, String _moneyType ) {
 	
-    	this.shopId = _shopId;
-    	this.catId = _catId;
-    	
-		moneyType = _moneyType ;
+    	super ( _shopId, _catId, _moneyType ) ;
 		
 	}
 
@@ -108,13 +100,6 @@ public class ItemNBlocks extends MerchCategory {
     public Merch constructMerch() {
         return new ItemInfo();
     }
-
-	@Override
-	public String getMoneyType ( ) {
-		
-		return moneyType ;
-		
-	}
 	
     public MerchCategory setCustomDBTable(String _dbTable) {
 

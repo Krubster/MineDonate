@@ -15,18 +15,10 @@ import java.sql.SQLException;
  * Created by Alastar on 21.07.2017.
  */
 public class Entities extends MerchCategory {
-		
-    public int shopId;
-    public int catId;
-    
-	String moneyType ;
 	
 	public Entities ( int _shopId, int _catId, String _moneyType ) {
-	
-    	this.shopId = _shopId;
-    	this.catId = _catId;
-    	
-		moneyType = _moneyType ;
+		
+    	super ( _shopId, _catId, _moneyType ) ;
 		
 	}
 	

@@ -8,7 +8,7 @@ public class DataOfUICategories {
 	public DataOfUICategoryItemsNBlocks itemsAndBlocks ;
 	public DataOfUICategoryPrivelegies privelegies ;
 	public DataOfUICategoryRegions regions ;
-	public DataOfUICategoryUsersShops usersShops ;
+	public DataOfUICategoryUsersShops shops ;
 
 	public DataOfUICategories ( ) {
 		
@@ -16,7 +16,7 @@ public class DataOfUICategories {
 		itemsAndBlocks = new DataOfUICategoryItemsNBlocks ( ) ;
 		privelegies = new DataOfUICategoryPrivelegies ( ) ;
 		regions = new DataOfUICategoryRegions ( ) ;
-		usersShops = new DataOfUICategoryUsersShops ( ) ;
+		shops = new DataOfUICategoryUsersShops ( ) ;
 		
 	}
 	

@@ -53,7 +53,7 @@ public class GuiItemEntryOfEntityMerch extends GuiAbstractItemEntry {
 		//
 		
 		gi . parent . drawString ( gi . getFontRenderer ( ), info . name, 41, y_offset + 8, 16777215 ) ;
-		gi . parent . moneyArea . drawPriceArea ( x_offset - 70 - 15, y_offset + 8, info . cost, info . getMoneyType ( ) ) ;
+		gi . parent . moneyArea . drawPriceArea ( x_offset - 70 - 15 - 3, y_offset + 8, info . cost, info . getMoneyType ( ) ) ;
 		//gi . parent . drawCenteredString ( gi . getFontRenderer ( ), costLine, x_offset - 70 - 15, y_offset + 8, 16777215 ) ;
 
 		//

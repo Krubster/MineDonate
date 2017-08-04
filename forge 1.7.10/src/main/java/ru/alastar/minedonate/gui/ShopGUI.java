@@ -2,9 +2,11 @@ package ru.alastar.minedonate.gui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
 import ru.alastar.minedonate.MineDonate;
@@ -27,7 +29,7 @@ public class ShopGUI extends GuiScreen {
 
     public static ShopGUI instance ;
     
-    private boolean can_process = true ;
+    public boolean can_process = true ;
 
     public boolean needNetUpdate = true ;
     public boolean loading = false ;
@@ -43,7 +45,7 @@ public class ShopGUI extends GuiScreen {
     public GuiGradientTextField searchField ;
     public GuiMoneyArea moneyArea ;
     
-    public boolean displayReturnButton = false; 
+   // public boolean displayReturnButton = false; 
 
     public ShopGUI ( ) {
 
@@ -81,7 +83,12 @@ public class ShopGUI extends GuiScreen {
     	
     }
     
-    //#LOG
+    public void lockProcess ( ) {
+    	
+    	can_process = false ;
+    	
+    }
+    
     @Override
     protected void keyTyped ( char p_73869_1_, int p_73869_2_ ) {
 
@@ -147,8 +154,8 @@ public class ShopGUI extends GuiScreen {
     	
         ScaledResolution resolution = new ScaledResolution(this.mc, this.mc.displayWidth, this.mc.displayHeight); // bull shit
 
-        this.drawRect(0, 0, resolution.getScaledWidth(), resolution.getScaledHeight(), 1258291200);
-     
+        this . drawRect ( 0, 0, resolution . getScaledWidth ( ), resolution . getScaledHeight ( ), 1258291200 ) ;
+
         if ( ! needNetUpdate ) {
         	
         	
@@ -220,11 +227,11 @@ public class ShopGUI extends GuiScreen {
             this.mc.thePlayer.closeScreen();
             
         } 
-        
+
         if(can_process) {
-        	
-            can_process = false;
-            
+          
+        	can_process = false ;
+
             if (button instanceof PreviousButton) {
             	
                 button.enabled = false;
@@ -233,7 +240,7 @@ public class ShopGUI extends GuiScreen {
                 updateBtns();
                 
             } else if (button instanceof NextButton) {
-            	
+
                 button.enabled = false;
                 m_Page = m_Page + 1;
                 System.out.println("new page is: " + m_Page);
@@ -312,6 +319,7 @@ public class ShopGUI extends GuiScreen {
             getCurrentCategory ( ) . actionPerformed ( button ) ;
             
         }
+        
     }
 
     public void drawHoveringText(ArrayList list, int mouseX, int mouseY, FontRenderer fontRenderer) {
@@ -338,7 +346,7 @@ public class ShopGUI extends GuiScreen {
 			
 		}
 		
-		moneyArea . initGui( this ) ;
+		moneyArea . initGui ( this ) ;
 		
 		//
 		
@@ -353,23 +361,9 @@ public class ShopGUI extends GuiScreen {
 
     }
 
-    // int widthCatsBlock = 0 ;
-    private void addCategories() {
-        //   int offset = 0;
-        ScaledResolution resolution = new ScaledResolution(this.mc, this.mc.displayWidth, this.mc.displayHeight);
-        ScaledResolution resolution0 ;
+    private void addCategories ( ) {
 
-        /*
-        int posX = 0 ;
-       // widthCatsBlock = 0 ;
-        for ( ShopCategory sc : getCurrentShopCategories ( ) ) {//#LOG
-        	if ( sc.getEnabled() ) { 
-        		
-        		resolution0 = new ScaledResolution(this.mc, sc . getButtonWidth ( ) + 5, 0 ) ; //TODO rewrite
-        		widthCatsBlock += resolution0.getScaledWidth() ; 	
-        		
-        	}
-        }*/
+    	ScaledResolution resolution = new ScaledResolution(this.mc, this.mc.displayWidth, this.mc.displayHeight);
 
         int posX = 30 ; //( resolution . getScaledWidth ( ) / 2 ) - ( widthCatsBlock / 2 ) ;
         
@@ -416,18 +410,12 @@ public class ShopGUI extends GuiScreen {
     NextButton nb ;
     public ScaledResolution resolution ;
     public GuiButton exitButton ;
-    public  GuiGradientButton searchButton ;
-    public GuiButton returnButton ;
+    public GuiGradientButton searchButton ;
 
-    public void updateBtns() {
+    public void updateBtns ( ) {
     	
-        //System.out.println("clear buttons");
         buttonList.clear();
         addCategories();
-        //System.out.println("added category buttons");
-
-        getCurrentCategory ( ) . updateButtons ( this, m_Page ) ;
-        //System.out.println("updated category buttons");
       
         if ( MineDonate . cfgUI . addSearchButton ){
         
@@ -436,7 +424,7 @@ public class ShopGUI extends GuiScreen {
         	if ( searchField == null ) {
         		
         		searchField = new GuiGradientTextField ( this . fontRendererObj, 30 + MineDonate.cfgUI.searchButton.width, (int) ( (resolution.getScaledHeight()) - (resolution.getScaledHeight() * 0.1) )-5, MineDonate . cfgUI . searchField . width, MineDonate . cfgUI . searchField . height, true ) ;
-        		// searchField . setTextHolder ( MineDonate . cfgUI . searchFieldPlaceHolder ) ;
+
         		searchField . setText ( MineDonate . cfgUI . searchField . text ) ;
         		searchField . setTextHolder ( MineDonate . cfgUI . searchField . textHolder ) ;
         		
@@ -447,18 +435,15 @@ public class ShopGUI extends GuiScreen {
 
         	searchField . xPosition = 30 + MineDonate.cfgUI.searchButton.width ;
     		searchField . yPosition = (int) ( (resolution.getScaledHeight()) - (resolution.getScaledHeight() * 0.1) ) - 5 ;
-
-    	
         	
         }
         
         buttonList . add ( exitButton = new GuiGradientButton ( 0, ( int ) ( resolution . getScaledWidth ( ) - 30 /** 0.5*/ ) - MineDonate . cfgUI . exitButton . width, ( int ) ( ( resolution . getScaledHeight ( ) ) - ( resolution . getScaledHeight ( ) * 0.1 ) - 5 ), MineDonate . cfgUI . exitButton . width, MineDonate . cfgUI . exitButton . height, MineDonate . cfgUI . exitButton . text, false ) ) ;
-        buttonList . add ( returnButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), exitButton.xPosition -  MineDonate . cfgUI . returnButton . width, exitButton . yPosition, MineDonate . cfgUI . returnButton . width, MineDonate . cfgUI . returnButton . height, MineDonate . cfgUI . returnButton . text, false ) ) ;
+      
+        // buttonList . add ( returnButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), exitButton.xPosition -  MineDonate . cfgUI . returnButton . width, exitButton . yPosition, MineDonate . cfgUI . returnButton . width, MineDonate . cfgUI . returnButton . height, MineDonate . cfgUI . returnButton . text, false ) ) ;
         
         buttonList . add ( pb = new PreviousButton ( ShopGUI . getNextButtonId ( ), ( int ) ( resolution . getScaledWidth ( ) * 0.5 ) - 20 - 2 , ( int ) ( ( resolution . getScaledHeight ( ) ) - ( resolution . getScaledHeight ( ) * 0.1 ) ) - 20 - 10, 20, 20, "<" ) ) ;
         buttonList . add ( nb = new NextButton ( ShopGUI . getNextButtonId ( ), pb . xPosition + pb . width + 4, pb . yPosition, 20, 20, ">" ) ) ;
-
-        returnButton . enabled = returnButton . visible = displayReturnButton ;
         		
         if ( getCurrentCategory ( ) . elementsOnPage ( ) != 0 && getCurrentCategory ( ) . getSourceCount ( getCurrentShopId ( ) ) > getCurrentCategory ( ) . elementsOnPage ( ) ) {
 
@@ -473,6 +458,8 @@ public class ShopGUI extends GuiScreen {
 
         }
         
+        getCurrentCategory ( ) . updateButtons ( this, m_Page ) ;
+
     }
 
     int tmpH ;
@@ -520,6 +507,12 @@ public class ShopGUI extends GuiScreen {
 	     tessellator.addVertexWithUV(x        , y         , 0, 0.0, 0.0);
 	     tessellator.draw();
 	     
+	}
+
+	public List getButtonList ( ) {
+		
+		return this . buttonList ;
+		
 	}
 
 }

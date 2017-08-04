@@ -6,6 +6,7 @@ import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import net.minecraft.entity.player.EntityPlayerMP;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.network.packets.AddMerchPacket;
+import ru.alastar.minedonate.network.packets.CategoryPacket;
 import ru.alastar.minedonate.network.packets.NeedShopCategoryPacket;
 import ru.alastar.minedonate.network.packets.NeedUpdatePacket;
 
@@ -27,6 +28,14 @@ public class NeedShopCategoryServerPacketHandler implements IMessageHandler<Need
             	MineDonate . loadUserShop ( message . shopId ) ;
             	
             }
+            
+            if ( ! MineDonate . checkCatExists ( message . shopId, message . cat ) ) {
+            	
+            	return null ;
+            	
+            }
+
+            MineDonate . networkChannel . sendTo ( new CategoryPacket ( message . shopId, message . cat, MineDonate . shops . get ( message . shopId ) . cats [ message . cat ] . subCategories ), serverPlayer ) ;
             
             if ( MineDonate . shops . containsKey ( message . shopId ) && MineDonate . shops . get ( message . shopId ) . cats . length > message . cat ) {
                          

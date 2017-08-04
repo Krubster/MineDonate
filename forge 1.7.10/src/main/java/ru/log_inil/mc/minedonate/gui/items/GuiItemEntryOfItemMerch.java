@@ -70,7 +70,7 @@ public class GuiItemEntryOfItemMerch extends GuiAbstractItemEntry {
 		//
 
 		gi . parent . drawString ( gi . getFontRenderer ( ), info . name, 67, y_offset + 8, 16777215 ) ;
-		gi . parent . moneyArea . drawPriceArea ( x_offset - 70 - 50, y_offset + 8,  ( info . cost * info . modified ), info . getMoneyType ( ) ) ;
+		gi . parent . moneyArea . drawPriceArea ( x_offset - 70 - 50 - 3, y_offset + 8,  ( info . cost * info . modified ), info . getMoneyType ( ) ) ;
 
 		if ( info . limit != -1) {
 		  

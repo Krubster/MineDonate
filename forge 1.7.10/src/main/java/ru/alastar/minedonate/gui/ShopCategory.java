@@ -1,7 +1,11 @@
 package ru.alastar.minedonate.gui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.client.gui.GuiButton;
 import ru.alastar.minedonate.MineDonate;
+import ru.alastar.minedonate.merch.Merch;
 import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.gui.GuiScrollingList;
 
@@ -10,7 +14,14 @@ import ru.log_inil.mc.minedonate.gui.GuiScrollingList;
  */
 public abstract class ShopCategory {
 
+	protected int shopId = 0 ;
 	protected int catId ;
+	protected int subCatId = -1 ;
+    protected int rowCount ;
+    protected int colCount ;
+
+    protected List < Merch > noSearchedEntries = new ArrayList < > ( ) ;
+
 	
 	public boolean getEnabled ( ) {
 		
@@ -31,6 +42,7 @@ public abstract class ShopCategory {
     }
 
     public abstract void draw(ShopGUI relative, int page, int mouseX, int mouseY, float partialTicks, DrawType dt ) ;
+    
     public void undraw ( ) {
     	
     }
@@ -60,8 +72,6 @@ public abstract class ShopCategory {
     	return "?" ;
     	
     }
-
-    protected int rowCount ;
     
     public int getRowCount ( ) {
     	
@@ -75,7 +85,6 @@ public abstract class ShopCategory {
     	
     }
     
-    protected int colCount ;
     public int getColCount ( ) { 
     	
     	return colCount ;
@@ -111,7 +120,31 @@ public abstract class ShopCategory {
 	public void initGui ( ) {
 		
 	}
+	
+	public void setSubCategory ( int _subCatId ) {
+		
+		if ( ! MineDonate . checkCatExists (  gui . getCurrentShopId ( ) , catId ) ) {
+			
+			return ;
+			
+		}
 
+		subCatId = _subCatId ;
+		
+		noSearchedEntries . clear ( ) ;
+			
+		for ( Merch m : MineDonate . shops . get (  gui . getCurrentShopId ( )  ) . cats [ catId ] . getMerch ( ) ) {
+			
+			if ( m != null && ( m . subCatId == _subCatId || _subCatId == -1 ) ) {
+				
+				noSearchedEntries . add ( m ) ;
+				
+			}
+			
+		}	
+		
+	}
+	
 	protected boolean search ;
 	protected String searchValue ;
 	
@@ -145,4 +178,18 @@ public abstract class ShopCategory {
     	
     }
 
+	public static class SubCategory {
+        
+		public int subCatId ;
+		public String displayName ;
+    	
+    	public SubCategory ( int _subCatId, String _displayName ) {
+    		
+    		subCatId = _subCatId ;
+    		displayName = _displayName ;
+    		
+    	}
+    	
+    }
+    
 }

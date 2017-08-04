@@ -9,6 +9,7 @@ import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.gui.CountButton;
 import ru.alastar.minedonate.gui.ShopCategory;
 import ru.alastar.minedonate.gui.ShopGUI;
+import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.merch.info.ItemInfo;
 import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.gui.GuiAbstractItemEntry;
@@ -24,8 +25,12 @@ import java.util.List;
  */
 public class ItemNBlockCategory extends ShopCategory {
 
-	int catId = 0 ;
-	int shopId = 0 ;
+	public ItemNBlockCategory ( ) {
+		
+		catId = 0 ;
+		shopId = 0 ;
+		
+	}
 	
     @SideOnly(Side.CLIENT)
     ResourceLocation background = new ResourceLocation(MineDonate.MODID, "test.png");
@@ -70,7 +75,7 @@ public class ItemNBlockCategory extends ShopCategory {
     }
 
     @Override
-    public void updateButtons(ShopGUI relative, int m_Page) {
+    public void updateButtons(ShopGUI relative, int m_Page ) {
     	
     	initGui ( ) ;
     	
@@ -106,13 +111,19 @@ public class ItemNBlockCategory extends ShopCategory {
 
 	GuiItemsScrollArea gi ;
 	List < GuiAbstractItemEntry > entrs = new ArrayList <GuiAbstractItemEntry > ( ) ;
-
+	
 	ItemInfo iim ;
 	
 	@Override
 	public void initGui ( ) {
 	
-		resolution = new ScaledResolution(gui.mc, gui.mc.displayWidth, gui.mc.displayHeight); // bull shit
+		if ( subCatId == -1 ) {
+			
+			setSubCategory ( subCatId ) ;
+			
+		}
+		
+		resolution = new ScaledResolution ( gui . mc, gui.mc.displayWidth, gui.mc.displayHeight); // bull shit
 
 		gi = new GuiItemsScrollArea ( resolution, gui, entrs, 0 ) ;
 	
@@ -128,9 +139,9 @@ public class ItemNBlockCategory extends ShopCategory {
 	
 	    	if ( search ) {
 	    		
-	    		for ( int i = 0 ; i < MineDonate . shops . get ( shopId ) . cats [ catId ] . getMerch ( ) . length ; i ++ ) {
+	    		for ( Merch m : noSearchedEntries ) {
 	        		
-	        		iim = ( ItemInfo ) MineDonate . shops . get ( shopId ) . cats [ catId ] . getMerch ( ) [ i ] ; 
+	        		iim = ( ItemInfo ) m ; 
 
 	        		if ( ( iim . m_stack != null ? iim . m_stack . getDisplayName ( ) . contains ( searchValue ) : false ) || iim . name . toLowerCase ( ) . contains ( searchValue ) ) {
 	        			
@@ -142,9 +153,9 @@ public class ItemNBlockCategory extends ShopCategory {
 	        		
 	    	} else {
 	    		
-	    		for ( int i = 0 ; i < MineDonate . shops . get ( shopId ) . cats [ catId ] . getMerch ( ) . length ; i ++ ) {
+	    		for ( Merch m : noSearchedEntries ) {
 	        		
-	        		iim = ( ItemInfo ) MineDonate . shops . get ( shopId ) . cats [ catId ] . getMerch ( ) [ i ] ; 
+	        		iim = ( ItemInfo ) m ; 
 	        		
 	        		entrs . add ( new GuiItemEntryOfItemMerch ( iim, this ) . addButtons ( gui ) . updateDrawData ( ) ) ;
 	        		
@@ -155,7 +166,8 @@ public class ItemNBlockCategory extends ShopCategory {
 		}
 		
     	gi . entrs = entrs ;
-    	gi. applyScrollLimits ( ) ;		
+    	gi . applyScrollLimits ( ) ;
+    	
 	}
 	
 	public void setShopId ( int _shopId ) { 
@@ -164,4 +176,10 @@ public class ItemNBlockCategory extends ShopCategory {
 		
 	}
 	
+	@Override
+	public GuiScrollingList getScrollList ( ) {
+		
+		return gi ;
+		
+	}
 }

@@ -4,6 +4,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayerMP;
 import ru.alastar.minedonate.MineDonate;
+import ru.alastar.minedonate.gui.ShopCategory;
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.network.packets.RemoveMerchPacket;
 
@@ -14,6 +15,21 @@ import java.util.Arrays;
  * Created by Alastar on 21.07.2017.
  */
 public abstract class MerchCategory {
+	
+    public int shopId;
+    public int catId;
+    public String moneyType ;
+
+    public MerchCategory ( int _shopId, int _catId, String _moneyType ) {
+    	
+    	shopId = _shopId ;
+    	catId = _catId ;
+		moneyType = _moneyType ;
+
+    }
+    
+    public ShopCategory . SubCategory [ ] subCategories ;
+
     protected Merch[] m_Merch = new Merch[0];
 
     @SideOnly(Side.SERVER)
@@ -80,6 +96,10 @@ public abstract class MerchCategory {
         m_Merch[id] = info;
     }
     
-    public abstract String getMoneyType ( ) ;
+    public String getMoneyType ( ) {
+    	
+    	return moneyType ;
+    	
+    }
 
 }

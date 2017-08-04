@@ -28,20 +28,21 @@ public class DataOfConfig {
 
 	public boolean userShops = true;
 	public String dbUserItems = "md_userItems" ;
-	public String dbshops = "md_shops" ;
+	public String dbShops = "md_shops" ;
 	public String defaultUserShopMoneyType = "coin" ;
 
 	public DataOfMoneyProcessor [ ] moneyProcessors ;
 
-	public boolean db_log = true;
+	public boolean sendLogToDB = true;
 	public String dbLogs = "md_logs";
+	public String dbShopsCategories = "md_subCats" ;
 
 	public String sessionPassword = "1234";
 
 	public DataOfConfig ( ) {
 		
 		moneyProcessors = new DataOfMoneyProcessor [ ] { 
-				new DataOfMoneyProcessor ( "rub", StandartMoneyProcessor . class . getName ( ), "md_accounts", "name", "money", false ),
+			new DataOfMoneyProcessor ( "rub", StandartMoneyProcessor . class . getName ( ), "md_accounts", "name", "money", false ),
 		} ;
 		
 	}

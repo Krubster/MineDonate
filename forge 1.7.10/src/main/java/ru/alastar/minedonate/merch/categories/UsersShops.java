@@ -11,6 +11,12 @@ import java.sql.SQLException;
 
 public class UsersShops extends MerchCategory {
 
+	public UsersShops ( ) {
+		
+		super ( 0, 4, null ) ;
+		
+	}
+	
     @Override
     public boolean canReverse() {
         return false;
@@ -42,7 +48,7 @@ public class UsersShops extends MerchCategory {
 
     @Override
     public String getDatabase() {
-        return MineDonate.cfg.dbshops;
+        return MineDonate.cfg.dbShops;
     }
 
     @Override
