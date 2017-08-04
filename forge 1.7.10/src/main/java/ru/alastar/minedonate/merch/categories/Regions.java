@@ -19,17 +19,9 @@ import java.sql.Statement;
  */
 public class Regions extends MerchCategory {
 	
-    public int shopId;
-    public int catId;
-    
-	String moneyType ;
-	
 	public Regions ( int _shopId, int _catId, String _moneyType ) {
 	
-    	this.shopId = _shopId;
-    	this.catId = _catId;
-    	
-		moneyType = _moneyType ;
+    	super ( _shopId, _catId, _moneyType ) ;
 		
 	}
 

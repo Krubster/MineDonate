@@ -1,6 +1,7 @@
 package ru.alastar.minedonate.gui.categories;
 
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import org.lwjgl.opengl.GL11;
 import ru.alastar.minedonate.MineDonate;
@@ -9,8 +10,8 @@ import ru.alastar.minedonate.gui.ShopCategory;
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.merch.info.PrivilegieInfo;
+import ru.alastar.minedonate.proxies.ClientProxy;
 import ru.log_inil.mc.minedonate.gui.DrawType;
-import ru.log_inil.mc.minedonate.gui.painters.PrivilegieGridItemPainter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,11 +23,8 @@ import java.util.Map;
  */
 public class PrivilegieCategory extends ShopCategory {
 
-    PrivilegieGridItemPainter pip;
-
     public PrivilegieCategory() {
 
-        pip = new PrivilegieGridItemPainter(this);
         catId = 1 ;
         
     }
@@ -53,7 +51,6 @@ public class PrivilegieCategory extends ShopCategory {
 
     }
 
-    Merch info;
     ScaledResolution resolution;
 
     @Override
@@ -70,10 +67,8 @@ public class PrivilegieCategory extends ShopCategory {
 
             if (page < list.size()) {
 
-                info = list.get(page);
-
-                pip.draw(relative, resolution, 0, mouseX, mouseY, partialTicks, info, 0, 0);
-
+                drawPrivilegie(relative, resolution, 0, mouseX, mouseY, partialTicks,  list.get(page), 0, 0);
+                
             }
 
         } else if (dt == DrawType.POST) {
@@ -129,7 +124,55 @@ public class PrivilegieCategory extends ShopCategory {
 
     }
 
-    public BuyButton bb;
+	public int x_offset ;
+	int y_offset ;
+	 
+	ArrayList listDescription = new ArrayList();
+	
+	int maxStringLength = 0 ;
+	int maxStringWidth = 0 ;
+
+	String [ ] strings ;
+
+	public void drawPrivilegie ( ShopGUI relative, ScaledResolution resolution, int m_Page, int mouseX, int mouseY, float partialTicks, PrivilegieInfo _info, int gridI, int gridJ) {
+
+	   x_offset = buyButton . xPosition = (int) ( resolution . getScaledWidth ( ) / 2 ) - ( maxStringWidth + 75 + 5 ) / 2; 
+       y_offset = (int) (resolution.getScaledHeight() * 0.30);
+       
+ 	   RenderHelper.enableGUIStandardItemLighting();
+ 	  
+       //  GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+       GL11.glBindTexture(GL11.GL_TEXTURE_2D, ClientProxy.getImage(_info.merch_id).getGlTextureId());
+       relative.drawTexturedModalRectNormal(x_offset, y_offset, 75, 75);
+       
+       relative.drawString(relative.getFontRenderer(), _info.name, x_offset + (75/2)- relative.getFontRenderer().getStringWidth(_info.name)/2, y_offset + 80, 0xFFFFFF);
+       relative . moneyArea . drawPriceArea ( x_offset, y_offset + 75+20+24, _info . cost, _info . getMoneyType ( ) ) ;
+
+	   list . clear ( ) ;
+
+	   maxStringWidth = 0 ;
+	   
+	   strings = _info.description.split("\r\n");
+
+       for (int i = 0; i < strings.length; ++i) {
+
+    	   listDescription.add(strings[i]);
+           
+           if ( maxStringWidth < relative . getFontRenderer ( ) . getStringWidth ( strings [ i ] )) {
+        	   
+        	   maxStringWidth = relative . getFontRenderer ( ) . getStringWidth ( strings [ i ] ) ;
+        	   
+           }
+           
+       }
+       
+       relative.drawHoveringText(listDescription, x_offset + 75, y_offset+15, relative.getFontRenderer());
+
+       RenderHelper.disableStandardItemLighting();
+
+	}
+	
+    public BuyButton buyButton ;
 
     List<PrivilegieInfo> list = new ArrayList<PrivilegieInfo>();
     Map<Integer, BuyButton> buttonsMap = new HashMap<Integer, BuyButton>(); // holy shi~
@@ -184,13 +227,16 @@ public class PrivilegieCategory extends ShopCategory {
 
             int y_offset = (int) (resolution.getScaledHeight() * 0.30);
                        
-            bb = new BuyButton( info . getShopId ( ), info . getCategory ( ), info . merch_id, ShopGUI.getNextButtonId(), (bb!=null?bb.xPosition: resolution . getScaledWidth ( ) / 2 - MineDonate.cfgUI.cats.privelegies.itemBuyButton.width / 2), y_offset +  93, MineDonate.cfgUI.cats.privelegies.itemBuyButton.width, MineDonate.cfgUI.cats.privelegies.itemBuyButton.height, MineDonate.cfgUI.cats.privelegies.itemBuyButton.text);
-            buttonsMap.put(info.merch_id, bb);
+            buyButton = new BuyButton( info . getShopId ( ), info . getCategory ( ), info . merch_id, ShopGUI.getNextButtonId(), (buyButton!=null?buyButton.xPosition: resolution . getScaledWidth ( ) / 2 - MineDonate.cfgUI.cats.privelegies.itemBuyButton.width / 2), y_offset +  93, MineDonate.cfgUI.cats.privelegies.itemBuyButton.width, MineDonate.cfgUI.cats.privelegies.itemBuyButton.height, MineDonate.cfgUI.cats.privelegies.itemBuyButton.text);
+            buttonsMap.put(info.merch_id, buyButton);
 
-            relative . addBtn ( bb ) ;
+            relative . addBtn ( buyButton ) ;
             
         }
     }
+    
+    @Override 
+	public void setSubCategory ( int _subCatId ) { }
     
 	@Override
 	public int getButtonWidth ( ) {

@@ -114,6 +114,13 @@ public class ItemInfo extends Merch {
         limit = buf.readInt();
         stack_data = ByteBufUtils.readTag(buf);
         m_stack = ItemStack.loadItemStackFromNBT(stack_data);
+        
+        if ( name == null || name . isEmpty ( ) ) {
+        	
+        	name = m_stack . getDisplayName ( ) ;
+        	
+        }
+        
     }
 	
 }

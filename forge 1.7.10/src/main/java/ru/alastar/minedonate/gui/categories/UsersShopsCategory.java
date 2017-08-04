@@ -8,6 +8,7 @@ import net.minecraft.client.gui.ScaledResolution;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.gui.ShopCategory;
 import ru.alastar.minedonate.gui.ShopGUI;
+import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.merch.info.ShopInfo;
 import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.gui.GuiAbstractItemEntry;
@@ -17,7 +18,12 @@ import ru.log_inil.mc.minedonate.gui.items.GuiItemEntryOfUserShopMerch;
 
 public class UsersShopsCategory extends ShopCategory {
 
-	int catId = 4 ;
+	public UsersShopsCategory ( ) {
+		
+		catId = 4 ;
+		
+	}
+	
 	ShopCategory userSC ;
 	public int selectedShop = 0 ;
 	
@@ -129,6 +135,12 @@ public class UsersShopsCategory extends ShopCategory {
 			
 		}
 		
+		if ( subCatId == -1 ) {
+			
+			setSubCategory ( subCatId ) ;
+			
+		}
+		
 		updateReturnButton ( ) ;
 		refreshGui ( ) ;
 		
@@ -154,9 +166,9 @@ public class UsersShopsCategory extends ShopCategory {
 				
 		    	if ( search ) {
 		    		
-		    		for ( int i = 0 ; i < MineDonate . shops . get ( gui . getCurrentShopId ( ) ) . cats [ catId ] . getMerch ( ) . length ; i ++ ) {
+		    		for ( Merch m : noSearchedEntries ) {
 		        		
-		        		iim = ( ShopInfo ) MineDonate . shops . get ( gui . getCurrentShopId ( ) ) . cats [ catId ] . getMerch ( ) [ i ] ; 
+		        		iim = ( ShopInfo ) m ; 
 		        		
 		        		if ( iim != null ) {
 
@@ -172,9 +184,9 @@ public class UsersShopsCategory extends ShopCategory {
 		        		
 		    	} else {
 		    		
-		    		for ( int i = 0 ; i < MineDonate . shops . get ( gui . getCurrentShopId ( ) ) . cats [ catId ] . getMerch ( ) . length ; i ++ ) {
+		    		for ( Merch m : noSearchedEntries ) {
 		        		
-		        		iim = ( ShopInfo ) MineDonate . shops . get ( gui . getCurrentShopId ( ) ) . cats [ catId ] . getMerch ( ) [ i ] ; 
+		        		iim = ( ShopInfo ) m ; 
 		        		
 		        		if ( iim != null ) {
 		        		

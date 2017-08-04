@@ -21,8 +21,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import org.bukkit.Bukkit;
+
+import ru.alastar.minedonate.commands.AddEntityCommand;
 import ru.alastar.minedonate.commands.AddItemCommand;
 import ru.alastar.minedonate.commands.AdminCommand;
+import ru.alastar.minedonate.gui.ShopCategory;
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.merch.categories.*;
@@ -41,8 +44,11 @@ import java.io.*;
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Mod(modid = MineDonate.MODID, version = MineDonate.VERSION, bukkitPlugin = "Vault")
@@ -121,11 +127,15 @@ public class MineDonate {
         networkChannel.registerMessage(NeedUpdateServerPacketHandler.class, NeedUpdatePacket.class, 7, Side.SERVER);
         networkChannel.registerMessage(NeedUpdateClientPacketHandler.class, NeedUpdatePacket.class, 7, Side.CLIENT);
         networkChannel.registerMessage(NeedShopCategoryServerPacketHandler.class, NeedShopCategoryPacket.class, 8, Side.SERVER);
+        networkChannel.registerMessage(CategoryPacketHandler.class, CategoryPacket.class, 9, Side.CLIENT);
+
         instance = this;
 
     }
     @Mod.EventHandler
     public void serverLoad(FMLServerStartingEvent event) {
+    	
+        event.registerServerCommand(new AddEntityCommand());
         event.registerServerCommand(new AddItemCommand());
         event.registerServerCommand(new AdminCommand());
 
@@ -223,10 +233,18 @@ public class MineDonate {
         	
         	if ( shops . isEmpty ( ) ) {
         	
-        		shops . put ( 0, new Shop ( 0, new MerchCategory [ ] { new ItemNBlocks ( 0, 0, cfg . itemsMoneyType ), new Privelegies ( 0, 1, cfg . privelegiesMoneyType ), new Regions ( 0, 2, cfg . regionMoneyType ), new Entities ( 0, 3, cfg . entitiesMoneyType ), new UsersShops ( ) }, "SERVER", "Server shop", false ) ) ;
-        	
+        		Shop s = new Shop ( 0, new MerchCategory [ ] { new ItemNBlocks ( 0, 0, cfg . itemsMoneyType ), new Privelegies ( 0, 1, cfg . privelegiesMoneyType ), new Regions ( 0, 2, cfg . regionMoneyType ), new Entities ( 0, 3, cfg . entitiesMoneyType ), new UsersShops ( ) }, "SERVER", "Server shop", false ) ;
+        		shops . put ( 0, s ) ;
+        		
+    			for ( MerchCategory mc : s . cats ) {
+    				
+    				mc . subCategories = getSubCategories ( mc.shopId, mc . catId ) ;
+    				
+    			}
+    			
         	}
 
+        	
         	Statement stmt ;
         	ResultSet rs ;
         	
@@ -280,7 +298,7 @@ public class MineDonate {
 
     @SideOnly(Side.SERVER)
     public static void logBuy(Merch bought, EntityPlayerMP by, int amount, String moneyType) {
-        if (!cfg.db_log) {
+        if (!cfg.sendLogToDB) {
             try {
                 m_log.write(calendar.getTime().toString() + ":" + by.getDisplayName() + ":" + bought.getCategory() + ":" + bought.getBoughtMessage() + ":" + bought.getCost() * amount + ":x" + amount + "\r\n");
                 m_log.flush();
@@ -432,8 +450,8 @@ public class MineDonate {
     }
 
 	public static boolean checkCatExists ( int shopId, int catId ) {
-    	
-    	return ( ! shops . containsKey ( shopId ) ? false : shops . get ( shopId ) . cats . length < catId ) ? false : true ;
+
+		return ( shops . containsKey ( shopId ) ? shops . get ( shopId ) . cats . length > catId : false ) ;
     	
 	}
 	
@@ -459,9 +477,7 @@ public class MineDonate {
         Statement stmt = null;
         try {
             stmt = m_DB_Connection.createStatement();
-            String sql;
-            sql = "SELECT " + "id" + " FROM " + cfg.dbshops + " WHERE id=" + shopId + ";";
-            ResultSet rs = stmt.executeQuery(sql);
+            ResultSet rs = stmt.executeQuery ( "SELECT " + "id" + " FROM " + cfg.dbShops + " WHERE id=" + shopId + ";" ) ;
             while (rs.next()) {
                 rs.close();
                 stmt.close();
@@ -481,9 +497,7 @@ public class MineDonate {
         Statement stmt = null;
         try {
             stmt = m_DB_Connection.createStatement();
-            String sql;
-            sql = "SELECT * FROM " + cfg.dbshops + " WHERE id=" + shopId + ";";
-            ResultSet rs = stmt.executeQuery(sql);
+            ResultSet rs = stmt . executeQuery ( "SELECT * FROM " + cfg.dbShops + " WHERE id=" + shopId + ";" ) ;
 
             while (rs.next()) {
 
@@ -499,6 +513,36 @@ public class MineDonate {
 
     }
 
+    public static ShopCategory . SubCategory [ ] getSubCategories ( int shopId, int catId ) {
+    	
+    	List < ShopCategory . SubCategory > l = new ArrayList < > ( ) ;
+        Statement stmt = null;
+        
+        try {
+        	
+        	stmt = getNewStatement ( ) ;
+        	ResultSet rs = stmt . executeQuery ( "SELECT id, displayName FROM " + cfg.dbShopsCategories + " WHERE shopId=" + shopId + " AND catId=" + catId + ";" ) ;
+
+            while ( rs . next ( ) ) {
+
+                l . add ( new ShopCategory . SubCategory ( rs . getInt ( "id" ), rs . getString ( "displayName" ) ) ) ;
+                
+            }
+
+            rs . close ( ) ;
+            stmt . close ( ) ;
+            
+        } catch ( SQLException ex ) {
+        	
+            ex . printStackTrace ( ) ;
+            
+        }
+        
+        ShopCategory . SubCategory [ ] arr = new ShopCategory . SubCategory [ l . size ( ) ] ;
+    	return ( ShopCategory . SubCategory [ ] ) l . toArray ( arr ) ;
+    	
+    }
+    
 	public static void loadUserShop ( int shopId ) {
 
 		ResultSet sdata = getShopData ( shopId ) ;
@@ -515,6 +559,12 @@ public class MineDonate {
 			
 			s = new Shop ( shopId, new MerchCategory [ ] { new ItemNBlocks ( shopId, 0, sdata . getString ( "moneyType" ) ) . setCustomDBTable ( cfg . dbUserItems ) }, sdata . getString ( "owner" ), sdata . getString ( "name" ), sdata . getBoolean ( "isFreezed") );
 			sdata . close ( ) ;
+			
+			for ( MerchCategory mc : s . cats ) {
+				
+				mc . subCategories = getSubCategories ( mc.shopId, mc . catId ) ;
+				
+			}
 			
 		} catch (SQLException e1) {
 			e1.printStackTrace();

@@ -8,6 +8,7 @@ import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.mproc.AbstractMoneyProcessor;
 import ru.alastar.minedonate.network.packets.AccountInfoPacket;
 import ru.alastar.minedonate.network.packets.AddMerchPacket;
+import ru.alastar.minedonate.network.packets.CategoryPacket;
 import ru.alastar.minedonate.network.packets.NeedUpdatePacket;
 import ru.alastar.minedonate.network.packets.SupportedFeaturesPacket;
 
@@ -45,6 +46,8 @@ public class NeedUpdateServerPacketHandler implements IMessageHandler<NeedUpdate
         			MineDonate . networkChannel . sendTo ( new AccountInfoPacket ( amp . getMoneyFor ( userName ), amp . getMoneyType ( ) ), serverPlayer ) ;
                       
                 }
+                
+                MineDonate . networkChannel . sendTo ( new CategoryPacket ( 0, 0, MineDonate . shops . get ( 0 ) . cats [ 0 ] . subCategories ), serverPlayer ) ;
                 
                 for ( int j = 0; j < MineDonate . shops . get ( 0 ) . cats [ 0 ] . getMerch ( ) . length ; ++ j ) {
                 	

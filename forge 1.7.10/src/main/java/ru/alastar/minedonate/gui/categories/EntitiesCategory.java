@@ -4,6 +4,7 @@ import net.minecraft.client.gui.ScaledResolution;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.gui.ShopCategory;
 import ru.alastar.minedonate.gui.ShopGUI;
+import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.merch.info.EntityInfo;
 import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.gui.GuiAbstractItemEntry;
@@ -26,8 +27,10 @@ public class EntitiesCategory extends ShopCategory {
 	}
 	
     @Override
-    public boolean getEnabled() {
-        return MineDonate.cfg.sellEntities;
+    public boolean getEnabled ( ) {
+        
+    	return MineDonate . cfg . sellEntities ;
+        
     }
 
     @Override
@@ -83,16 +86,44 @@ public class EntitiesCategory extends ShopCategory {
 	@Override
 	public void initGui ( ) {
 	
+		if ( subCatId == -1 ) {
+			
+			setSubCategory ( subCatId ) ;
+			
+		}
+		
 		refreshGui ( ) ;
 		
 	}
 	
 	EntityInfo eim ;
 
+	List < Merch > noSearchedEntries = new ArrayList < > ( ) ;
+	
+	public void setSubCategory ( int _subCatId ) {
+		
+		noSearchedEntries . clear ( ) ;
+		
+		if ( MineDonate . shops . containsKey ( gui . getCurrentShopId ( ) ) ) {
+	
+			for ( Merch m : MineDonate . shops . get ( 0 ) . cats [ catId ] . getMerch ( ) ) {
+				
+				if ( m . subCatId == _subCatId || _subCatId == -1 ) {
+					
+					noSearchedEntries . add ( m ) ;
+					
+				}
+				
+			}
+			
+		}
+		
+	}
+	
 	public void refreshGui ( ) {
 		
 		resolution = new ScaledResolution(gui.mc, gui.mc.displayWidth, gui.mc.displayHeight);
-
+		
 		gi = new GuiItemsScrollArea ( resolution, gui, entrs, 0 ) ;
 	
 		for ( GuiAbstractItemEntry gie : entrs ) {
@@ -107,9 +138,9 @@ public class EntitiesCategory extends ShopCategory {
 	
 	    	if ( search ) {
 	    		
-	    		for ( int i = 0 ; i < MineDonate . shops . get ( gui . getCurrentShopId ( ) ) . cats [ catId ] . getMerch ( ) . length ; i ++ ) {
+	    		for ( Merch m : noSearchedEntries ) {
 	        		
-	        		eim = ( EntityInfo ) MineDonate . shops . get ( gui . getCurrentShopId ( ) ) . cats [ catId ] . getMerch ( ) [ i ] ; 
+	        		eim = ( EntityInfo ) m ; 
 	        		
 	        		if ( eim . name . toLowerCase ( ) . contains ( searchValue ) ) {
 	        			
@@ -121,9 +152,9 @@ public class EntitiesCategory extends ShopCategory {
 	        		
 	    	} else {
 	    		
-	        	for ( int i = 0 ; i <  MineDonate . shops . get ( gui . getCurrentShopId ( ) ) . cats [ catId ] . getMerch ( ) . length ; i ++ ) {
+	    		for ( Merch m : noSearchedEntries ) {
 	        		
-	        		eim = ( EntityInfo ) MineDonate . shops . get ( gui . getCurrentShopId ( ) ) . cats [ catId ] . getMerch ( ) [ i ] ; 
+	        		eim = ( EntityInfo ) m ; 
 	        		entrs . add ( new GuiItemEntryOfEntityMerch ( eim, this ) . addButtons ( gui ) . updateDrawData ( ) ) ;
 	        		
 	        	}

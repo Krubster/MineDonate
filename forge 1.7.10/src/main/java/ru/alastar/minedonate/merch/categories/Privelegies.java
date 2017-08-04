@@ -19,17 +19,9 @@ import java.util.Arrays;
  */
 public class Privelegies extends MerchCategory {
 	
-    public int shopId;
-    public int catId;
-    
-	String moneyType ;
-	
 	public Privelegies ( int _shopId, int _catId, String _moneyType ) {
 	
-    	this.shopId = _shopId;
-    	this.catId = _catId;
-    	
-		moneyType = _moneyType ;
+    	super ( _shopId, _catId, _moneyType ) ;
 		
 	}
 	

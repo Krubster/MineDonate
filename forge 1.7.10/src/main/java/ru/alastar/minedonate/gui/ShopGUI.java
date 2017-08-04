@@ -2,9 +2,11 @@ package ru.alastar.minedonate.gui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
 import ru.alastar.minedonate.MineDonate;
@@ -147,8 +149,8 @@ public class ShopGUI extends GuiScreen {
     	
         ScaledResolution resolution = new ScaledResolution(this.mc, this.mc.displayWidth, this.mc.displayHeight); // bull shit
 
-        this.drawRect(0, 0, resolution.getScaledWidth(), resolution.getScaledHeight(), 1258291200);
-     
+        this . drawRect ( 0, 0, resolution . getScaledWidth ( ), resolution . getScaledHeight ( ), 1258291200 ) ;
+
         if ( ! needNetUpdate ) {
         	
         	
@@ -338,7 +340,7 @@ public class ShopGUI extends GuiScreen {
 			
 		}
 		
-		moneyArea . initGui( this ) ;
+		moneyArea . initGui ( this ) ;
 		
 		//
 		

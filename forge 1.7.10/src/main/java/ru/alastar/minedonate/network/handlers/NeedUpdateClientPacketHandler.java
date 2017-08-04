@@ -23,7 +23,7 @@ public class NeedUpdateClientPacketHandler implements IMessageHandler<NeedUpdate
 				 
 				ShopGUI . instance . needNetUpdate = false ;
 				ShopGUI . instance . loading = false ;
-
+				
 			}      
     			
     	}
@@ -33,7 +33,7 @@ public class NeedUpdateClientPacketHandler implements IMessageHandler<NeedUpdate
 			if ( ShopGUI . instance != null ) {
 				 
 				ShopGUI . instance . loading = false ;
-								
+
 				if ( ShopGUI . instance . getCurrentCategory ( ) instanceof UsersShopsCategory ) {
 					
 					UsersShopsCategory usc = ( UsersShopsCategory ) ShopGUI . instance . getCurrentCategory ( )  ;
@@ -55,6 +55,8 @@ public class NeedUpdateClientPacketHandler implements IMessageHandler<NeedUpdate
 			}      
     			
     	}
+    	
+		ShopGUI . instance . initGui ( ) ;
     	
         return null ;
         

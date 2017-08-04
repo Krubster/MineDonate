@@ -1,6 +1,5 @@
 package ru.alastar.minedonate.gui.categories;
 
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
@@ -11,8 +10,6 @@ import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.merch.info.RegionInfo;
 import ru.log_inil.mc.minedonate.gui.DrawType;
-import ru.log_inil.mc.minedonate.gui.GuiScrollingList;
-import ru.log_inil.mc.minedonate.gui.painters.RegionGridItemPainter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,11 +24,8 @@ import org.lwjgl.opengl.GL12;
  */
 public class RegionsCategory extends ShopCategory {
 
-    RegionGridItemPainter rip ;
     public RegionsCategory ( ) {
-    	
-    	 rip = new RegionGridItemPainter ( this ) ;
-    	 catId = 2 ;
+    	    	 catId = 2 ;
     	 rowCount = 4 ;
     	 colCount = 2 ;
     	 
@@ -58,10 +52,12 @@ public class RegionsCategory extends ShopCategory {
         
     }
     
+    int drawn ;
+    
     @Override
-    public void draw(ShopGUI relative, int m_Page, int mouseX, int mouseY, float partialTicks, DrawType dt) {
+    public void draw(ShopGUI relative, int page, int mouseX, int mouseY, float partialTicks, DrawType dt) {
     	
-		ScaledResolution resolution = new ScaledResolution( relative.mc, relative.mc.displayWidth, relative.mc.displayHeight);
+		ScaledResolution resolution = new ScaledResolution( relative.mc, relative.mc.displayWidth, relative.mc.displayHeight); // Давайте поможем Даше убрать это дно из всего кода?
 		
     	if ( dt == DrawType . BG ){
     		
@@ -72,18 +68,22 @@ public class RegionsCategory extends ShopCategory {
     		GL11 . glEnable ( GL12 . GL_RESCALE_NORMAL ) ;
     		RenderHelper . enableGUIStandardItemLighting ( ) ;
     		
-            rip . drawn = 0 ;
+            drawn = 0 ;
             
-            for (int i = 0; i < rowCount; ++i) {
-                for (int j = 0; j < colCount; ++j) {
-                    if (m_Page * colCount * rowCount + rip . drawn < list . size ( ) ) {
+            for ( int i = 0; i < rowCount ; i ++ ) {
+            	
+                for ( int j = 0; j < colCount; j ++ ) {
+                	
+                    if ( page * colCount * rowCount + drawn < list . size ( ) ) {
                
-                    	rip.draw(relative, resolution, m_Page, mouseX, mouseY, partialTicks, list.get(m_Page * colCount * rowCount + rip.drawn), i, j);
+                    	drawRegion ( relative, resolution, page, mouseX, mouseY, partialTicks, list . get ( page * colCount * rowCount + drawn ), i, j ) ;
                     	
-                    	rip . drawn ++ ;
+                    	drawn ++ ;
                     	
                     }
+                    
                 }
+                
             }
             
     		RenderHelper . disableStandardItemLighting ( ) ;
@@ -139,6 +139,20 @@ public class RegionsCategory extends ShopCategory {
         }
  
     }
+    
+    int x_offset ;
+    int y_offset ;
+    
+	public void drawRegion(ShopGUI relative, ScaledResolution sc, int m_Page, int mouseX, int mouseY, float partialTicks, RegionInfo _info, int gridI, int gridJ) {
+
+	  x_offset = (int) ( ( sc . getScaledWidth ( ) / 2 - ( getColCount ( ) * 75 ) / 2 )/2 ) + 75 * ( gridJ + 1 ) ;
+	  y_offset = (int) ( ( sc . getScaledHeight ( ) / 2 - ( getRowCount ( ) * 75 ) / 2 )/2 ) + 75 * ( gridI + 1  );
+
+      relative.drawCenteredString(relative.getFontRenderer(), _info.name, x_offset, y_offset - 15, 16777215);
+     //relative.drawCenteredString(relative.getFontRenderer(), MineDonate.cfgUI.cats.regions.pricePrefix + info.cost + MineDonate.cfgUI.cats.regions.priceSuffix, x_offset, y_offset, 16777215);
+      relative . moneyArea . drawPriceArea ( x_offset, y_offset, _info . cost, _info . getMoneyType ( ) ) ;
+
+	}
 
     List < RegionInfo > list = new ArrayList < > ( ) ;
     Map < Integer, BuyButton > buttonsMap = new HashMap < > ( ) ; // holy shi~
@@ -214,7 +228,10 @@ public class RegionsCategory extends ShopCategory {
             }
         }
     }
-        
+      
+    @Override 
+	public void setSubCategory ( int _subCatId ) { }
+    
 	@Override
 	public int getButtonWidth ( ) {
 		
