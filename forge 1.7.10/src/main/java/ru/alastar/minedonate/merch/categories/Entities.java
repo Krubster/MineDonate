@@ -37,7 +37,7 @@ public class Entities extends MerchCategory {
         int i = 0;
         try {
             while (rs.next()) {
-                final EntityInfo info = new EntityInfo(shopId, catId, i, rs.getInt("cost"), rs.getBlob("data"), rs.getString("name"));
+                final EntityInfo info = new EntityInfo(shopId, catId, i, rs.getInt("cost"), rs.getBlob("data"), rs.getString("name"), rs.getInt("lim"));
                 this.addMerch(info);
                 ++i;
             }
@@ -62,6 +62,7 @@ public class Entities extends MerchCategory {
         try {
             EntityInfo info = (EntityInfo)merch;
             Entity entity = (Entity) Class.forName(info.classpath).getDeclaredConstructor(net.minecraft.world.World.class).newInstance(serverPlayer.getEntityWorld());
+            entity.readFromNBT(info.entity_data);
             entity.setLocationAndAngles(serverPlayer.posX, serverPlayer.posY, serverPlayer.posZ, serverPlayer.rotationYaw, serverPlayer.rotationPitch);
             serverPlayer.getEntityWorld().spawnEntityInWorld(entity);
         } catch (InstantiationException e) {
