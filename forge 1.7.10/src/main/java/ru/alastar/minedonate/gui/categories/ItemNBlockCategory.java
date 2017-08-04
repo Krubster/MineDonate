@@ -164,4 +164,10 @@ public class ItemNBlockCategory extends ShopCategory {
 		
 	}
 	
+	@Override
+	public GuiScrollingList getScrollList ( ) {
+		
+		return gi ;
+		
+	}
 }

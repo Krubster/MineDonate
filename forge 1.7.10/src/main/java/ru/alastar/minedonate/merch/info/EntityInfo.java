@@ -54,9 +54,7 @@ public class EntityInfo extends Merch {
 
     @Override
     public void read(ByteBuf buf) {
-    	shopId = buf.readInt();
-    	catId = buf.readInt();
-        merch_id = buf.readInt();
+    	super.read(buf);
         cost = buf.readInt();
         int info_length = buf.readInt();
         try {
@@ -69,9 +67,7 @@ public class EntityInfo extends Merch {
 
     @Override
     public void write(ByteBuf buf) {
-    	buf.writeInt(shopId);
-        buf.writeInt(catId);
-        buf.writeInt(merch_id);
+    	super.write(buf);
         buf.writeInt(cost);
         buf.writeInt(name.getBytes().length);
         buf.writeBytes(name.getBytes());

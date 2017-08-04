@@ -51,7 +51,9 @@ public class UsersShopsCategory extends ShopCategory {
         
         if ( userSC != null && userSC . getScrollList ( ) != null && dt != DrawType . BG ) {
 
-        	userSC . getScrollList ( ) . drawScreen ( mouseX, mouseY, partialTicks, dt ) ; }
+        	userSC . getScrollList ( ) . drawScreen ( mouseX, mouseY, partialTicks, dt ) ; 
+        	
+        }
     	
         if ( ( userSC != null ? dt != DrawType . POST : true ) ) {
         	
@@ -203,7 +205,7 @@ public class UsersShopsCategory extends ShopCategory {
 			userSC . undraw ( ) ;
 			
 		}
-		
+
 		userSC = sc ;
 		if ( r ) { refreshGui ( ) ; }
 		updateReturnButton ( ) ;

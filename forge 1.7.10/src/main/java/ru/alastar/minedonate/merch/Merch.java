@@ -13,15 +13,24 @@ public abstract class Merch {
     public int merch_id;
     public int shopId;
     public int catId;
+	public int subCatId ;
 
     public int getCategory() {
         return -1;
     }
 
     public void read(ByteBuf buf) {
+    	shopId = buf.readInt();
+    	catId = buf.readInt();
+    	subCatId = buf.readInt();
+        merch_id = buf.readInt();
     }
 
     public void write(ByteBuf buf) {
+    	buf.writeInt(shopId);
+        buf.writeInt(catId);
+        buf.writeInt(subCatId);
+        buf.writeInt(merch_id);
     }
 
     public String getBoughtMessage() {

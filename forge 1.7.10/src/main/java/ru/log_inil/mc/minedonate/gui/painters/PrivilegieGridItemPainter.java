@@ -61,7 +61,7 @@ public class PrivilegieGridItemPainter implements IGridItemPainter {
 
        for (int i = 0; i < strings.length; ++i) {
 
-    	   // list.add(strings[i]);
+    	   list.add(strings[i]);
            
            if ( maxStringWidth < relative . getFontRenderer ( ). getStringWidth ( strings [ i ] )) {
         	   

@@ -127,7 +127,7 @@ public class EntitiesCategory extends ShopCategory {
 	        		entrs . add ( new GuiItemEntryOfEntityMerch ( eim, this ) . addButtons ( gui ) . updateDrawData ( ) ) ;
 	        		
 	        	}
-	    		
+
 	    	}
 		
 		}
