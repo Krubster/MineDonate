@@ -38,8 +38,8 @@ public class GuiItemEntryOfItemMerch extends GuiAbstractItemEntry {
 			
 			List < ContextElement > cElements = new ArrayList < > ( ) ;
 	
-			cElements . add ( new ContextElement ( 0, "rename", "Rename this", this, 9 ) ) ;
-			cElements . add ( new ContextElement ( 1, "delete", "Delete this", this, 9 ) ) ;
+			cElements . add ( new ContextElement ( 0, "rename",  MineDonate.cfgUI.lang.renameItemMerch, this, 9 ) ) ;
+			cElements . add ( new ContextElement ( 1, "delete", MineDonate.cfgUI.lang.deleteItemMerch, this, 9 ) ) ;
 	
 			cmm = new ContextMenu ( 1, 1, cElements ) ;
 			

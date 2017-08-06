@@ -109,8 +109,8 @@ public class ShopGUI extends MCGuiAccessable {
 
 			getCurrentCategory ( ) . search ( searchField . getText ( ) ) ;
 			
-            updateGrid ( ) ;
-            updateBtns ( ) ;
+            //updateGrid ( ) ;
+            //updateBtns ( ) ;
             
     		return ;
     		
@@ -333,8 +333,8 @@ public class ShopGUI extends MCGuiAccessable {
 
                 			getCurrentCategory ( ) . search ( null ) ;
                 			
-                            updateGrid ( ) ;
-                            updateBtns ( ) ;
+                           updateGrid ( ) ;
+                     //       updateBtns ( ) ;
                             
                     	} else {
                     		
@@ -342,10 +342,11 @@ public class ShopGUI extends MCGuiAccessable {
                         	searchField . setEnabled ( true ) ;
                         	searchField . setFocused ( true ) ;
                         	
-                			getCurrentCategory ( ) . search ( searchField . getText () ) ;
+                			getCurrentCategory ( ) . search ( searchField . getText ( ) ) ;
                 			
                             updateGrid ( ) ;
-                            updateBtns ( ) ;
+                     //       updateBtns ( ) ;
+                            
                     	}
                     	       
             		}
@@ -508,7 +509,7 @@ public class ShopGUI extends MCGuiAccessable {
     }
 
     int tmpH ;
-    public void updateGrid ( ) { // #LOG
+    public void updateGrid ( ) {
 			
 		int tmpW ;
 

@@ -141,7 +141,7 @@ public class PrivilegieCategory extends ShopCategory {
        
  	   RenderHelper.enableGUIStandardItemLighting();
  	  
-       //  GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+       GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
        GL11.glBindTexture(GL11.GL_TEXTURE_2D, ClientProxy.getImage(_info.merch_id).getGlTextureId());
        relative.drawTexturedModalRectNormal(x_offset, y_offset, 75, 75);
        

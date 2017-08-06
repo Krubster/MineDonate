@@ -86,17 +86,19 @@ public class UsersShopsCategory extends ShopCategory {
         
     	relative . getButtonList ( ) . add ( viewMyShopsButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), relative.exitButton.xPosition -  MineDonate . cfgUI . cats . shops . viewMyShopsButton . width, relative . exitButton . yPosition, MineDonate . cfgUI . cats . shops . viewMyShopsButton . width, MineDonate . cfgUI . cats . shops . viewMyShopsButton . height, MineDonate . cfgUI . cats . shops . viewMyShopsButton . text, false ) ) ;
     	relative . getButtonList ( ) . add ( createNewShopButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), viewMyShopsButton.xPosition -  MineDonate . cfgUI . cats . shops . createNewShopButton . width, viewMyShopsButton . yPosition, MineDonate . cfgUI . cats . shops . createNewShopButton . width, MineDonate . cfgUI . cats . shops . createNewShopButton . height, MineDonate . cfgUI . cats . shops . createNewShopButton . text, false ) ) ;
-
-    	refreshGui ( ) ;
     	
     	if ( userSC != null ) {
     		
+    		userSC . updateButtons(relative, m_Page);
+
     		userSC . postShow (  ) ;
     	
     	}
 
-    	updateButtons ( ) ;
+    	refreshGui ( ) ;
 
+    	updateButtons ( ) ;
+    	
     }
 
     boolean viewMyShops = false ;

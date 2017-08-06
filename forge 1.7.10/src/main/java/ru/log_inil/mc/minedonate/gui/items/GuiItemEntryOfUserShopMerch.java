@@ -35,20 +35,20 @@ public class GuiItemEntryOfUserShopMerch extends GuiAbstractItemEntry {
 
 		if ( MineDonate . getAccount ( ) . canFreezeShop ( info . owner ) ) {
 			
-			cElements . add ( new ContextElement ( 0, "freeze", "Freeze this shop ", this, 9 ) ) ;
-			cElements . add ( new ContextElement ( 1, "unfreeze", "Unfreeze this shop", this, 9 ) ) ;
+			cElements . add ( new ContextElement ( 0, "freeze", MineDonate.cfgUI.lang.freezeShop, this, 9 ) ) ;
+			cElements . add ( new ContextElement ( 1, "unfreeze", MineDonate.cfgUI.lang.unfreezeShop, this, 9 ) ) ;
 
 		}
 		
 		if ( MineDonate . getAccount ( ) . canRenameShop ( info . owner ) ) {
 			
-			cElements . add ( new ContextElement ( 2, "rename", "Rename this shop ", this, 9 ) ) ;
+			cElements . add ( new ContextElement ( 2, "rename", MineDonate.cfgUI.lang.renameShop, this, 9 ) ) ;
 
 		}
 		
 		if ( MineDonate . getAccount ( ) . canDeleteShop ( info . owner ) ) {
 			
-			cElements . add ( new ContextElement ( 3, "delete", "Delete this shop ", this, 9 ) ) ;
+			cElements . add ( new ContextElement ( 3, "delete", MineDonate.cfgUI.lang.deleteShop, this, 9 ) ) ;
 
 		}
 				

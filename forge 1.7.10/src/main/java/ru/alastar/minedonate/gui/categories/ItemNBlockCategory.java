@@ -13,6 +13,7 @@ import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.merch.info.ItemInfo;
 import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.gui.GuiAbstractItemEntry;
+import ru.log_inil.mc.minedonate.gui.GuiGradientButton;
 import ru.log_inil.mc.minedonate.gui.GuiItemsScrollArea;
 import ru.log_inil.mc.minedonate.gui.GuiScrollingList;
 import ru.log_inil.mc.minedonate.gui.items.GuiItemEntryOfItemMerch;
@@ -79,9 +80,34 @@ public class ItemNBlockCategory extends ShopCategory {
 		
     }
 
+    GuiGradientButton addButton ;
+	GuiButton rightButton ;
+
     @Override
     public void updateButtons(ShopGUI relative, int page ) {
-    	    	
+    	    	    	    	
+    	if ( ! ( relative.getCurrentCategory() instanceof ItemNBlockCategory ) ) {
+    		
+    		rightButton = (GuiButton) relative.getButtonList().get(relative.getButtonList().size()-1);
+    		
+    		if(rightButton.visible){
+        		rightButton = (GuiButton) relative.getButtonList().get(relative.getButtonList().size()-2);
+    		}
+    		
+    		if(rightButton.visible){
+        		rightButton = (GuiButton) relative.getButtonList().get(relative.getButtonList().size()-3);
+    		}
+    		
+    	} else {
+
+    		rightButton = relative.exitButton;
+    		
+    	}
+
+    	relative . getButtonList ( ) . add ( addButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), 
+    			rightButton . xPosition -  MineDonate . cfgUI . cats . itemsAndBlocks . addButton . width,
+    			rightButton.yPosition, MineDonate . cfgUI . cats . itemsAndBlocks . addButton . width, MineDonate . cfgUI . cats . itemsAndBlocks . addButton . height, MineDonate . cfgUI . cats . itemsAndBlocks . addButton . text, false ) ) ;
+    	
     	super.updateButtons(relative, page);
     	
     }

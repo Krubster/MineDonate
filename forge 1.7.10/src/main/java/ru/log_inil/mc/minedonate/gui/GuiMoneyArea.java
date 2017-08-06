@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
+import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;
@@ -25,7 +26,7 @@ public class GuiMoneyArea {
 	}
 	
 	List < String > linesRemoved = new ArrayList < > ( ) ;
-	// List < String > types = new ArrayList < String > ( ) ;
+	List < String > types = new ArrayList < String > ( ) ;
 	Map < String, MoneyLine > lines = new HashMap < > ( ) ;
 	
 	public GuiMoneyArea updateDrawData ( ) {
@@ -53,13 +54,14 @@ public class GuiMoneyArea {
 
 		for ( String type: MineDonate . clientMoney . keySet ( ) ) {
 			
-		//	if ( ! lines . containsKey ( type ) ) {
+			if ( ! lines . containsKey ( type ) ) {
+				
 				ml = new MoneyLine ( type ) ;
 				ml . load ( ) ;
 				
 				lines . put ( type, ml ) ;
 				
-		//	}
+			}
 			
 			
 		}
@@ -211,13 +213,15 @@ public class GuiMoneyArea {
 			
 			if ( texture != null ) {
 				
+     		    GL11.glEnable(GL11.GL_BLEND);
 				RenderHelper . disableStandardItemLighting ( ) ;
 
 			 	Minecraft . getMinecraft ( ) . renderEngine . bindTexture ( texture ) ;
 			 	gui . drawTexturedModalRectNormal ( offsetX + 5 + tmpX / 2, offsetY, 9, 9 ) ;
 			 	
 			 	RenderHelper . enableGUIStandardItemLighting ( ) ;
-							
+     		    GL11.glDisable(GL11.GL_BLEND);
+		
 			}
 			
 			/*

@@ -18,6 +18,7 @@ public class DataOfUIConfig {
 	public boolean bindF5RefreshButton ;
 	
 	public DataOfUIMoneyGroup [ ] moneyGroups ;
+	public DataOfUILang lang ;
 	
 	public DataOfUIConfig ( ) {
 		
@@ -37,6 +38,7 @@ public class DataOfUIConfig {
 		bindF5RefreshButton = false ;
 		
 		moneyGroups = new DataOfUIMoneyGroup [ ] { new DataOfUIMoneyGroup ( "rub", "minedonate:/images/rub.png" ) } ;
+		lang = new DataOfUILang ( ) ;
 		
 	}
 	

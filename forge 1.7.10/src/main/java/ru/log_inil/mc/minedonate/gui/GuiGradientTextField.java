@@ -489,7 +489,7 @@ public class GuiGradientTextField extends Gui
             	if ( bgIsGradient ) {
             		
             		this.drawGradientRect ( xPosition, yPosition, xPosition + width, yPosition+height, GuiStaticVariables.guiGradientTextField_GradientStartColor, GuiStaticVariables.guiGradientTextField_GradientEndColor);
-            		
+
             	} else {
             		
 		            drawRect(this.xPosition - 1, this.yPosition - 1, this.xPosition + this.width + 1, this.yPosition + this.height + 1, GuiStaticVariables.guiGradientTextField_BgRectColor0 ) ;

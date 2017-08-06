@@ -68,7 +68,7 @@ public abstract class ShopCategory {
     
     	if ( subButtonsMap . containsKey ( button . id ) ) {
     		
-    		setSubCategory ( subCatIdMap . get ( button . id ) ) ;
+    	//	setSubCategory ( subCatIdMap . get ( button . id ) ) ;
     		
     	}
 
@@ -337,6 +337,8 @@ public abstract class ShopCategory {
 	
 	public void search ( String text ) {
 		
+		boolean b = search ;
+
 		search = ! ( text == null || text . trim ( ) . isEmpty ( ) ) ;
 		
 		if ( search ) {
@@ -349,7 +351,11 @@ public abstract class ShopCategory {
 			
 		}
 			
-		updateButtons ( gui, 0 ) ;
+		if ( b ) {
+			
+			updateButtons ( gui, 0 ) ;
+			
+		}
 		
 	}
 

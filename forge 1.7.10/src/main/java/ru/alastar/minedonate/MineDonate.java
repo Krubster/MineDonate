@@ -762,12 +762,7 @@ public class MineDonate {
 	public static Account getAccount ( ) {
 		
 		return acc ;
-		/*
-		List<String> l = new ArrayList<>();
-		l.add("*");
-		
-		return new Account(Minecraft.getMinecraft().thePlayer.getDisplayName().toLowerCase(), l) ;
-		*/
+
 	}
 	
 	@SideOnly ( Side . CLIENT )

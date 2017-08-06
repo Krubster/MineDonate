@@ -1,5 +1,6 @@
 package ru.alastar.minedonate.gui.categories;
 
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.ScaledResolution;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.gui.ShopCategory;
@@ -8,6 +9,7 @@ import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.merch.info.EntityInfo;
 import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.gui.GuiAbstractItemEntry;
+import ru.log_inil.mc.minedonate.gui.GuiGradientButton;
 import ru.log_inil.mc.minedonate.gui.GuiItemsScrollArea;
 import ru.log_inil.mc.minedonate.gui.GuiScrollingList;
 import ru.log_inil.mc.minedonate.gui.items.GuiItemEntryOfEntityMerch;
@@ -57,16 +59,24 @@ public class EntitiesCategory extends ShopCategory {
     	
     }
     
+    GuiButton addButton;
+    GuiButton rightButton;
+    
     @Override
     public void updateButtons(ShopGUI relative, int page ) {
-    	
-    	refreshGui ( ) ; 
-    	super.updateButtons(relative, page);
+    	    	    	    	
 
+    	rightButton = relative.exitButton;
+    
+
+    	relative . getButtonList ( ) . add ( addButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), 
+    			rightButton . xPosition -  MineDonate . cfgUI . cats . itemsAndBlocks . addButton . width,
+    			rightButton.yPosition, MineDonate . cfgUI . cats . itemsAndBlocks . addButton . width, MineDonate . cfgUI . cats . itemsAndBlocks . addButton . height, MineDonate . cfgUI . cats . itemsAndBlocks . addButton . text, false ) ) ;
+    	
+    	super.updateButtons(relative, page);
+    	
     }
-    
-    // #LOG
-    
+        
 	@Override
 	public int getButtonWidth ( ) {
 		
