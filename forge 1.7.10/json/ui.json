@@ -91,7 +91,7 @@
       "balancePref": "",
       "balanceSuff": "",
       "imageIsResource": true,
-      "image": "minedonate:/images/rub.png"
+      "image": "minedonate:images/rub.png"
     },
     {
       "id": "coin",
@@ -100,7 +100,7 @@
       "balancePref": "",
       "balanceSuff": "",
       "imageIsResource": true,
-      "image": "minedonate:/images/coin.png"
+      "image": "minedonate:images/coin.png"
     }
   ]
 }
