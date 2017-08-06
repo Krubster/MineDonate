@@ -9,6 +9,7 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.item.ItemStack;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.gui.categories.*;
 import ru.alastar.minedonate.network.packets.NeedShopCategoryPacket;
@@ -18,6 +19,9 @@ import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.gui.GuiGradientButton;
 import ru.log_inil.mc.minedonate.gui.GuiGradientTextField;
 import ru.log_inil.mc.minedonate.gui.GuiMoneyArea;
+import ru.log_inil.mc.minedonate.gui.MCGuiAccessable;
+import ru.log_inil.mc.minedonate.gui.context.ContextMenu;
+import ru.log_inil.mc.minedonate.gui.context.ContextMenuManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +29,7 @@ import java.util.List;
 /**
  * Created by Alastar on 18.07.2017.
  */
-public class ShopGUI extends GuiScreen {
+public class ShopGUI extends MCGuiAccessable {
 
     public static ShopGUI instance ;
     
@@ -157,6 +161,8 @@ public class ShopGUI extends GuiScreen {
     @Override
     protected void mouseClicked ( int p_73864_1_, int p_73864_2_, int p_73864_3_ ) {
     	
+    	ContextMenuManager . click ( p_73864_1_, p_73864_2_, p_73864_3_ ) ;
+    	
   		for ( GuiGradientTextField ggtf: listTextFields ) {
 			
   			ggtf . mouseClicked ( p_73864_1_, p_73864_2_, p_73864_3_ ) ;		
@@ -230,6 +236,8 @@ public class ShopGUI extends GuiScreen {
 	    	}
 	    	
 	    }
+        
+        ContextMenuManager . draw ( this, mouseX, mouseY  ) ;
         
     }
 
@@ -525,7 +533,11 @@ public class ShopGUI extends GuiScreen {
     public void drawGradientRectAccess(int par1, int par2, int par3, int par4, int par5, int par6) {
     	drawGradientRect(par1, par2, par3, par4, par5, par6) ;
     }
-
+    
+    public void renderToolTipAccess(ItemStack p_146285_1_, int p_146285_2_, int p_146285_3_){
+    	renderToolTip(p_146285_1_, p_146285_2_, p_146285_3_);
+    }
+    
 	public void drawTexturedModalRectNormal(int x, int y, int width, int height) {
 		
 	     Tessellator tessellator = Tessellator.instance;

@@ -152,7 +152,7 @@ public class RegionsCategory extends ShopCategory {
 
       relative.drawCenteredString(relative.getFontRenderer(), _info.name, x_offset, y_offset - 15, 16777215);
      //relative.drawCenteredString(relative.getFontRenderer(), MineDonate.cfgUI.cats.regions.pricePrefix + info.cost + MineDonate.cfgUI.cats.regions.priceSuffix, x_offset, y_offset, 16777215);
-      relative . moneyArea . drawPriceArea ( x_offset, y_offset, _info . cost, _info . getMoneyType ( ) ) ;
+      relative . moneyArea . drawPriceArea ( x_offset + (75 / 2), y_offset, _info . cost, _info . getMoneyType ( ) ) ;
 
 	}
 
@@ -180,7 +180,7 @@ public class RegionsCategory extends ShopCategory {
 	    		
 	    		for ( Merch ri : MineDonate . shops . get ( gui . getCurrentShopId ( ) ) . cats [ catId ] . getMerch ( ) ) {
 	    			
-	        		if ( ( ( RegionInfo ) ri ) . name . contains ( searchValue ) ) {
+	        		if ( ( ( RegionInfo ) ri ) . getSearchValue ( ) . toLowerCase ( ) . contains ( searchValue ) ) {
 	        			
 	        			list . add ( ( RegionInfo ) ri ) ;
 	        			
@@ -204,7 +204,7 @@ public class RegionsCategory extends ShopCategory {
 		
     	int drawn = 0;
 
-    	ScaledResolution resolution= new ScaledResolution( relative.mc, relative.mc.displayWidth, relative.mc.displayHeight); // bull shit
+    	ScaledResolution resolution = new ScaledResolution( relative.mc, relative.mc.displayWidth, relative.mc.displayHeight); // bull shit
     	
         RegionInfo info ;
         int x_offset ;

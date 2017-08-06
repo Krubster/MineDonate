@@ -58,9 +58,10 @@ public class EntitiesCategory extends ShopCategory {
     }
     
     @Override
-    public void updateButtons(ShopGUI relative, int m_Page ) {
+    public void updateButtons(ShopGUI relative, int page ) {
     	
     	refreshGui ( ) ; 
+    	super.updateButtons(relative, page);
 
     }
     
@@ -81,7 +82,6 @@ public class EntitiesCategory extends ShopCategory {
 	}
 
 	GuiItemsScrollArea gi ;
-	List < GuiAbstractItemEntry > entrs = new ArrayList < > ( ) ;
 		
 	@Override
 	public void postShow ( ) {
@@ -135,7 +135,13 @@ public class EntitiesCategory extends ShopCategory {
 		}
 		
 		entrs . clear ( ) ;
-		
+		 
+        if ( subCats != null && subCats . length > 0 && subCatId == -1 ) {
+        	
+        	return ;
+        	
+        }
+        
 		if ( MineDonate . shops . containsKey ( gui . getCurrentShopId ( ) ) ) {
 	
 	    	if ( search ) {

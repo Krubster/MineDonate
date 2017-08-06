@@ -1,9 +1,13 @@
 package ru.alastar.minedonate.merch.info;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.util.EnumChatFormatting;
 import ru.alastar.minedonate.merch.Merch;
 
 import java.io.UnsupportedEncodingException;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * Created by Alastar on 19.07.2017.
@@ -73,4 +77,13 @@ public class PrivilegieInfo extends Merch {
     public long getTimeInSeconds() {
         return seconds;
     }
+    
+	@SideOnly(Side.CLIENT)
+	@Override
+	public String getSearchValue ( ) {
+		
+		return EnumChatFormatting . getTextWithoutFormattingCodes ( name + description ) ;
+		
+	}
+	
 }

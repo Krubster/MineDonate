@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import io.netty.buffer.ByteBuf;
+import ru.alastar.minedonate.Utils;
 import ru.log_inil.mc.minedonate.localData.DataOfConfig;
 
 /**
@@ -44,15 +45,27 @@ public class SupportedFeaturesPacket implements IMessage {
     @Override 
     public void toBytes(ByteBuf buf) {
     	
-        buf.writeBoolean(items);
-        writeString ( buf, itemsMoneyType ) ;
-        buf.writeBoolean(privelegies);
-        writeString ( buf, privelegiesMoneyType ) ;
-        buf.writeBoolean(regions);
-        writeString ( buf, regionsMoneyType ) ;
-        buf.writeBoolean(entities);
-        writeString ( buf, entitiesMoneyType ) ;
-        buf.writeBoolean(userShops);
+        try {
+        	
+        	buf.writeBoolean(items);
+            Utils . netWriteString ( buf, itemsMoneyType ) ;
+            
+            buf.writeBoolean(privelegies);  
+            Utils . netWriteString ( buf, privelegiesMoneyType ) ;
+            
+            buf.writeBoolean(regions);
+            Utils . netWriteString ( buf, regionsMoneyType ) ;
+            
+            buf.writeBoolean(entities); 
+            Utils . netWriteString ( buf, entitiesMoneyType ) ;
+            
+            buf.writeBoolean(userShops);
+            
+        } catch ( Exception ex ) {
+        	
+        	ex . printStackTrace( ) ;
+        	
+        }
 
     }
 
@@ -62,13 +75,17 @@ public class SupportedFeaturesPacket implements IMessage {
        try {
     	   
     	   this.items = buf.readBoolean();
-    	   this.itemsMoneyType = readString ( buf ) ;
+    	   this.itemsMoneyType = Utils . netReadString ( buf ) ;
+    	   
            this.privelegies = buf.readBoolean();
-    	   this.privelegiesMoneyType = readString ( buf ) ;
+    	   this.privelegiesMoneyType = Utils . netReadString ( buf ) ;
+    	   
            this.regions = buf.readBoolean();
-    	   this.regionsMoneyType = readString ( buf ) ;
+    	   this.regionsMoneyType = Utils . netReadString ( buf ) ;
+    	   
            this.entities = buf.readBoolean();
-    	   this.entitiesMoneyType = readString ( buf ) ;
+    	   this.entitiesMoneyType = Utils . netReadString ( buf ) ;
+    	   
            this.userShops = buf.readBoolean();
            
        } catch ( Exception ex ) {
@@ -79,17 +96,4 @@ public class SupportedFeaturesPacket implements IMessage {
 
     }
     
-    String readString ( ByteBuf buf ) throws UnsupportedEncodingException {
-    	
-        return new String ( buf . readBytes ( buf . readInt ( ) ) . array ( ), "UTF-8" ) ;
-        
-    }
-     
-    
-    void writeString ( ByteBuf buf, String str ) {
-    	
-        buf.writeInt(str.getBytes().length);
-        buf.writeBytes(str.getBytes());
-        
-    }
-     }
+}

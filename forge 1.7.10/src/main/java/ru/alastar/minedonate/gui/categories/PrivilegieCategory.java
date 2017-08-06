@@ -147,7 +147,7 @@ public class PrivilegieCategory extends ShopCategory {
        relative.drawTexturedModalRectNormal(x_offset, y_offset, 75, 75);
        
        relative.drawString(relative.getFontRenderer(), _info.name, x_offset + (75/2)- relative.getFontRenderer().getStringWidth(_info.name)/2, y_offset + 80, 0xFFFFFF);
-       relative . moneyArea . drawPriceArea ( x_offset, y_offset + 75+20+24, _info . cost, _info . getMoneyType ( ) ) ;
+       relative . moneyArea . drawPriceArea ( x_offset+(65/2), y_offset + 75+20+24, _info . cost, _info . getMoneyType ( ) ) ;
 
        listDescription . clear ( ) ;
 
@@ -198,7 +198,7 @@ public class PrivilegieCategory extends ShopCategory {
 	    		
 	    		for ( Merch ri:  MineDonate . shops . get ( gui . getCurrentShopId ( ) ) . cats [ catId ] . getMerch ( ) ) {
 
-	    			if ( ( ( PrivilegieInfo ) ri ) . name . contains ( searchValue ) ) {
+	    			if ( ( ( PrivilegieInfo ) ri ) . getSearchValue ( ) . toLowerCase ( ) . contains ( searchValue ) ) {
 	        			
 	        			list . add ( ( PrivilegieInfo ) ri ) ;
 	        			

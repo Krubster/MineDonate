@@ -1,12 +1,15 @@
 package ru.alastar.minedonate.merch.info;
 
 import cpw.mods.fml.common.network.ByteBufUtils;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
 import ru.alastar.minedonate.merch.Merch;
 
 import java.io.IOException;
@@ -102,6 +105,8 @@ public class EntityInfo extends Merch {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+        
+        
     }
 
     @Override
@@ -127,4 +132,12 @@ public class EntityInfo extends Merch {
         return 1;
     }
 
+	@SideOnly(Side.CLIENT)
+	@Override
+	public String getSearchValue ( ) {
+		
+		return EnumChatFormatting . getTextWithoutFormattingCodes ( name ) ;
+		
+	}
+	
 }

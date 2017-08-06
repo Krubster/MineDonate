@@ -2,8 +2,11 @@ package ru.alastar.minedonate.merch.info;
 
 import java.io.UnsupportedEncodingException;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.EnumChatFormatting;
 import ru.alastar.minedonate.merch.Merch;
 
 public class ShopInfo extends Merch {
@@ -152,4 +155,12 @@ public class ShopInfo extends Merch {
 		return -1 ;
 	}
     
+	@SideOnly(Side.CLIENT)
+	@Override
+	public String getSearchValue ( ) {
+		
+		return EnumChatFormatting . getTextWithoutFormattingCodes ( name + owner ) ;
+		
+	}
+	
 }

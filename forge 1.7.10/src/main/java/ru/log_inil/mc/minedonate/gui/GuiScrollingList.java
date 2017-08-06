@@ -77,7 +77,7 @@ public abstract class GuiScrollingList
 
     protected abstract void drawBackground();
 
-    protected abstract void drawSlot(int var1, int var2, int var3, int var4, Tessellator var5);
+    protected abstract void drawSlot(int var1, int var2, int var3, int var4, int mouseX, int mouseY, Tessellator var5);
 
     protected void func_27260_a(int p_27260_1_, int p_27260_2_, Tessellator p_27260_3_) {}
 
@@ -309,7 +309,7 @@ public abstract class GuiScrollingList
 	                    GL11.glEnable(GL11.GL_TEXTURE_2D);
 	                }
 	
-	                this.drawSlot(var11, boxRight, var19, var13, var18);
+	                this.drawSlot(var11, boxRight, var19, var13, mouseX, mouseY, var18);
 	                
 	            } else {
 	            	

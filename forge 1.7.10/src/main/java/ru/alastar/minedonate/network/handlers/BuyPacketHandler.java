@@ -50,7 +50,7 @@ public class BuyPacketHandler implements IMessageHandler<BuyPacket, IMessage> {
 	                            MineDonate . logBuy ( info, serverPlayer, message . amount, info . getMoneyType ( ) ) ;
 	                            int currentMoney = info . withdrawMoney ( serverPlayer . getDisplayName ( ), procMoney ) ;
 	                                
-	                            MineDonate . networkChannel . sendTo ( new AccountInfoPacket ( currentMoney, info . getMoneyType ( ) ), ( EntityPlayerMP ) serverPlayer ) ;
+	                            MineDonate . networkChannel . sendTo ( new MoneyChangedPacket ( currentMoney, info . getMoneyType ( ) ), ( EntityPlayerMP ) serverPlayer ) ;
 	                        
 	                            MineDonate . shops . get ( message . shopId ) . cats [ category ] . GiveMerch ( serverPlayer, info, message . amount ) ;
 	                            

@@ -173,8 +173,9 @@ public class GuiMoneyArea {
 		
 		public void drawBalance ( int i, int max, int count, int offsetX, int offsetY, int mouseX, int mouseY ) {
 		
+			
 			tmpX = offsetX - 20 - ( gui . getFontRenderer ( ) . getStringWidth ( count + ( balanceSuff != null ? balanceSuff : "" ) ) ) ;
-			tmpY = offsetY - ( max * 5 ) + ( i * 10 ) ; // ( 10 / 2 = 5 )
+			tmpY = offsetY - ( max * 3 ) + ( i * 10 ) ;
 			
 			tmp = 0 ;
 			
@@ -186,12 +187,12 @@ public class GuiMoneyArea {
 
 			if ( texture != null ) {
 				
-			 	RenderHelper . enableGUIStandardItemLighting ( ) ;
+			    // 	RenderHelper . enableGUIStandardItemLighting ( ) ;
 				
 			 	Minecraft . getMinecraft ( ) . renderEngine . bindTexture ( texture ) ;
 			 	gui . drawTexturedModalRectNormal ( tmpX, tmpY, 8, 8 ) ;
 						
-			 	RenderHelper . disableStandardItemLighting ( ) ;
+			    // 	RenderHelper . disableStandardItemLighting ( ) ;
 
 				tmp += 10 ;
 				
@@ -205,6 +206,21 @@ public class GuiMoneyArea {
 		
 		public void drawPrice ( int price, int offsetX, int offsetY ) {
 			
+			tmpX = ( gui . getFontRenderer ( ) . getStringWidth ( ( pricePref != null ? pricePref : "" ) + price + ( priceSuff != null ? priceSuff : "" )  ) ) ;
+			gui . getFontRenderer ( ) . drawString ( ( pricePref != null ? pricePref : "" ) + price + ( priceSuff != null ? priceSuff : "" ) , offsetX - tmpX/2 , offsetY, 14737632 ) ;
+			
+			if ( texture != null ) {
+				
+				RenderHelper . disableStandardItemLighting ( ) ;
+
+			 	Minecraft . getMinecraft ( ) . renderEngine . bindTexture ( texture ) ;
+			 	gui . drawTexturedModalRectNormal ( offsetX + 5 + tmpX / 2, offsetY, 9, 9 ) ;
+			 	
+			 	RenderHelper . enableGUIStandardItemLighting ( ) ;
+							
+			}
+			
+			/*
 			tmp = 0 ;
 
 			if ( pricePref != null ) {
@@ -225,7 +241,7 @@ public class GuiMoneyArea {
 			}
 
 			gui . getFontRenderer ( ) . drawString ( price + ( priceSuff != null ? priceSuff : "" ), offsetX + tmp, offsetY, 14737632 ) ;
-			
+			*/
 		}
 		
 	}

@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import io.netty.buffer.ByteBuf;
+import ru.alastar.minedonate.Utils;
 
 public class CreateNewShopPacket implements IMessage {
 
@@ -18,8 +19,16 @@ public class CreateNewShopPacket implements IMessage {
     @Override 
     public void toBytes(ByteBuf buf) {
     	
-		writeString(buf, name);
-
+    	try {
+			
+    		Utils . netWriteString(buf, name);
+			
+		} catch ( Exception ex ) {
+			
+			ex . printStackTrace ( ) ;
+			
+		}
+    	
     }
 
     @Override 
@@ -27,7 +36,7 @@ public class CreateNewShopPacket implements IMessage {
     	
        try {
     	   
-    	   name = readString ( buf ) ;
+    	   name = Utils . netReadString ( buf ) ;
            
        } catch ( Exception ex ) {
     	   
@@ -35,20 +44,6 @@ public class CreateNewShopPacket implements IMessage {
     	   
        }
 
-    }
-    
-    String readString ( ByteBuf buf ) throws UnsupportedEncodingException {
-    	
-        return new String ( buf . readBytes ( buf . readInt ( ) ) . array ( ), "UTF-8" ) ;
-        
-    }
-     
-    
-    void writeString ( ByteBuf buf, String str ) {
-    	
-        buf.writeInt(str.getBytes().length);
-        buf.writeBytes(str.getBytes());
-        
     }
     
  }

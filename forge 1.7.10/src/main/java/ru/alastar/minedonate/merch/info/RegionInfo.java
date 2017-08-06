@@ -3,11 +3,17 @@ package ru.alastar.minedonate.merch.info;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumChatFormatting;
+
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
+import ru.alastar.minedonate.plugin.PluginHelper;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
@@ -30,7 +36,12 @@ public class RegionInfo extends Merch {
 
     @Override
     public boolean canBuy(EntityPlayerMP serverPlayer, int amount) {
-        try {
+
+    	return PluginHelper . wgMgr . checkRegionMaxOut ( serverPlayer . getDisplayName ( ) ) ;
+
+    	/*
+        try {       	
+        	
             World bukkit_world = Bukkit.getWorld(this.world_name);
             Object plr = Bukkit.getPlayer(serverPlayer.getDisplayName());
             Object wg = MineDonate.wg_plugin.getClass().getMethod("inst").invoke(null);
@@ -56,9 +67,9 @@ public class RegionInfo extends Merch {
             e.printStackTrace();
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
-        }
-        serverPlayer.addChatMessage(new ChatComponentText("Errorrrrrrrr!"));
-        return false;
+        }*/
+      //  serverPlayer.addChatMessage(new ChatComponentText("Errorrrrrrrr!"));
+      //  return false;
     }
 
     @Override
@@ -99,4 +110,13 @@ public class RegionInfo extends Merch {
     public String getBoughtMessage() {
         return " bought region " + name + "=" + world_name;
     }
+    
+	@SideOnly(Side.CLIENT)
+	@Override
+	public String getSearchValue ( ) {
+		
+		return EnumChatFormatting . getTextWithoutFormattingCodes ( name + world_name ) ;
+		
+	}
+	
 }

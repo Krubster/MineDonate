@@ -5,10 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.gui.GuiButton;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
 import ru.log_inil.mc.minedonate.gui.DrawType;
+import ru.log_inil.mc.minedonate.gui.GuiAbstractItemEntry;
 import ru.log_inil.mc.minedonate.gui.GuiScrollingList;
 
 /**
@@ -51,6 +54,8 @@ public abstract class ShopCategory {
     
     public void updateButtons ( ShopGUI relative, int page ) {
     	
+    	postShow ( ) ;
+
     }
 
     public int elementsOnPage ( ) {
@@ -66,6 +71,8 @@ public abstract class ShopCategory {
     		setSubCategory ( subCatIdMap . get ( button . id ) ) ;
     		
     	}
+
+    	postShow ( ) ;
     	
     }
     
@@ -127,15 +134,16 @@ public abstract class ShopCategory {
 
 	public int calcMaxCatStringLineWidth ( ) {
 		
+		/*
 		int max = 0 ;
 		
 		for ( SubCategory sc : MineDonate . shops . get (  gui . getCurrentShopId ( )  ) . cats [ catId ] . subCategories ) {
 			
 			max = Math . max ( max, gui . getFontRenderer ( ) . getStringWidth ( sc . displayName ) ) ;
-			
-		}
-		
-		return max ;
+
+		}*/
+				
+		return 75 ;// max ;
 		
 	}
 	
@@ -145,12 +153,12 @@ public abstract class ShopCategory {
 	public void updateMaxRowAndColCount ( ) {
 
 		if ( ( tmpMW = calcMaxCatStringLineWidth ( ) ) > 0 ) {
+
+			tmpH = gui . getScaledResolution ( ) . getScaledHeight ( ) - 50 - 25 ;
     		
-    		tmpH = gui . getScaledResolution ( ) . getScaledHeight ( ) - 50 - 25 ;
-    		
-    		tmpW = gui . getScaledResolution ( ) . getScaledWidth ( ) - 50 - 50 ;
-    		
-    		buttonsColCount = tmpW / tmpMW ;
+    		tmpW = gui . getScaledResolution ( ) . getScaledWidth ( ) - 40 - 40 ;
+
+    		buttonsColCount = (tmpW) / tmpMW;
 
     		buttonsRowCount = tmpH / MineDonate.cfgUI.subCategoryButtonHeight;
 		
@@ -159,7 +167,7 @@ public abstract class ShopCategory {
 	}
 	
 	SubCategory subCat ;
-	SubCategory [ ] subCats ;
+	public SubCategory [ ] subCats ;
 	int xOffset, yOffset ;
 	GuiButton openSubCatButton ;
 	
@@ -176,9 +184,9 @@ public abstract class ShopCategory {
 		
 		subCats = MineDonate . shops . get ( gui . getCurrentShopId ( )  ) . cats [ catId ] . subCategories ;
 		drawn = 0 ;
-		
-		if ( subCats != null && subCats . length > 0 ) {
 
+		if ( subCats != null && subCats . length > 0 ) {
+			
 			if ( subCatId == -1 ) {
 				
 				subCatIdMap . clear ( ) ;
@@ -194,33 +202,79 @@ public abstract class ShopCategory {
 				updateMaxRowAndColCount ( ) ;
 
 				int added = 0 ;
+				
+				int en = 0 ;
+				int bccx = 0 ;
+				int brcy = 0 ;
+				
 		        for ( int i = 0; i < buttonsRowCount ; i ++ ) {
 
 		            for ( int j = 0; j < buttonsColCount; j ++ ) {
 
-		            	//System.err.println(buttonsColCount * buttonsRowCount + drawn);
-
-		                if ( added < subCats . length ) {
+		                if ( en < subCats . length ) {
 		                	
-		                	added ++ ;
-		                	subCat = subCats [ i * j ] ;
+		                	brcy = Math.max(i+1, brcy);
+		                	bccx = Math.max(j+1, bccx);
 
-		                	xOffset = ( ( gui . getScaledResolution ( ) . getScaledWidth ( ) / 2 - ( buttonsColCount * 75 ) / 2 ) / 2 ) + 75 * ( j + 1 );
-		                	yOffset = ( ( gui . getScaledResolution ( ) . getScaledHeight ( ) / 2 - ( buttonsRowCount * 75 ) / 2 ) / 2 ) + 75 * ( i + 1 );
-		                		                  System.err.println(( buttonsColCount * 75 ));
-		                	openSubCatButton = new GuiButton ( ShopGUI . getNextButtonId ( ), 0, yOffset + 15, gui . getFontRenderer ( ) . getStringWidth ( subCat . displayName ) + 15, MineDonate.cfgUI.cats.regions.itemBuyButton.height, subCat . displayName ) ;
-		                	subButtonsMap . put ( openSubCatButton . id, openSubCatButton ) ;
-
-		                	subCatIdMap . put ( openSubCatButton . id, subCat . subCatId ) ;
+		                	en ++ ;
 		                	
-		                    gui . addBtn ( openSubCatButton ) ;
-		                    
-		                    drawn ++ ;
-
 		                }
 		                
 		            }
 		            
+		        }
+		        
+		        buttonsRowCount = brcy ;
+		        buttonsColCount = bccx ;
+				
+		        for ( int i = 0; i < buttonsRowCount ; i ++ ) {
+
+		            for ( int j = 0; j < buttonsColCount; j ++ ) {
+
+		                if ( added < subCats . length ) {
+		                	
+		                	subCat = subCats [ added ] ;
+		                	added ++ ;
+		                	
+		                	if ( search ? subCat . displayName . toLowerCase ( ) . contains ( searchValue ) : true ) {
+		                		
+			                	xOffset = 15 + ( (int) ( ( gui . getScaledResolution ( ) . getScaledWidth ( ) / 2 - 45 - ( buttonsColCount * 75 ) / 2 ) / 2 ) + 75 * ( j + 1 ) ) ;
+			                	yOffset = (int) (gui . getScaledResolution ( ) . getScaledHeight ( )*0.05) + ( ( ( gui . getScaledResolution ( ) . getScaledHeight ( ) / 2 - ( buttonsRowCount * MineDonate.cfgUI.cats.regions.itemBuyButton.height ) ) ) + MineDonate.cfgUI.cats.regions.itemBuyButton.height * 2 * ( i ) ) ;
+		  		                  
+			                	if( yOffset > gui . getScaledResolution ( ) . getScaledHeight ( ) - 55 ) {
+				                	
+			                		continue ;
+			                		
+			                	}
+			                	
+		                		if( yOffset < 55 ) {
+				                	
+			                		continue ;
+			                		
+			                	}
+			                	
+			                	if( xOffset > gui . getScaledResolution ( ) . getScaledWidth ( ) - 55 ) {
+				                	
+			                		continue ;
+			                		
+			                	}
+
+			                	openSubCatButton = new GuiButton ( ShopGUI . getNextButtonId ( ), xOffset, yOffset, gui . getFontRenderer ( ) . getStringWidth ( subCat . displayName ) + 15, MineDonate.cfgUI.cats.regions.itemBuyButton.height, subCat . displayName ) ;
+			                	openSubCatButton.xPosition-=  openSubCatButton . width/2 ;
+			                	
+			                	subButtonsMap . put ( openSubCatButton . id, openSubCatButton ) ;
+	
+			                	subCatIdMap . put ( openSubCatButton . id, subCat . subCatId ) ;
+			                	
+			                    gui . addBtn ( openSubCatButton ) ;
+			                    
+			                    drawn ++ ;
+
+		                	}
+	                	}
+		                
+		            }
+		           
 		        }
 				
 			} else {
@@ -236,7 +290,21 @@ public abstract class ShopCategory {
 		
 	}
 	
+	protected List < GuiAbstractItemEntry > entrs = new ArrayList < > ( ) ;
+	
+	public List < GuiAbstractItemEntry > getEntries ( ) {
+		
+		return entrs ;
+		
+	}
+	
 	public void unShow ( ) {
+		
+		for ( GuiAbstractItemEntry gie : entrs ) {
+
+			gie . unDraw ( ) ;
+			
+		}
 		
 	}
 	
@@ -252,7 +320,7 @@ public abstract class ShopCategory {
 		
 		noSearchedEntries . clear ( ) ;
 			
-		for ( Merch m : MineDonate . shops . get (  gui . getCurrentShopId ( )  ) . cats [ catId ] . getMerch ( ) ) {
+		for ( Merch m : MineDonate . shops . get ( gui . getCurrentShopId ( )  ) . cats [ catId ] . getMerch ( ) ) {
 			
 			if ( m != null && ( m . subCatId == _subCatId || _subCatId == -1 ) ) {
 				

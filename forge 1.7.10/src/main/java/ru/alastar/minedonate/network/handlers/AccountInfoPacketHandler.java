@@ -18,7 +18,11 @@ public class AccountInfoPacketHandler implements IMessageHandler<AccountInfoPack
     @Override 
     public IMessage onMessage(AccountInfoPacket message, MessageContext ctx) {
     	
-        MineDonate . SetMoney ( message . moneyType, message . money ) ;
+    	for ( AccountInfoPacket.MoneySystem ms : message.mSystems ) {
+    		
+    		MineDonate . setMoney ( ms . type, ms . balance ) ;
+    		
+    	}
         
         return null ;
         

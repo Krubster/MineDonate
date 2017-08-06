@@ -226,7 +226,6 @@ public class UsersShopsCategory extends ShopCategory {
 	}
 
 	GuiItemsScrollArea gi ;
-	List < GuiAbstractItemEntry > entrs = new ArrayList < > ( ) ;
 	
 	ShopInfo iim ;
 	
@@ -300,7 +299,7 @@ public class UsersShopsCategory extends ShopCategory {
 		        		
 		        		if ( iim != null ) {
 
-			        		if ( ( iim . isFreezed ? ! MineDonate . cfgUI . cats . shops . dontShowFreezed : true ) && ( viewMyShops ? ( iim . owner . equalsIgnoreCase ( searchValue ) ) : ( iim . owner . toLowerCase ( ) . contains ( searchValue ) ||  iim . name . toLowerCase ( ) . contains ( searchValue ) ) ) ) {
+			        		if ( ( iim . isFreezed ? ! MineDonate . cfgUI . cats . shops . dontShowFreezed : true ) && ( viewMyShops ? ( iim . owner . equalsIgnoreCase ( searchValue ) ) : ( iim . owner . toLowerCase ( ) . contains ( searchValue ) ||  iim . getSearchValue ( ) . toLowerCase ( ) . contains ( searchValue ) ) ) ) {
 			        			
 			        			entrs . add ( new GuiItemEntryOfUserShopMerch ( iim, this ) . addButtons ( gui ) . updateDrawData ( ) ) ;
 			        			
@@ -340,6 +339,8 @@ public class UsersShopsCategory extends ShopCategory {
 	
     @Override
     public void unShow ( ) {
+    	
+    	super . unShow ( ) ;
     	
 		gui . listTextFields . remove ( this . newShopNameField ) ;
 		createNewShop = false ;

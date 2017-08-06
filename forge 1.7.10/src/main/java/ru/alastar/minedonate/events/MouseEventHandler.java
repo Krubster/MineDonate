@@ -22,8 +22,9 @@ public class MouseEventHandler {
             if (MineDonate.checkAdminSession((EntityPlayerMP) event.entityPlayer)) {
                 final AdminSession session = MineDonate.getAdminSession((EntityPlayerMP) event.entityPlayer);
                 if(session.pending){
-                    event.entityPlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "Entity added! Check it shop now"));
                     MineDonate.AddEntityBy(session, event.target);
+                    event.setCanceled(true);
+                    event.entityPlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "Entity added! Check it shop now"));
                 }
             }
         }

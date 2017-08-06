@@ -20,6 +20,8 @@ import ru.log_inil.mc.minedonate.gui.items.GuiItemEntryOfItemMerch;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.lwjgl.opengl.GL11;
+
 /**
  * Created by Alastar on 19.07.2017.
  */
@@ -58,13 +60,21 @@ public class ItemNBlockCategory extends ShopCategory {
     public void draw(ShopGUI relative, int m_Page, int mouseX, int mouseY, float partialTicks, DrawType dt) {
     	
         resolution = new ScaledResolution(relative.mc, relative.mc.displayWidth, relative.mc.displayHeight);
-         
+
+        if ( subCats != null && subCats . length > 0 && subCatId == -1 && dt == DrawType . PRE ){        	
+        
+        	return ;
+        	
+        }
+        
     	gi.drawScreen(mouseX, mouseY, partialTicks, dt);
-    	
+
     }
     
     @Override
     public void unDraw ( ) {
+    	
+    	super . unDraw ( ) ;
     	
 		for ( GuiAbstractItemEntry gie : entrs ) {
 
@@ -75,12 +85,16 @@ public class ItemNBlockCategory extends ShopCategory {
     }
 
     @Override
-    public void updateButtons(ShopGUI relative, int m_Page ) {
+    public void updateButtons(ShopGUI relative, int page ) {
     	    	
+    	super.updateButtons(relative, page);
+    	
     }
     
     @Override
     public void actionPerformed(GuiButton button) {
+    	
+    	super.actionPerformed(button);
     	
         if (button instanceof CountButton) {
         	
@@ -108,7 +122,6 @@ public class ItemNBlockCategory extends ShopCategory {
 	}
 
 	GuiItemsScrollArea gi ;
-	List < GuiAbstractItemEntry > entrs = new ArrayList <GuiAbstractItemEntry > ( ) ;
 	
 	ItemInfo iim ;
 	
@@ -123,6 +136,8 @@ public class ItemNBlockCategory extends ShopCategory {
 		
 		resolution = new ScaledResolution ( gui . mc, gui.mc.displayWidth, gui.mc.displayHeight); // bull shit
 
+		super . postShow ( ) ;
+		
 		gi = new GuiItemsScrollArea ( resolution, gui, entrs, 0 ) ;
 	
 		for ( GuiAbstractItemEntry gie : entrs ) {
@@ -131,8 +146,14 @@ public class ItemNBlockCategory extends ShopCategory {
 			
 		}
 		
-		entrs . clear ( ) ;
-		
+		entrs . clear ( ) ;	
+        
+        if ( subCats != null && subCats . length > 0 && subCatId == -1 ) {
+        	
+        	return ;
+        	
+        }
+        
 		if ( MineDonate . shops . containsKey ( gui . getCurrentShopId ( ) ) ) {
 	
 	    	if ( search ) {
@@ -141,7 +162,7 @@ public class ItemNBlockCategory extends ShopCategory {
 	        		
 	        		iim = ( ItemInfo ) m ; 
 
-	        		if ( ( iim . m_stack != null ? iim . m_stack . getDisplayName ( ) . contains ( searchValue ) : false ) || iim . name . toLowerCase ( ) . contains ( searchValue ) ) {
+	        		if ( iim . getSearchValue ( ) . toLowerCase ( ) . contains ( searchValue ) ) {
 	        			
 	        			entrs . add ( new GuiItemEntryOfItemMerch ( iim, this ) . addButtons ( gui ) . updateDrawData ( ) ) ;
 	        			
@@ -165,8 +186,6 @@ public class ItemNBlockCategory extends ShopCategory {
 		
     	gi . entrs = entrs ;
     	gi . applyScrollLimits ( ) ;
-    	
-		super . postShow ( ) ;
 
 	}
 	

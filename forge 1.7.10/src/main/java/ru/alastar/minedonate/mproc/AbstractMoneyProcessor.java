@@ -21,6 +21,18 @@ public abstract class AbstractMoneyProcessor {
 	public abstract void returnMoney ( String name, int money ) ;
 	public abstract boolean existsAccount ( String name ) ;
 	public abstract int canBuy ( Merch m, String buyer, int amount ) ;
+
+	public boolean isCustomMoneyType ( ) {
+		
+		return false ;
+		
+	}
+	
+	public String getClientMoneyType ( ) {
+		
+		return null ;
+		
+	}
 	
 	public String getMoneyType ( ) {
 		

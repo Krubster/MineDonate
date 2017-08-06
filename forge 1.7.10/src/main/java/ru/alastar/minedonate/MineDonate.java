@@ -33,9 +33,11 @@ import ru.alastar.minedonate.merch.info.ItemInfo;
 import ru.alastar.minedonate.mproc.AbstractMoneyProcessor;
 import ru.alastar.minedonate.network.handlers.*;
 import ru.alastar.minedonate.network.packets.*;
+import ru.alastar.minedonate.plugin.PluginHelper;
 import ru.alastar.minedonate.proxies.CommonProxy;
 import ru.log_inil.mc.minedonate.localData.DataOfConfig;
 import ru.log_inil.mc.minedonate.localData.DataOfMoneyProcessor;
+import ru.log_inil.mc.minedonate.localData.DataOfPermissionLine;
 import ru.log_inil.mc.minedonate.localData.DataOfUIConfig;
 import ru.log_inil.mc.minedonate.localData.LocalDataInterchange;
 
@@ -67,9 +69,10 @@ public class MineDonate {
 
     public static Map<EntityPlayerMP, AdminSession> m_Admin_Sessions = new HashMap<EntityPlayerMP, AdminSession>();
 
+    /*
     @SideOnly(Side.SERVER)
     public static Object wg_plugin;
-
+    */
     @SideOnly(Side.SERVER)
     private static BufferedWriter m_log;
 
@@ -100,12 +103,13 @@ public class MineDonate {
 
     }
 
+    /*
     @Mod.EventHandler
     @SideOnly(Side.SERVER)
     public void fmlLifeCycle(FMLServerStartedEvent event) {
         if (MineDonate.cfg.sellRegions)
             MineDonate.InitWG();
-    }
+    }*/
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
@@ -127,6 +131,7 @@ public class MineDonate {
         instance = this;
 
     }
+    
     @Mod.EventHandler
     public void serverLoad(FMLServerStartingEvent event) {
     	
@@ -134,6 +139,11 @@ public class MineDonate {
         event.registerServerCommand(new AddItemCommand());
         event.registerServerCommand(new AdminCommand());
 
+    }
+    
+    @Mod.EventHandler
+    public void serverStarting(FMLServerStartingEvent event) {
+        proxy.serverStarting(event);
     }
     
     @SideOnly(Side.SERVER)
@@ -184,7 +194,7 @@ public class MineDonate {
             MinecraftServer.getServer().logInfo("Initializing database connection...");
 
             Class.forName("com.mysql.jdbc.Driver").newInstance();
-            m_DB_Connection = DriverManager.getConnection("jdbc:mysql://" + cfg.dbHost + ":" + cfg.dbPort + "/" + cfg.dbName, cfg.dbUser, cfg.dbPassword);
+            m_DB_Connection = DriverManager.getConnection("jdbc:mysql://" + cfg.dbHost + ":" + cfg.dbPort + "/" + cfg.dbName + "?useUnicode=true&characterEncoding=utf-8", cfg.dbUser, cfg.dbPassword);
 
             MinecraftServer.getServer().logInfo("Connected!");
 
@@ -207,7 +217,7 @@ public class MineDonate {
         m_Enabled = false;
     }
 
-
+    /*
     @SideOnly(Side.SERVER)
     private static void InitWG() {
         wg_plugin = Bukkit.getPluginManager().getPlugin("WorldGuard");
@@ -219,7 +229,7 @@ public class MineDonate {
             e.printStackTrace();
         }
 
-    }
+    }*/
 
     @SideOnly(Side.SERVER)
     private static void loadMerchServer ( ) {
@@ -396,9 +406,10 @@ public class MineDonate {
     ///End reverse section
 
     @SideOnly(Side.CLIENT)
-    public static void SetMoney ( String moneyType, int money ) {
+    public static void setMoney ( String moneyType, int money ) {
 
     	clientMoney . put ( moneyType, money ) ;
+    	
     	ShopGUI . instance . moneyArea . updateDrawData ( ) ;
     	
     }
@@ -517,7 +528,9 @@ public class MineDonate {
     public static ShopCategory . SubCategory [ ] getSubCategories ( int shopId, int catId ) {
     	
     	List < ShopCategory . SubCategory > l = new ArrayList < > ( ) ;
-        Statement stmt = null;
+        
+    	/*
+    	Statement stmt = null;
         
         try {
         	
@@ -538,8 +551,10 @@ public class MineDonate {
             ex . printStackTrace ( ) ;
             
         }
+        */
         
         ShopCategory . SubCategory [ ] arr = new ShopCategory . SubCategory [ l . size ( ) ] ;
+        
     	return ( ShopCategory . SubCategory [ ] ) l . toArray ( arr ) ;
     	
     }
@@ -657,4 +672,40 @@ public class MineDonate {
             e.printStackTrace();
         }
     }
+
+    static List < String > getPermissionsByGroup ( String groupName ) {
+    	
+    	return null ;
+    	
+    }
+    
+	public static String [ ] getPermissionsByUser ( String userName ) {
+		
+		List < String > l = new ArrayList < > ( ) ;
+		
+		if ( cfg . enableInternalServerPermissions ) {
+			
+			for ( DataOfPermissionLine dopl : cfg . permissionsTriggerList ) {
+				
+				if ( PluginHelper . pexMgr . hasPermission ( userName, dopl.key ) ) {
+					
+					l . addAll ( getPermissionsByGroup ( dopl . groupName ) ) ;
+					
+				}
+				
+			}
+			
+		} else {
+			
+		}
+		
+		String [ ] r = new String [ l . size ( ) ] ;
+		r = l . toArray ( r ) ;
+		
+		l . clear ( ) ;
+		
+		return r ;
+		
+	}
+	
 }
