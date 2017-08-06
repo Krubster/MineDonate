@@ -33,6 +33,4 @@ public abstract class MCGuiAccessable extends GuiScreen {
 		
 	}
 	
-	
-	
 }

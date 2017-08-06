@@ -1,5 +1,8 @@
 package ru.log_inil.mc.minedonate.gui.items;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
@@ -14,6 +17,7 @@ import ru.alastar.minedonate.merch.info.ItemInfo;
 import ru.log_inil.mc.minedonate.gui.GuiAbstractItemEntry;
 import ru.log_inil.mc.minedonate.gui.GuiItemsScrollArea;
 import ru.log_inil.mc.minedonate.gui.context.ContextMenu;
+import ru.log_inil.mc.minedonate.gui.context.ContextMenuManager;
 import ru.log_inil.mc.minedonate.gui.context.ContextElement;
 
 public class GuiItemEntryOfItemMerch extends GuiAbstractItemEntry {
@@ -28,6 +32,20 @@ public class GuiItemEntryOfItemMerch extends GuiAbstractItemEntry {
 
 		info = _iim ;
 		sc = _sc ;
+		
+		String owner = MineDonate . shops . get ( info . shopId ) . owner ;
+		if ( MineDonate . getAccount ( ) . canEditShop ( owner ) ) {
+			
+			List < ContextElement > cElements = new ArrayList < > ( ) ;
+	
+			cElements . add ( new ContextElement ( 0, "rename", "Rename this", this, 9 ) ) ;
+			cElements . add ( new ContextElement ( 1, "delete", "Delete this", this, 9 ) ) ;
+	
+			cmm = new ContextMenu ( 1, 1, cElements ) ;
+			
+			ContextMenuManager . addNewMenu ( cmm ) ;
+			
+		}
 		
 	}
 	
@@ -50,11 +68,11 @@ public class GuiItemEntryOfItemMerch extends GuiAbstractItemEntry {
 	
 	@Override 
 	public void draw ( GuiItemsScrollArea gi, int x_offset, int y_offset, int xRightOffset, int mouseX, int mouseY, Tessellator var5, int index, int size ) {
-
+	
 		super.draw(gi, x_offset, y_offset, xRightOffset, mouseX, mouseY, var5, index, size);
 
 		if ( pl != null ) {
-		
+			
 			pl . yPosition = y_offset + 2 ; 
 			min . yPosition = y_offset + 2 ;
 			buy . yPosition = y_offset + 2 ;
@@ -77,12 +95,12 @@ public class GuiItemEntryOfItemMerch extends GuiAbstractItemEntry {
 		
 		//
 
-		gi . parent . drawString ( gi . getFontRenderer ( ), info . name, 67 + 40, y_offset + 8, 16777215 ) ;
-		gi . parent . moneyArea . drawPriceArea ( x_offset - 70 - 50 - 20, y_offset + 8, ( info . cost * info . modified ), info . getMoneyType ( ) ) ;
+		gi . parent . drawString ( gi . getFontRenderer ( ), info . name, 67, y_offset + 8, 16777215 ) ;
+		gi . parent . moneyArea . drawPriceArea ( xRightOffset - 70 - 50 - 20, y_offset + 8, ( info . cost * info . modified ), info . getMoneyType ( ) ) ;
 
 		if ( info . limit != -1) {
 		  
-			gi . parent . drawCenteredString ( gi . getFontRenderer ( ), limitLine, x_offset - 80 - 50 - 50 - 20, y_offset + 8, 16777215 ) ; // - costLineWidth
+			gi . parent . drawCenteredString ( gi . getFontRenderer ( ), limitLine, xRightOffset - 80 - 50 - 50 - 20, y_offset + 8, 16777215 ) ; // - costLineWidth
 
 		}
 		
@@ -144,17 +162,17 @@ public class GuiItemEntryOfItemMerch extends GuiAbstractItemEntry {
 	public GuiAbstractItemEntry addButtons ( ShopGUI gui ) {
 				
 		buy = new BuyButton ( info . getShopId ( ), info . getCategory ( ), info . merch_id, ShopGUI . getNextButtonId ( ), gui . resolution . getScaledWidth ( ) - 91, -100, MineDonate . cfgUI . cats.itemsAndBlocks . itemBuyButton . width, MineDonate . cfgUI . cats . itemsAndBlocks . itemBuyButton . height, MineDonate . cfgUI . cats . itemsAndBlocks . itemBuyButton . text ) ;
-        gui . addBtn ( buy ) ;
+        gui . addBtn ( buy, false ) ;
         
         min = new CountButton ( -1, info, ShopGUI . getNextButtonId ( ), buy . xPosition - 1 - 16, - 100, 16, 20, "-" ) ;
         min . setEntityOnUpdate ( this ) ;
         
-        gui . addBtn ( min ) ;
+        gui . addBtn ( min, false ) ;
         
         pl = new CountButton ( 1, info, ShopGUI . getNextButtonId ( ), min . xPosition - 1 - 16, -100, 16, 20, "+" ) ;
         pl . setEntityOnUpdate ( this ) ;
         
-        gui . addBtn ( pl ) ;
+        gui . addBtn ( pl, false ) ;
 
     	if ( ! pl . canModify ( ) && ! min . canModify ( ) ) {
         	
@@ -183,8 +201,7 @@ public class GuiItemEntryOfItemMerch extends GuiAbstractItemEntry {
 
 	@Override
 	public void onClickContextMenuElement(ContextMenu cmm, ContextElement e) {
-		System.err.println(cmm + ">" + e);
+		System.err.println( ">" + e.name);
 	}
-	
 	
 }

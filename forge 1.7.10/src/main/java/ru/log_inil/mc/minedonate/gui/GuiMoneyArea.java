@@ -205,7 +205,7 @@ public class GuiMoneyArea {
 		int tmp = 0 ;
 		
 		public void drawPrice ( int price, int offsetX, int offsetY ) {
-			
+
 			tmpX = ( gui . getFontRenderer ( ) . getStringWidth ( ( pricePref != null ? pricePref : "" ) + price + ( priceSuff != null ? priceSuff : "" )  ) ) ;
 			gui . getFontRenderer ( ) . drawString ( ( pricePref != null ? pricePref : "" ) + price + ( priceSuff != null ? priceSuff : "" ) , offsetX - tmpX/2 , offsetY, 14737632 ) ;
 			

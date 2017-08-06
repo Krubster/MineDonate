@@ -32,13 +32,34 @@ public class GuiItemEntryOfUserShopMerch extends GuiAbstractItemEntry {
 		sc = _sc ;
 
 		List < ContextElement > cElements = new ArrayList < > ( ) ;
+
+		if ( MineDonate . getAccount ( ) . canFreezeShop ( info . owner ) ) {
+			
+			cElements . add ( new ContextElement ( 0, "freeze", "Freeze this shop ", this, 9 ) ) ;
+			cElements . add ( new ContextElement ( 1, "unfreeze", "Unfreeze this shop", this, 9 ) ) ;
+
+		}
 		
-		cElements . add ( new ContextElement ( 0, "Freeze this shop " + this.hashCode(), this, 10 ) ) ;
-		cElements . add ( new ContextElement ( 1, "Rename" + this.hashCode(), this, 10 ) ) ;
-		cmm = new ContextMenu ( 1, 1, cElements ) ;
+		if ( MineDonate . getAccount ( ) . canRenameShop ( info . owner ) ) {
+			
+			cElements . add ( new ContextElement ( 2, "rename", "Rename this shop ", this, 9 ) ) ;
+
+		}
 		
-		ContextMenuManager . addNewMenu ( cmm ) ;
-		
+		if ( MineDonate . getAccount ( ) . canDeleteShop ( info . owner ) ) {
+			
+			cElements . add ( new ContextElement ( 3, "delete", "Delete this shop ", this, 9 ) ) ;
+
+		}
+				
+		if ( ! cElements . isEmpty ( ) ) {
+			
+			cmm = new ContextMenu ( 1, 1, cElements ) ;
+			
+			ContextMenuManager . addNewMenu ( cmm ) ;
+			
+		}
+			
 	}
 		
 	String shopTitle ;
@@ -115,7 +136,7 @@ public class GuiItemEntryOfUserShopMerch extends GuiAbstractItemEntry {
 		go = new GoButton ( info . shopId, ShopGUI . getNextButtonId ( ), gui . resolution . getScaledWidth ( ) - 16 - 30 - ( info . isFreezed ? MineDonate . cfgUI . cats . shops . lockedGoButton . width : MineDonate . cfgUI . cats . shops . itemBuyButton . width ), -100, info . isFreezed ? MineDonate . cfgUI . cats . shops . lockedGoButton . width : MineDonate . cfgUI . cats . shops . itemBuyButton . width, info . isFreezed ? MineDonate . cfgUI . cats . shops . lockedGoButton . height : MineDonate . cfgUI . cats . shops . itemBuyButton . height, info . isFreezed ? MineDonate . cfgUI . cats . shops . lockedGoButton . text : MineDonate . cfgUI . cats . shops . itemBuyButton . text ) ;
 		go . enabled = info . isFreezed ? ! MineDonate . cfgUI . cats . shops . lockGoShopButtonWhenFreezed : true ;
 		
-        gui . addBtn ( go ) ;
+        gui . addBtn ( go, false ) ;
                 
 		return this ;
 		
@@ -123,7 +144,7 @@ public class GuiItemEntryOfUserShopMerch extends GuiAbstractItemEntry {
 	
 	@Override
 	public void onClickContextMenuElement(ContextMenu cmm, ContextElement e) {
-		System.err.println( ">" + e.line);
+		System.err.println( ">" + e.name);
 	}
 	
 }

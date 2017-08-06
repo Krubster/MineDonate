@@ -16,7 +16,7 @@ public class GuiItemsScrollArea extends GuiScrollingList {
     
     public GuiItemsScrollArea(ScaledResolution sr, ShopGUI parent, List<GuiAbstractItemEntry> _entr, int listWidth)
     {
-        super ( Minecraft . getMinecraft ( ), sr . getScaledWidth ( ) - 60, 100,  ( int ) ( sr . getScaledHeight ( ) * 0.1) + 15 + 24, (int) ( ( sr . getScaledHeight ( ) ) - ( sr . getScaledHeight ( ) * 0.1 ) ) - 5, 30, itemHeight ) ;
+        super ( Minecraft . getMinecraft ( ), sr . getScaledWidth ( ) - 60, ( int ) ( sr . getScaledHeight ( ) * 0.1),  ( int ) ( sr . getScaledHeight ( ) * 0.1) + 15 + 24, (int) ( ( sr . getScaledHeight ( ) ) - ( sr . getScaledHeight ( ) * 0.1 ) ) - 5, 30, itemHeight ) ;
         this.parent=parent;
         this.entrs=_entr;
     }

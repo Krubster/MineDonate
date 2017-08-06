@@ -266,7 +266,7 @@ public abstract class ShopCategory {
 	
 			                	subCatIdMap . put ( openSubCatButton . id, subCat . subCatId ) ;
 			                	
-			                    gui . addBtn ( openSubCatButton ) ;
+			                    gui . addBtn ( openSubCatButton, true ) ;
 			                    
 			                    drawn ++ ;
 

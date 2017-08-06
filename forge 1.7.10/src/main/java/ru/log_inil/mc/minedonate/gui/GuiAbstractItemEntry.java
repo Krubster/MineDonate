@@ -1,5 +1,6 @@
 package ru.log_inil.mc.minedonate.gui;
 
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.Tessellator;
 import ru.alastar.minedonate.gui.ShopGUI;
@@ -7,7 +8,7 @@ import ru.log_inil.mc.minedonate.gui.context.ContextMenu;
 import ru.log_inil.mc.minedonate.gui.context.ContextMenuInteract;
 import ru.log_inil.mc.minedonate.gui.context.ContextMenuManager;
 
-public abstract class GuiAbstractItemEntry implements ContextMenuInteract {
+public abstract class GuiAbstractItemEntry extends MCGuiAccessable implements ContextMenuInteract {
 
 	protected int xOffset, yOffset;
 	protected ContextMenu cmm ;
@@ -22,6 +23,8 @@ public abstract class GuiAbstractItemEntry implements ContextMenuInteract {
 		
 	}
 	
+	boolean nextMoveUpdate = false ;
+	
 	public void move ( int x, int y ) {
 		
 		if ( x != xOffset || y != yOffset ) {
@@ -31,7 +34,8 @@ public abstract class GuiAbstractItemEntry implements ContextMenuInteract {
 			
 			if ( cmm != null ) {
 
-				cmm . updateInteractArea ( x, y - 4 ) ;
+				cmm . updateInteractArea ( this, x, y - 4 ) ;
+				if ( ! nextMoveUpdate ) nextMoveUpdate = true ;
 				
 			}
 			
@@ -43,14 +47,17 @@ public abstract class GuiAbstractItemEntry implements ContextMenuInteract {
 		
 		if ( cmm != null ) {
 
-			cmm . updateInteractAreaSizes ( w, h ) ;
+			cmm . updateInteractAreaSizes ( this, w, h ) ;
 			
 		}
 		
 	}
 	
-	public void draw ( GuiItemsScrollArea gi, int var2, int var3, int var4, int mouseX, int mouseY, Tessellator var5, int index, int size ) {
+	GuiItemsScrollArea gi ;
+	public void draw ( GuiItemsScrollArea _gi, int var2, int var3, int var4, int mouseX, int mouseY, Tessellator var5, int index, int size ) {
 
+		gi = _gi ;
+		
 		move ( var2, var3 ) ;
 		
 	}
@@ -59,7 +66,6 @@ public abstract class GuiAbstractItemEntry implements ContextMenuInteract {
 		
 		if ( cmm != null ) {
 
-			System.err.println("??");
 			ContextMenuManager . removeMenu ( cmm ) ;
 			cmm = null ;
 			
@@ -88,6 +94,13 @@ public abstract class GuiAbstractItemEntry implements ContextMenuInteract {
     }
 
 	public void updateContextMenu ( ) {
+		
+	}
+
+	@Override
+	public FontRenderer getFontRenderer ( ) {
+		
+		return gi . getFontRenderer ( ) ;
 		
 	}
 	

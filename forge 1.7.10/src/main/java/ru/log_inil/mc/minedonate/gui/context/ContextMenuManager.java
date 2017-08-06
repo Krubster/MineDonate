@@ -25,7 +25,7 @@ public class ContextMenuManager {
 		
 	}
 
-	public static void click ( int x, int y, int t ) {
+	public static void click ( MCGuiAccessable gs, int x, int y, int t ) {
 
 		if ( t == 1 ) {
 			
@@ -34,7 +34,6 @@ public class ContextMenuManager {
 			currentMenu = null ;
 			
 			for ( ContextMenu cmm : menus ) {
-				// System.err.println( cmm . coordContains ( x, y ));
 
 				if ( cmm . coordContains ( x, y ) ) {
 
@@ -42,6 +41,8 @@ public class ContextMenuManager {
 					
 					cmm . drawPosX = x ;
 					cmm . drawPosY = y ;
+					
+					cmm . updateInteractArea ( gs, cmm . activateCoordX, cmm . activateCoordY ) ;
 					
 					currentMenu = cmm ;
 					
@@ -55,11 +56,10 @@ public class ContextMenuManager {
 			
 			if ( currentDrawMenu ) {
 				
-				if ( currentMenu . coordContains ( x, y ) ) {
+				if ( currentMenu . coordContainsInteract ( x, y ) ) {
 					
 					ContextElement cme = currentMenu . getLine ( x, y ) ;
-					System.err.println(cme);
-
+					
 					if ( cme != null ) {
 						
 						cme . onClick ( currentMenu ) ;

@@ -1,6 +1,8 @@
 package ru.alastar.minedonate.network.packets;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
 
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import io.netty.buffer.ByteBuf;
@@ -16,6 +18,8 @@ public class AccountInfoPacket implements IMessage {
     public AccountInfoPacket(){}
 
     public MoneySystem [ ] mSystems ;
+    
+    public List < String > permissions ;
     
     String userName ;
     
@@ -50,7 +54,7 @@ public class AccountInfoPacket implements IMessage {
             }
 				
             String [ ] perms = MineDonate . getPermissionsByUser ( userName ) ; 
-            
+
             buf . writeInt ( perms . length ) ;
             
             for ( String p : perms ) {
@@ -82,6 +86,18 @@ public class AccountInfoPacket implements IMessage {
         		
         	}
         	
+        	l = buf . readInt ( ) ;
+        	permissions = new ArrayList < > ( ) ;
+        	
+        	if ( l > 0 ) {
+        		
+        		for ( int i = 0 ; i < l ; i ++ ) {
+        			
+        			permissions . add ( Utils . netReadString ( buf ) . toLowerCase ( ) ) ;
+        			
+        		}
+        		
+        	}
         	
 		} catch ( UnsupportedEncodingException ex ) {
 			

@@ -5,6 +5,10 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.EntityLivingBase;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 import ru.alastar.minedonate.MineDonate;
@@ -15,6 +19,7 @@ import ru.alastar.minedonate.merch.info.EntityInfo;
 import ru.log_inil.mc.minedonate.gui.GuiAbstractItemEntry;
 import ru.log_inil.mc.minedonate.gui.GuiItemsScrollArea;
 import ru.log_inil.mc.minedonate.gui.context.ContextMenu;
+import ru.log_inil.mc.minedonate.gui.context.ContextMenuManager;
 import ru.log_inil.mc.minedonate.gui.context.ContextElement;
 
 public class GuiItemEntryOfEntityMerch extends GuiAbstractItemEntry {
@@ -29,6 +34,20 @@ public class GuiItemEntryOfEntityMerch extends GuiAbstractItemEntry {
 		info = _eim ;
 		sc = _sc ;
 
+		String owner = MineDonate . shops . get ( info . shopId ) . owner ;
+		if ( MineDonate . getAccount ( ) . canEditShop ( owner ) ) {
+			
+			List < ContextElement > cElements = new ArrayList < > ( ) ;
+	
+			cElements . add ( new ContextElement ( 0, "rename", "Rename this", this, 9 ) ) ;
+			cElements . add ( new ContextElement ( 1, "delete", "Delete this", this, 9 ) ) ;
+	
+			cmm = new ContextMenu ( 1, 1, cElements ) ;
+			
+			ContextMenuManager . addNewMenu ( cmm ) ;
+			
+		}
+		
 	}
 
 	String costLine, limitLine;
@@ -76,11 +95,11 @@ public class GuiItemEntryOfEntityMerch extends GuiAbstractItemEntry {
 		//
 		renderEntity(55, y_offset + 25, 13 /* scale */, 55 + 55, y_offset - 200, info.entity);
 		gi.parent.drawCenteredString(gi.getFontRenderer(), info.name, 40 + 55, y_offset + 8, 16777215);
-		gi . parent . moneyArea . drawPriceArea ( x_offset - 70 - 15 - 20, y_offset + 8, info . cost, info . getMoneyType ( ) ) ;
+		gi . parent . moneyArea . drawPriceArea ( xRightOffset - 70 - 15 - 20, y_offset + 8, info . cost, info . getMoneyType ( ) ) ;
 
 		if (info.limit != -1) {
 
-			gi.parent.drawCenteredString(gi.getFontRenderer(), limitLine, x_offset - 80 - 50 - 50 - 10, y_offset + 8, 16777215); // - costLineWidth
+			gi.parent.drawCenteredString(gi.getFontRenderer(), limitLine, xRightOffset - 80 - 50 - 50 - 10, y_offset + 8, 16777215); // - costLineWidth
 
 		}
 
@@ -157,7 +176,7 @@ public class GuiItemEntryOfEntityMerch extends GuiAbstractItemEntry {
 
 		buy = new BuyButton ( info . getShopId ( ), info . getCategory ( ), info . merch_id, ShopGUI . getNextButtonId ( ), gui . resolution . getScaledWidth ( ) - 91, -100, MineDonate . cfgUI . cats . itemsAndBlocks . itemBuyButton . width, MineDonate . cfgUI . cats . itemsAndBlocks . itemBuyButton . height, MineDonate . cfgUI . cats . itemsAndBlocks . itemBuyButton . text ) ;
 
-        gui . addBtn ( buy ) ;
+        gui . addBtn ( buy, false ) ;
 		if (info.limit != -1 && info.limit == 0) {
 
 			buy.enabled = false;
@@ -169,7 +188,7 @@ public class GuiItemEntryOfEntityMerch extends GuiAbstractItemEntry {
 
 	@Override
 	public void onClickContextMenuElement(ContextMenu cmm, ContextElement e) {
-		System.err.println(cmm + ">" + e);
+		System.err.println( ">" + e.name);
 	}
 	
 }

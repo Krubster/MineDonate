@@ -676,29 +676,73 @@ public class MineDonate {
         }
     }
 
+    static Map < String, List < String > > permissions = new HashMap < > ( ) ;
+    
     static List < String > getPermissionsByGroup ( String groupName ) {
     	
-    	return null ;
+    	if ( permissions . containsKey ( groupName ) ) {
+    		
+    		return permissions . get ( groupName ) ;
+    		
+    	}
+    	
+		List < String > l = new ArrayList < > ( ) ;
+
+		if ( groupName . contains ( "," ) ) {
+			
+			for ( String s : groupName . split ( "," ) ) {
+				
+				l . addAll ( getPermissionsByGroup ( s ) ) ;
+				
+			}
+			
+	        permissions . put ( groupName, l ) ;
+
+			return l ;
+			
+		}
+		
+        try {
+        	
+        	Statement stmt = m_DB_Connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM " + cfg.dbModPermissionsTable+ " WHERE groupName = '" + groupName + "';");
+            
+            while ( rs . next ( ) ) {
+
+                 l . add ( rs . getString ( "permission" ) ) ;
+
+            }
+
+            rs.close();
+            stmt.close();
+         
+        } catch ( Exception ex ) {
+        	
+        	ex . printStackTrace ( ) ;
+        	
+        }
+        
+        permissions . put ( groupName, l ) ;
+        
+    	return l ;
     	
     }
     
 	public static String [ ] getPermissionsByUser ( String userName ) {
 		
 		List < String > l = new ArrayList < > ( ) ;
-		
+
 		if ( cfg . enableInternalServerPermissions ) {
 			
 			for ( DataOfPermissionLine dopl : cfg . permissionsTriggerList ) {
-				
-				if ( PluginHelper . pexMgr . hasPermission ( userName, dopl.key ) ) {
+
+				if ( PluginHelper . pexMgr . hasPermission ( userName, dopl . key ) ) {
 					
 					l . addAll ( getPermissionsByGroup ( dopl . groupName ) ) ;
 					
 				}
 				
 			}
-			
-		} else {
 			
 		}
 		
@@ -710,5 +754,28 @@ public class MineDonate {
 		return r ;
 		
 	}
+
+	@SideOnly ( Side . CLIENT )
+	public static Account acc ;
+	
+	@SideOnly ( Side . CLIENT )
+	public static Account getAccount ( ) {
+		
+		return acc ;
+		/*
+		List<String> l = new ArrayList<>();
+		l.add("*");
+		
+		return new Account(Minecraft.getMinecraft().thePlayer.getDisplayName().toLowerCase(), l) ;
+		*/
+	}
+	
+	@SideOnly ( Side . CLIENT )
+	public static void setAccount ( Account _acc ) {
+		
+		acc = _acc ;
+		
+	}
+	
 	
 }

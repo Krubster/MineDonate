@@ -8,10 +8,12 @@ public class ContextElement  {
 	public String line ;
 	public ContextMenuInteract cmi ;
 	public int lineHeight ;
+	public String name ;
 	
-	public ContextElement ( int _id, String _line, ContextMenuInteract _cmi, int _lineHeight ) {
+	public ContextElement ( int _id, String _name, String _line, ContextMenuInteract _cmi, int _lineHeight ) {
 		
 		id = _id ;
+		name = _name ;
 		line = _line ;
 		cmi = _cmi ;
 		lineHeight = _lineHeight ;

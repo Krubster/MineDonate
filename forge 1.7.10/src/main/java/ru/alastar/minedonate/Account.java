@@ -19,32 +19,32 @@ public class Account {
 	}
 	
 	public boolean hasPermission ( String name ) {
-	
+
 		return permissions . contains ( name . toLowerCase ( ) ) ;
 		
 	}
 	
 	public boolean canFreezeShop ( String owner ) {
-		
-		return hasPermission ( "freezeOtherShop" ) || hasPermission ( "*" ) ;
+
+		return ( hasPermission ( "freezeOtherShop" ) && ! owner . equalsIgnoreCase ( "SERVER" ) ) || hasPermission ( "*" ) ;
 		
 	}
 	
 	public boolean canDeleteShop ( String owner ) {
 		
-		return ( name . equalsIgnoreCase ( owner ) && hasPermission ( "removeOwnedShop" ) ) || hasPermission ( "removeOtherShop" ) || hasPermission ( "*" ) ;
+		return ( name . equalsIgnoreCase ( owner ) && hasPermission ( "removeOwnedShop" ) ) || ( hasPermission ( "removeOtherShop" ) && ! owner . equalsIgnoreCase ("SERVER" ) ) || hasPermission ( "*" ) ;
 
 	}
 	
 	public boolean canRenameShop ( String owner ) {
 		
-		return ( name . equalsIgnoreCase ( owner ) && hasPermission ( "renameOwnedShop" ) ) || hasPermission ( "renameOtherShop" ) || hasPermission ( "*" ) ;
+		return ( name . equalsIgnoreCase ( owner ) && hasPermission ( "renameOwnedShop" ) ) || ( hasPermission ( "renameOtherShop" ) && ! owner . equalsIgnoreCase ("SERVER" ) ) || hasPermission ( "*" ) ;
 
 	}
 	
 	public boolean canEditShop ( String owner ) {
 		
-		return ( name . equalsIgnoreCase ( owner ) && hasPermission ( "editOwnedShop" ) ) || hasPermission ( "editOtherShop" ) || hasPermission ( "*" ) ;
+		return ( name . equalsIgnoreCase ( owner ) && hasPermission ( "editOwnedShop" ) ) || ( hasPermission ( "editOtherShop" ) && ! owner . equalsIgnoreCase ("SERVER" ) ) || hasPermission ( "*" ) ;
 
 	}
 	

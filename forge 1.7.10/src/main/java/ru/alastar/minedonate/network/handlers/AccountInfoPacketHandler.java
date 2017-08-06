@@ -3,6 +3,8 @@ package ru.alastar.minedonate.network.handlers;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import net.minecraft.client.Minecraft;
+import ru.alastar.minedonate.Account;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.network.packets.AccountInfoPacket;
 
@@ -18,7 +20,9 @@ public class AccountInfoPacketHandler implements IMessageHandler<AccountInfoPack
     @Override 
     public IMessage onMessage(AccountInfoPacket message, MessageContext ctx) {
     	
-    	for ( AccountInfoPacket.MoneySystem ms : message.mSystems ) {
+    	MineDonate . setAccount ( new Account ( Minecraft . getMinecraft ( ) . thePlayer . getDisplayName ( ) . toLowerCase ( ), message . permissions ) ) ;
+
+    	for ( AccountInfoPacket . MoneySystem ms : message.mSystems ) {
     		
     		MineDonate . setMoney ( ms . type, ms . balance ) ;
     		

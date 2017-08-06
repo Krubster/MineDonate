@@ -91,7 +91,7 @@ public class PrivilegieCategory extends ShopCategory {
             var18.addVertexWithUV((double) 30, (double) ((int) (resolution.getScaledHeight() * 0.1) + 19 + 20 + var20), 0.0D, 0.0D, 1.0D);
             var18.addVertexWithUV((double) (int) resolution.getScaledWidth() - 30, (double) ((resolution.getScaledHeight() * 0.1) + 19 + 20 + var20), 0.0D, 1.0D, 1.0D);
 
-            var18.setColorRGBA_I(0, 255);
+            var18.setColorRGBA_I(0, 105);
 
             var18.addVertexWithUV((double) resolution.getScaledWidth() - 30, (double) (int) (resolution.getScaledHeight() * 0.1) + 19 + 20, 0.0D, 1.0D, 0.0D);
             var18.addVertexWithUV((double) 30, (double) (int) (resolution.getScaledHeight() * 0.1) + 19 + 20, 0.0D, 0.0D, 0.0D);
@@ -101,7 +101,7 @@ public class PrivilegieCategory extends ShopCategory {
 
             var18.startDrawingQuads();
 
-            var18.setColorRGBA_I(0, 255);
+            var18.setColorRGBA_I(0, 105);
 
             var18.addVertexWithUV((double) 30, (double) ((resolution.getScaledHeight()) - (resolution.getScaledHeight() * 0.1)) - 6, 0.0D, 0.0D, 1.0D);
             var18.addVertexWithUV((double) resolution.getScaledWidth() - 30, (double) ((resolution.getScaledHeight()) - (resolution.getScaledHeight() * 0.1)) - 6, 0.0D, 1.0D, 1.0D);
@@ -230,7 +230,7 @@ public class PrivilegieCategory extends ShopCategory {
             buyButton = new BuyButton( info . getShopId ( ), info . getCategory ( ), info . merch_id, ShopGUI.getNextButtonId(), (buyButton!=null?buyButton.xPosition: resolution . getScaledWidth ( ) / 2 - MineDonate.cfgUI.cats.privelegies.itemBuyButton.width / 2), y_offset +  93, MineDonate.cfgUI.cats.privelegies.itemBuyButton.width, MineDonate.cfgUI.cats.privelegies.itemBuyButton.height, MineDonate.cfgUI.cats.privelegies.itemBuyButton.text);
             buttonsMap.put(info.merch_id, buyButton);
 
-            relative . addBtn ( buyButton ) ;
+            relative . addBtn ( buyButton, false ) ;
             
         }
     }
