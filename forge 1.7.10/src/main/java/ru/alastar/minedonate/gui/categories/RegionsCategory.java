@@ -152,7 +152,7 @@ public class RegionsCategory extends ShopCategory {
 
       relative.drawCenteredString(relative.getFontRenderer(), _info.name, x_offset, y_offset - 15, 16777215);
      //relative.drawCenteredString(relative.getFontRenderer(), MineDonate.cfgUI.cats.regions.pricePrefix + info.cost + MineDonate.cfgUI.cats.regions.priceSuffix, x_offset, y_offset, 16777215);
-      relative . moneyArea . drawPriceArea ( x_offset + (75 / 2), y_offset, _info . cost, _info . getMoneyType ( ) ) ;
+      relative . moneyArea . drawPriceArea ( x_offset - 7, y_offset, _info . cost, _info . getMoneyType ( ) ) ;
 
 	}
 

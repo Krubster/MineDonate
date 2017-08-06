@@ -12,7 +12,6 @@ import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.merch.info.PrivilegieInfo;
 import ru.alastar.minedonate.proxies.ClientProxy;
 import ru.log_inil.mc.minedonate.gui.DrawType;
-import ru.log_inil.mc.minedonate.gui.GuiGradientButton;
 
 import java.util.ArrayList;
 import java.util.HashMap;

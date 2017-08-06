@@ -28,12 +28,12 @@ public class NeedUpdateServerPacketHandler implements IMessageHandler<NeedUpdate
                 EntityPlayerMP serverPlayer = ctx . getServerHandler ( ) . playerEntity ;
                 String userName = serverPlayer . getDisplayName ( ) ;
                 
-                for ( AbstractMoneyProcessor amp : MineDonate.moneyProcessors.values() ) {
-                	
+                for ( AbstractMoneyProcessor amp : MineDonate . moneyProcessors . values ( ) ) {
+
                 	if ( ! amp . existsAccount ( userName ) ) {
                 		
-                		amp . registerPlayer ( userName ) ;
-                		
+                		amp . registerPlayer ( userName,  MineDonate . moneyProcessors . values ( ) ) ;
+
                 	}
                 	
                 }

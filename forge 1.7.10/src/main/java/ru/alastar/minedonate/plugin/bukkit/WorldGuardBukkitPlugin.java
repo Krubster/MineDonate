@@ -7,8 +7,9 @@ import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 public class WorldGuardBukkitPlugin extends ru.alastar.minedonate.plugin.clean.WorldGuardPlugin {
 
 	boolean loaded = false ;
-	WorldGuardPlugin wgMgr ;
+	com.sk89q.worldguard.bukkit.WorldGuardPlugin wgMgr ;
 	
+	@Override
 	public void load ( ) {
 		
 		if ( ! loaded ) {
@@ -51,8 +52,17 @@ public class WorldGuardBukkitPlugin extends ru.alastar.minedonate.plugin.clean.W
 		
 	}
 	
+    @Override
 	public boolean checkRegionMaxOut ( String world, String name ) {
 
+    	if ( Bukkit . getWorld ( world ) == null ) {
+    		
+    		System . err . println ( "[MineDonate] World: " + world + ", not found!" ) ;
+    		
+    		return false ;
+    		
+    	}
+    	
 		return wgMgr . getGlobalStateManager ( ) . get ( Bukkit . getWorld ( world ) ) . getMaxRegionCount ( Bukkit . getPlayer ( name ) ) > wgMgr . getGlobalRegionManager ( ) . get ( Bukkit . getWorld ( world ) ) . getRegionCountOfPlayer ( wgMgr . wrapPlayer ( Bukkit . getPlayer ( name ) ) ) ;
 		
 	}

@@ -72,7 +72,7 @@ public abstract class ShopCategory {
     		
     	}
 
-    	postShow ( ) ;
+    	// postShow ( ) ;
     	
     }
     

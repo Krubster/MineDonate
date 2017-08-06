@@ -33,6 +33,8 @@ public class AccountInfoPacket implements IMessage {
             buf . writeInt ( MineDonate . moneyProcessors . size ( ) ) ;
 
             for ( AbstractMoneyProcessor amp : MineDonate . moneyProcessors . values ( ) ) {
+            	
+        		System.err.println(amp.getMoneyType() + ", " + amp . getMoneyFor ( userName ) );
 
             	buf . writeInt ( amp . getMoneyFor ( userName ) ) ;
             	Utils . netWriteString ( buf, amp . getMoneyType ( ) ) ;

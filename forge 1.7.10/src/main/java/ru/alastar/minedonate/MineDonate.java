@@ -5,22 +5,23 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
-import org.bukkit.Bukkit;
+
 import ru.alastar.minedonate.commands.AddEntityCommand;
 import ru.alastar.minedonate.commands.AddItemCommand;
 import ru.alastar.minedonate.commands.AdminCommand;
@@ -35,6 +36,7 @@ import ru.alastar.minedonate.network.handlers.*;
 import ru.alastar.minedonate.network.packets.*;
 import ru.alastar.minedonate.plugin.PluginHelper;
 import ru.alastar.minedonate.proxies.CommonProxy;
+
 import ru.log_inil.mc.minedonate.localData.DataOfConfig;
 import ru.log_inil.mc.minedonate.localData.DataOfMoneyProcessor;
 import ru.log_inil.mc.minedonate.localData.DataOfPermissionLine;
@@ -127,6 +129,7 @@ public class MineDonate {
         networkChannel.registerMessage(NeedUpdateClientPacketHandler.class, NeedUpdatePacket.class, 7, Side.CLIENT);
         networkChannel.registerMessage(NeedShopCategoryServerPacketHandler.class, NeedShopCategoryPacket.class, 8, Side.SERVER);
         networkChannel.registerMessage(CategoryPacketHandler.class, CategoryPacket.class, 9, Side.CLIENT);
+        networkChannel.registerMessage(MoneyChangedPacketHandler.class, MoneyChangedPacket.class, 10, Side.CLIENT);
 
         instance = this;
 

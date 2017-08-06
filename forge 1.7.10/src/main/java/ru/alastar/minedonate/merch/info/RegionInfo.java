@@ -5,18 +5,12 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 
-import org.bukkit.Bukkit;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.plugin.PluginHelper;
 
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * Created by Alastar on 20.07.2017.
@@ -36,8 +30,18 @@ public class RegionInfo extends Merch {
 
     @Override
     public boolean canBuy(EntityPlayerMP serverPlayer, int amount) {
+    	
+    	if ( PluginHelper . wgMgr . checkRegionMaxOut ( this . world_name, serverPlayer . getDisplayName ( ) ) ) {
+ 		 
+    		serverPlayer . addChatMessage ( new ChatComponentText ( "You can't have more regions!" ) ) ;
 
-    	return PluginHelper . wgMgr . checkRegionMaxOut ( serverPlayer . getDisplayName ( ) ) ;
+    		return false ;
+    		
+    	} else {
+    				   
+           return true;
+               
+    	}
 
     	/*
         try {       	

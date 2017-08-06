@@ -3,7 +3,6 @@ package ru.log_inil.mc.minedonate.gui.items;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import ru.alastar.minedonate.MineDonate;
@@ -78,7 +77,7 @@ public class GuiItemEntryOfItemMerch extends GuiAbstractItemEntry {
 		
 		//
 
-		gi . parent . drawCenteredString ( gi . getFontRenderer ( ), info . name, 67 + 40, y_offset + 8, 16777215 ) ;
+		gi . parent . drawString ( gi . getFontRenderer ( ), info . name, 67 + 40, y_offset + 8, 16777215 ) ;
 		gi . parent . moneyArea . drawPriceArea ( x_offset - 70 - 50 - 20, y_offset + 8, ( info . cost * info . modified ), info . getMoneyType ( ) ) ;
 
 		if ( info . limit != -1) {

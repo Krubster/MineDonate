@@ -1,7 +1,5 @@
 package ru.alastar.minedonate.network.packets;
 
-import java.io.UnsupportedEncodingException;
-
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import io.netty.buffer.ByteBuf;
 import ru.alastar.minedonate.Utils;
