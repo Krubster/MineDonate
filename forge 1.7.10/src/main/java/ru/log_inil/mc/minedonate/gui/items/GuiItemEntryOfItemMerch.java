@@ -14,7 +14,9 @@ import ru.alastar.minedonate.gui.CountButton;
 import ru.alastar.minedonate.gui.ShopCategory;
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.merch.info.ItemInfo;
+import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.gui.GuiAbstractItemEntry;
+import ru.log_inil.mc.minedonate.gui.GuiFrameItemRename;
 import ru.log_inil.mc.minedonate.gui.GuiItemsScrollArea;
 import ru.log_inil.mc.minedonate.gui.context.ContextMenu;
 import ru.log_inil.mc.minedonate.gui.context.ContextMenuManager;
@@ -67,9 +69,9 @@ public class GuiItemEntryOfItemMerch extends GuiAbstractItemEntry {
 	}
 	
 	@Override 
-	public void draw ( GuiItemsScrollArea gi, int x_offset, int y_offset, int xRightOffset, int mouseX, int mouseY, Tessellator var5, int index, int size ) {
+	public void draw ( GuiItemsScrollArea gi, int x_offset, int y_offset, int xRightOffset, int mouseX, int mouseY, Tessellator var5, DrawType dt, int index, int size ) {
 	
-		super.draw(gi, x_offset, y_offset, xRightOffset, mouseX, mouseY, var5, index, size);
+		super.draw(gi, x_offset, y_offset, xRightOffset, mouseX, mouseY, var5, dt, index, size);
 
 		if ( pl != null ) {
 			
@@ -90,56 +92,65 @@ public class GuiItemEntryOfItemMerch extends GuiAbstractItemEntry {
 		
 	//	GL11 . glDisable ( GL11.GL_LIGHTING ) ;
 
-		GL11 . glEnable ( GL12 . GL_RESCALE_NORMAL ) ;
-		RenderHelper . enableGUIStandardItemLighting ( ) ;
-		
-		//
+		if ( dt == DrawType . PRE ) {
+			
+			GL11 . glEnable ( GL12 . GL_RESCALE_NORMAL ) ;
+			RenderHelper . enableGUIStandardItemLighting ( ) ;
+			
+			//
 
-		gi . parent . drawString ( gi . getFontRenderer ( ), info . name, 67, y_offset + 8, 16777215 ) ;
-		gi . parent . moneyArea . drawPriceArea ( xRightOffset - 70 - 50 - 20, y_offset + 8, ( info . cost * info . modified ), info . getMoneyType ( ) ) ;
+			gi . parent . drawString ( gi . getFontRenderer ( ), info . name, 67, y_offset + 8, 16777215 ) ;
+			gi . parent . moneyArea . drawPriceArea ( xRightOffset - 70 - 50 - 20, y_offset + 8, ( info . cost * info . modified ), info . getMoneyType ( ) ) ;
 
-		if ( info . limit != -1) {
-		  
-			gi . parent . drawCenteredString ( gi . getFontRenderer ( ), limitLine, xRightOffset - 80 - 50 - 50 - 20, y_offset + 8, 16777215 ) ; // - costLineWidth
+			if ( info . limit != -1) {
+			  
+				gi . parent . drawCenteredString ( gi . getFontRenderer ( ), limitLine, xRightOffset - 80 - 50 - 50 - 20, y_offset + 8, 16777215 ) ; // - costLineWidth
 
-		}
-		
-		//
-		
-		GL11 . glPushMatrix ( ) ; 
-		
-		GL11 . glTranslatef ( 40, y_offset + 2, 10 ) ;
-		GL11 . glScalef ( 1.2f, 1.2f, 1f ) ;  
-
-		gi . parent . getItemRender ( ) . renderItemAndEffectIntoGUI ( gi . getFontRenderer ( ), gi . parent . mc . getTextureManager ( ), info . m_stack, 0, 0 ) ;
-
-		GL11 . glPopMatrix ( ) ;
-		
-		//
-		
-		GL11 . glDisable ( GL12 . GL_RESCALE_NORMAL ) ;
-
-		//
-		this . drawHorizontalLine ( gi . parent, 40, xRightOffset - 10, y_offset - 3, 520093695 ) ;
-
-  		if ( index + 1 == size && y_offset + 30 < gi . bottom ) {
-  			
-  			this . drawHorizontalLine ( gi . parent, 40, xRightOffset - 10, y_offset - 3 + 30, 520093695 ) ;
-
-  		}
-  		
-  		
-		gi . parent . getItemRender ( ) .renderItemOverlayIntoGUI ( gi . getFontRenderer ( ), gi . parent . mc . getTextureManager ( ), info . m_stack, 45, y_offset + 5, stackCountLine ) ;
-
-		if ( mouseX >= 40 && 60 >= mouseX ) {
-			if ( mouseY >= y_offset - 2 && y_offset + 20 >= mouseY ) {
-				gi.parent.renderToolTipAccess(info.m_stack, mouseX, mouseY);
-		//		gi . parent .get
-				//gi . parent . getItemRender ( ).renderItemIntoGUI(p_77015_1_, p_77015_2_, p_77015_3_, p_77015_4_, p_77015_5_, renderEffect);
 			}
-		}
+			
+			//
+			
+			GL11 . glPushMatrix ( ) ; 
+			
+			GL11 . glTranslatef ( 40, y_offset + 2, 10 ) ;
+			GL11 . glScalef ( 1.2f, 1.2f, 1f ) ;  
 
-		RenderHelper . disableStandardItemLighting ( ) ;
+			gi . parent . getItemRender ( ) . renderItemAndEffectIntoGUI ( gi . getFontRenderer ( ), gi . parent . mc . getTextureManager ( ), info . m_stack, 0, 0 ) ;
+
+			GL11 . glPopMatrix ( ) ;
+			
+			//
+			
+			GL11 . glDisable ( GL12 . GL_RESCALE_NORMAL ) ;
+
+			//
+			this . drawHorizontalLine ( gi . parent, 40, xRightOffset - 10, y_offset - 3, 520093695 ) ;
+
+	  		if ( index + 1 == size && y_offset + 30 < gi . bottom ) {
+	  			
+	  			this . drawHorizontalLine ( gi . parent, 40, xRightOffset - 10, y_offset - 3 + 30, 520093695 ) ;
+
+	  		}
+	  		
+	  		
+			gi . parent . getItemRender ( ) .renderItemOverlayIntoGUI ( gi . getFontRenderer ( ), gi . parent . mc . getTextureManager ( ), info . m_stack, 45, y_offset + 5, stackCountLine ) ;
+
+			RenderHelper . disableStandardItemLighting ( ) ;
+			
+		} else {
+			
+			if ( mouseX >= 40 && 60 >= mouseX ) {
+				
+				if ( mouseY >= y_offset - 2 && y_offset + 20 >= mouseY ) {
+					
+					gi.parent.renderToolTipAccess(info.m_stack, mouseX, mouseY);
+					RenderHelper .disableStandardItemLighting ( ) ;
+
+				}
+				
+			}
+			
+		}
 
 	}
 	
@@ -200,8 +211,26 @@ public class GuiItemEntryOfItemMerch extends GuiAbstractItemEntry {
 	}
 
 	@Override
-	public void onClickContextMenuElement(ContextMenu cmm, ContextElement e) {
+	public void onClickContextMenuElement ( ShopGUI g, ContextMenu cmm, ContextElement e ) {
+		
+		if ( e != null && e . name . equals ( "rename" ) ) {
+
+			GuiFrameItemRename gfir = ( GuiFrameItemRename ) g . showEntry ( "itemRename", true ) ;	
+			
+			if ( "" . equals ( info . name ) ) { //info . m_stack . getDisplayName ( ) . equals (  
+
+				gfir . setFieldData ( "", info . m_stack . getDisplayName ( ) ) ;
+
+			} else {
+				
+				gfir . setFieldData ( info . name, MineDonate.cfgUI.frames.rename.renameField.textHolder ) ;
+
+			}
+			
+		}
+		
 		System.err.println( ">" + e.name);
+		
 	}
 	
 }

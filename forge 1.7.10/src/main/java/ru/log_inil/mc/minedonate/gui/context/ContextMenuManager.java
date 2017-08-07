@@ -3,6 +3,7 @@ package ru.log_inil.mc.minedonate.gui.context;
 import java.util.ArrayList;
 import java.util.List;
 
+import ru.alastar.minedonate.gui.ShopGUI;
 import ru.log_inil.mc.minedonate.gui.MCGuiAccessable;
 
 public class ContextMenuManager {
@@ -25,7 +26,7 @@ public class ContextMenuManager {
 		
 	}
 
-	public static void click ( MCGuiAccessable gs, int x, int y, int t ) {
+	public static void click ( ShopGUI gs, int x, int y, int t ) {
 
 		if ( t == 1 ) {
 			
@@ -62,7 +63,7 @@ public class ContextMenuManager {
 					
 					if ( cme != null ) {
 						
-						cme . onClick ( currentMenu ) ;
+						cme . onClick ( gs, currentMenu ) ;
 						
 					} else {
 						

@@ -1,4 +1,4 @@
-package ru.log_inil.mc.minedonate.localData;
+package ru.log_inil.mc.minedonate.localData.ui;
 
 public class DataOfUIMoneyGroup {
 
@@ -18,7 +18,7 @@ public class DataOfUIMoneyGroup {
 		balancePref = "" ;
 		balanceSuff = "" ;
 		imageIsResource = true ;
-		image = "minedonate:/images/unknown.png" ;
+		image = "minedonate:images/unknown.png" ;
 		
 	}
 	

@@ -15,14 +15,16 @@ import ru.alastar.minedonate.proxies.ClientProxy;
 import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.gui.GuiGradientButton;
 import ru.log_inil.mc.minedonate.gui.GuiGradientTextField;
+import ru.log_inil.mc.minedonate.gui.GuiFrameItemRename;
+import ru.log_inil.mc.minedonate.gui.GuiFrameLoading;
 import ru.log_inil.mc.minedonate.gui.GuiMoneyArea;
 import ru.log_inil.mc.minedonate.gui.MCGuiAccessable;
 import ru.log_inil.mc.minedonate.gui.context.ContextMenuManager;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
-
-import org.lwjgl.opengl.GL11;
+import java.util.Map;
 
 /**
  * Created by Alastar on 18.07.2017.
@@ -58,6 +60,9 @@ public class ShopGUI extends MCGuiAccessable {
     public GuiGradientButton exitButton ;
     public GuiGradientButton searchButton ;
     
+    public Map < String, ru.log_inil.mc.minedonate.gui.GuiEntry > gEntries = new LinkedHashMap < > ( ) ;
+    GuiFrameLoading gfl ;
+    
     public ShopGUI ( ) {
 
     	cats = new ShopCategory [ ] { new ItemNBlockCategory ( ), new PrivilegieCategory ( ), new RegionsCategory ( ), new EntitiesCategory ( ), new UsersShopsCategory ( ) } ;
@@ -68,6 +73,11 @@ public class ShopGUI extends MCGuiAccessable {
     		
     	}
     	
+    	gEntries . put ( "itemRename", new GuiFrameItemRename ( MineDonate . cfgUI . frames . rename ) ) ;
+    	
+    	gEntries . put ( "loading", ( gfl = new GuiFrameLoading ( ) ) ) ;
+    	gfl . setText ( MineDonate . cfgUI . loadingText ) ;
+    	
     }
 
     public static int getNextButtonId ( ) {
@@ -76,6 +86,18 @@ public class ShopGUI extends MCGuiAccessable {
         
     }
 
+    public ru.log_inil.mc.minedonate.gui.GuiEntry showEntry ( String k, boolean v ) {
+    
+    	if ( gEntries . containsKey ( k ) ) {
+    		
+    		gEntries . get ( k ) . show ( v ) ;
+    		
+    	}
+    	
+    	return null ;
+    	
+    }
+    
     public ShopCategory [ ] getCurrentShopCategories ( ) { // #LOG
     	
     	return cats ;
@@ -103,8 +125,19 @@ public class ShopGUI extends MCGuiAccessable {
     @Override
     protected void keyTyped ( char p_73869_1_, int p_73869_2_ ) {
 
+        for ( ru.log_inil.mc.minedonate.gui.GuiEntry ge : gEntries.values() ) {
+
+        	if ( ge . isVisible ( ) && ge . onKey ( p_73869_1_, p_73869_2_ ) ) {
+        		
+        		return ;
+        		
+        	}
+        	
+        }
+        
+        
     	if ( searchField != null && searchField . isFocused ( ) ) {
-    	
+    		
     		searchField . textboxKeyTyped ( p_73869_1_, p_73869_2_ ) ;		
 
 			getCurrentCategory ( ) . search ( searchField . getText ( ) ) ;
@@ -157,10 +190,38 @@ public class ShopGUI extends MCGuiAccessable {
     	
     }
     
+    boolean contextCallFlag = true ;
+    
     @Override
     protected void mouseClicked ( int p_73864_1_, int p_73864_2_, int p_73864_3_ ) {
     	
-    	ContextMenuManager . click ( this, p_73864_1_, p_73864_2_, p_73864_3_ ) ;
+    	contextCallFlag = true ;
+    	
+        for ( ru.log_inil.mc.minedonate.gui.GuiEntry ge : gEntries.values() ) {
+
+        	if ( ge . isVisible ( ) && ge . coordContains ( p_73864_1_,  p_73864_2_ ) ) {
+        			
+        		if ( ge . onClick ( p_73864_1_,  p_73864_2_, p_73864_3_ ) ) {
+        			
+        			return ;
+        			
+        		}
+        		
+        		if ( ge . lockContextMenuUnderEntry ( ) ) {
+        			
+        			contextCallFlag = false ;
+        			
+        		}
+        		
+        	}
+        	
+        }
+          
+        if ( contextCallFlag ) {
+        	
+        	ContextMenuManager . click ( this, p_73864_1_, p_73864_2_, p_73864_3_ ) ;
+        	
+        }
     	
   		for ( GuiGradientTextField ggtf: listTextFields ) {
 			
@@ -173,76 +234,25 @@ public class ShopGUI extends MCGuiAccessable {
     }
 
     @Override
-    public void drawScreen ( int mouseX, int mouseY, float partialTicks ) {    	
-    	
-    	this . drawRect ( 0, 0, resolution . getScaledWidth ( ), resolution . getScaledHeight ( ), 1258291200 ) ;
-
-        if ( ! needNetUpdate ) {
-        	
-        	moneyArea . drawBalanceArea ( ( int ) resolution . getScaledWidth ( ) - 20, ( int ) ( resolution . getScaledHeight ( ) * 0.1 + 25 ), mouseX, mouseY ) ;
-        	
-	        if ( ! loading ) { 
-	        	
-	        	can_process = true; 
-	        	
-	        	getCurrentCategory ( ) . draw ( this, m_Page, mouseX, mouseY, partialTicks, DrawType . BG ) ;   
-  
-		        super . drawScreen ( mouseX, mouseY, partialTicks ) ;  
-		        
-	            getCurrentCategory ( ) . draw ( this, m_Page, mouseX, mouseY, partialTicks, DrawType . PRE ) ;    		
-
-		  		for ( GuiGradientTextField ggtf: listTextFields ) {
-					
-		  			ggtf . drawTextBox ( ) ;		
-
-				}
-		  		
-		        getCurrentCategory ( ) . draw ( this, m_Page, mouseX, mouseY, partialTicks, DrawType . POST ) ;   
-
-		        //
-	    	
-	        } else { 
-	        	
-	        	can_process = false ; 
-	            
-		    	getCurrentCategory ( ) . draw ( this, m_Page, mouseX, mouseY, partialTicks, DrawType . BG ) ;   
-
-		        super . drawScreen ( mouseX, mouseY, partialTicks ) ;  
-		        
-		    	getCurrentCategory ( ) . draw ( this, m_Page, mouseX, mouseY, partialTicks, DrawType . POST ) ;   
-
-		    	this.drawRect((resolution.getScaledWidth()/2)-10-this.fontRendererObj.getStringWidth(MineDonate.cfgUI.loadingText)/2, (resolution.getScaledHeight()/2)-5, (resolution.getScaledWidth()/2)+10+this.fontRendererObj.getStringWidth(MineDonate.cfgUI.loadingText)/2, (resolution.getScaledHeight()/2) + 15, 1258291200);
-			  	   
-		    	this.drawCenteredString( this.fontRendererObj, MineDonate.cfgUI.loadingText, resolution.getScaledWidth()/2, resolution.getScaledHeight()/2, 16777215);
-		       
-
-	        }
-	        
-	    } else {
-	    	
-	    	if ( loading ) {
-	    		
-		        can_process = false;
-	
-		    	this.drawRect((resolution.getScaledWidth()/2)-10-this.fontRendererObj.getStringWidth(MineDonate.cfgUI.loadingText)/2, (resolution.getScaledHeight()/2)-5, (resolution.getScaledWidth()/2)+10+this.fontRendererObj.getStringWidth(MineDonate.cfgUI.loadingText)/2, (resolution.getScaledHeight()/2) + 15, 1258291200);
-			  	   
-		    	this.drawCenteredString( this.fontRendererObj, MineDonate.cfgUI.loadingText, resolution.getScaledWidth()/2, resolution.getScaledHeight()/2, 16777215);
-		    	
-	    	}
-	    	
-	    }
-        
-        ContextMenuManager . draw ( this, mouseX, mouseY  ) ;
-        
-    }
-
-    @Override
-    public boolean doesGuiPauseGame() {
-        return false;
-    }
-
-    @Override
     protected void actionPerformed(GuiButton button) {
+
+        for ( ru.log_inil.mc.minedonate.gui.GuiEntry ge : gEntries . values ( ) ) {
+        	
+        	if ( ge . isOwnerButton ( button ) ) {
+    			
+        		if ( ge . actionPerformed ( this, button ) ) {
+        			
+        			return ;
+        			
+        		}
+        		
+    		} else if ( ge . lockButtonsUnderEntry ( ) ) {
+        		
+    			return ; 
+        		
+        	}
+        	
+        }
         
     	if (button.id == 0) {
         	
@@ -266,7 +276,6 @@ public class ShopGUI extends MCGuiAccessable {
 
                 button.enabled = false;
                 m_Page = m_Page + 1;
-                System.out.println("new page is: " + m_Page);
                 updateGrid ( ) ;
                 updateBtns();
                 
@@ -289,7 +298,7 @@ public class ShopGUI extends MCGuiAccessable {
 
             	if ( lastCategory != -1 ) {
             		
-            		cats [ lastCategory ] . unShow ( ) ;  
+            		cats [ lastCategory ] . unShow ( this ) ;  
             		
             	}
 
@@ -360,6 +369,78 @@ public class ShopGUI extends MCGuiAccessable {
         }
         
     }
+    
+    @Override
+    public void drawScreen ( int mouseX, int mouseY, float partialTicks ) {    	
+    	
+    	this . drawRect ( 0, 0, resolution . getScaledWidth ( ), resolution . getScaledHeight ( ), 1258291200 ) ;
+
+        if ( ! needNetUpdate ) {
+        	
+        	moneyArea . drawBalanceArea ( ( int ) resolution . getScaledWidth ( ) - 20, ( int ) ( resolution . getScaledHeight ( ) * 0.1 + 25 ), mouseX, mouseY ) ;
+        	
+	        if ( ! loading ) { 
+	        	
+	        	can_process = true; 
+	        	
+	        	getCurrentCategory ( ) . draw ( this, m_Page, mouseX, mouseY, partialTicks, DrawType . BG ) ;   
+  
+		        super . drawScreen ( mouseX, mouseY, partialTicks ) ;  
+		        
+	            getCurrentCategory ( ) . draw ( this, m_Page, mouseX, mouseY, partialTicks, DrawType . PRE ) ;    		
+
+		  		for ( GuiGradientTextField ggtf: listTextFields ) {
+					
+		  			ggtf . drawTextBox ( ) ;		
+
+				}
+		  		
+		        getCurrentCategory ( ) . draw ( this, m_Page, mouseX, mouseY, partialTicks, DrawType . POST ) ;   
+		        getCurrentCategory ( ) . draw ( this, m_Page, mouseX, mouseY, partialTicks, DrawType . OVERLAY ) ;   
+
+		        //
+	    	
+	        } else { 
+	        	
+	        	can_process = false ; 
+	            
+		    	getCurrentCategory ( ) . draw ( this, m_Page, mouseX, mouseY, partialTicks, DrawType . BG ) ;   
+
+		        super . drawScreen ( mouseX, mouseY, partialTicks ) ;  
+		        
+		    	getCurrentCategory ( ) . draw ( this, m_Page, mouseX, mouseY, partialTicks, DrawType . POST ) ;   
+		        getCurrentCategory ( ) . draw ( this, m_Page, mouseX, mouseY, partialTicks, DrawType . OVERLAY ) ;   
+
+	        }
+	        
+	    } else {
+	    	
+	    	if ( loading ) {
+	    		
+		        can_process = false;
+	
+		        /*
+		    	this.drawRect((resolution.getScaledWidth()/2)-10-this.fontRendererObj.getStringWidth(MineDonate.cfgUI.loadingText)/2, (resolution.getScaledHeight()/2)-5, (resolution.getScaledWidth()/2)+10+this.fontRendererObj.getStringWidth(MineDonate.cfgUI.loadingText)/2, (resolution.getScaledHeight()/2) + 15, 1258291200);
+			  	   
+		    	this.drawCenteredString( this.fontRendererObj, MineDonate.cfgUI.loadingText, resolution.getScaledWidth()/2, resolution.getScaledHeight()/2, 16777215);
+		    	*/
+	    	}
+	    	
+	    }
+
+        ContextMenuManager . draw ( this, mouseX, mouseY  ) ;
+
+        for ( ru.log_inil.mc.minedonate.gui.GuiEntry ge : gEntries . values ( ) ) {
+
+        	if ( ge . isVisible ( ) ) {
+        		
+        		ge . draw ( this, 0, mouseX, mouseY, partialTicks, DrawType . POST ) ;
+        		
+        	}
+        	
+        }
+                
+    }
 
     public void drawHoveringText(ArrayList list, int mouseX, int mouseY, FontRenderer fontRenderer) {
         super.drawHoveringText(list, mouseX, mouseY, fontRenderer);
@@ -389,7 +470,7 @@ public class ShopGUI extends MCGuiAccessable {
 		
 		//
 		
-        getCurrentCategory ( ) . postShow ( ) ;
+        getCurrentCategory ( ) . postShow ( this ) ;
         
 		if ( needNetUpdate && ! loading ) {
 
@@ -398,6 +479,16 @@ public class ShopGUI extends MCGuiAccessable {
             
         }
 
+        for ( ru.log_inil.mc.minedonate.gui.GuiEntry ge : gEntries.values() ) {
+
+        	if ( ge . isVisible ( ) ) {
+        		
+        		ge . postShow ( this ) ;
+        		
+        	}
+        	
+        }
+        
     }
 
     private void addCategories ( ) {
@@ -466,7 +557,7 @@ public class ShopGUI extends MCGuiAccessable {
 
         	if ( searchField == null ) {
         		
-        		listTextFields . add( searchField = new GuiGradientTextField ( this . fontRendererObj, 30 + MineDonate.cfgUI.searchButton.width, (int) ( (resolution.getScaledHeight()) - (resolution.getScaledHeight() * 0.1) )-5, MineDonate . cfgUI . searchField . width, MineDonate . cfgUI . searchField . height, true ) ) ;
+        		listTextFields . add ( searchField = new GuiGradientTextField ( this . fontRendererObj, 30 + MineDonate.cfgUI.searchButton.width, (int) ( (resolution.getScaledHeight()) - (resolution.getScaledHeight() * 0.1) )-5, MineDonate . cfgUI . searchField . width, MineDonate . cfgUI . searchField . height, true ) ) ;
 
         		searchField . setText ( MineDonate . cfgUI . searchField . text ) ;
         		searchField . setTextHolder ( MineDonate . cfgUI . searchField . textHolder ) ;
@@ -572,5 +663,16 @@ public class ShopGUI extends MCGuiAccessable {
 		return resolution ;
 
 	}
+
+	public void drawHoveringTextAccess(List<String> list, int mouseX, int mouseY, FontRenderer fontRenderer) {
+		this.drawHoveringText(list, mouseX, mouseY, fontRenderer);
+	}
 	
+    @Override
+    public boolean doesGuiPauseGame ( ) {
+        
+    	return false ;
+        
+    }
+    
 }

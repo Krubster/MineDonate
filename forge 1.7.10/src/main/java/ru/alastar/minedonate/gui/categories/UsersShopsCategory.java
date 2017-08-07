@@ -82,6 +82,24 @@ public class UsersShopsCategory extends ShopCategory {
     	
         gui = relative ;
         
+    	if ( returnButton != null ) {
+    		
+    		relative . removeButton ( returnButton ) ;
+    		
+    	}
+    	
+    	if ( viewMyShopsButton != null ) {
+    		
+    		relative . removeButton ( viewMyShopsButton ) ;
+    		
+    	}
+    	
+    	if ( createNewShopButton != null ) {
+    		
+    		relative . removeButton ( createNewShopButton ) ;
+    		
+    	}
+    	
     	relative . getButtonList ( ) . add ( returnButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), relative.exitButton.xPosition -  MineDonate . cfgUI . returnButton . width, relative . exitButton . yPosition, MineDonate . cfgUI . returnButton . width, MineDonate . cfgUI . returnButton . height, MineDonate . cfgUI . returnButton . text, false ) ) ;
         
     	relative . getButtonList ( ) . add ( viewMyShopsButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), relative.exitButton.xPosition -  MineDonate . cfgUI . cats . shops . viewMyShopsButton . width, relative . exitButton . yPosition, MineDonate . cfgUI . cats . shops . viewMyShopsButton . width, MineDonate . cfgUI . cats . shops . viewMyShopsButton . height, MineDonate . cfgUI . cats . shops . viewMyShopsButton . text, false ) ) ;
@@ -91,7 +109,7 @@ public class UsersShopsCategory extends ShopCategory {
     		
     		userSC . updateButtons(relative, m_Page);
 
-    		userSC . postShow (  ) ;
+    		userSC . postShow ( relative ) ;
     	
     	}
 
@@ -229,12 +247,12 @@ public class UsersShopsCategory extends ShopCategory {
 	ShopInfo iim ;
 	
 	@Override
-	public void postShow ( ) {
+	public void postShow ( ShopGUI g ) {
 	
 		if ( userSC != null ) {
 			
 			userSC . preShow ( gui ) ;
-			userSC . postShow ( ) ;
+			userSC . postShow ( g ) ;
 			
 		}
 		
@@ -247,7 +265,7 @@ public class UsersShopsCategory extends ShopCategory {
 		updateButtons ( ) ;
 		refreshGui ( ) ;
 		
-		super . postShow ( ) ;
+		super . postShow ( g ) ;
 
 	}
 	
@@ -337,11 +355,11 @@ public class UsersShopsCategory extends ShopCategory {
 	}
 	
     @Override
-    public void unShow ( ) {
+    public void unShow ( ShopGUI g ) {
     	
-    	super . unShow ( ) ;
+    	super . unShow ( g ) ;
     	
-		gui . listTextFields . remove ( this . newShopNameField ) ;
+		g . listTextFields . remove ( this . newShopNameField ) ;
 		createNewShop = false ;
 		
     }

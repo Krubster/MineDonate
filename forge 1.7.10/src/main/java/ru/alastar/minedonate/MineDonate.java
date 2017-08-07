@@ -40,8 +40,8 @@ import ru.alastar.minedonate.proxies.CommonProxy;
 import ru.log_inil.mc.minedonate.localData.DataOfConfig;
 import ru.log_inil.mc.minedonate.localData.DataOfMoneyProcessor;
 import ru.log_inil.mc.minedonate.localData.DataOfPermissionLine;
-import ru.log_inil.mc.minedonate.localData.DataOfUIConfig;
 import ru.log_inil.mc.minedonate.localData.LocalDataInterchange;
+import ru.log_inil.mc.minedonate.localData.ui.DataOfUIConfig;
 
 import java.io.*;
 import java.sql.*;
@@ -241,7 +241,7 @@ public class MineDonate {
         	
         	if ( shops . isEmpty ( ) ) {
         	
-        		Shop s = new Shop ( 0, new MerchCategory [ ] { new ItemNBlocks ( 0, 0, cfg . itemsMoneyType ), new Privelegies ( 0, 1, cfg . privelegiesMoneyType ), new Regions ( 0, 2, cfg . regionMoneyType ), new Entities ( 0, 3, cfg . entitiesMoneyType ), new UsersShops ( ) }, "SERVER", "Server shop", false ) ;
+        		Shop s = new Shop ( 0, new MerchCategory [ ] { new ItemNBlocks ( 0, 0, cfg . itemsMoneyType ), new Privelegies ( 0, 1, cfg . privelegiesMoneyType ), new Regions ( 0, 2, cfg . regionMoneyType ), new Entities ( 0, 3, cfg . entitiesMoneyType ), new UsersShops ( ) }, "SERVER", "Server shop", false, null, null, false ) ;
         		shops . put ( 0, s ) ;
         		
     			for ( MerchCategory mc : s . cats ) {
@@ -300,7 +300,7 @@ public class MineDonate {
     @SideOnly(Side.CLIENT)
     public static void loadMerchClient() {
 
-    	shops . put ( 0, new Shop ( 0, new MerchCategory[]{new ItemNBlocks(0, 0,  cfg.itemsMoneyType), new Privelegies(0, 1, cfg.privelegiesMoneyType), new Regions(0, 2, cfg.regionMoneyType), new Entities(0, 3, cfg.entitiesMoneyType), new UsersShops()}, "SERVER", "Server shop", false ) ) ;
+    	shops . put ( 0, new Shop ( 0, new MerchCategory[]{new ItemNBlocks(0, 0,  cfg.itemsMoneyType), new Privelegies(0, 1, cfg.privelegiesMoneyType), new Regions(0, 2, cfg.regionMoneyType), new Entities(0, 3, cfg.entitiesMoneyType), new UsersShops()}, "SERVER", "Server shop", false, null, null, false ) ) ;
 
     }
 
@@ -576,7 +576,7 @@ public class MineDonate {
 		
 		try {
 			
-			s = new Shop ( shopId, new MerchCategory [ ] { new ItemNBlocks ( shopId, 0, sdata . getString ( "moneyType" ) ) . setCustomDBTable ( cfg . dbUserItems ) }, sdata . getString ( "owner" ), sdata . getString ( "name" ), sdata . getBoolean ( "isFreezed") );
+			s = new Shop ( shopId, new MerchCategory [ ] { new ItemNBlocks ( shopId, 0, sdata . getString ( "moneyType" ) ) . setCustomDBTable ( cfg . dbUserItems ) }, sdata . getString ( "owner" ), sdata . getString ( "name" ), sdata . getBoolean ( "isFreezed" ), sdata . getString ( "freezer" ), sdata . getString ( "freezReason" ), false ) ;
 			sdata . close ( ) ;
 			
 			for ( MerchCategory mc : s . cats ) {
@@ -728,7 +728,7 @@ public class MineDonate {
     	
     }
     
-	public static String [ ] getPermissionsByUser ( String userName ) {
+	public static List < String >  getPermissionsByUser ( String userName ) {
 		
 		List < String > l = new ArrayList < > ( ) ;
 
@@ -745,13 +745,13 @@ public class MineDonate {
 			}
 			
 		}
-		
+		/*
 		String [ ] r = new String [ l . size ( ) ] ;
 		r = l . toArray ( r ) ;
 		
 		l . clear ( ) ;
-		
-		return r ;
+		*/
+		return l ;
 		
 	}
 
@@ -769,6 +769,24 @@ public class MineDonate {
 	public static void setAccount ( Account _acc ) {
 		
 		acc = _acc ;
+		
+	}
+
+	public static Map < String, Account > users = new HashMap < > ( ) ;
+	
+	public static Account getAccount ( String name ) {
+
+		if ( users . containsKey ( name ) ) {
+			
+			return users . get ( name ) ;
+			
+		}
+		
+		Account acc = new Account ( name, getPermissionsByUser ( name ) ) ;
+		
+		users . put ( name, acc ) ;
+		
+		return acc ;
 		
 	}
 	

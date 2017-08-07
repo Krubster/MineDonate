@@ -1,10 +1,7 @@
 package ru.alastar.minedonate.gui.categories;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.util.ResourceLocation;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.gui.CountButton;
 import ru.alastar.minedonate.gui.ShopCategory;
@@ -30,9 +27,6 @@ public class ItemNBlockCategory extends ShopCategory {
 		
 	}
 	
-    @SideOnly(Side.CLIENT)
-    ResourceLocation background = new ResourceLocation(MineDonate.MODID, "test.png");
-
     @Override
     public boolean getEnabled() {
         return MineDonate.cfg.sellItems;
@@ -104,10 +98,16 @@ public class ItemNBlockCategory extends ShopCategory {
     		
     	}
 
+    	if ( addButton != null ) {
+    		
+    		relative . removeButton ( addButton ) ;
+    		
+    	}
+    	
     	relative . getButtonList ( ) . add ( addButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), 
     			rightButton . xPosition -  MineDonate . cfgUI . cats . itemsAndBlocks . addButton . width,
     			rightButton.yPosition, MineDonate . cfgUI . cats . itemsAndBlocks . addButton . width, MineDonate . cfgUI . cats . itemsAndBlocks . addButton . height, MineDonate . cfgUI . cats . itemsAndBlocks . addButton . text, false ) ) ;
-    	
+
     	super.updateButtons(relative, page);
     	
     }
@@ -147,7 +147,7 @@ public class ItemNBlockCategory extends ShopCategory {
 	ItemInfo iim ;
 	
 	@Override
-	public void postShow ( ) {
+	public void postShow ( ShopGUI g ) {
 	
 		if ( subCatId == -1 ) {
 			
@@ -157,7 +157,7 @@ public class ItemNBlockCategory extends ShopCategory {
 		
 		resolution = new ScaledResolution ( gui . mc, gui.mc.displayWidth, gui.mc.displayHeight); // bull shit
 
-		super . postShow ( ) ;
+		super . postShow ( g ) ;
 		
 		gi = new GuiItemsScrollArea ( resolution, gui, entrs, 0 ) ;
 	

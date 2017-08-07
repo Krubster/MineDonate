@@ -5,7 +5,6 @@ import java.util.List;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
 public class Account {
 
 	public String name ;
@@ -44,8 +43,14 @@ public class Account {
 	
 	public boolean canEditShop ( String owner ) {
 		
-		return ( name . equalsIgnoreCase ( owner ) && hasPermission ( "editOwnedShop" ) ) || ( hasPermission ( "editOtherShop" ) && ! owner . equalsIgnoreCase ("SERVER" ) ) || hasPermission ( "*" ) ;
+		return ( name . equalsIgnoreCase ( owner ) && hasPermission ( "editOwnedShop" ) ) || ( hasPermission ( "editOtherShop" ) && ! owner . equalsIgnoreCase ( "SERVER" ) ) || hasPermission ( "*" ) ;
 
+	}
+
+	public boolean canViewOtherFreezText() {
+
+		return hasPermission ( "canViewOtherFreezText" ) || hasPermission ( "*" ) ;
+		
 	}
 	
 }

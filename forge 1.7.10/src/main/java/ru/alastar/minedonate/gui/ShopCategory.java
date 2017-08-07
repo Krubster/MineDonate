@@ -5,19 +5,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.gui.GuiButton;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
-import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.gui.GuiAbstractItemEntry;
+import ru.log_inil.mc.minedonate.gui.GuiEntry;
 import ru.log_inil.mc.minedonate.gui.GuiScrollingList;
 
 /**
  * Created by Alastar on 19.07.2017.
  */
-public abstract class ShopCategory {
+public abstract class ShopCategory extends GuiEntry {
 
 	protected int shopId = 0 ;
 	protected int catId ;
@@ -46,15 +44,11 @@ public abstract class ShopCategory {
     	
     }
 
-    public abstract void draw(ShopGUI relative, int page, int mouseX, int mouseY, float partialTicks, DrawType dt ) ;
+
     
-    public void unDraw ( ) {
+    public void updateButtons ( ShopGUI g, int page ) {
     	
-    }
-    
-    public void updateButtons ( ShopGUI relative, int page ) {
-    	
-    	postShow ( ) ;
+    	postShow ( g ) ;
 
     }
 
@@ -124,13 +118,7 @@ public abstract class ShopCategory {
     	
     }
     
-    protected ShopGUI gui ;
-    
-	public void preShow ( ShopGUI _shopGUI ) {
-		
-		gui = _shopGUI ;
-		
-	}
+
 
 	public int calcMaxCatStringLineWidth ( ) {
 		
@@ -160,7 +148,7 @@ public abstract class ShopCategory {
 
     		buttonsColCount = (tmpW) / tmpMW;
 
-    		buttonsRowCount = tmpH / MineDonate.cfgUI.subCategoryButtonHeight;
+    		//buttonsRowCount = tmpH / MineDonate.cfgUI.subCategoryButtonHeight;
 		
     	}
 		
@@ -174,7 +162,8 @@ public abstract class ShopCategory {
     Map < Integer, GuiButton > subButtonsMap = new HashMap < > ( ) ;
     Map < Integer, Integer > subCatIdMap = new HashMap < > ( ) ;
 
-	public void postShow ( ) {
+	@Override
+	public void postShow ( ShopGUI g ) {
 		
 		if ( ! MineDonate . checkCatExists ( gui . getCurrentShopId ( ), catId ) ) {
 			
@@ -182,6 +171,8 @@ public abstract class ShopCategory {
 			
 		}
 		
+		super . unShow ( g ) ;
+
 		subCats = MineDonate . shops . get ( gui . getCurrentShopId ( )  ) . cats [ catId ] . subCategories ;
 		drawn = 0 ;
 
@@ -298,7 +289,10 @@ public abstract class ShopCategory {
 		
 	}
 	
-	public void unShow ( ) {
+	@Override
+	public void unShow ( ShopGUI g ) {
+		
+		super . unShow ( g ) ;
 		
 		for ( GuiAbstractItemEntry gie : entrs ) {
 

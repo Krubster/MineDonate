@@ -66,14 +66,14 @@
   "moneyLineSuffix": "руб.",
   "loadingText": "Загрузка данных...",
   "exitButton": {
-        "text": "Выход",
-        "width": 44,
-        "height": 20
+	"text": "Выход",
+	"width": 44,
+	"height": 20
   },
   "returnButton": {
-		"text": "Обратно",
-		"width": 46,
-		"height": 20
+	"text": "Обратно",
+	"width": 46,
+	"height": 20
   },
   "bindF5RefreshButton": true,
     "addSearchButton": true,
@@ -82,7 +82,6 @@
     "width": 40,
     "height": 20
   },
-  "bindF5RefreshButton": true,
   "moneyGroups": [
     {
       "id": "rub",

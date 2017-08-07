@@ -68,10 +68,13 @@ public class EntitiesCategory extends ShopCategory {
 
     	rightButton = relative.exitButton;
     
-
-    	relative . getButtonList ( ) . add ( addButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), 
-    			rightButton . xPosition -  MineDonate . cfgUI . cats . itemsAndBlocks . addButton . width,
-    			rightButton.yPosition, MineDonate . cfgUI . cats . itemsAndBlocks . addButton . width, MineDonate . cfgUI . cats . itemsAndBlocks . addButton . height, MineDonate . cfgUI . cats . itemsAndBlocks . addButton . text, false ) ) ;
+    	if ( addButton != null ) {
+    		
+    		relative . removeButton ( addButton ) ;
+    		
+    	}
+    	
+    	relative . getButtonList ( ) . add ( addButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), rightButton . xPosition -  MineDonate . cfgUI . cats . entities . addButton . width, rightButton . yPosition, MineDonate . cfgUI . cats . entities . addButton . width, MineDonate . cfgUI . cats . entities . addButton . height, MineDonate . cfgUI . cats . entities . addButton . text, false ) ) ;
     	
     	super.updateButtons(relative, page);
     	
@@ -94,7 +97,7 @@ public class EntitiesCategory extends ShopCategory {
 	GuiItemsScrollArea gi ;
 		
 	@Override
-	public void postShow ( ) {
+	public void postShow ( ShopGUI g ) {
 	
 		if ( subCatId == -1 ) {
 			
@@ -104,7 +107,7 @@ public class EntitiesCategory extends ShopCategory {
 		
 		refreshGui ( ) ;
 		
-		super . postShow ( ) ;
+		super . postShow ( g ) ;
 		
 	}
 	

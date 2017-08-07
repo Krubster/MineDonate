@@ -16,6 +16,7 @@ import ru.alastar.minedonate.gui.BuyButton;
 import ru.alastar.minedonate.gui.ShopCategory;
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.merch.info.EntityInfo;
+import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.gui.GuiAbstractItemEntry;
 import ru.log_inil.mc.minedonate.gui.GuiItemsScrollArea;
 import ru.log_inil.mc.minedonate.gui.context.ContextMenu;
@@ -66,58 +67,62 @@ public class GuiItemEntryOfEntityMerch extends GuiAbstractItemEntry {
 	}
 	
 	@Override 
-	public void draw ( GuiItemsScrollArea gi, int x_offset, int y_offset, int xRightOffset, int mouseX, int mouseY, Tessellator var5, int index, int size ) {
+	public void draw ( GuiItemsScrollArea gi, int x_offset, int y_offset, int xRightOffset, int mouseX, int mouseY, Tessellator var5, DrawType dt, int index, int size ) {
 
-		super.draw(gi, x_offset, y_offset, xRightOffset, mouseX, mouseY, var5, index, size);
+		super.draw(gi, x_offset, y_offset, xRightOffset, mouseX, mouseY, var5, dt, index, size);
 		
 		xOffset = x_offset ;
 		yOffset = y_offset ;
 		
 		super . updateContextMenu ( ) ;
-		
-		if ( buy != null ) {
+
+		if ( dt == DrawType . PRE ) {
+
+			if ( buy != null ) {
+				
+				buy . yPosition = y_offset + 2 ;
+
+			}
 			
-			buy . yPosition = y_offset + 2 ;
+			if ( updateDataNeed ) {
+				
+				this . updateSize ( xRightOffset - x_offset, 30 ) ;
 
-		}
-		
-		if ( updateDataNeed ) {
+				updateDataNeed = false ;
+				
+			}
 			
-			this . updateSize ( xRightOffset - x_offset, 30 ) ;
+			GL11 . glEnable ( GL12 . GL_RESCALE_NORMAL ) ;
+			RenderHelper . enableGUIStandardItemLighting ( ) ;
 
-			updateDataNeed = false ;
+			//
+			renderEntity(55, y_offset + 25, 13 /* scale */, 55 + 55, y_offset - 200, info.entity);
+			gi.parent.drawCenteredString(gi.getFontRenderer(), info.name, 40 + 55, y_offset + 8, 16777215);
+			gi . parent . moneyArea . drawPriceArea ( xRightOffset - 70 - 15 - 20, y_offset + 8, info . cost, info . getMoneyType ( ) ) ;
+
+			if (info.limit != -1) {
+
+				gi.parent.drawCenteredString(gi.getFontRenderer(), limitLine, xRightOffset - 80 - 50 - 50 - 10, y_offset + 8, 16777215); // - costLineWidth
+
+			}
+
+			//gi . parent . drawCenteredString ( gi . getFontRenderer ( ), costLine, x_offset - 70 - 15, y_offset + 8, 16777215 ) ;
+
+			//
 			
+			RenderHelper . disableStandardItemLighting ( ) ;
+			GL11 . glDisable ( GL12 . GL_RESCALE_NORMAL ) ;
+		    
+			//
+			this . drawHorizontalLine ( gi . parent, 40, xRightOffset - 10, y_offset - 3, 520093695 ) ;
+
+	  		if ( index + 1 == size && y_offset + 30 < gi . bottom ) {
+	  			
+	  			this . drawHorizontalLine ( gi . parent, 40, xRightOffset - 10, y_offset - 3 + 30, 520093695 ) ;
+
+	  		}
+	  		
 		}
-		
-		GL11 . glEnable ( GL12 . GL_RESCALE_NORMAL ) ;
-		RenderHelper . enableGUIStandardItemLighting ( ) ;
-
-		//
-		renderEntity(55, y_offset + 25, 13 /* scale */, 55 + 55, y_offset - 200, info.entity);
-		gi.parent.drawCenteredString(gi.getFontRenderer(), info.name, 40 + 55, y_offset + 8, 16777215);
-		gi . parent . moneyArea . drawPriceArea ( xRightOffset - 70 - 15 - 20, y_offset + 8, info . cost, info . getMoneyType ( ) ) ;
-
-		if (info.limit != -1) {
-
-			gi.parent.drawCenteredString(gi.getFontRenderer(), limitLine, xRightOffset - 80 - 50 - 50 - 10, y_offset + 8, 16777215); // - costLineWidth
-
-		}
-
-		//gi . parent . drawCenteredString ( gi . getFontRenderer ( ), costLine, x_offset - 70 - 15, y_offset + 8, 16777215 ) ;
-
-		//
-		
-		RenderHelper . disableStandardItemLighting ( ) ;
-		GL11 . glDisable ( GL12 . GL_RESCALE_NORMAL ) ;
-	    
-		//
-		this . drawHorizontalLine ( gi . parent, 40, xRightOffset - 10, y_offset - 3, 520093695 ) ;
-
-  		if ( index + 1 == size && y_offset + 30 < gi . bottom ) {
-  			
-  			this . drawHorizontalLine ( gi . parent, 40, xRightOffset - 10, y_offset - 3 + 30, 520093695 ) ;
-
-  		}
 		
 	}
 
@@ -187,7 +192,7 @@ public class GuiItemEntryOfEntityMerch extends GuiAbstractItemEntry {
 	}
 
 	@Override
-	public void onClickContextMenuElement(ContextMenu cmm, ContextElement e) {
+	public void onClickContextMenuElement(ShopGUI g, ContextMenu cmm, ContextElement e) {
 		System.err.println( ">" + e.name);
 	}
 	

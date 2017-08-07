@@ -46,7 +46,7 @@ public class NeedUpdateClientPacketHandler implements IMessageHandler<NeedUpdate
 						cat . setShopId ( usc . selectedShop ) ;
 						
 						usc . updateUserShopCategory ( cat, true ) ;
-						usc . postShow ( ) ; 
+						usc . postShow ( ShopGUI . instance ) ; 
 						
 					}
 			

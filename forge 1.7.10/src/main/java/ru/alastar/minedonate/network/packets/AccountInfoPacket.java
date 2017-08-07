@@ -38,8 +38,6 @@ public class AccountInfoPacket implements IMessage {
 
             for ( AbstractMoneyProcessor amp : MineDonate . moneyProcessors . values ( ) ) {
             	
-        		System.err.println(amp.getMoneyType() + ", " + amp . getMoneyFor ( userName ) );
-
             	buf . writeInt ( amp . getMoneyFor ( userName ) ) ;
             	Utils . netWriteString ( buf, amp . getMoneyType ( ) ) ;
               
@@ -53,9 +51,9 @@ public class AccountInfoPacket implements IMessage {
             	
             }
 				
-            String [ ] perms = MineDonate . getPermissionsByUser ( userName ) ; 
-
-            buf . writeInt ( perms . length ) ;
+    		List < String > perms = MineDonate . getPermissionsByUser ( userName ) ;
+    		
+            buf . writeInt ( perms . size ( ) ) ;
             
             for ( String p : perms ) {
             	

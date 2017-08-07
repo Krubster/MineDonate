@@ -13,6 +13,7 @@ import ru.alastar.minedonate.gui.GoButton;
 import ru.alastar.minedonate.gui.ShopCategory;
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.merch.info.ShopInfo;
+import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.gui.GuiAbstractItemEntry;
 import ru.log_inil.mc.minedonate.gui.GuiItemsScrollArea;
 import ru.log_inil.mc.minedonate.gui.context.ContextElement;
@@ -35,9 +36,16 @@ public class GuiItemEntryOfUserShopMerch extends GuiAbstractItemEntry {
 
 		if ( MineDonate . getAccount ( ) . canFreezeShop ( info . owner ) ) {
 			
-			cElements . add ( new ContextElement ( 0, "freeze", MineDonate.cfgUI.lang.freezeShop, this, 9 ) ) ;
-			cElements . add ( new ContextElement ( 1, "unfreeze", MineDonate.cfgUI.lang.unfreezeShop, this, 9 ) ) ;
+			if ( info . isFreezed ) {
+			
+				cElements . add ( new ContextElement ( 1, "unfreeze", MineDonate.cfgUI.lang.unfreezeShop, this, 9 ) ) ;
 
+			} else {
+			
+				cElements . add ( new ContextElement ( 0, "freeze", MineDonate.cfgUI.lang.freezeShop, this, 9 ) ) ;
+			
+			}
+			
 		}
 		
 		if ( MineDonate . getAccount ( ) . canRenameShop ( info . owner ) ) {
@@ -64,11 +72,23 @@ public class GuiItemEntryOfUserShopMerch extends GuiAbstractItemEntry {
 		
 	String shopTitle ;
 	boolean updateDataNeed = false ;
+	List < String > freezText ;
 	
 	@Override
 	public GuiAbstractItemEntry updateDrawData ( ) {
 			
 		shopTitle = info . owner + ( info . name != null && ! info . name . isEmpty ( ) ? " — " + info . name : "" ) ;
+		
+		if ( info . isFreezed && info . canVisibleFreezedText ) {
+			
+			freezText = new ArrayList < > ( ) ;
+			
+			freezText . add ( MineDonate.cfgUI.lang.shopFreezer + info . freezer ) ;
+			freezText . add ( MineDonate.cfgUI.lang.shopFreezReason + info . freezReason ) ;
+
+		}
+		
+		
 		updateDataNeed = true ;
 		
 		return this ;
@@ -76,9 +96,9 @@ public class GuiItemEntryOfUserShopMerch extends GuiAbstractItemEntry {
 	}
 	
 	@Override 
-	public void draw ( GuiItemsScrollArea gi, int x_offset, int y_offset, int xRightOffset, int mouseX, int mouseY, Tessellator var5, int index, int size ) {
+	public void draw ( GuiItemsScrollArea gi, int x_offset, int y_offset, int xRightOffset, int mouseX, int mouseY, Tessellator var5,  DrawType dt, int index, int size ) {
 
-		super.draw(gi, x_offset, y_offset, xRightOffset, mouseX, mouseY, var5, index, size);
+		super.draw(gi, x_offset, y_offset, xRightOffset, mouseX, mouseY, var5, dt, index, size);
 
 		if ( go != null ) {
 			
@@ -93,28 +113,48 @@ public class GuiItemEntryOfUserShopMerch extends GuiAbstractItemEntry {
 			updateDataNeed = false ;
 			
 		}
+	
+		if ( dt == DrawType.PRE) {
 		
-		GL11 . glEnable ( GL12 . GL_RESCALE_NORMAL ) ;
-		RenderHelper . enableGUIStandardItemLighting ( ) ;
-
-		//
+			GL11 . glEnable ( GL12 . GL_RESCALE_NORMAL ) ;
+			RenderHelper . enableGUIStandardItemLighting ( ) ;
 		
-		gi . parent . drawString ( gi . getFontRenderer ( ), shopTitle, 41, y_offset + 8, 16777215 ) ;
+			//
+			
+			gi . parent . drawString ( gi . getFontRenderer ( ), shopTitle, 41, y_offset + 8, 16777215 ) ;
+			
+			//
+			
+			RenderHelper . disableStandardItemLighting ( ) ;
+			GL11 . glDisable ( GL12 . GL_RESCALE_NORMAL ) ;
+		    
+			//
 		
-		//
+			this . drawHorizontalLine ( gi . parent, 40, xRightOffset - 10, y_offset - 3, 520093695 ) ;
 		
-		RenderHelper . disableStandardItemLighting ( ) ;
-		GL11 . glDisable ( GL12 . GL_RESCALE_NORMAL ) ;
-	    
-		//
-
-		this . drawHorizontalLine ( gi . parent, 40, xRightOffset - 10, y_offset - 3, 520093695 ) ;
-
-  		if ( index + 1 == size && y_offset + 30 < gi . bottom ) {
-  			
-  			this . drawHorizontalLine ( gi . parent, 40, xRightOffset - 10, y_offset - 3 + 30, 520093695 ) ;
-
-  		}
+			if ( index + 1 == size && y_offset + 30 < gi . bottom ) {
+				
+				this . drawHorizontalLine ( gi . parent, 40, xRightOffset - 10, y_offset - 3 + 30, 520093695 ) ;
+		
+			}
+			
+		} else {
+			
+			if ( info . isFreezed && freezText != null ) {
+				
+				if ( mouseX >= go.xPosition && go.xPosition+go.width >= mouseX ) {
+					
+					if ( mouseY >= go.yPosition && go.yPosition + go.height >= mouseY ) {
+						
+						gi.parent.drawHoveringTextAccess(freezText, mouseX, mouseY, gi.getFontRenderer());
+						
+					}
+					
+				}
+				
+			}
+			
+		}
   		
 	}
 	
@@ -143,7 +183,7 @@ public class GuiItemEntryOfUserShopMerch extends GuiAbstractItemEntry {
 	}
 	
 	@Override
-	public void onClickContextMenuElement(ContextMenu cmm, ContextElement e) {
+	public void onClickContextMenuElement(ShopGUI g, ContextMenu cmm, ContextElement e) {
 		System.err.println( ">" + e.name);
 	}
 	

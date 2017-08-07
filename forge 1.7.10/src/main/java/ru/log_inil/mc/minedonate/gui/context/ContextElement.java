@@ -1,5 +1,6 @@
 package ru.log_inil.mc.minedonate.gui.context;
 
+import ru.alastar.minedonate.gui.ShopGUI;
 import ru.log_inil.mc.minedonate.gui.MCGuiAccessable;
 
 public class ContextElement  {
@@ -40,11 +41,11 @@ public class ContextElement  {
 		
 	}
 	
-	public void onClick ( ContextMenu cmm ) {
+	public void onClick ( ShopGUI g, ContextMenu cmm ) {
 
 		if ( cmi != null ) {
 		
-			cmi . onClickContextMenuElement ( cmm, this ) ;
+			cmi . onClickContextMenuElement ( g, cmm, this ) ;
 		
 		}
 		
