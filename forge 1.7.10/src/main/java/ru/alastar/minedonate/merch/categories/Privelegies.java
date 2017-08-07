@@ -92,7 +92,7 @@ public class Privelegies extends MerchCategory {
             if (info.worlds.length > 0) {
             	
                 for (String world : info.worlds) {
-                	PluginHelper.pexMgr.addGroup(serverPlayer.getDisplayName(), world, null, info.getTimeInSeconds());
+                	PluginHelper.pexMgr.addGroup(serverPlayer.getDisplayName(), info.name, world, info.getTimeInSeconds());
                    // Object obj = Bukkit.getPluginManager().getPlugin("PermissionsEx").getClass().getMethod("getUser", String.class).invoke(null, serverPlayer.getDisplayName());
                    // obj.getClass().getMethod("addGroup", String.class, String.class, long.class).invoke(obj, info.name, world, info.getTimeInSeconds());
                 }
