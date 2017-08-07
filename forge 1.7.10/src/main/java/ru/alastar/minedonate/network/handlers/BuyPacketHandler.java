@@ -6,9 +6,9 @@ import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import net.minecraft.entity.player.EntityPlayerMP;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
-import ru.alastar.minedonate.network.packets.AccountInfoPacket;
 import ru.alastar.minedonate.network.packets.BuyPacket;
 import ru.alastar.minedonate.network.packets.BuyResponsePacket;
+import ru.alastar.minedonate.network.packets.MoneyChangedPacket;
 
 /**
  * Created by Alastar on 18.07.2017.
@@ -50,7 +50,7 @@ public class BuyPacketHandler implements IMessageHandler<BuyPacket, IMessage> {
 	                            MineDonate . logBuy ( info, serverPlayer, message . amount, info . getMoneyType ( ) ) ;
 	                            int currentMoney = info . withdrawMoney ( serverPlayer . getDisplayName ( ), procMoney ) ;
 	                                
-	                            MineDonate . networkChannel . sendTo ( new AccountInfoPacket ( currentMoney, info . getMoneyType ( ) ), ( EntityPlayerMP ) serverPlayer ) ;
+	                            MineDonate . networkChannel . sendTo ( new MoneyChangedPacket ( currentMoney, info . getMoneyType ( ) ), ( EntityPlayerMP ) serverPlayer ) ;
 	                        
 	                            MineDonate . shops . get ( message . shopId ) . cats [ category ] . GiveMerch ( serverPlayer, info, message . amount ) ;
 	                            

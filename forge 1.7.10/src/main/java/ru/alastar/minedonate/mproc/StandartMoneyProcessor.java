@@ -56,19 +56,29 @@ public class StandartMoneyProcessor extends AbstractMoneyProcessor {
 	}
 	
 	@Override
-	public void registerPlayer ( String name ) {
+	public void registerPlayer ( String name, java . util . Collection < AbstractMoneyProcessor > pl ) {
 		
 		try {
 			
 			Statement stat = MineDonate . getNewStatement ( ) ;
 						
-			stat . execute ( "INSERT INTO " + domp . dbTable + " (" + domp . dbNameColumn + "," + domp . dbMoneyColumn + ") VALUES ( '" + name + "', " + domp . regMoney + " )" ) ;
+			stat . execute ( "INSERT INTO " + domp . dbTable + " (" + domp . dbNameColumn + "," + domp . dbMoneyColumn + ") VALUES ( '" + name . toLowerCase ( ) + "', " + domp . regMoney + " )" ) ;
             
             stat . close ( ) ;
             
+			for ( AbstractMoneyProcessor amp : pl ) {
+				
+				if ( domp . dbTable . equals ( amp . domp . dbTable ) ) {
+					
+					amp . setMoney ( name, domp . regMoney ) ;
+
+				}
+				
+			}
+
 		} catch ( Exception ex ) {
 			
-			// ex . printStackTrace ( ) ;
+			ex . printStackTrace ( ) ;
 			
 		}
 		
@@ -81,7 +91,7 @@ public class StandartMoneyProcessor extends AbstractMoneyProcessor {
 			
 			Statement stat = MineDonate . getNewStatement ( ) ;
 
-			ResultSet rs = stat . executeQuery ( "SELECT " + domp . dbMoneyColumn + " FROM " + domp . dbTable + " WHERE " + domp . dbNameColumn + "='" + name + "';" ) ;
+			ResultSet rs = stat . executeQuery ( "SELECT " + domp . dbMoneyColumn + " FROM " + domp . dbTable + " WHERE " + domp . dbNameColumn + "='" + name . toLowerCase ( ) + "';" ) ;
             
 			boolean w = true ;
             int money = -1 ;
@@ -112,13 +122,18 @@ public class StandartMoneyProcessor extends AbstractMoneyProcessor {
 	@Override
 	public void returnMoney ( String name, int money ) {
 		
+		setMoney ( name, getMoneyFor ( name ) + money ) ;
+			
+	}
+	
+	@Override
+	public void setMoney ( String name, int money ) {
+		
 		try {
 			
 			Statement stat = MineDonate . getNewStatement ( ) ;
-			
-			int reversed = getMoneyFor ( name ) + money ;
-			
-			stat . executeUpdate ( "UPDATE " + domp . dbTable + " SET " + domp . dbMoneyColumn + "=" + reversed + " WHERE " + domp . dbNameColumn + "='" + name + "';" ) ;
+						
+			stat . executeUpdate ( "UPDATE " + domp . dbTable + " SET " + domp . dbMoneyColumn + "=" + money + " WHERE " + domp . dbNameColumn + "='" + name . toLowerCase ( ) + "';" ) ;
             
             stat . close ( ) ;
             
@@ -137,7 +152,7 @@ public class StandartMoneyProcessor extends AbstractMoneyProcessor {
 		
 			Statement stat = MineDonate . getNewStatement ( ) ;
 
-			ResultSet rs = stat . executeQuery ( "SELECT id FROM " + domp . dbTable + " WHERE " + domp . dbNameColumn + "='" + name + "';" ) ;
+			ResultSet rs = stat . executeQuery ( "SELECT id FROM " + domp . dbTable + " WHERE " + domp . dbNameColumn + "='" + name . toLowerCase ( ) + "';" ) ;
             
             while ( rs . next ( ) ) {
             	
@@ -157,7 +172,5 @@ public class StandartMoneyProcessor extends AbstractMoneyProcessor {
 		return false ;
 		
 	}
-
-
 
 }

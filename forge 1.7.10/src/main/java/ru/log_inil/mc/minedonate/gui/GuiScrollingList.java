@@ -77,7 +77,7 @@ public abstract class GuiScrollingList
 
     protected abstract void drawBackground();
 
-    protected abstract void drawSlot(int var1, int var2, int var3, int var4, Tessellator var5);
+    protected abstract void drawSlot(int var1, int var2, int var3, int var4, int mouseX, int mouseY, Tessellator var5, DrawType dt);
 
     protected void func_27260_a(int p_27260_1_, int p_27260_2_, Tessellator p_27260_3_) {}
 
@@ -142,7 +142,6 @@ public abstract class GuiScrollingList
     public void drawScreen(int mouseX, int mouseY, float p_22243_3_, DrawType dt)
     {
     	if ( dt == DrawType . PRE ) {//#LOG
-    		
     		this.mouseX = mouseX;
 	        this.mouseY = mouseY;
 	        //  this.drawBackground();
@@ -285,7 +284,6 @@ public abstract class GuiScrollingList
 	        {
 	            var19 = var10 + var11 * this.slotHeight + this.field_27261_r;
 	            var13 = this.slotHeight;
-	
 	            if (var19 + 22/*#LOG*/ <= this.bottom && var19 + var13 - 36/*#LOG*/ >= this.top-2)
 	            {
 	                if (this.field_25123_p && this.isSelected(var11))
@@ -309,15 +307,24 @@ public abstract class GuiScrollingList
 	                    GL11.glEnable(GL11.GL_TEXTURE_2D);
 	                }
 	
-	                this.drawSlot(var11, boxRight, var19, var13, var18);
+	                this.drawSlot(var11, boxRight, var19, var13, mouseX, mouseY, var18, DrawType.PRE);
 	                
 	            } else {
 	            	
-	                this.undrawSlot(var11);
+	                this.unDrawSlot(var11);
 	
 	            }
 	        }
-	
+
+	        for (var11 = 0; var11 < listLength; ++var11)
+	        {
+	            var19 = var10 + var11 * this.slotHeight + this.field_27261_r;
+	            var13 = this.slotHeight;
+	            if (var19 + 22/*#LOG*/ <= this.bottom && var19 + var13 - 36/*#LOG*/ >= this.top-2) {
+	                this.drawSlot(var11, boxRight, var19, var13, mouseX, mouseY, var18, DrawType.POST);
+	            }
+	        }
+
 	        GL11.glDisable(GL11.GL_DEPTH_TEST);
 	        //byte var20 = 12;
 	        if (this.client.theWorld == null)
@@ -441,7 +448,7 @@ public abstract class GuiScrollingList
 	        var18.addVertexWithUV((double)this.left, (double)(this.top + var20), 0.0D, 0.0D, 1.0D);
 	        var18.addVertexWithUV((double)this.right-r, (double)(this.top + var20), 0.0D, 1.0D, 1.0D);
 	        
-	        var18.setColorRGBA_I(0, 255);
+	        var18.setColorRGBA_I(0, 105);
 	        
 	        var18.addVertexWithUV((double)this.right-r, (double)this.top, 0.0D, 1.0D, 0.0D);
 	        var18.addVertexWithUV((double)this.left, (double)this.top, 0.0D, 0.0D, 0.0D);
@@ -450,7 +457,7 @@ public abstract class GuiScrollingList
 	        
 	        var18.startDrawingQuads();
 	        
-	        var18.setColorRGBA_I(0, 255);
+	        var18.setColorRGBA_I(0, 105);
 	        
 	        var18.addVertexWithUV((double)this.left, (double)this.bottom, 0.0D, 0.0D, 1.0D);
 	        var18.addVertexWithUV((double)this.right-r, (double)this.bottom, 0.0D, 1.0D, 1.0D);
@@ -517,7 +524,7 @@ public abstract class GuiScrollingList
         GL11.glEnable(GL11.GL_TEXTURE_2D);
     }
 
-	protected void undrawSlot(int listIndex) {
+	protected void unDrawSlot(int listIndex) {
 		
 	}
 }

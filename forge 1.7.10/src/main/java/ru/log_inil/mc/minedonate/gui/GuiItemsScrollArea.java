@@ -16,7 +16,7 @@ public class GuiItemsScrollArea extends GuiScrollingList {
     
     public GuiItemsScrollArea(ScaledResolution sr, ShopGUI parent, List<GuiAbstractItemEntry> _entr, int listWidth)
     {
-        super ( Minecraft . getMinecraft ( ), sr . getScaledWidth ( ) - 60, 100,  ( int ) ( sr . getScaledHeight ( ) * 0.1) + 15 + 24, (int) ( ( sr . getScaledHeight ( ) ) - ( sr . getScaledHeight ( ) * 0.1 ) ) - 5, 30, itemHeight ) ;
+        super ( Minecraft . getMinecraft ( ), sr . getScaledWidth ( ) - 60, ( int ) ( sr . getScaledHeight ( ) * 0.1),  ( int ) ( sr . getScaledHeight ( ) * 0.1) + 15 + 24, (int) ( ( sr . getScaledHeight ( ) ) - ( sr . getScaledHeight ( ) * 0.1 ) ) - 5, 30, itemHeight ) ;
         this.parent=parent;
         this.entrs=_entr;
     }
@@ -49,17 +49,17 @@ public class GuiItemsScrollArea extends GuiScrollingList {
     }
 
     @Override
-    protected void drawSlot(int listIndex, int var2, int var3, int var4, Tessellator var5) {
-    	
-    	entrs . get ( listIndex ) . draw ( this, var2, var3, var4, var5, listIndex, entrs . size ( ) ) ;
+    protected void drawSlot(int listIndex, int var2, int var3, int var4, int mouseX, int mouseY, Tessellator var5, DrawType dt) {
+
+    	entrs . get ( listIndex ) . draw ( this, var4, var3, var2, mouseX, mouseY, var5, dt, listIndex, entrs . size ( ) ) ;
   
     }
     
     
     @Override
-    protected void undrawSlot ( int listIndex ) {
+    protected void unDrawSlot ( int listIndex ) {
     	
-    	entrs . get ( listIndex ) . undraw ( ) ;
+    	entrs . get ( listIndex ) . unDraw ( ) ;
   
     }
     

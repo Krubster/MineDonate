@@ -1,5 +1,6 @@
 package ru.alastar.minedonate.gui.categories;
 
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.ScaledResolution;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.gui.ShopCategory;
@@ -8,6 +9,7 @@ import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.merch.info.EntityInfo;
 import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.gui.GuiAbstractItemEntry;
+import ru.log_inil.mc.minedonate.gui.GuiGradientButton;
 import ru.log_inil.mc.minedonate.gui.GuiItemsScrollArea;
 import ru.log_inil.mc.minedonate.gui.GuiScrollingList;
 import ru.log_inil.mc.minedonate.gui.items.GuiItemEntryOfEntityMerch;
@@ -57,15 +59,27 @@ public class EntitiesCategory extends ShopCategory {
     	
     }
     
+    GuiButton addButton;
+    GuiButton rightButton;
+    
     @Override
-    public void updateButtons(ShopGUI relative, int m_Page ) {
-    	
-    	refreshGui ( ) ; 
+    public void updateButtons(ShopGUI relative, int page ) {
+    	    	    	    	
 
+    	rightButton = relative.exitButton;
+    
+    	if ( addButton != null ) {
+    		
+    		relative . removeButton ( addButton ) ;
+    		
+    	}
+    	
+    	relative . getButtonList ( ) . add ( addButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), rightButton . xPosition -  MineDonate . cfgUI . cats . entities . addButton . width, rightButton . yPosition, MineDonate . cfgUI . cats . entities . addButton . width, MineDonate . cfgUI . cats . entities . addButton . height, MineDonate . cfgUI . cats . entities . addButton . text, false ) ) ;
+    	
+    	super.updateButtons(relative, page);
+    	
     }
-    
-    // #LOG
-    
+        
 	@Override
 	public int getButtonWidth ( ) {
 		
@@ -81,10 +95,9 @@ public class EntitiesCategory extends ShopCategory {
 	}
 
 	GuiItemsScrollArea gi ;
-	List < GuiAbstractItemEntry > entrs = new ArrayList < > ( ) ;
 		
 	@Override
-	public void initGui ( ) {
+	public void postShow ( ShopGUI g ) {
 	
 		if ( subCatId == -1 ) {
 			
@@ -93,6 +106,8 @@ public class EntitiesCategory extends ShopCategory {
 		}
 		
 		refreshGui ( ) ;
+		
+		super . postShow ( g ) ;
 		
 	}
 	
@@ -128,12 +143,18 @@ public class EntitiesCategory extends ShopCategory {
 	
 		for ( GuiAbstractItemEntry gie : entrs ) {
 
-			gie . undraw ( ) ;
+			gie . unDraw ( ) ;
 			
 		}
 		
 		entrs . clear ( ) ;
-		
+		 
+        if ( subCats != null && subCats . length > 0 && subCatId == -1 ) {
+        	
+        	return ;
+        	
+        }
+        
 		if ( MineDonate . shops . containsKey ( gui . getCurrentShopId ( ) ) ) {
 	
 	    	if ( search ) {

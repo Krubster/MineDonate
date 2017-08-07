@@ -25,7 +25,9 @@ import org.lwjgl.opengl.GL12;
 public class RegionsCategory extends ShopCategory {
 
     public RegionsCategory ( ) {
-    	    	 catId = 2 ;
+    	 
+		 catId = 2 ;
+    	 
     	 rowCount = 4 ;
     	 colCount = 2 ;
     	 
@@ -107,7 +109,7 @@ public class RegionsCategory extends ShopCategory {
 	        var18.addVertexWithUV((double)30, (double)((int) (resolution.getScaledHeight() * 0.1) + 19+20+ var20), 0.0D, 0.0D, 1.0D);
 	        var18.addVertexWithUV((double)(int) resolution.getScaledWidth()-30, (double)( (resolution.getScaledHeight() * 0.1) + 19+20 + var20), 0.0D, 1.0D, 1.0D);
 	        
-	        var18.setColorRGBA_I(0, 255);
+	        var18.setColorRGBA_I(0, 105);
 	        
 	        var18.addVertexWithUV((double)resolution.getScaledWidth()-30, (double)(int) (resolution.getScaledHeight() * 0.1) + 19+20, 0.0D, 1.0D, 0.0D);
 	        var18.addVertexWithUV((double)30, (double)(int) (resolution.getScaledHeight() * 0.1) + 19+20, 0.0D, 0.0D, 0.0D);
@@ -117,7 +119,7 @@ public class RegionsCategory extends ShopCategory {
 	        
 	        var18.startDrawingQuads();
 	        
-	        var18.setColorRGBA_I(0, 255);
+	        var18.setColorRGBA_I(0, 105);
 	        
 	        var18.addVertexWithUV((double)30, (double) ( (resolution.getScaledHeight()) - (resolution.getScaledHeight() * 0.1) ) - 6, 0.0D, 0.0D, 1.0D);
 	        var18.addVertexWithUV((double)resolution.getScaledWidth()-30, (double) ( (resolution.getScaledHeight()) - (resolution.getScaledHeight() * 0.1) ) - 6, 0.0D, 1.0D, 1.0D);
@@ -150,7 +152,7 @@ public class RegionsCategory extends ShopCategory {
 
       relative.drawCenteredString(relative.getFontRenderer(), _info.name, x_offset, y_offset - 15, 16777215);
      //relative.drawCenteredString(relative.getFontRenderer(), MineDonate.cfgUI.cats.regions.pricePrefix + info.cost + MineDonate.cfgUI.cats.regions.priceSuffix, x_offset, y_offset, 16777215);
-      relative . moneyArea . drawPriceArea ( x_offset, y_offset, _info . cost, _info . getMoneyType ( ) ) ;
+      relative . moneyArea . drawPriceArea ( x_offset - 7, y_offset, _info . cost, _info . getMoneyType ( ) ) ;
 
 	}
 
@@ -178,7 +180,7 @@ public class RegionsCategory extends ShopCategory {
 	    		
 	    		for ( Merch ri : MineDonate . shops . get ( gui . getCurrentShopId ( ) ) . cats [ catId ] . getMerch ( ) ) {
 	    			
-	        		if ( ( ( RegionInfo ) ri ) . name . contains ( searchValue ) ) {
+	        		if ( ( ( RegionInfo ) ri ) . getSearchValue ( ) . toLowerCase ( ) . contains ( searchValue ) ) {
 	        			
 	        			list . add ( ( RegionInfo ) ri ) ;
 	        			
@@ -202,7 +204,7 @@ public class RegionsCategory extends ShopCategory {
 		
     	int drawn = 0;
 
-    	ScaledResolution resolution= new ScaledResolution( relative.mc, relative.mc.displayWidth, relative.mc.displayHeight); // bull shit
+    	ScaledResolution resolution = new ScaledResolution( relative.mc, relative.mc.displayWidth, relative.mc.displayHeight); // bull shit
     	
         RegionInfo info ;
         int x_offset ;
@@ -220,7 +222,7 @@ public class RegionsCategory extends ShopCategory {
                     bb = new BuyButton ( info . getShopId ( ), info . getCategory ( ), info . merch_id, ShopGUI.getNextButtonId(), x_offset - 22, y_offset + 15, MineDonate.cfgUI.cats.regions.itemBuyButton.width, MineDonate.cfgUI.cats.regions.itemBuyButton.height, MineDonate.cfgUI.cats.regions.itemBuyButton.text);
                     buttonsMap.put(info.merch_id, bb);
 
-                    relative.addBtn(bb);
+                    relative . addBtn ( bb, false ) ;
                     
                     ++drawn;
                     

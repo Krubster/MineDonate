@@ -16,11 +16,24 @@ public abstract class AbstractMoneyProcessor {
 	}
 	
 	public abstract int process ( Merch m, String buyer, int money ) ;
-	public abstract void registerPlayer ( String name ) ;
+	public abstract void registerPlayer ( String name, java . util . Collection < AbstractMoneyProcessor > pl ) ;
 	public abstract int getMoneyFor ( String name ) ;
 	public abstract void returnMoney ( String name, int money ) ;
+	public abstract void setMoney ( String name, int money ) ;
 	public abstract boolean existsAccount ( String name ) ;
 	public abstract int canBuy ( Merch m, String buyer, int amount ) ;
+
+	public boolean isCustomMoneyType ( ) {
+		
+		return false ;
+		
+	}
+	
+	public String getClientMoneyType ( ) {
+		
+		return null ;
+		
+	}
 	
 	public String getMoneyType ( ) {
 		

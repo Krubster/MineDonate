@@ -1,8 +1,5 @@
 package ru.alastar.minedonate.gui.categories;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.ScaledResolution;
@@ -11,9 +8,12 @@ import ru.alastar.minedonate.gui.ShopCategory;
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.merch.info.ShopInfo;
+import ru.alastar.minedonate.network.packets.CreateNewShopPacket;
+
 import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.gui.GuiAbstractItemEntry;
 import ru.log_inil.mc.minedonate.gui.GuiGradientButton;
+import ru.log_inil.mc.minedonate.gui.GuiGradientTextField;
 import ru.log_inil.mc.minedonate.gui.GuiItemsScrollArea;
 import ru.log_inil.mc.minedonate.gui.GuiScrollingList;
 import ru.log_inil.mc.minedonate.gui.items.GuiItemEntryOfUserShopMerch;
@@ -82,28 +82,50 @@ public class UsersShopsCategory extends ShopCategory {
     	
         gui = relative ;
         
+    	if ( returnButton != null ) {
+    		
+    		relative . removeButton ( returnButton ) ;
+    		
+    	}
+    	
+    	if ( viewMyShopsButton != null ) {
+    		
+    		relative . removeButton ( viewMyShopsButton ) ;
+    		
+    	}
+    	
+    	if ( createNewShopButton != null ) {
+    		
+    		relative . removeButton ( createNewShopButton ) ;
+    		
+    	}
+    	
     	relative . getButtonList ( ) . add ( returnButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), relative.exitButton.xPosition -  MineDonate . cfgUI . returnButton . width, relative . exitButton . yPosition, MineDonate . cfgUI . returnButton . width, MineDonate . cfgUI . returnButton . height, MineDonate . cfgUI . returnButton . text, false ) ) ;
         
     	relative . getButtonList ( ) . add ( viewMyShopsButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), relative.exitButton.xPosition -  MineDonate . cfgUI . cats . shops . viewMyShopsButton . width, relative . exitButton . yPosition, MineDonate . cfgUI . cats . shops . viewMyShopsButton . width, MineDonate . cfgUI . cats . shops . viewMyShopsButton . height, MineDonate . cfgUI . cats . shops . viewMyShopsButton . text, false ) ) ;
     	relative . getButtonList ( ) . add ( createNewShopButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), viewMyShopsButton.xPosition -  MineDonate . cfgUI . cats . shops . createNewShopButton . width, viewMyShopsButton . yPosition, MineDonate . cfgUI . cats . shops . createNewShopButton . width, MineDonate . cfgUI . cats . shops . createNewShopButton . height, MineDonate . cfgUI . cats . shops . createNewShopButton . text, false ) ) ;
-
-    	refreshGui ( ) ;
     	
     	if ( userSC != null ) {
     		
-    		userSC . initGui (  ) ;
+    		userSC . updateButtons(relative, m_Page);
+
+    		userSC . postShow ( relative ) ;
     	
     	}
 
-    	updateButtons ( ) ;
+    	refreshGui ( ) ;
 
+    	updateButtons ( ) ;
+    	
     }
 
     boolean viewMyShops = false ;
-    
+    boolean createNewShop = false ;
+    boolean createNewShopFirst = true ;
+
     @Override
     public void actionPerformed(GuiButton button) {
-    	
+
     	if ( userSC != null ) {
     		
     		userSC . actionPerformed ( button ) ;
@@ -115,7 +137,21 @@ public class UsersShopsCategory extends ShopCategory {
     			if ( viewMyShops ) {
     				
     				actionPerformed ( viewMyShopsButton ) ;
+    				
         			gui . updateBtns ( ) ;
+        			updateButtons ( ) ;
+
+    				return ;
+    				
+    			}
+    			
+    			if ( createNewShop ) {
+    			
+    				gui . listTextFields . remove ( this . newShopNameField ) ;
+    				createNewShop = false ;
+    				
+        			gui . updateBtns ( ) ;
+        			updateButtons ( ) ;
 
     				return ;
     				
@@ -125,14 +161,31 @@ public class UsersShopsCategory extends ShopCategory {
 
     			updateUserShopCategory ( null, true ) ;
     			gui . updateBtns ( ) ;
-    			
+    			updateButtons ( ) ;
+
         		//relative . returnButton . enabled = relative . returnButton . visible =ShopGUI .instance . displayReturnButton = false ;
     			return ;
     			
 			}
     		
     	}
+    	
+		if ( button . id == returnButton . id ) {
 
+			if ( createNewShop ) {
+				
+				gui . listTextFields . remove ( this . newShopNameField ) ;
+				createNewShop = false ;
+				
+				gui . updateBtns ( ) ;
+				updateButtons ( ) ;
+
+				return ;
+				
+			}
+			
+		}
+		
 		if ( button . id == this . viewMyShopsButton . id ) {
 
 			gui . lockProcess ( ) ;
@@ -150,21 +203,30 @@ public class UsersShopsCategory extends ShopCategory {
 			viewMyShops = ! viewMyShops ;
 
 			gui . updateBtns ( ) ;
-
+			updateButtons ( ) ;
+			
     	}
         
 		if ( button . id == this . createNewShopButton . id ) {
 
 			gui . lockProcess ( ) ;
+
+			if ( createNewShop && ! createNewShopFirst ) {
+
+				gui . loading = true ;
+                MineDonate . networkChannel . sendToServer ( new CreateNewShopPacket ( this . newShopNameField . getText ( ) ) ) ;
+
+			}
 			
+			createNewShop = ! createNewShop ;
+			createNewShopFirst = false ;
 
 			gui . updateBtns ( ) ;
+			updateButtons ( ) ;
 
     	}
         
     }
-
-    // #LOG
     
 	@Override
 	public int getButtonWidth ( ) {
@@ -181,17 +243,16 @@ public class UsersShopsCategory extends ShopCategory {
 	}
 
 	GuiItemsScrollArea gi ;
-	List < GuiAbstractItemEntry > entrs = new ArrayList < > ( ) ;
 	
 	ShopInfo iim ;
 	
 	@Override
-	public void initGui ( ) {
+	public void postShow ( ShopGUI g ) {
 	
 		if ( userSC != null ) {
 			
-			userSC . init ( gui ) ;
-			userSC . initGui ( ) ;
+			userSC . preShow ( gui ) ;
+			userSC . postShow ( g ) ;
 			
 		}
 		
@@ -204,7 +265,11 @@ public class UsersShopsCategory extends ShopCategory {
 		updateButtons ( ) ;
 		refreshGui ( ) ;
 		
+		super . postShow ( g ) ;
+
 	}
+	
+	GuiGradientTextField newShopNameField ;
 	
 	public void refreshGui ( ) {
 		
@@ -214,13 +279,32 @@ public class UsersShopsCategory extends ShopCategory {
 	
 		for ( GuiAbstractItemEntry gie : entrs ) {
 
-			gie . undraw ( ) ;
+			gie . unDraw ( ) ;
 			
 		}
 		
 		entrs . clear ( ) ;
 		
-		if ( userSC == null ) {
+		if ( createNewShop ) {
+			
+			if ( newShopNameField == null ) {
+				
+				newShopNameField = new GuiGradientTextField ( gui . getFontRenderer ( ), 0, 0, MineDonate . cfgUI . cats.shops.createNewShopNameField . width, MineDonate . cfgUI . cats.shops.createNewShopNameField . height, true ) ;
+				newShopNameField . setTextHolder ( MineDonate . cfgUI . cats . shops . createNewShopNameField . textHolder ) ;
+				newShopNameField . setMaxStringLength ( 120 ) ;
+
+			}
+			
+			newShopNameField . xPosition = ( resolution . getScaledWidth ( ) ) - 30 - MineDonate.cfgUI.cats.shops.createNewShopNameField.width ;
+			newShopNameField . yPosition = ( int ) ( ( resolution . getScaledHeight ( ) ) - ( resolution . getScaledHeight ( ) * 0.1 ) ) - 5 - MineDonate . cfgUI . cats.shops.createNewShopNameField . height ;
+			
+			if ( ! gui . listTextFields . contains ( newShopNameField ) ) {
+				
+				gui . listTextFields . add ( newShopNameField ) ;
+				
+			}
+
+		} else if ( userSC == null ) {
 						
 			if ( MineDonate . shops . containsKey ( gui . getCurrentShopId ( ) ) ) {
 				
@@ -232,7 +316,7 @@ public class UsersShopsCategory extends ShopCategory {
 		        		
 		        		if ( iim != null ) {
 
-			        		if ( ( iim . isFreezed ? ! MineDonate . cfgUI . cats . shops . dontShowFreezed : true ) && ( viewMyShops ? ( iim . owner . equalsIgnoreCase ( searchValue ) ) : ( iim . owner . toLowerCase ( ) . contains ( searchValue ) ||  iim . name . toLowerCase ( ) . contains ( searchValue ) ) ) ) {
+			        		if ( ( iim . isFreezed ? ! MineDonate . cfgUI . cats . shops . dontShowFreezed : true ) && ( viewMyShops ? ( iim . owner . equalsIgnoreCase ( searchValue ) ) : ( iim . owner . toLowerCase ( ) . contains ( searchValue ) ||  iim . getSearchValue ( ) . toLowerCase ( ) . contains ( searchValue ) ) ) ) {
 			        			
 			        			entrs . add ( new GuiItemEntryOfUserShopMerch ( iim, this ) . addButtons ( gui ) . updateDrawData ( ) ) ;
 			        			
@@ -270,11 +354,21 @@ public class UsersShopsCategory extends ShopCategory {
     	
 	}
 	
+    @Override
+    public void unShow ( ShopGUI g ) {
+    	
+    	super . unShow ( g ) ;
+    	
+		g . listTextFields . remove ( this . newShopNameField ) ;
+		createNewShop = false ;
+		
+    }
+    
 	public void updateUserShopCategory ( ShopCategory sc, boolean r ) {
 
 		if ( userSC != null ) {
 			
-			userSC . undraw ( ) ;
+			userSC . unDraw ( ) ;
 			
 		}
 
@@ -286,30 +380,42 @@ public class UsersShopsCategory extends ShopCategory {
 
     public void updateButtons ( ) {
     	
-		if ( userSC != null ) {
-
+		if ( createNewShop ) {
+			
 			returnButton . enabled = returnButton . visible = displayReturnButton = true ;
-			
-		} else {
-
-			returnButton . enabled = returnButton . visible = displayReturnButton = false ;
-
-		}
-		
-		if ( displayReturnButton ) {
-			
 			viewMyShopsButton . yPosition = -100 ;
-			createNewShopButton . yPosition = -100 ;
+			createNewShopButton . xPosition = returnButton . xPosition - createNewShopButton . width ;
+			createNewShopButton . yPosition = returnButton . yPosition ;			
 			
 		} else {
+			
+			if ( userSC != null ) {
 
-			viewMyShopsButton . xPosition = gui . exitButton . xPosition - viewMyShopsButton . width ;
-			viewMyShopsButton . yPosition = gui . exitButton . yPosition ;
-			createNewShopButton . xPosition = viewMyShopsButton . xPosition - viewMyShopsButton . width ;
-			createNewShopButton . yPosition = viewMyShopsButton . yPosition ;
+				returnButton . enabled = returnButton . visible = displayReturnButton = true ;
+				
+			} else {
 
+				returnButton . enabled = returnButton . visible = displayReturnButton = false ;
 
+			}
+			
+			if ( displayReturnButton ) {
+				
+				viewMyShopsButton . yPosition = -100 ;
+				createNewShopButton . yPosition = -100 ;
+				
+			} else {
+
+				viewMyShopsButton . xPosition = gui . exitButton . xPosition - viewMyShopsButton . width ;
+				viewMyShopsButton . yPosition = gui . exitButton . yPosition ;
+				createNewShopButton . xPosition = viewMyShopsButton . xPosition - createNewShopButton . width ;
+				createNewShopButton . yPosition = viewMyShopsButton . yPosition ;
+
+			}
+			
 		}
+
+		viewMyShopsButton . pressed = viewMyShops ;
 		
     }
     
@@ -325,7 +431,13 @@ public class UsersShopsCategory extends ShopCategory {
 		
 		viewMyShops = false ;
 		
-		super . search( s ) ;
+		super . search ( s ) ;
+		
+		if ( userSC != null ) {
+			
+			userSC . search ( s ) ;
+			
+		}
 		
 	}
 	

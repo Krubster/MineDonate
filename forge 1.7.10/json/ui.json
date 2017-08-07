@@ -1,0 +1,105 @@
+{
+  "cats": {
+    "entities": {
+      "categoryButtonText": "Мобы",
+      "categoryButtonWidth": 45,
+      "itemBuyButton": {
+        "text": "Купить",
+        "width": 44,
+        "height": 20
+      },
+      "pricePrefix": "Цена: ",
+	  "priceSuffix": "руб."
+    },
+    "itemsAndBlocks": {
+      "categoryButtonText": "Предметы",
+      "categoryButtonWidth": 50,
+      "itemBuyButton": {
+        "text": "Купить",
+        "width": 44,
+        "height": 20
+      },
+      "pricePrefix": "Цена: ",
+	  "priceSuffix": "руб.",
+	  "itemLeft": "Осталось: "
+    },
+    "privelegies": {
+      "categoryButtonText": "Привилегии",
+      "categoryButtonWidth": 70,
+      "itemBuyButton": {
+        "text": "Купить",
+        "width": 75,
+        "height": 20
+      },
+      "pricePrefix": "Цена: ",
+	  "priceSuffix": "руб."
+    },
+    "regions": {
+      "categoryButtonText": "Регионы",
+      "categoryButtonWidth": 55,
+      "itemBuyButton": {
+        "text": "Купить",
+        "width": 44,
+        "height": 20
+      },
+      "pricePrefix": "Цена: ",
+	  "priceSuffix": "руб."
+    },
+    "usersShops": {
+      "categoryButtonText": "Магазины пользователей",
+      "categoryButtonWidth": 110,
+      "itemBuyButton": {
+        "text": "Перейти",
+        "width": 44,
+        "height": 20
+      },
+	  "dontShowFreezed": false,
+	  "lockGoShopButtonWhenFreezed": true,
+	  "lockedGoButton": {
+        "text": "Заблокирован",
+        "width": 64,
+        "height": 20
+      }
+    }
+  },
+  "moneyLinePrefix": "Ваш баланс: ",
+  "moneyLineSuffix": "руб.",
+  "loadingText": "Загрузка данных...",
+  "exitButton": {
+	"text": "Выход",
+	"width": 44,
+	"height": 20
+  },
+  "returnButton": {
+	"text": "Обратно",
+	"width": 46,
+	"height": 20
+  },
+  "bindF5RefreshButton": true,
+    "addSearchButton": true,
+  "searchButton": {
+    "text": "Поиск",
+    "width": 40,
+    "height": 20
+  },
+  "moneyGroups": [
+    {
+      "id": "rub",
+      "pricePref": "",
+      "priceSuff": "",
+      "balancePref": "",
+      "balanceSuff": "",
+      "imageIsResource": true,
+      "image": "minedonate:images/rub.png"
+    },
+    {
+      "id": "coin",
+      "pricePref": "",
+      "priceSuff": "",
+      "balancePref": "",
+      "balanceSuff": "",
+      "imageIsResource": true,
+      "image": "minedonate:images/coin.png"
+    }
+  ]
+}

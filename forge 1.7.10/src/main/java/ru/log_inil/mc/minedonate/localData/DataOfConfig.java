@@ -35,7 +35,14 @@ public class DataOfConfig {
 
 	public boolean sendLogToDB = true;
 	public String dbLogs = "md_logs";
-	public String dbShopsCategories = "md_subCats" ;
+	
+	public boolean enableInternalServerPermissions = false ;
+	public DataOfPermissionLine [ ] permissionsTriggerList ;
+	
+	public String dbModPermissionsTable = "md_perms" ;
+	public String dbModPermsUsersTable = "md_users" ;
+	
+	// public String dbShopsCategories = "md_subCats" ;
 
 	public String sessionPassword = "1234";
 
@@ -45,6 +52,7 @@ public class DataOfConfig {
 			new DataOfMoneyProcessor ( "rub", StandartMoneyProcessor . class . getName ( ), "md_accounts", "name", "money", false ),
 		} ;
 		
+		permissionsTriggerList = new DataOfPermissionLine [ ] { new DataOfPermissionLine ( "minedonate.default", "default" ), new DataOfPermissionLine ( "minedonate.moderation", "default,moder" ) } ;
 	}
 	
 }

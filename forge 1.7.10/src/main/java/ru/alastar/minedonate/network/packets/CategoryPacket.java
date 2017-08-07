@@ -1,9 +1,8 @@
 package ru.alastar.minedonate.network.packets;
 
-import java.io.UnsupportedEncodingException;
-
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import io.netty.buffer.ByteBuf;
+import ru.alastar.minedonate.Utils;
 import ru.alastar.minedonate.gui.ShopCategory;
 
 public class CategoryPacket implements IMessage {
@@ -23,23 +22,32 @@ public class CategoryPacket implements IMessage {
     @Override 
     public void toBytes(ByteBuf buf) {
     	
-    	buf.writeInt(shopId);
-    	buf.writeInt(catId);
-    	
-    	buf.writeBoolean( subCategories.length != 0 );
-    	
-    	if ( subCategories.length != 0 ) {
-    		
-	    	buf.writeInt(subCategories.length);
-	    	
-	    	for ( ShopCategory . SubCategory sc: subCategories ) {
-	    		
-	    		buf.writeInt(sc.subCatId);
-	    		writeString(buf, sc.displayName);
-	    		
-	    	}
-	    	
-    	}
+		try {
+			
+			buf . writeInt ( shopId ) ;
+			buf . writeInt ( catId ) ;
+			
+			buf.writeBoolean( subCategories.length != 0 );
+			
+			if ( subCategories.length != 0 ) {
+				
+		    	buf.writeInt(subCategories.length);
+		    	
+		    	for ( ShopCategory . SubCategory sc: subCategories ) {
+		    		
+		    		buf.writeInt(sc.subCatId);
+		
+		    		Utils . netWriteString ( buf, sc . displayName ) ;
+		    		
+		    	}
+		    	
+			}
+			
+       } catch ( Exception ex ) {
+    	   
+    	   ex . printStackTrace ( ) ;
+    	   
+       }
     	
     }
 
@@ -59,12 +67,12 @@ public class CategoryPacket implements IMessage {
 	    	   
 	           for ( int i = 0 ; i < l ; i ++ ) {
 	        	   
-	        	   subCategories [ i ] = new ShopCategory . SubCategory ( buf . readInt ( ), readString ( buf ) ) ;
-	        	   
+	        	   subCategories [ i ] = new ShopCategory . SubCategory ( buf . readInt ( ), Utils . netReadString ( buf ) ) ;
+
 	           } 
 	           
            } else {
-        	   
+
         	   subCategories = new ShopCategory . SubCategory [ 0 ] ;
         	   
            }
@@ -75,20 +83,6 @@ public class CategoryPacket implements IMessage {
     	   
        }
 
-    }
-    
-    String readString ( ByteBuf buf ) throws UnsupportedEncodingException {
-    	
-        return new String ( buf . readBytes ( buf . readInt ( ) ) . array ( ), "UTF-8" ) ;
-        
-    }
-     
-    
-    void writeString ( ByteBuf buf, String str ) {
-    	
-        buf.writeInt(str.getBytes().length);
-        buf.writeBytes(str.getBytes());
-        
     }
     
  }

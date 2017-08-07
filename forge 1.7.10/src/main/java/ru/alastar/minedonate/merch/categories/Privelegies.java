@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.merch.info.PrivilegieInfo;
+import ru.alastar.minedonate.plugin.PluginHelper;
 import ru.alastar.minedonate.proxies.ClientProxy;
 
 import java.lang.reflect.InvocationTargetException;
@@ -85,6 +86,7 @@ public class Privelegies extends MerchCategory {
     @Override
     public void GiveMerch(EntityPlayerMP serverPlayer, Merch merch, int amount) {
         try {
+<<<<<<< HEAD
             final PrivilegieInfo info = (PrivilegieInfo) merch;
             if (info.worlds.length > 0) {
                 for (String world : info.worlds) {
@@ -94,14 +96,32 @@ public class Privelegies extends MerchCategory {
             } else {
                 Object obj = Bukkit.getPluginManager().getPlugin("PermissionsEx").getClass().getMethod("getUser", String.class).invoke(null, serverPlayer.getDisplayName());
                 obj.getClass().getMethod("addGroup", String.class, String.class, long.class).invoke(obj, info.name, "*", info.getTimeInSeconds());
+=======
+            
+        	final PrivilegieInfo info = (PrivilegieInfo) merch;
+            
+            if (info.worlds.length > 0) {
+            	
+                for (String world : info.worlds) {
+                	PluginHelper.pexMgr.addGroup(serverPlayer.getDisplayName(), info.name, world, info.getTimeInSeconds());
+                   // Object obj = Bukkit.getPluginManager().getPlugin("PermissionsEx").getClass().getMethod("getUser", String.class).invoke(null, serverPlayer.getDisplayName());
+                   // obj.getClass().getMethod("addGroup", String.class, String.class, long.class).invoke(obj, info.name, world, info.getTimeInSeconds());
+                }
+                
+            } else {
+            	
+            	PluginHelper.pexMgr.addGroup(serverPlayer.getDisplayName(), info.name, null, info.getTimeInSeconds());
+              //  Object obj = Bukkit.getPluginManager().getPlugin("PermissionsEx").getClass().getMethod("getUser", String.class).invoke(null, serverPlayer.getDisplayName());
+              // obj.getClass().getMethod("addGroup", String.class, String.class, long.class).invoke(obj, info.name, "*", info.getTimeInSeconds());
+>>>>>>> log_inil
             }
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
+            
+        } catch ( Exception ex ) {
+        	
+        	ex . printStackTrace ( ) ;
+        	
         }
+        
     }
 
     @Override
@@ -111,4 +131,14 @@ public class Privelegies extends MerchCategory {
 
     }
 
+<<<<<<< HEAD
+    @Override
+    public String getMoneyType() {
+
+        return moneyType;
+
+    }
+
+=======
+>>>>>>> log_inil
 }

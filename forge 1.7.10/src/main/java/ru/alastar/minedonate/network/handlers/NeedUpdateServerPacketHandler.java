@@ -25,15 +25,15 @@ public class NeedUpdateServerPacketHandler implements IMessageHandler<NeedUpdate
     		
     		if ( MineDonate . m_Enabled ) {
     			
-                EntityPlayerMP serverPlayer = ctx.getServerHandler().playerEntity;
+                EntityPlayerMP serverPlayer = ctx . getServerHandler ( ) . playerEntity ;
                 String userName = serverPlayer . getDisplayName ( ) ;
                 
-                for ( AbstractMoneyProcessor amp : MineDonate.moneyProcessors.values() ) {
-                	
+                for ( AbstractMoneyProcessor amp : MineDonate . moneyProcessors . values ( ) ) {
+
                 	if ( ! amp . existsAccount ( userName ) ) {
                 		
-                		amp . registerPlayer ( userName ) ;
-                		
+                		amp . registerPlayer ( userName,  MineDonate . moneyProcessors . values ( ) ) ;
+
                 	}
                 	
                 }
@@ -41,12 +41,8 @@ public class NeedUpdateServerPacketHandler implements IMessageHandler<NeedUpdate
                 SupportedFeaturesPacket features_packet = new SupportedFeaturesPacket ( MineDonate . cfg ) ;
                 MineDonate . networkChannel . sendTo ( features_packet, serverPlayer ) ;
                 
-                for ( AbstractMoneyProcessor amp : MineDonate . moneyProcessors . values ( ) ) {
-                	
-        			MineDonate . networkChannel . sendTo ( new AccountInfoPacket ( amp . getMoneyFor ( userName ), amp . getMoneyType ( ) ), serverPlayer ) ;
+        		MineDonate . networkChannel . sendTo ( new AccountInfoPacket ( userName ), serverPlayer ) ;
                       
-                }
-                
                 MineDonate . networkChannel . sendTo ( new CategoryPacket ( 0, 0, MineDonate . shops . get ( 0 ) . cats [ 0 ] . subCategories ), serverPlayer ) ;
                 
                 for ( int j = 0; j < MineDonate . shops . get ( 0 ) . cats [ 0 ] . getMerch ( ) . length ; ++ j ) {

@@ -8,6 +8,7 @@ import io.netty.buffer.Unpooled;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
 import ru.alastar.minedonate.merch.Merch;
 
 import java.io.IOException;
@@ -122,5 +123,13 @@ public class ItemInfo extends Merch {
         }
         
     }
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public String getSearchValue ( ) {
+		
+		return EnumChatFormatting . getTextWithoutFormattingCodes ( name ) +  ( m_stack != null ? EnumChatFormatting . getTextWithoutFormattingCodes ( m_stack . getDisplayName ( ) ) : "" ) ;
+		
+	}
 	
 }

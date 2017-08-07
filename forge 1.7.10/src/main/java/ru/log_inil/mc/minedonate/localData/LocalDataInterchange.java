@@ -49,9 +49,9 @@ public class LocalDataInterchange {
 		
 		File f = new File ( root . getCanonicalPath ( ) + File . separator + "config" + File . separator + configFolderName + File . separator + _path + ".json" ) ;
 		
-		boolean read = ! f . exists ( ) ;
+		boolean read = f . exists ( ) ;
 
-		if ( ! read ) {
+		if ( read ) {
 
 			FileInputStream fis = new FileInputStream ( f ) ;
 			InputStreamReader isr = new InputStreamReader ( fis, "UTF-8" ) ;
@@ -66,8 +66,7 @@ public class LocalDataInterchange {
 			 
 		}
 		
-		
-		if ( read ) {
+		if ( ! read ) {
 			
 			if ( ! f . getParentFile ( ) . exists ( ) ) {
 				

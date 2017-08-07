@@ -1,10 +1,11 @@
-package ru.log_inil.mc.minedonate.localData;
+package ru.log_inil.mc.minedonate.localData.ui;
 
 public class DataOfUIConfig {
 
 	public DataOfUICategories cats ;
-	public String moneyLinePrefix ;
-	public String moneyLineSuffix ;
+	public DataOfUIFrames frames ;
+
+	//public int subCategoryButtonHeight ;
 	
 	public DataOfUIElement exitButton ;
 	public DataOfUIElement returnButton ;
@@ -18,15 +19,16 @@ public class DataOfUIConfig {
 	public boolean bindF5RefreshButton ;
 	
 	public DataOfUIMoneyGroup [ ] moneyGroups ;
+	public DataOfUILang lang ;
 	
 	public DataOfUIConfig ( ) {
 		
 		cats = new DataOfUICategories ( ) ;
+		frames = new DataOfUIFrames ( ) ;
 		
-		moneyLinePrefix = "Your money: " ;
-		moneyLineSuffix = "" ;
+		//subCategoryButtonHeight = 20 ;
 		
-		exitButton = new DataOfUIElement ( "Exit", 26, 20 ) ;
+		exitButton = new DataOfUIElement ( "Exit", 30, 20 ) ;
 		returnButton = new DataOfUIElement ( "Return", 36, 20 ) ;
 		
 		loadingText = "Loading data..." ;
@@ -37,7 +39,8 @@ public class DataOfUIConfig {
 		
 		bindF5RefreshButton = false ;
 		
-		moneyGroups = new DataOfUIMoneyGroup [ ] { new DataOfUIMoneyGroup ( "rub", "minedonate:/images/rub.png" ) } ;
+		moneyGroups = new DataOfUIMoneyGroup [ ] { new DataOfUIMoneyGroup ( "rub", "minedonate:images/rub.png" ) } ;
+		lang = new DataOfUILang ( ) ;
 		
 	}
 	

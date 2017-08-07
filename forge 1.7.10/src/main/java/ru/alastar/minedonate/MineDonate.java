@@ -5,22 +5,23 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
-import org.bukkit.Bukkit;
+
 import ru.alastar.minedonate.commands.AddEntityCommand;
 import ru.alastar.minedonate.commands.AddItemCommand;
 import ru.alastar.minedonate.commands.AdminCommand;
@@ -33,11 +34,14 @@ import ru.alastar.minedonate.merch.info.ItemInfo;
 import ru.alastar.minedonate.mproc.AbstractMoneyProcessor;
 import ru.alastar.minedonate.network.handlers.*;
 import ru.alastar.minedonate.network.packets.*;
+import ru.alastar.minedonate.plugin.PluginHelper;
 import ru.alastar.minedonate.proxies.CommonProxy;
+
 import ru.log_inil.mc.minedonate.localData.DataOfConfig;
 import ru.log_inil.mc.minedonate.localData.DataOfMoneyProcessor;
-import ru.log_inil.mc.minedonate.localData.DataOfUIConfig;
+import ru.log_inil.mc.minedonate.localData.DataOfPermissionLine;
 import ru.log_inil.mc.minedonate.localData.LocalDataInterchange;
+import ru.log_inil.mc.minedonate.localData.ui.DataOfUIConfig;
 
 import java.io.*;
 import java.sql.*;
@@ -67,9 +71,10 @@ public class MineDonate {
 
     public static Map<EntityPlayerMP, AdminSession> m_Admin_Sessions = new HashMap<EntityPlayerMP, AdminSession>();
 
+    /*
     @SideOnly(Side.SERVER)
     public static Object wg_plugin;
-
+    */
     @SideOnly(Side.SERVER)
     private static BufferedWriter m_log;
 
@@ -100,12 +105,13 @@ public class MineDonate {
 
     }
 
+    /*
     @Mod.EventHandler
     @SideOnly(Side.SERVER)
     public void fmlLifeCycle(FMLServerStartedEvent event) {
         if (MineDonate.cfg.sellRegions)
             MineDonate.InitWG();
-    }
+    }*/
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
@@ -123,10 +129,12 @@ public class MineDonate {
         networkChannel.registerMessage(NeedUpdateClientPacketHandler.class, NeedUpdatePacket.class, 7, Side.CLIENT);
         networkChannel.registerMessage(NeedShopCategoryServerPacketHandler.class, NeedShopCategoryPacket.class, 8, Side.SERVER);
         networkChannel.registerMessage(CategoryPacketHandler.class, CategoryPacket.class, 9, Side.CLIENT);
+        networkChannel.registerMessage(MoneyChangedPacketHandler.class, MoneyChangedPacket.class, 10, Side.CLIENT);
 
         instance = this;
 
     }
+    
     @Mod.EventHandler
     public void serverLoad(FMLServerStartingEvent event) {
     	
@@ -134,6 +142,11 @@ public class MineDonate {
         event.registerServerCommand(new AddItemCommand());
         event.registerServerCommand(new AdminCommand());
 
+    }
+    
+    @Mod.EventHandler
+    public void serverStarting(FMLServerStartingEvent event) {
+        proxy.serverStarting(event);
     }
     
     @SideOnly(Side.SERVER)
@@ -184,7 +197,7 @@ public class MineDonate {
             MinecraftServer.getServer().logInfo("Initializing database connection...");
 
             Class.forName("com.mysql.jdbc.Driver").newInstance();
-            m_DB_Connection = DriverManager.getConnection("jdbc:mysql://" + cfg.dbHost + ":" + cfg.dbPort + "/" + cfg.dbName, cfg.dbUser, cfg.dbPassword);
+            m_DB_Connection = DriverManager.getConnection("jdbc:mysql://" + cfg.dbHost + ":" + cfg.dbPort + "/" + cfg.dbName + "?useUnicode=true&characterEncoding=utf-8", cfg.dbUser, cfg.dbPassword);
 
             MinecraftServer.getServer().logInfo("Connected!");
 
@@ -207,7 +220,7 @@ public class MineDonate {
         m_Enabled = false;
     }
 
-
+    /*
     @SideOnly(Side.SERVER)
     private static void InitWG() {
         wg_plugin = Bukkit.getPluginManager().getPlugin("WorldGuard");
@@ -219,7 +232,7 @@ public class MineDonate {
             e.printStackTrace();
         }
 
-    }
+    }*/
 
     @SideOnly(Side.SERVER)
     private static void loadMerchServer ( ) {
@@ -228,7 +241,7 @@ public class MineDonate {
         	
         	if ( shops . isEmpty ( ) ) {
         	
-        		Shop s = new Shop ( 0, new MerchCategory [ ] { new ItemNBlocks ( 0, 0, cfg . itemsMoneyType ), new Privelegies ( 0, 1, cfg . privelegiesMoneyType ), new Regions ( 0, 2, cfg . regionMoneyType ), new Entities ( 0, 3, cfg . entitiesMoneyType ), new UsersShops ( ) }, "SERVER", "Server shop", false ) ;
+        		Shop s = new Shop ( 0, new MerchCategory [ ] { new ItemNBlocks ( 0, 0, cfg . itemsMoneyType ), new Privelegies ( 0, 1, cfg . privelegiesMoneyType ), new Regions ( 0, 2, cfg . regionMoneyType ), new Entities ( 0, 3, cfg . entitiesMoneyType ), new UsersShops ( ) }, "SERVER", "Server shop", false, null, null, false ) ;
         		shops . put ( 0, s ) ;
         		
     			for ( MerchCategory mc : s . cats ) {
@@ -287,7 +300,7 @@ public class MineDonate {
     @SideOnly(Side.CLIENT)
     public static void loadMerchClient() {
 
-    	shops . put ( 0, new Shop ( 0, new MerchCategory[]{new ItemNBlocks(0, 0,  cfg.itemsMoneyType), new Privelegies(0, 1, cfg.privelegiesMoneyType), new Regions(0, 2, cfg.regionMoneyType), new Entities(0, 3, cfg.entitiesMoneyType), new UsersShops()}, "SERVER", "Server shop", false ) ) ;
+    	shops . put ( 0, new Shop ( 0, new MerchCategory[]{new ItemNBlocks(0, 0,  cfg.itemsMoneyType), new Privelegies(0, 1, cfg.privelegiesMoneyType), new Regions(0, 2, cfg.regionMoneyType), new Entities(0, 3, cfg.entitiesMoneyType), new UsersShops()}, "SERVER", "Server shop", false, null, null, false ) ) ;
 
     }
 
@@ -396,9 +409,10 @@ public class MineDonate {
     ///End reverse section
 
     @SideOnly(Side.CLIENT)
-    public static void SetMoney ( String moneyType, int money ) {
+    public static void setMoney ( String moneyType, int money ) {
 
     	clientMoney . put ( moneyType, money ) ;
+    	
     	ShopGUI . instance . moneyArea . updateDrawData ( ) ;
     	
     }
@@ -517,7 +531,9 @@ public class MineDonate {
     public static ShopCategory . SubCategory [ ] getSubCategories ( int shopId, int catId ) {
     	
     	List < ShopCategory . SubCategory > l = new ArrayList < > ( ) ;
-        Statement stmt = null;
+        
+    	/*
+    	Statement stmt = null;
         
         try {
         	
@@ -538,8 +554,10 @@ public class MineDonate {
             ex . printStackTrace ( ) ;
             
         }
+        */
         
         ShopCategory . SubCategory [ ] arr = new ShopCategory . SubCategory [ l . size ( ) ] ;
+        
     	return ( ShopCategory . SubCategory [ ] ) l . toArray ( arr ) ;
     	
     }
@@ -558,7 +576,7 @@ public class MineDonate {
 		
 		try {
 			
-			s = new Shop ( shopId, new MerchCategory [ ] { new ItemNBlocks ( shopId, 0, sdata . getString ( "moneyType" ) ) . setCustomDBTable ( cfg . dbUserItems ) }, sdata . getString ( "owner" ), sdata . getString ( "name" ), sdata . getBoolean ( "isFreezed") );
+			s = new Shop ( shopId, new MerchCategory [ ] { new ItemNBlocks ( shopId, 0, sdata . getString ( "moneyType" ) ) . setCustomDBTable ( cfg . dbUserItems ) }, sdata . getString ( "owner" ), sdata . getString ( "name" ), sdata . getBoolean ( "isFreezed" ), sdata . getString ( "freezer" ), sdata . getString ( "freezReason" ), false ) ;
 			sdata . close ( ) ;
 			
 			for ( MerchCategory mc : s . cats ) {
@@ -657,4 +675,120 @@ public class MineDonate {
             e.printStackTrace();
         }
     }
+
+    static Map < String, List < String > > permissions = new HashMap < > ( ) ;
+    
+    static List < String > getPermissionsByGroup ( String groupName ) {
+    	
+    	if ( permissions . containsKey ( groupName ) ) {
+    		
+    		return permissions . get ( groupName ) ;
+    		
+    	}
+    	
+		List < String > l = new ArrayList < > ( ) ;
+
+		if ( groupName . contains ( "," ) ) {
+			
+			for ( String s : groupName . split ( "," ) ) {
+				
+				l . addAll ( getPermissionsByGroup ( s ) ) ;
+				
+			}
+			
+	        permissions . put ( groupName, l ) ;
+
+			return l ;
+			
+		}
+		
+        try {
+        	
+        	Statement stmt = m_DB_Connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM " + cfg.dbModPermissionsTable+ " WHERE groupName = '" + groupName + "';");
+            
+            while ( rs . next ( ) ) {
+
+                 l . add ( rs . getString ( "permission" ) ) ;
+
+            }
+
+            rs.close();
+            stmt.close();
+         
+        } catch ( Exception ex ) {
+        	
+        	ex . printStackTrace ( ) ;
+        	
+        }
+        
+        permissions . put ( groupName, l ) ;
+        
+    	return l ;
+    	
+    }
+    
+	public static List < String >  getPermissionsByUser ( String userName ) {
+		
+		List < String > l = new ArrayList < > ( ) ;
+
+		if ( cfg . enableInternalServerPermissions ) {
+			
+			for ( DataOfPermissionLine dopl : cfg . permissionsTriggerList ) {
+
+				if ( PluginHelper . pexMgr . hasPermission ( userName, dopl . key ) ) {
+					
+					l . addAll ( getPermissionsByGroup ( dopl . groupName ) ) ;
+					
+				}
+				
+			}
+			
+		}
+		/*
+		String [ ] r = new String [ l . size ( ) ] ;
+		r = l . toArray ( r ) ;
+		
+		l . clear ( ) ;
+		*/
+		return l ;
+		
+	}
+
+	@SideOnly ( Side . CLIENT )
+	public static Account acc ;
+	
+	@SideOnly ( Side . CLIENT )
+	public static Account getAccount ( ) {
+		
+		return acc ;
+
+	}
+	
+	@SideOnly ( Side . CLIENT )
+	public static void setAccount ( Account _acc ) {
+		
+		acc = _acc ;
+		
+	}
+
+	public static Map < String, Account > users = new HashMap < > ( ) ;
+	
+	public static Account getAccount ( String name ) {
+
+		if ( users . containsKey ( name ) ) {
+			
+			return users . get ( name ) ;
+			
+		}
+		
+		Account acc = new Account ( name, getPermissionsByUser ( name ) ) ;
+		
+		users . put ( name, acc ) ;
+		
+		return acc ;
+		
+	}
+	
+	
 }

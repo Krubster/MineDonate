@@ -2,14 +2,12 @@ package ru.alastar.minedonate.merch.categories;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import org.bukkit.Bukkit;
-import org.bukkit.World;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.merch.info.RegionInfo;
 import ru.alastar.minedonate.network.packets.AddMerchPacket;
+import ru.alastar.minedonate.plugin.PluginHelper;
 
-import java.lang.reflect.InvocationTargetException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -36,7 +34,12 @@ public class Regions extends MerchCategory {
         msg.replace(" bought region ", "");
         String world_name = msg.split("=")[1];
         String name = msg.split("=")[0];
+        
+        PluginHelper.wgMgr.removePlayerFromRegion(world_name, name, player);
+        /*
         try {
+        	
+        	
             World bukkit_world = Bukkit.getWorld(world_name);
             Object wg = MineDonate.wg_plugin.getClass().getMethod("inst").invoke(null);
             Object reg_cont = wg.getClass().getMethod("getRegionContainer").invoke(wg);
@@ -54,7 +57,7 @@ public class Regions extends MerchCategory {
             e.printStackTrace();
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
-        }
+        }*/
         returnToStock(new RegionInfo(shopId, catId, m_Merch.length, Integer.valueOf(log_msg.split(":")[4]), name, world_name));
     }
 
@@ -107,6 +110,8 @@ public class Regions extends MerchCategory {
     @Override
     public void GiveMerch(EntityPlayerMP player, Merch merch, int amount) {
         final RegionInfo info = (RegionInfo) merch;
+        PluginHelper.wgMgr.addPlayerToRegion(info.world_name, info.name, player.getDisplayName());
+        /*
         try {
             World bukkit_world = Bukkit.getWorld(info.world_name);
             Object wg = MineDonate.wg_plugin.getClass().getMethod("inst").invoke(null);
@@ -127,7 +132,7 @@ public class Regions extends MerchCategory {
             e.printStackTrace();
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
-        }
+        }*/
 
     }
 

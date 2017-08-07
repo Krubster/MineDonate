@@ -12,7 +12,6 @@ import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.merch.info.PrivilegieInfo;
 import ru.alastar.minedonate.proxies.ClientProxy;
 import ru.log_inil.mc.minedonate.gui.DrawType;
-import ru.log_inil.mc.minedonate.gui.GuiGradientButton;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -92,7 +91,7 @@ public class PrivilegieCategory extends ShopCategory {
             var18.addVertexWithUV((double) 30, (double) ((int) (resolution.getScaledHeight() * 0.1) + 19 + 20 + var20), 0.0D, 0.0D, 1.0D);
             var18.addVertexWithUV((double) (int) resolution.getScaledWidth() - 30, (double) ((resolution.getScaledHeight() * 0.1) + 19 + 20 + var20), 0.0D, 1.0D, 1.0D);
 
-            var18.setColorRGBA_I(0, 255);
+            var18.setColorRGBA_I(0, 105);
 
             var18.addVertexWithUV((double) resolution.getScaledWidth() - 30, (double) (int) (resolution.getScaledHeight() * 0.1) + 19 + 20, 0.0D, 1.0D, 0.0D);
             var18.addVertexWithUV((double) 30, (double) (int) (resolution.getScaledHeight() * 0.1) + 19 + 20, 0.0D, 0.0D, 0.0D);
@@ -102,7 +101,7 @@ public class PrivilegieCategory extends ShopCategory {
 
             var18.startDrawingQuads();
 
-            var18.setColorRGBA_I(0, 255);
+            var18.setColorRGBA_I(0, 105);
 
             var18.addVertexWithUV((double) 30, (double) ((resolution.getScaledHeight()) - (resolution.getScaledHeight() * 0.1)) - 6, 0.0D, 0.0D, 1.0D);
             var18.addVertexWithUV((double) resolution.getScaledWidth() - 30, (double) ((resolution.getScaledHeight()) - (resolution.getScaledHeight() * 0.1)) - 6, 0.0D, 1.0D, 1.0D);
@@ -142,12 +141,12 @@ public class PrivilegieCategory extends ShopCategory {
        
  	   RenderHelper.enableGUIStandardItemLighting();
  	  
-       //  GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+       GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
        GL11.glBindTexture(GL11.GL_TEXTURE_2D, ClientProxy.getImage(_info.merch_id).getGlTextureId());
        relative.drawTexturedModalRectNormal(x_offset, y_offset, 75, 75);
        
        relative.drawString(relative.getFontRenderer(), _info.name, x_offset + (75/2)- relative.getFontRenderer().getStringWidth(_info.name)/2, y_offset + 80, 0xFFFFFF);
-       relative . moneyArea . drawPriceArea ( x_offset, y_offset + 75+20+24, _info . cost, _info . getMoneyType ( ) ) ;
+       relative . moneyArea . drawPriceArea ( x_offset+(65/2), y_offset + 75+20+24, _info . cost, _info . getMoneyType ( ) ) ;
 
        listDescription . clear ( ) ;
 
@@ -185,7 +184,7 @@ public class PrivilegieCategory extends ShopCategory {
     	
 		for ( PrivilegieInfo ri : list ) {
 			
-			if ( buttonsMap . containsKey ( ri.merch_id ) ) relative . removeButton ( buttonsMap . get ( ri . merch_id ) ) ;
+			if ( buttonsMap . containsKey ( ri . merch_id ) ) relative . removeButton ( buttonsMap . get ( ri . merch_id ) ) ;
 
     	}
 		
@@ -197,10 +196,10 @@ public class PrivilegieCategory extends ShopCategory {
 	    	if ( search ) {
 	    		
 	    		for ( Merch ri:  MineDonate . shops . get ( gui . getCurrentShopId ( ) ) . cats [ catId ] . getMerch ( ) ) {
-	    			
-	        		if ( ( ( PrivilegieInfo ) ri ) . name . contains ( searchValue ) ) {
+
+	    			if ( ( ( PrivilegieInfo ) ri ) . getSearchValue ( ) . toLowerCase ( ) . contains ( searchValue ) ) {
 	        			
-	        			list . add (  ( PrivilegieInfo ) ri ) ;
+	        			list . add ( ( PrivilegieInfo ) ri ) ;
 	        			
 	        		}
 	        		
@@ -231,7 +230,7 @@ public class PrivilegieCategory extends ShopCategory {
             buyButton = new BuyButton( info . getShopId ( ), info . getCategory ( ), info . merch_id, ShopGUI.getNextButtonId(), (buyButton!=null?buyButton.xPosition: resolution . getScaledWidth ( ) / 2 - MineDonate.cfgUI.cats.privelegies.itemBuyButton.width / 2), y_offset +  93, MineDonate.cfgUI.cats.privelegies.itemBuyButton.width, MineDonate.cfgUI.cats.privelegies.itemBuyButton.height, MineDonate.cfgUI.cats.privelegies.itemBuyButton.text);
             buttonsMap.put(info.merch_id, buyButton);
 
-            relative . addBtn ( buyButton ) ;
+            relative . addBtn ( buyButton, false ) ;
             
         }
     }

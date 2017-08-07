@@ -1,4 +1,4 @@
-package ru.log_inil.mc.minedonate.localData;
+package ru.log_inil.mc.minedonate.localData.ui;
 
 import ru.log_inil.mc.minedonate.localData.cats.*;
 

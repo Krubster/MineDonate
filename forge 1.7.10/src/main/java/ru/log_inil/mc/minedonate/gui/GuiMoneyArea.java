@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
+import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;
@@ -15,7 +16,7 @@ import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.util.ResourceLocation;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.gui.ShopGUI;
-import ru.log_inil.mc.minedonate.localData.DataOfUIMoneyGroup;
+import ru.log_inil.mc.minedonate.localData.ui.DataOfUIMoneyGroup;
 
 public class GuiMoneyArea {
 
@@ -25,7 +26,7 @@ public class GuiMoneyArea {
 	}
 	
 	List < String > linesRemoved = new ArrayList < > ( ) ;
-	// List < String > types = new ArrayList < String > ( ) ;
+	List < String > types = new ArrayList < String > ( ) ;
 	Map < String, MoneyLine > lines = new HashMap < > ( ) ;
 	
 	public GuiMoneyArea updateDrawData ( ) {
@@ -53,13 +54,14 @@ public class GuiMoneyArea {
 
 		for ( String type: MineDonate . clientMoney . keySet ( ) ) {
 			
-		//	if ( ! lines . containsKey ( type ) ) {
+			if ( ! lines . containsKey ( type ) ) {
+				
 				ml = new MoneyLine ( type ) ;
 				ml . load ( ) ;
 				
 				lines . put ( type, ml ) ;
 				
-		//	}
+			}
 			
 			
 		}
@@ -168,10 +170,14 @@ public class GuiMoneyArea {
 			
 		}
 		
+		int tmpX ;
+		int tmpY ;
+		
 		public void drawBalance ( int i, int max, int count, int offsetX, int offsetY, int mouseX, int mouseY ) {
 		
-			int tmpY = offsetY - ( max * 5 ) + ( i * 10 ) ; // ( 10 / 2 = 5 )
-			int tmpX = offsetX - 20 - ( gui . getFontRenderer ( ) . getStringWidth ( count + ( balanceSuff != null ? balanceSuff : "" ) ) ) ;
+			
+			tmpX = offsetX - 20 - ( gui . getFontRenderer ( ) . getStringWidth ( count + ( balanceSuff != null ? balanceSuff : "" ) ) ) ;
+			tmpY = offsetY - ( max * 3 ) + ( i * 10 ) ;
 			
 			tmp = 0 ;
 			
@@ -183,12 +189,12 @@ public class GuiMoneyArea {
 
 			if ( texture != null ) {
 				
-			 	RenderHelper . enableGUIStandardItemLighting ( ) ;
+			    // 	RenderHelper . enableGUIStandardItemLighting ( ) ;
 				
 			 	Minecraft . getMinecraft ( ) . renderEngine . bindTexture ( texture ) ;
 			 	gui . drawTexturedModalRectNormal ( tmpX, tmpY, 8, 8 ) ;
 						
-			 	RenderHelper . disableStandardItemLighting ( ) ;
+			    // 	RenderHelper . disableStandardItemLighting ( ) ;
 
 				tmp += 10 ;
 				
@@ -201,7 +207,24 @@ public class GuiMoneyArea {
 		int tmp = 0 ;
 		
 		public void drawPrice ( int price, int offsetX, int offsetY ) {
+
+			tmpX = ( gui . getFontRenderer ( ) . getStringWidth ( ( pricePref != null ? pricePref : "" ) + price + ( priceSuff != null ? priceSuff : "" )  ) ) ;
+			gui . getFontRenderer ( ) . drawString ( ( pricePref != null ? pricePref : "" ) + price + ( priceSuff != null ? priceSuff : "" ) , offsetX - tmpX/2 , offsetY, 14737632 ) ;
 			
+			if ( texture != null ) {
+				
+     		    GL11.glEnable(GL11.GL_BLEND);
+				RenderHelper . disableStandardItemLighting ( ) ;
+
+			 	Minecraft . getMinecraft ( ) . renderEngine . bindTexture ( texture ) ;
+			 	gui . drawTexturedModalRectNormal ( offsetX + 5 + tmpX / 2, offsetY, 9, 9 ) ;
+			 	
+			 	RenderHelper . enableGUIStandardItemLighting ( ) ;
+     		    GL11.glDisable(GL11.GL_BLEND);
+		
+			}
+			
+			/*
 			tmp = 0 ;
 
 			if ( pricePref != null ) {
@@ -222,7 +245,7 @@ public class GuiMoneyArea {
 			}
 
 			gui . getFontRenderer ( ) . drawString ( price + ( priceSuff != null ? priceSuff : "" ), offsetX + tmp, offsetY, 14737632 ) ;
-			
+			*/
 		}
 		
 	}

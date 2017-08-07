@@ -5,6 +5,7 @@ import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import net.minecraft.entity.player.EntityPlayerMP;
 import ru.alastar.minedonate.MineDonate;
+import ru.alastar.minedonate.merch.info.ShopInfo;
 import ru.alastar.minedonate.network.packets.AddMerchPacket;
 import ru.alastar.minedonate.network.packets.CategoryPacket;
 import ru.alastar.minedonate.network.packets.NeedShopCategoryPacket;
@@ -42,6 +43,22 @@ public class NeedShopCategoryServerPacketHandler implements IMessageHandler<Need
             	for ( int j = 0; j < MineDonate . shops . get ( message . shopId ) . cats [ message . cat ] . getMerch ( ) . length ; ++ j ) {
                 	
                     AddMerchPacket packet = new AddMerchPacket ( MineDonate . shops . get ( message . shopId ) . cats [ message . cat ] . getMerch ( ) [ j ] ) ;
+                    
+                    if ( packet . info instanceof ShopInfo ) {
+                    	
+                    	ShopInfo si = ( ( ShopInfo ) packet . info ) ;
+                    	if ( ! si . owner . equalsIgnoreCase ( serverPlayer . getDisplayName ( ) ) ) {
+                    		
+                    		if ( ! MineDonate . getAccount ( serverPlayer . getDisplayName ( ) ) . canViewOtherFreezText ( ) ) {
+                    			
+                    			si . cleanFreezVisibleData ( ) ; 
+                    			
+                    		}
+                    		
+                    	}
+                    	
+                    }
+                    
                     MineDonate . networkChannel . sendTo ( packet, serverPlayer ) ;
                     
                 }

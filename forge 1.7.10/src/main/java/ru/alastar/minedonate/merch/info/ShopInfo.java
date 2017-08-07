@@ -2,8 +2,11 @@ package ru.alastar.minedonate.merch.info;
 
 import java.io.UnsupportedEncodingException;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.EnumChatFormatting;
 import ru.alastar.minedonate.merch.Merch;
 
 public class ShopInfo extends Merch {
@@ -12,10 +15,15 @@ public class ShopInfo extends Merch {
     public int shopId ;
     public String owner ;
     public String name ;
+    
     public boolean isFreezed ;
+    public String freezer ;
+    public String freezReason ;
+    public boolean canVisibleFreezedText ;
+    
     public String moneyType ;
     
-    public ShopInfo ( int _merch_id, int _shopId, String _owner, String _name, boolean _isFreezed, String _moneyType ) {
+    public ShopInfo ( int _merch_id, int _shopId, String _owner, String _name, boolean _isFreezed, String _freezer, String _freezReason, boolean _canVisibleFreezedText, String _moneyType ) {
     	
        	super();
        	
@@ -25,7 +33,12 @@ public class ShopInfo extends Merch {
        	
         this . owner = _owner ;
         this . name = _name ;
+        
         this . isFreezed = _isFreezed ;
+        this . freezer = _freezer ;
+        this . freezReason = _freezReason ;
+        this . canVisibleFreezedText = _canVisibleFreezedText ;
+        
         this . moneyType = _moneyType ;
         
     }	
@@ -51,12 +64,19 @@ public class ShopInfo extends Merch {
         	merch_id = buf . readInt ( ) ;
             shopId = buf . readInt ( ) ;
             
-            owner = readString ( buf ) ;
-            
+            owner = readString ( buf ) ;          
             name = readString ( buf ) ;
 
             isFreezed = buf.readBoolean();
-                    
+            canVisibleFreezedText = buf . readBoolean ( ) ;
+
+            if ( isFreezed && canVisibleFreezedText ) {
+                
+            	freezer = readString ( buf ) ;          
+            	freezReason = readString ( buf ) ;
+                
+            }
+                        
             moneyType = readString ( buf ) ;
             
         } catch ( Exception ex ) {
@@ -75,11 +95,18 @@ public class ShopInfo extends Merch {
         buf . writeInt ( shopId ) ;
         
         writeString ( buf, owner ) ;
-        
         writeString ( buf, name ) ;
 
         buf . writeBoolean ( isFreezed ) ;
+        buf . writeBoolean ( canVisibleFreezedText ) ;
 
+        if ( isFreezed && canVisibleFreezedText ) {
+        	
+            writeString ( buf, freezer ) ;
+            writeString ( buf, freezReason ) ;
+
+        }
+                
         writeString ( buf, moneyType ) ;
         
     }
@@ -152,4 +179,20 @@ public class ShopInfo extends Merch {
 		return -1 ;
 	}
     
+	@SideOnly(Side.CLIENT)
+	@Override
+	public String getSearchValue ( ) {
+		
+		return EnumChatFormatting . getTextWithoutFormattingCodes ( name + owner ) ;
+		
+	}
+
+	public void cleanFreezVisibleData ( ) {
+		
+		freezer = "" ;
+		freezReason = "" ;
+		canVisibleFreezedText = false ;
+		
+	}
+	
 }

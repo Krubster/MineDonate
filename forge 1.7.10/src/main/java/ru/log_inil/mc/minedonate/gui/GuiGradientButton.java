@@ -9,7 +9,8 @@ import net.minecraft.client.renderer.OpenGlHelper;
 
 public class GuiGradientButton extends GuiButton {
 
-	boolean gradientVector = false ;
+	public boolean gradientVector = false ;
+	public boolean pressed = false ;
 	
     public GuiGradientButton(int p_i1020_1_, int p_i1020_2_, int p_i1020_3_, String p_i1020_4_, boolean _gv)
     {
@@ -55,8 +56,14 @@ public class GuiGradientButton extends GuiButton {
 			int rgba0 = (r0 << 16) + (g0 << 8) + (b0) + (a0<<24);
 			//System.err.println(rgba0);
 			 * */
+        	if ( pressed ) {
+				
+        		k = 0 ;
+				
+			}
+        	
 			int rgba = ( k == 0 ? -939458303 : k == 1 ? 1761673473 : -1694433023 ) ;
-			
+		
 			this.drawGradientRect ( xPosition, yPosition, xPosition + width, yPosition+height, gradientVector ? 0 : rgba, gradientVector ? rgba : 0);
 
             this.mouseDragged(p_146112_1_, p_146112_2_, p_146112_3_);
@@ -66,7 +73,7 @@ public class GuiGradientButton extends GuiButton {
             {
                 l = packedFGColour;
             }
-            else if (!this.enabled)
+            else if (!this.enabled || pressed)
             {
                 l = -1258291201;
             }

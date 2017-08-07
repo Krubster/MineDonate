@@ -39,7 +39,7 @@ public class AddMerchPacketHandler implements IMessageHandler<AddMerchPacket, IM
         		
         	}
         	
-        	MineDonate . shops . put ( us . shopId, new Shop ( us . shopId, new MerchCategory [ ] { new ItemNBlocks ( us . shopId, us . getCategory ( ), us . moneyType ) }, us . owner, us . name, us . isFreezed ) ) ;
+        	MineDonate . shops . put ( us . shopId, new Shop ( us . shopId, new MerchCategory [ ] { new ItemNBlocks ( us . shopId, us . getCategory ( ), us . moneyType ) }, us . owner, us . name, us . isFreezed, us . freezer, us . freezReason, us . canVisibleFreezedText ) ) ;
         	
         }
         

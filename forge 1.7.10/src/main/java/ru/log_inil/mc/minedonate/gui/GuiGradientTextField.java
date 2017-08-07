@@ -37,9 +37,14 @@ public class GuiGradientTextField extends Gui
     /** True if this textbox is visible */
     private boolean visible = true;
     private static final String __OBFID = "CL_00000670";
+    
     public boolean bgIsGradient = false ;
+    
     public boolean isHoldered = false ;
     public String textHolder ;
+    
+    public boolean borderDrawing = false ;
+    public int fieldBorderColor = 0 ;
     
     public GuiGradientTextField(FontRenderer p_i1032_1_, int p_i1032_2_, int p_i1032_3_, int p_i1032_4_, int p_i1032_5_, boolean _bgIsGradient)
     {
@@ -58,6 +63,14 @@ public class GuiGradientTextField extends Gui
     	isHoldered = textHolder != null ;
     	
     }
+    
+	public void setEnableBorderDrawing(boolean _borderDrawing, int _fieldBorderColor) {
+		
+		borderDrawing = _borderDrawing ;
+		fieldBorderColor = _fieldBorderColor ;
+		
+	}
+	
     /**
      * Increments the cursor counter
      */
@@ -489,7 +502,7 @@ public class GuiGradientTextField extends Gui
             	if ( bgIsGradient ) {
             		
             		this.drawGradientRect ( xPosition, yPosition, xPosition + width, yPosition+height, GuiStaticVariables.guiGradientTextField_GradientStartColor, GuiStaticVariables.guiGradientTextField_GradientEndColor);
-            		
+
             	} else {
             		
 		            drawRect(this.xPosition - 1, this.yPosition - 1, this.xPosition + this.width + 1, this.yPosition + this.height + 1, GuiStaticVariables.guiGradientTextField_BgRectColor0 ) ;
@@ -500,6 +513,18 @@ public class GuiGradientTextField extends Gui
 	//             drawRect(this.xPosition - 1, this.yPosition - 1, this.xPosition + this.width + 1, this.yPosition + this.height + 1, -6250336);
    //             drawRect(this.xPosition, this.yPosition, this.xPosition + this.width, this.yPosition + this.height, -16777216);
          
+            }
+            
+            if ( borderDrawing ) {
+            	
+            	this.drawRect(xPosition, yPosition, xPosition+width, yPosition+1, this.fieldBorderColor);
+            	
+            	this.drawRect(xPosition, yPosition+1, xPosition+1, yPosition+ height, this.fieldBorderColor);
+
+            	this.drawRect(xPosition+width, yPosition, xPosition+width+1, yPosition+ height, this.fieldBorderColor);
+
+            	this.drawRect(xPosition, yPosition+height, xPosition+width+1, yPosition + height + 1, this.fieldBorderColor);
+
             }
             
             if ( isHoldered && getText ( ) == null || getText ( ) . trim ( ) . isEmpty ( ) ) {
@@ -789,4 +814,6 @@ public class GuiGradientTextField extends Gui
     {
         this.visible = p_146189_1_;
     }
+
+
 }
