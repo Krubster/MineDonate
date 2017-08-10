@@ -15,9 +15,7 @@ public class DataOfUIConfig {
 	public boolean addSearchButton ;
 	public DataOfUIElement searchButton ;
 	public DataOfUITextHolderElement searchField ;
-	
-	public boolean bindF5RefreshButton ;
-	
+		
 	public DataOfUIMoneyGroup [ ] moneyGroups ;
 	public DataOfUILang lang ;
 	
@@ -38,9 +36,7 @@ public class DataOfUIConfig {
 		addSearchButton = true ;
 		searchButton = new DataOfUIElement ( "Search", 40, 20 ) ;
 		searchField = new DataOfUITextHolderElement ( "", "Entry name", 160, 20 ) ;
-		
-		bindF5RefreshButton = false ;
-		
+				
 		moneyGroups = new DataOfUIMoneyGroup [ ] { new DataOfUIMoneyGroup ( "rub", "minedonate:images/rub.png" ) } ;
 		lang = new DataOfUILang ( ) ;
 		

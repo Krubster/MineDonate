@@ -2,7 +2,6 @@ package ru.alastar.minedonate.plugin.reflection;
 
 import java.lang.reflect.Method;
 
-import ru.alastar.minedonate.plugin.clean.PermissionsPlugin;
 import ru.alastar.minedonate.plugin.clean.WorldGuardPlugin;
 
 public class WorldGuardPluginReflection extends WorldGuardPlugin {

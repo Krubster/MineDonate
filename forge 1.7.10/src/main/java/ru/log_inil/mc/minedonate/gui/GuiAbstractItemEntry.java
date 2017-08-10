@@ -8,7 +8,7 @@ import ru.log_inil.mc.minedonate.gui.context.ContextMenu;
 import ru.log_inil.mc.minedonate.gui.context.ContextMenuInteract;
 import ru.log_inil.mc.minedonate.gui.context.ContextMenuManager;
 
-public abstract class GuiAbstractItemEntry extends MCGuiAccessable implements ContextMenuInteract {
+public abstract class GuiAbstractItemEntry extends MCGuiAccessible implements ContextMenuInteract {
 
 	protected int xOffset, yOffset;
 	protected ContextMenu cmm ;

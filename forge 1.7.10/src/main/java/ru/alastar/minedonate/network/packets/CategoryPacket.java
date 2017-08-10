@@ -2,8 +2,6 @@ package ru.alastar.minedonate.network.packets;
 
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import io.netty.buffer.ByteBuf;
-import ru.alastar.minedonate.gui.ShopCategory;
-import ru.alastar.minedonate.rtnl.Utils;
 
 public class CategoryPacket implements IMessage {
 

@@ -2,8 +2,6 @@ package ru.alastar.minedonate.plugin.bukkit;
 
 import org.bukkit.Bukkit;
 
-import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-
 public class WorldGuardBukkitPlugin extends ru.alastar.minedonate.plugin.clean.WorldGuardPlugin {
 
 	boolean loaded = false ;

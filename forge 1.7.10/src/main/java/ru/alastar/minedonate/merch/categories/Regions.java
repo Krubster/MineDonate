@@ -2,10 +2,10 @@ package ru.alastar.minedonate.merch.categories;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.merch.info.RegionInfo;
-import ru.alastar.minedonate.network.packets.AddMerchPacket;
 import ru.alastar.minedonate.plugin.PluginHelper;
 import ru.alastar.minedonate.rtnl.ModNetwork;
 

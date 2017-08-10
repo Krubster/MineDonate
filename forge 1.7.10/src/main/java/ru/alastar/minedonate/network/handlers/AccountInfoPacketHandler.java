@@ -19,7 +19,7 @@ public class AccountInfoPacketHandler implements IMessageHandler<AccountInfoPack
 
     @Override 
     public IMessage onMessage(AccountInfoPacket message, MessageContext ctx) {
-    	
+
     	MineDonate . setAccount ( new Account ( Minecraft . getMinecraft ( ) . thePlayer . getDisplayName ( ) . toLowerCase ( ), message . permissions ) ) ;
 
     	for ( AccountInfoPacket . MoneySystem ms : message.mSystems ) {

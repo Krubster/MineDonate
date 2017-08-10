@@ -6,12 +6,12 @@ import cpw.mods.fml.common.gameevent.InputEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import net.minecraft.client.Minecraft;
+
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.gui.ShopGUI;
-import ru.alastar.minedonate.network.packets.InventoryShopPacket;
 import ru.alastar.minedonate.proxies.ClientProxy;
-import ru.alastar.minedonate.rtnl.ModNetwork;
 
 /**
  * Created by Alastar on 18.07.2017.

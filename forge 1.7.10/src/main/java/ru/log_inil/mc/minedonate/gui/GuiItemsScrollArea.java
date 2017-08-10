@@ -21,6 +21,18 @@ public class GuiItemsScrollArea extends GuiScrollingList {
         this.entrs=_entr;
     }
 
+	public void updateSizes ( ScaledResolution sr ) {
+	
+		listWidth =  sr . getScaledWidth ( ) - 60 ;
+		listHeight = ( int ) ( sr . getScaledHeight ( ) * 0.1 ) ; 
+		top = ( int ) ( sr . getScaledHeight ( ) * 0.1) + 15 + 24 ;
+		bottom =(int) ( ( sr . getScaledHeight ( ) ) - ( sr . getScaledHeight ( ) * 0.1 ) ) - 5 ;
+		left = 30 ;
+		slotHeight = itemHeight ;
+		right = listWidth + this.left;
+		
+	}
+	
     @Override
     protected int getSize() {
     	

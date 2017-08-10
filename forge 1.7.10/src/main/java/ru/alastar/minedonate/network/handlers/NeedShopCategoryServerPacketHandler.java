@@ -3,18 +3,19 @@ package ru.alastar.minedonate.network.handlers;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+
 import net.minecraft.entity.player.EntityPlayerMP;
+
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.info.ShopInfo;
 import ru.alastar.minedonate.network.packets.AddMerchPacket;
-import ru.alastar.minedonate.network.packets.CategoryPacket;
 import ru.alastar.minedonate.network.packets.NeedShopCategoryPacket;
 import ru.alastar.minedonate.network.packets.NeedUpdatePacket;
 import ru.alastar.minedonate.rtnl.ModNetwork;
 
 public class NeedShopCategoryServerPacketHandler implements IMessageHandler<NeedShopCategoryPacket, IMessage> {
     
-	public NeedShopCategoryServerPacketHandler(){
+	public NeedShopCategoryServerPacketHandler ( ) {
 
     }
     

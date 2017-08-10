@@ -32,14 +32,6 @@ public class ServerProxy extends CommonProxy {
         
     }
     
-    @Mod.EventHandler
-    public void init ( FMLInitializationEvent event ) {
-
-    	super . init ( event ) ;
-    	
-        ModNetwork . register ( ) ;
-
-    }
     
     @Mod.EventHandler
     public void serverStarting ( FMLServerStartingEvent event ) {

@@ -28,8 +28,6 @@ public class PluginHelper {
 	
 	public static void loadPlugins ( ) {
 		
-		ClassLoader cll = PluginHelper . class . getClassLoader ( ) ;
-
 		if ( MineDonate . cfg . sellPrivelegies && hasExists ( "PermissionsEx" ) ) {
 			
 			try {

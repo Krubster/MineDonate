@@ -2,13 +2,12 @@ package ru.alastar.minedonate.gui.categories;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.ScaledResolution;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.gui.ShopCategory;
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.merch.info.ShopInfo;
-import ru.alastar.minedonate.network.packets.manage.CreateNewShopPacket;
+
 import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.gui.GuiAbstractItemEntry;
 import ru.log_inil.mc.minedonate.gui.GuiGradientButton;
@@ -305,6 +304,10 @@ public class UsersShopsCategory extends ShopCategory {
 
 			gi = new GuiItemsScrollArea ( g . getScaledResolution ( ), gui, entrs, 0 ) ;
 	
+		} else {
+			
+			gi . updateSizes ( g . getScaledResolution ( ) ) ;
+			
 		}
 		
 		for ( GuiAbstractItemEntry gie : entrs ) {

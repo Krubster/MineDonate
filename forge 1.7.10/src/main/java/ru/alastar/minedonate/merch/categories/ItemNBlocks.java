@@ -3,10 +3,10 @@ package ru.alastar.minedonate.merch.categories;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
+
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.merch.info.ItemInfo;
-import ru.alastar.minedonate.network.packets.MerchInfoPacket;
 import ru.alastar.minedonate.rtnl.ModNetwork;
 
 import java.sql.ResultSet;

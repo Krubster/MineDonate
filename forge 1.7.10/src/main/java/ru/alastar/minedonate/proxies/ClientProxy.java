@@ -24,9 +24,6 @@ import java.util.Arrays;
 public class ClientProxy extends CommonProxy {
 
     public static KeyBinding openShop = new KeyBinding("minedonate.open.shop", Keyboard.KEY_EQUALS, "key.minedonate.main");
-    public static KeyBinding openAdmin = new KeyBinding("minedonate.open.admin", Keyboard.KEY_MINUS, "key.minedonate.main");
-
-    public static KeyBinding refreshCfg;
 
     public static DynamicTexture[] m_Privelegies_Icons = new DynamicTexture[0];
         
@@ -39,13 +36,6 @@ public class ClientProxy extends CommonProxy {
         MineDonate.loadClientConfig();
 
         ClientRegistry.registerKeyBinding(openShop);
-        ClientRegistry.registerKeyBinding(openAdmin);
-
-        if (MineDonate.cfgUI.bindF5RefreshButton) {
-
-            refreshCfg = new KeyBinding("minedonate.refresh", Keyboard.KEY_F5, "key.minedonate.main");
-            
-        }
 
     }
 

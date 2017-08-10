@@ -129,7 +129,7 @@ public class GuiFrameDeleteItem extends GuiEntry {
 		
     	if ( b . id == deleteButton . id ) {
     	
-    		if ( codeField . getText ( ) . trim ( ) . isEmpty ( ) || ! code . equals ( codeField . getText ( ) ) ) {
+    		if ( ! ShopGUI . instance . confirmFlag && ( codeField . getText ( ) . trim ( ) . isEmpty ( ) || ! code . equals ( codeField . getText ( ) ) ) ) {
     			
     			codeField . fieldBorderColor = fieldBorderRedColor ;
     			

@@ -6,10 +6,9 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+
 import ru.alastar.minedonate.MineDonate;
-import ru.alastar.minedonate.gui.merge.ShopInventoryContainer.UpdateInventorySlot;
 import ru.alastar.minedonate.rtnl.ModNetwork;
 
 public class ShopInventoryGUI extends GuiContainer {

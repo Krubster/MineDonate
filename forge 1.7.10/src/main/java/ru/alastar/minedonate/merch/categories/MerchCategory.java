@@ -2,11 +2,10 @@ package ru.alastar.minedonate.merch.categories;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import net.minecraft.entity.player.EntityPlayerMP;
-import ru.alastar.minedonate.MineDonate;
-import ru.alastar.minedonate.gui.ShopCategory;
+
 import ru.alastar.minedonate.merch.Merch;
-import ru.alastar.minedonate.network.packets.RemoveMerchPacket;
 import ru.alastar.minedonate.rtnl.ModNetwork;
 
 import java.sql.ResultSet;

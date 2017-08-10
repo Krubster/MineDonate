@@ -6,7 +6,6 @@ import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayerMP;
 import ru.alastar.minedonate.MineDonate;
-import ru.alastar.minedonate.gui.ShopCategory.SubCategory;
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.network.handlers.*;
 import ru.alastar.minedonate.network.handlers.manage.*;
@@ -23,7 +22,7 @@ public class ModNetwork {
     	
     	int i = 0 ;
     	
-        networkChannel . registerMessage ( AccountInfoPacketHandler . class, AccountInfoPacket . class, 0, Side . CLIENT ) ;
+        networkChannel . registerMessage ( AccountInfoPacketHandler . class, AccountInfoPacket . class, i ++, Side . CLIENT ) ;
         networkChannel . registerMessage ( AddMerchPacketHandler . class, AddMerchPacket . class, i ++, Side . CLIENT ) ;
         
         networkChannel . registerMessage ( BuyPacketHandler . class, BuyPacket . class, i ++, Side . SERVER ) ;
@@ -32,9 +31,14 @@ public class ModNetwork {
         networkChannel . registerMessage ( SupportedFeaturesPacketHandler . class, SupportedFeaturesPacket . class, i ++, Side . CLIENT ) ;
         networkChannel . registerMessage ( RemoveMerchPacketHandler . class, RemoveMerchPacket . class, i ++, Side . CLIENT ) ;
         networkChannel . registerMessage ( MerchInfoPacketHandler . class, MerchInfoPacket . class, i ++, Side . CLIENT ) ;
-        
-        networkChannel . registerMessage ( NeedUpdateServerPacketHandler . class, NeedUpdatePacket . class, i ++, Side .  SERVER ) ;
-        networkChannel . registerMessage ( NeedUpdateClientPacketHandler . class, NeedUpdatePacket . class, i ++, Side . CLIENT ) ;
+
+        i++ ;
+ 
+        networkChannel . registerMessage ( NeedUpdateServerPacketHandler . class, NeedUpdatePacket . class, i, Side .  SERVER ) ;
+        networkChannel . registerMessage ( NeedUpdateClientPacketHandler . class, NeedUpdatePacket . class, i, Side . CLIENT ) ;
+
+        i++ ;
+
         networkChannel . registerMessage ( NeedShopCategoryServerPacketHandler . class, NeedShopCategoryPacket . class, i ++, Side . SERVER ) ;
         
         networkChannel . registerMessage ( CategoryPacketHandler . class, CategoryPacket . class, i ++, Side . CLIENT ) ;

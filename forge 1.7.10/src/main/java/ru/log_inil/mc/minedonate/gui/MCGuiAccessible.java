@@ -3,7 +3,7 @@ package ru.log_inil.mc.minedonate.gui;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 
-public abstract class MCGuiAccessable extends GuiScreen {
+public abstract class MCGuiAccessible extends GuiScreen {
 
 	GuiScreen gs ;
 	

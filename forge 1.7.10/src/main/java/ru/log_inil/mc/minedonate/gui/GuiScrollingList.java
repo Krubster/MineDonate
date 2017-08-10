@@ -15,13 +15,13 @@ import org.lwjgl.opengl.GL11;
 public abstract class GuiScrollingList
 {
 	public final Minecraft client;
-    public final int listWidth;
-    public final int listHeight;
-    public final int top;
-    public final int bottom;
-    public final int right;
-    public final int left;
-    public final int slotHeight;
+    public int listWidth;
+    public int listHeight;
+    public int top;
+    public int bottom;
+    public int right;
+    public int left;
+    public int slotHeight;
     public int scrollUpActionId;
     public int scrollDownActionId;
     public int mouseX;

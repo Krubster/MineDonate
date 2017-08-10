@@ -5,7 +5,7 @@ import java.util.List;
 
 import net.minecraft.client.gui.Gui;
 import ru.alastar.minedonate.rtnl.Utils;
-import ru.log_inil.mc.minedonate.gui.MCGuiAccessable;
+import ru.log_inil.mc.minedonate.gui.MCGuiAccessible;
 
 public class ContextMenu {
 	
@@ -44,7 +44,7 @@ public class ContextMenu {
 	int dbgColorInteract = Utils.rgbaToInt(new Color(150, 1, 1, 255));
 	int dbgColor = Utils.rgbaToInt(new Color(1, 150, 1, 255));
 
-	public void draw ( MCGuiAccessable g, int mouseX, int mouseY ) {
+	public void draw ( MCGuiAccessible g, int mouseX, int mouseY ) {
 		
 		Gui . drawRect ( drawPosX, drawPosY - 2, drawPosX + maxWidth + 7, drawPosY + tmpHeight + 2, 1258291200 ) ;
 
@@ -88,7 +88,7 @@ public class ContextMenu {
 		
 	}
 	
-	public void calcMaxs ( MCGuiAccessable g ) {
+	public void calcMaxs ( MCGuiAccessible g ) {
 	
 		maxHeight = 0 ;
 		
@@ -101,7 +101,7 @@ public class ContextMenu {
 		
 	}
 	
-	public void updateInteractArea ( MCGuiAccessable g, int x, int y ) {
+	public void updateInteractArea ( MCGuiAccessible g, int x, int y ) {
 		// System.err.println(activateCoordX + "<=" + x);
 
 		activateCoordX = x ;
@@ -117,7 +117,7 @@ public class ContextMenu {
 
 	}
 	
-	public void updateInteractAreaSizes ( MCGuiAccessable g, int w, int h ) {
+	public void updateInteractAreaSizes ( MCGuiAccessible g, int w, int h ) {
 		
 		interactWidth = w ;
 		interactHeight = h ;
@@ -140,7 +140,7 @@ public class ContextMenu {
 		
 	}
 
-	public void drawDebugInteractable(MCGuiAccessable g, int mouseX, int mouseY) {
+	public void drawDebugInteractable(MCGuiAccessible g, int mouseX, int mouseY) {
  	
 
       	g.drawRect(drawPosX, drawPosY-2, activateCoordXEndInteract, drawPosY-1, dbgColorInteract);
@@ -153,7 +153,7 @@ public class ContextMenu {
     	
 	}
 
-	public void drawDebug(MCGuiAccessable g, int mouseX, int mouseY) {
+	public void drawDebug(MCGuiAccessible g, int mouseX, int mouseY) {
 		//dbgColor
     	g.drawRect(activateCoordX, activateCoordY, activateCoordXEnd, activateCoordY+1, dbgColor);
     	

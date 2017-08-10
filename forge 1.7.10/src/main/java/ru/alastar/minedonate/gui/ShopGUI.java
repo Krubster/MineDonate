@@ -7,16 +7,15 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.item.ItemStack;
+
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.gui.categories.*;
-import ru.alastar.minedonate.network.packets.NeedShopCategoryPacket;
-import ru.alastar.minedonate.network.packets.NeedUpdatePacket;
 import ru.alastar.minedonate.proxies.ClientProxy;
 import ru.alastar.minedonate.rtnl.ModNetwork;
+
 import ru.log_inil.mc.minedonate.gui.*;
 import ru.log_inil.mc.minedonate.gui.context.ContextMenuManager;
 import ru.log_inil.mc.minedonate.gui.frames.*;
-
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -26,7 +25,7 @@ import java.util.Map;
 /**
  * Created by Alastar on 18.07.2017.
  */
-public class ShopGUI extends MCGuiAccessable {
+public class ShopGUI extends MCGuiAccessible {
 
     public static ShopGUI instance ;
     
@@ -34,8 +33,9 @@ public class ShopGUI extends MCGuiAccessable {
 
     public boolean needNetUpdate = true ;
     public boolean loading = false ;
-    public boolean dbg = false ;
-    
+    public boolean dbgFlag = false ;
+    public boolean confirmFlag = false ;
+
     private static int buttonLastId = 3 ;
     
     public static int m_Page = 0 ;
@@ -193,21 +193,31 @@ public class ShopGUI extends MCGuiAccessable {
     		
     		searchField . textboxKeyTyped ( p_73869_1_, p_73869_2_ ) ;		
 
+            //updateGrid ( ) ;
+            //updateBtns ( ) ;
+			
+            if ( "!DBGE" . equals ( searchField . getText ( ) ) ) {
+            	
+            	dbgFlag = ! dbgFlag ;
+            	
+            	searchField . setText ( "" ) ;
+            	
+            }
+            
+            if ( "!CNFRM" . equals ( searchField . getText ( ) ) ) {
+            	
+            	confirmFlag = ! confirmFlag ;
+            	
+            	searchField . setText ( "" ) ;
+            	
+            }
+            
 			getCurrentCategory ( ) . search ( searchField . getText ( ) ) ;
 			
 			getCurrentCategory ( ) . unShow ( this ) ;
 			getCurrentCategory ( ) . preShow ( this ) ;
 			getCurrentCategory ( ) . postShow ( this ) ;
 			
-            //updateGrid ( ) ;
-            //updateBtns ( ) ;
-			
-            if ( "!DBGE" . equals ( searchField . getText ( ) ) ) {
-            	
-            	dbg = ! dbg ;
-            	
-            }
-            
     		return ;
     		
     	}
@@ -221,8 +231,8 @@ public class ShopGUI extends MCGuiAccessable {
 			}
   			
 		}
-  		
-    	if ( ClientProxy . refreshCfg != null && ClientProxy . refreshCfg . getKeyCode ( ) == p_73869_2_ ) { 
+
+  		if ( dbgFlag && p_73869_2_ == 63 ) { 
     		
     		MineDonate . loadClientConfig ( ) ;
     		initGui ( ) ;
@@ -258,7 +268,7 @@ public class ShopGUI extends MCGuiAccessable {
     @Override
     protected void mouseClicked ( int p_73864_1_, int p_73864_2_, int p_73864_3_ ) {
     	
-    	if ( dbg ) {
+    	if ( dbgFlag ) {
 
     		System . err . println ( "Mouse click: x" + p_73864_1_ + ", y" + p_73864_2_ + ", k" + p_73864_3_ ) ;
     		
@@ -313,7 +323,7 @@ public class ShopGUI extends MCGuiAccessable {
     @Override
     protected void actionPerformed(GuiButton button) {
 
-    	if ( dbg ) {
+    	if ( dbgFlag ) {
     		
     		System . err . println ( "" ) ;
     		
@@ -521,7 +531,7 @@ public class ShopGUI extends MCGuiAccessable {
 
         ContextMenuManager . draw ( this, mouseX, mouseY ) ;
         
-        if ( dbg ) {
+        if ( dbgFlag ) {
         	
         	ContextMenuManager . drawDebug ( this, mouseX, mouseY ) ;
         	

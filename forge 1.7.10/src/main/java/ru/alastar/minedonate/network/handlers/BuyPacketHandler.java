@@ -3,22 +3,21 @@ package ru.alastar.minedonate.network.handlers;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+
 import net.minecraft.entity.player.EntityPlayerMP;
+
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.network.packets.BuyPacket;
 import ru.alastar.minedonate.network.packets.BuyResponsePacket;
-import ru.alastar.minedonate.network.packets.MoneyChangedPacket;
 import ru.alastar.minedonate.rtnl.ModNetwork;
 
 /**
  * Created by Alastar on 18.07.2017.
  */
 public class BuyPacketHandler implements IMessageHandler<BuyPacket, IMessage> {
-    // Do note that the default constructor is required, but implicitly defined in this case
-    public BuyPacketHandler() {
 
-    }
+	public BuyPacketHandler ( ) { }
 
     @Override
     public IMessage onMessage(BuyPacket message, MessageContext ctx) {

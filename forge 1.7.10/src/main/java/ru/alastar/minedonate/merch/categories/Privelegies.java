@@ -2,14 +2,13 @@ package ru.alastar.minedonate.merch.categories;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import org.bukkit.Bukkit;
+
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.merch.info.PrivilegieInfo;
 import ru.alastar.minedonate.plugin.PluginHelper;
 import ru.alastar.minedonate.proxies.ClientProxy;
 
-import java.lang.reflect.InvocationTargetException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;

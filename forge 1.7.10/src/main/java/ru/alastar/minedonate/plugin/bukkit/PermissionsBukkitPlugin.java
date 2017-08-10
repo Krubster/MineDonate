@@ -1,10 +1,7 @@
 package ru.alastar.minedonate.plugin.bukkit;
 
-import java.net.URL;
-
 import org.bukkit.Bukkit;
 
-import ru.alastar.minedonate.plugin.PluginHelper;
 import ru.alastar.minedonate.plugin.clean.PermissionsPlugin;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 

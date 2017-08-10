@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.alastar.minedonate.gui.ShopGUI;
-import ru.log_inil.mc.minedonate.gui.MCGuiAccessable;
+import ru.log_inil.mc.minedonate.gui.MCGuiAccessible;
 
 public class ContextMenuManager {
 
@@ -12,9 +12,9 @@ public class ContextMenuManager {
 	static boolean currentDrawMenu = false ;
 	static ContextMenu currentMenu ;
 	
-	static MCGuiAccessable gs ;
+	static MCGuiAccessible gs ;
 	
-	public static void draw ( MCGuiAccessable _gs, int mouseX, int mouseY ) {
+	public static void draw ( MCGuiAccessible _gs, int mouseX, int mouseY ) {
 		
 		gs = _gs ;
 		
@@ -26,7 +26,7 @@ public class ContextMenuManager {
 		
 	}
 	
-	public static void drawDebug ( MCGuiAccessable _gs, int mouseX, int mouseY ) {
+	public static void drawDebug ( MCGuiAccessible _gs, int mouseX, int mouseY ) {
 		
 		gs = _gs ;
 		
