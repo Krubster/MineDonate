@@ -7,6 +7,7 @@ import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.gui.ShopCategory;
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.network.packets.RemoveMerchPacket;
+import ru.alastar.minedonate.rtnl.ModNetwork;
 
 import java.sql.ResultSet;
 import java.util.Arrays;
@@ -28,8 +29,6 @@ public abstract class MerchCategory {
 
     }
     
-    public ShopCategory . SubCategory [ ] subCategories ;
-
     protected Merch[] m_Merch = new Merch[0];
 
     @SideOnly(Side.SERVER)
@@ -52,7 +51,8 @@ public abstract class MerchCategory {
     }
 
     public abstract boolean isEnabled();
-
+    public abstract void setEnabled ( boolean _enabled ) ;
+    
     @SideOnly(Side.SERVER)
     public abstract void GiveMerch(EntityPlayerMP player, Merch merch, int amount);
 
@@ -88,7 +88,8 @@ public abstract class MerchCategory {
         for (int i = 0; i < m_Merch.length; ++i) {
             m_Merch[i].setId(i);
         }
-        MineDonate.networkChannel.sendToAll(new RemoveMerchPacket(info.getShopId(), info.getId(), info.getCategory()));
+        
+        ModNetwork . sendToAllRemoveMerchPacket ( info . getShopId ( ), info . getId ( ), info . getCategory ( ) ) ;
 
     }
 

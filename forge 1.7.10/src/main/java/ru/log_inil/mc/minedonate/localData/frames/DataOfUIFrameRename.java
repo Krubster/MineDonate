@@ -15,7 +15,7 @@ public class DataOfUIFrameRename {
 		title = "Rename" ;
 		saveButton = new DataOfUIElement ( "Rename", 40, 20 ) ;
 		cancelButton = new DataOfUIElement ( "Cancel", 40, 20 ) ;
-		renameField = new DataOfUITextHolderElement ( "", "Item name", 160, 20 ) ;
+		renameField = new DataOfUITextHolderElement ( "", "", 160, 20 ) ;
 		
 	}
 	

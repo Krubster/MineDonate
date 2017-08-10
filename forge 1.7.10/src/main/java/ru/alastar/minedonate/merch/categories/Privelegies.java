@@ -19,6 +19,8 @@ import java.util.Arrays;
  */
 public class Privelegies extends MerchCategory {
 
+	boolean enabled = MineDonate.cfg.sellPrivelegies ;
+
     public Privelegies(int _shopId, int _catId, String _moneyType) {
 
         super(_shopId, _catId, _moneyType);
@@ -32,17 +34,9 @@ public class Privelegies extends MerchCategory {
 
     @Override
     public void reverseFor(String log_msg, String player) {
-        try {
-            String name = log_msg.split(":")[2].split("-")[1];
-            Object obj = Bukkit.getPluginManager().getPlugin("PermissionsEx").getClass().getMethod("getUser", String.class).invoke(null, player);
-            obj.getClass().getMethod("removeGroup", String.class).invoke(obj, name);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        }
+        
+    	PluginHelper.pexMgr.removeGroup ( player, log_msg.split(":")[2].split("-")[1] ) ;
+
     }
 
     @Override
@@ -80,7 +74,14 @@ public class Privelegies extends MerchCategory {
 
     @Override
     public boolean isEnabled() {
-        return MineDonate.cfg.sellPrivelegies;
+        return enabled;
+    }
+    
+    @Override
+    public void setEnabled ( boolean _enabled ) {
+    	
+    	enabled = _enabled ;
+    	
     }
 
     @Override

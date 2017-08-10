@@ -4,14 +4,14 @@ import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.OpenGlHelper;
 
-public class GuiGradientButton extends GuiButton {
+public class GuiGradientButton extends GuiTexturedButton {
 
 	public boolean gradientVector = false ;
 	public boolean pressed = false ;
-	
+	public boolean gradient = true ;
+
     public GuiGradientButton(int p_i1020_1_, int p_i1020_2_, int p_i1020_3_, String p_i1020_4_, boolean _gv)
     {
         this(p_i1020_1_, p_i1020_2_, p_i1020_3_, 200, 20, p_i1020_4_, _gv);
@@ -34,9 +34,16 @@ public class GuiGradientButton extends GuiButton {
         
     }
 
-  
+    @Override
     public void drawButton(Minecraft p_146112_1_, int p_146112_2_, int p_146112_3_)
     {
+    	if ( ! gradient ) {
+    		
+    		super.drawButton(p_146112_1_, p_146112_2_, p_146112_3_);
+    		return ;
+    		
+    	}
+    	
         if (this.visible)
         {
             FontRenderer fontrenderer = p_146112_1_.fontRenderer;

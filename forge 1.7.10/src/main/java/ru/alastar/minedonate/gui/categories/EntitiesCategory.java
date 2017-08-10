@@ -48,14 +48,17 @@ public class EntitiesCategory extends ShopCategory {
     	return "Entities" ;
         
     }
-
-    ScaledResolution resolution ;
     
     @Override
-    public void draw(ShopGUI relative, int m_Page, int mouseX, int mouseY, float partialTicks, DrawType dt) {
+    public void draw(ShopGUI g, int page, int mouseX, int mouseY, float partialTicks, DrawType dt) {
+    
+    	super.draw(g, page, mouseX, mouseY, partialTicks, dt);
 
-    	resolution = new ScaledResolution(relative.mc, relative.mc.displayWidth, relative.mc.displayHeight);
-    	gi.drawScreen(mouseX, mouseY, partialTicks, dt);
+    	if ( gi != null ) {
+    		
+    		gi . drawScreen(mouseX, mouseY, partialTicks, dt);
+    		
+    	}
     	
     }
     
@@ -63,8 +66,7 @@ public class EntitiesCategory extends ShopCategory {
     GuiButton rightButton;
     
     @Override
-    public void updateButtons(ShopGUI relative, int page ) {
-    	    	    	    	
+    public void updateButtons(ShopGUI relative, int page ) {	    	    	    	
 
     	rightButton = relative.exitButton;
     
@@ -98,49 +100,19 @@ public class EntitiesCategory extends ShopCategory {
 		
 	@Override
 	public void postShow ( ShopGUI g ) {
-	
+
 		if ( subCatId == -1 ) {
 			
 			setSubCategory ( subCatId ) ;
 			
 		}
-		
-		refreshGui ( ) ;
-		
-		super . postShow ( g ) ;
-		
-	}
-	
-	EntityInfo eim ;
 
-	List < Merch > noSearchedEntries = new ArrayList < > ( ) ;
+		if ( gi == null ) {
+
+			gi = new GuiItemsScrollArea ( g . getScaledResolution ( ), gui, entrs, 0 ) ;
 	
-	public void setSubCategory ( int _subCatId ) {
-		
-		noSearchedEntries . clear ( ) ;
-		
-		if ( MineDonate . shops . containsKey ( gui . getCurrentShopId ( ) ) ) {
-	
-			for ( Merch m : MineDonate . shops . get ( 0 ) . cats [ catId ] . getMerch ( ) ) {
-				
-				if ( m . subCatId == _subCatId || _subCatId == -1 ) {
-					
-					noSearchedEntries . add ( m ) ;
-					
-				}
-				
-			}
-			
 		}
 		
-	}
-	
-	public void refreshGui ( ) {
-		
-		resolution = new ScaledResolution(gui.mc, gui.mc.displayWidth, gui.mc.displayHeight);
-		
-		gi = new GuiItemsScrollArea ( resolution, gui, entrs, 0 ) ;
-	
 		for ( GuiAbstractItemEntry gie : entrs ) {
 
 			gie . unDraw ( ) ;
@@ -149,6 +121,12 @@ public class EntitiesCategory extends ShopCategory {
 		
 		entrs . clear ( ) ;
 		 
+		if ( g . isLoading ( ) ) {
+			
+			return ;
+			
+		}
+		
         if ( subCats != null && subCats . length > 0 && subCatId == -1 ) {
         	
         	return ;
@@ -186,7 +164,33 @@ public class EntitiesCategory extends ShopCategory {
     	
     	gi . entrs = entrs ;
     	gi . applyScrollLimits ( ) ;
-    	
+    			
+		super . postShow ( g ) ;
+		
+	}
+	
+	EntityInfo eim ;
+
+	List < Merch > noSearchedEntries = new ArrayList < > ( ) ;
+	
+	public void setSubCategory ( int _subCatId ) {
+		
+		noSearchedEntries . clear ( ) ;
+		
+		if ( MineDonate . shops . containsKey ( gui . getCurrentShopId ( ) ) ) {
+	
+			for ( Merch m : MineDonate . shops . get ( 0 ) . cats [ catId ] . getMerch ( ) ) {
+				
+				if ( m . subCatId == _subCatId || _subCatId == -1 ) {
+					
+					noSearchedEntries . add ( m ) ;
+					
+				}
+				
+			}
+			
+		}
+		
 	}
 	
 	@Override

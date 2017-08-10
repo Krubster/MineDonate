@@ -11,7 +11,6 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.events.ClientEventHandler;
-import ru.alastar.minedonate.events.KeyInputEvent;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -24,29 +23,28 @@ import java.util.Arrays;
  */
 public class ClientProxy extends CommonProxy {
 
-    public static KeyBinding openHUD = new KeyBinding("minedonate.open.shop", Keyboard.KEY_EQUALS, "key.minedonate.main");
+    public static KeyBinding openShop = new KeyBinding("minedonate.open.shop", Keyboard.KEY_EQUALS, "key.minedonate.main");
+    public static KeyBinding openAdmin = new KeyBinding("minedonate.open.admin", Keyboard.KEY_MINUS, "key.minedonate.main");
+
     public static KeyBinding refreshCfg;
 
     public static DynamicTexture[] m_Privelegies_Icons = new DynamicTexture[0];
-    public static KeyBinding openAdmin = new KeyBinding("minedonate.open.admin", Keyboard.KEY_MINUS, "key.minedonate.main");
+        
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
 
-
         FMLCommonHandler.instance().bus().register(new ClientEventHandler());
-        FMLCommonHandler.instance().bus().register(new KeyInputEvent());
 
         MineDonate.loadClientConfig();
 
-        ClientRegistry.registerKeyBinding(openHUD);
+        ClientRegistry.registerKeyBinding(openShop);
         ClientRegistry.registerKeyBinding(openAdmin);
 
         if (MineDonate.cfgUI.bindF5RefreshButton) {
 
             refreshCfg = new KeyBinding("minedonate.refresh", Keyboard.KEY_F5, "key.minedonate.main");
-            ClientRegistry.registerKeyBinding(refreshCfg);
-
+            
         }
 
     }

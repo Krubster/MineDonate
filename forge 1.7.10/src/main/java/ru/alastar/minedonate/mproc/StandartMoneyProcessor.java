@@ -66,12 +66,16 @@ public class StandartMoneyProcessor extends AbstractMoneyProcessor {
             
             stat . close ( ) ;
             
-			for ( AbstractMoneyProcessor amp : pl ) {
+			if ( MineDonate . cfg . autoFixMoneyProcessorsTableCollisions ) {
 				
-				if ( domp . dbTable . equals ( amp . domp . dbTable ) ) {
+				for ( AbstractMoneyProcessor amp : pl ) {
 					
-					amp . setMoney ( name, domp . regMoney ) ;
+					if ( domp . dbTable . equals ( amp . domp . dbTable ) ) {
+						
+						amp . setMoney ( name, domp . regMoney ) ;
 
+					}
+					
 				}
 				
 			}

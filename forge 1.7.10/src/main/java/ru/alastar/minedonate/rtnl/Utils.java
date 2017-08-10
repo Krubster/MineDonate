@@ -1,4 +1,4 @@
-package ru.alastar.minedonate;
+package ru.alastar.minedonate.rtnl;
 
 import java.awt.Color;
 import java.io.UnsupportedEncodingException;
@@ -20,15 +20,16 @@ public class Utils {
         buf . writeBytes ( str . getBytes ( "UTF-8" ) ) ;
         
     }
+    
+	public static int rgbaToInt ( Color c ) {
+		
+    	int r = c . getRed ( ) & 0xFF ;
+		int g = c . getGreen ( ) & 0xFF ;
+		int b = c . getBlue ( ) & 0xFF ;
+		int a = c . getAlpha ( ) & 0xFF ;
 
-
-	public static int rgbaToInt(Color c) {
-    	int r = c.getRed() & 0xFF;
-		int g = c.getGreen() & 0xFF;
-		int b = c.getBlue() & 0xFF;
-		int a = c.getAlpha() & 0xFF;
-
-		return (r << 16) + (g << 8) + (b) + (a<<24);
+		return ( r << 16 ) + ( g << 8 ) + ( b ) + ( a << 24 ) ;
+		
 	}
 
 

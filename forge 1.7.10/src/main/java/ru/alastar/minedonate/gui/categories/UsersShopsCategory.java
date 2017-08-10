@@ -8,8 +8,7 @@ import ru.alastar.minedonate.gui.ShopCategory;
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.merch.info.ShopInfo;
-import ru.alastar.minedonate.network.packets.CreateNewShopPacket;
-
+import ru.alastar.minedonate.network.packets.manage.CreateNewShopPacket;
 import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.gui.GuiAbstractItemEntry;
 import ru.log_inil.mc.minedonate.gui.GuiGradientButton;
@@ -32,7 +31,7 @@ public class UsersShopsCategory extends ShopCategory {
     @Override
     public boolean getEnabled ( ) {
     	
-        return ( userSC != null ? userSC . getEnabled ( ) : MineDonate . cfg . userShops ) ;
+        return  MineDonate . cfg . userShops ; // ( userSC != null ? userSC . getEnabled ( ) : MineDonate . cfg . userShops ) ;
         
     }
 
@@ -49,21 +48,19 @@ public class UsersShopsCategory extends ShopCategory {
     	return "Users shops";
         
     }
-
-    ScaledResolution resolution;
     
     @Override
-    public void draw(ShopGUI relative, int m_Page, int mouseX, int mouseY, float partialTicks, DrawType dt ) {
-    	
-        resolution = new ScaledResolution ( relative . mc, relative . mc . displayWidth, relative . mc . displayHeight ) ;// bull shit
-        
+    public void draw(ShopGUI g, int page, int mouseX, int mouseY, float partialTicks, DrawType dt ) {
+    	        
+    	super.draw(g, page, mouseX, mouseY, partialTicks, dt);
+
         if ( userSC != null && userSC . getScrollList ( ) != null && dt != DrawType . BG ) {
 
         	userSC . getScrollList ( ) . drawScreen ( mouseX, mouseY, partialTicks, dt ) ; 
         	
         }
     	
-        if ( ( userSC != null ? dt != DrawType . POST : true ) ) {
+        if ( gi != null && ( userSC != null ? dt != DrawType . POST : true ) ) {
         	
         	gi . drawScreen ( mouseX, mouseY, partialTicks, dt ) ;
         	
@@ -78,7 +75,7 @@ public class UsersShopsCategory extends ShopCategory {
     public boolean displayReturnButton = false; 
 
     @Override
-    public void updateButtons ( ShopGUI relative, int m_Page ) {
+    public void updateButtons ( ShopGUI relative, int page ) {
     	
         gui = relative ;
         
@@ -107,13 +104,18 @@ public class UsersShopsCategory extends ShopCategory {
     	
     	if ( userSC != null ) {
     		
-    		userSC . updateButtons(relative, m_Page);
-
+    		//userSC . updateButtons(relative, page);
     		userSC . postShow ( relative ) ;
-    	
+    		
+    		relative . getButtonList ( ) . add ( ( (ItemNBlockCategory) userSC ) . addButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), 
+    				createNewShopButton . xPosition -  MineDonate . cfgUI . cats . itemsAndBlocks . addButton . width,
+    				createNewShopButton.yPosition, MineDonate . cfgUI . cats . itemsAndBlocks . addButton . width, MineDonate . cfgUI . cats . itemsAndBlocks . addButton . height, MineDonate . cfgUI . cats . itemsAndBlocks . addButton . text, false ) ) ;
+	
     	}
 
-    	refreshGui ( ) ;
+
+    	super.updateButtons(relative, page);
+    	//refreshGui ( relative ) ;
 
     	updateButtons ( ) ;
     	
@@ -124,69 +126,78 @@ public class UsersShopsCategory extends ShopCategory {
     boolean createNewShopFirst = true ;
 
     @Override
-    public void actionPerformed(GuiButton button) {
+    public boolean actionPerformed(ShopGUI g, GuiButton button) {
 
+    	super.actionPerformed(g, button);
+    	
     	if ( userSC != null ) {
     		
-    		userSC . actionPerformed ( button ) ;
+    		userSC . actionPerformed ( g, button ) ;
     		
-    		if ( button . id == returnButton . id ) {
+    		if ( returnButton != null && button . id == returnButton . id ) {
     			
     			gui . lockProcess ( ) ;
 
     			if ( viewMyShops ) {
     				
-    				actionPerformed ( viewMyShopsButton ) ;
+    				actionPerformed ( g, viewMyShopsButton ) ;
     				
-        			gui . updateBtns ( ) ;
+        			gui . updateButtons ( true ) ;
         			updateButtons ( ) ;
+        			postShow ( g ) ;
 
-    				return ;
+    				return true ;
     				
     			}
     			
+    			/*
     			if ( createNewShop ) {
     			
-    				gui . listTextFields . remove ( this . newShopNameField ) ;
-    				createNewShop = false ;
+    				//gui . listTextFields . remove ( this . newShopNameField ) ;
+    				//createNewShop = false ;
     				
-        			gui . updateBtns ( ) ;
+        			gui . updateButtons ( true ) ;
         			updateButtons ( ) ;
+        			postShow ( g ) ;
 
-    				return ;
+    				return true ;
     				
-    			}
+    			}*/
     			
 				ShopGUI . instance . currentShop = selectedShop = 0 ;
 
-    			updateUserShopCategory ( null, true ) ;
-    			gui . updateBtns ( ) ;
+    			updateUserShopCategory ( g, null, true ) ;
+    			gui . updateButtons ( true ) ;
     			updateButtons ( ) ;
-
+    			postShow ( g ) ;
         		//relative . returnButton . enabled = relative . returnButton . visible =ShopGUI .instance . displayReturnButton = false ;
-    			return ;
+    			return true ;
     			
 			}
     		
     	}
     	
-		if ( button . id == returnButton . id ) {
+    	/*
+		if ( returnButton != null && button . id == returnButton . id ) {
 
 			if ( createNewShop ) {
 				
-				gui . listTextFields . remove ( this . newShopNameField ) ;
-				createNewShop = false ;
-				
-				gui . updateBtns ( ) ;
-				updateButtons ( ) ;
+				//g . showEntry ( "createShop", true ) ;	
 
-				return ;
+				//gui . listTextFields . remove ( this . newShopNameField ) ;
+				//createNewShop = false ;
+				
+				gui . updateButtons ( true ) ;
+				updateButtons ( ) ;
+    			postShow ( g ) ;
+
+				return true ;
 				
 			}
 			
-		}
+		}*/
 		
-		if ( button . id == this . viewMyShopsButton . id ) {
+		if ( viewMyShopsButton != null && button . id == this . viewMyShopsButton . id ) {
 
 			gui . lockProcess ( ) ;
 			
@@ -202,29 +213,40 @@ public class UsersShopsCategory extends ShopCategory {
 			
 			viewMyShops = ! viewMyShops ;
 
-			gui . updateBtns ( ) ;
+			gui . updateButtons ( true ) ;
 			updateButtons ( ) ;
+			postShow ( g ) ;
+
+			return true ;
 			
     	}
         
-		if ( button . id == this . createNewShopButton . id ) {
+		if ( createNewShopButton != null && button . id == this . createNewShopButton . id ) {
 
 			gui . lockProcess ( ) ;
 
+			g . showEntry ( "createShop", true ) ;	
+
+			/*
 			if ( createNewShop && ! createNewShopFirst ) {
 
 				gui . loading = true ;
                 MineDonate . networkChannel . sendToServer ( new CreateNewShopPacket ( this . newShopNameField . getText ( ) ) ) ;
 
-			}
+			}*/
 			
-			createNewShop = ! createNewShop ;
-			createNewShopFirst = false ;
+			//createNewShop = ! createNewShop ;
+			//createNewShopFirst = false ;
 
-			gui . updateBtns ( ) ;
+			gui . updateButtons ( true ) ;
 			updateButtons ( ) ;
+			postShow ( g ) ;
 
+			return true ;
+			
     	}
+		
+		return false ;
         
     }
     
@@ -249,7 +271,15 @@ public class UsersShopsCategory extends ShopCategory {
 	@Override
 	public void postShow ( ShopGUI g ) {
 	
+		super . postShow ( g ) ;
+
 		if ( userSC != null ) {
+			
+			if ( subCatId == -1 ) {
+				
+				userSC . setSubCategory ( subCatId ) ;
+				
+			}
 			
 			userSC . preShow ( gui ) ;
 			userSC . postShow ( g ) ;
@@ -263,27 +293,33 @@ public class UsersShopsCategory extends ShopCategory {
 		}
 		
 		updateButtons ( ) ;
-		refreshGui ( ) ;
+		refreshGui ( g ) ;
 		
-		super . postShow ( g ) ;
-
 	}
 	
 	GuiGradientTextField newShopNameField ;
 	
-	public void refreshGui ( ) {
+	public void refreshGui ( ShopGUI g ) {
 		
-		resolution = new ScaledResolution(gui.mc, gui.mc.displayWidth, gui.mc.displayHeight);// bull shit
+		if ( gi == null ) {
 
-		gi = new GuiItemsScrollArea ( resolution, gui, entrs, 0 ) ;
+			gi = new GuiItemsScrollArea ( g . getScaledResolution ( ), gui, entrs, 0 ) ;
 	
+		}
+		
 		for ( GuiAbstractItemEntry gie : entrs ) {
 
-			gie . unDraw ( ) ;
+			gie . unShow ( g ) ;
 			
 		}
 		
 		entrs . clear ( ) ;
+		
+		if ( g . isLoading ( ) ) {
+			
+			return ;
+			
+		}
 		
 		if ( createNewShop ) {
 			
@@ -295,8 +331,8 @@ public class UsersShopsCategory extends ShopCategory {
 
 			}
 			
-			newShopNameField . xPosition = ( resolution . getScaledWidth ( ) ) - 30 - MineDonate.cfgUI.cats.shops.createNewShopNameField.width ;
-			newShopNameField . yPosition = ( int ) ( ( resolution . getScaledHeight ( ) ) - ( resolution . getScaledHeight ( ) * 0.1 ) ) - 5 - MineDonate . cfgUI . cats.shops.createNewShopNameField . height ;
+			newShopNameField . xPosition = ( g . getScaledResolution ( ) . getScaledWidth ( ) ) - 30 - MineDonate.cfgUI.cats.shops.createNewShopNameField.width ;
+			newShopNameField . yPosition = ( int ) ( ( g . getScaledResolution ( ) . getScaledHeight ( ) ) - ( g . getScaledResolution ( ) . getScaledHeight ( ) * 0.1 ) ) - 5 - MineDonate . cfgUI . cats.shops.createNewShopNameField . height ;
 			
 			if ( ! gui . listTextFields . contains ( newShopNameField ) ) {
 				
@@ -329,7 +365,7 @@ public class UsersShopsCategory extends ShopCategory {
 		    	} else {
 		    		
 		    		for ( Merch m : noSearchedEntries ) {
-		        		
+
 		        		iim = ( ShopInfo ) m ; 
 		        		
 		        		if ( iim != null ) {
@@ -348,8 +384,8 @@ public class UsersShopsCategory extends ShopCategory {
 	    	}
 		
 		}
-    	
-    	gi . entrs = entrs ;
+
+		gi . entrs = entrs ;
     	gi . applyScrollLimits ( ) ;
     	
 	}
@@ -359,21 +395,27 @@ public class UsersShopsCategory extends ShopCategory {
     	
     	super . unShow ( g ) ;
     	
+		if ( userSC != null ) {
+			
+			userSC . unShow ( g ) ;
+			
+		}
+		
 		g . listTextFields . remove ( this . newShopNameField ) ;
 		createNewShop = false ;
 		
     }
     
-	public void updateUserShopCategory ( ShopCategory sc, boolean r ) {
+	public void updateUserShopCategory ( ShopGUI g, ShopCategory sc, boolean r ) {
 
 		if ( userSC != null ) {
 			
-			userSC . unDraw ( ) ;
+			userSC . unShow ( g ) ;
 			
 		}
 
 		userSC = sc ;
-		if ( r ) { refreshGui ( ) ; }
+		if ( r ) { refreshGui ( g ) ; }
 		updateButtons ( ) ;
 		
 	}

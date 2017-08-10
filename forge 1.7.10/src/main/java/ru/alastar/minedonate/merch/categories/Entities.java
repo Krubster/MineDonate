@@ -15,7 +15,9 @@ import java.sql.SQLException;
  * Created by Alastar on 21.07.2017.
  */
 public class Entities extends MerchCategory {
-	
+
+	boolean enabled = MineDonate.cfg.sellEntities ;
+
 	public Entities ( int _shopId, int _catId, String _moneyType ) {
 		
     	super ( _shopId, _catId, _moneyType ) ;
@@ -54,7 +56,14 @@ public class Entities extends MerchCategory {
 
     @Override
     public boolean isEnabled() {
-        return MineDonate.cfg.sellEntities;
+        return enabled;
+    }
+    
+    @Override
+    public void setEnabled ( boolean _enabled ) {
+    	
+    	enabled = _enabled ;
+    	
     }
 
     @Override

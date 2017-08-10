@@ -1,9 +1,11 @@
-package ru.log_inil.mc.minedonate.gui;
+package ru.log_inil.mc.minedonate.gui.frames;
 
 import java.awt.Color;
 
-import ru.alastar.minedonate.Utils;
 import ru.alastar.minedonate.gui.ShopGUI;
+import ru.alastar.minedonate.rtnl.Utils;
+import ru.log_inil.mc.minedonate.gui.DrawType;
+import ru.log_inil.mc.minedonate.gui.GuiEntry;
 
 public class GuiFrameExample extends GuiEntry {
 

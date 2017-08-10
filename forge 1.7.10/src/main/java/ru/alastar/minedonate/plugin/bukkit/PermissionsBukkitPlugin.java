@@ -42,5 +42,11 @@ public class PermissionsBukkitPlugin extends PermissionsPlugin {
 		
 	}
 	
+	@Override
+	public void removeGroup ( String user, String name ) {
+		
+		pexMgr . getUser ( Bukkit . getPlayer ( user ) ) . removeGroup ( name ) ;
+		
+	}
 	
 }

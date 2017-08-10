@@ -1,25 +1,26 @@
-package ru.alastar.minedonate.network.packets;
+package ru.alastar.minedonate.network.packets.manage;
 
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import io.netty.buffer.ByteBuf;
-import ru.alastar.minedonate.Utils;
+import ru.alastar.minedonate.rtnl.Utils;
 
 public class CreateNewShopPacket implements IMessage {
 
 	String name ;
-    public CreateNewShopPacket(){}
-    public CreateNewShopPacket(String _name){
+	
+    public CreateNewShopPacket ( ) { }
+    public CreateNewShopPacket ( String _name ) {
     	
     	name = _name ;
     	
     }
 
     @Override 
-    public void toBytes(ByteBuf buf) {
+    public void toBytes ( ByteBuf buf ) {
     	
     	try {
 			
-    		Utils . netWriteString(buf, name);
+    		Utils . netWriteString ( buf, name ) ;
 			
 		} catch ( Exception ex ) {
 			
@@ -30,7 +31,7 @@ public class CreateNewShopPacket implements IMessage {
     }
 
     @Override 
-    public void fromBytes(ByteBuf buf) {
+    public void fromBytes ( ByteBuf buf ) {
     	
        try {
     	   

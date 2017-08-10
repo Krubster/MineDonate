@@ -51,74 +51,18 @@ public class PrivilegieCategory extends ShopCategory {
 
     }
 
-    ScaledResolution resolution;
-
     @Override
-    public void draw(ShopGUI relative, int page, int mouseX, int mouseY, float partialTicks, DrawType dt) {
+    public void draw(ShopGUI g, int page, int mouseX, int mouseY, float partialTicks, DrawType dt) {
 
-        ScaledResolution resolution = new ScaledResolution(relative.mc, relative.mc.displayWidth, relative.mc.displayHeight);
-
-        if (dt == DrawType.BG) {
-
-            // relative.drawRect(30, (int) (resolution.getScaledHeight() * 0.1) + 15+24, resolution.getScaledWidth()-30,  (int) ( (resolution.getScaledHeight()) - (resolution.getScaledHeight() * 0.1) ) - 5, 1258291200);
-            relative.drawGradientRectAccess(30, (int) (resolution.getScaledHeight() * 0.1) + 19 + 20, resolution.getScaledWidth() - 30, (int) ((resolution.getScaledHeight()) - (resolution.getScaledHeight() * 0.1)) - 5, -1072689136, -804253680);
-
-        } else if (dt == DrawType.PRE) {
+    	super.draw(g, page, mouseX, mouseY, partialTicks, dt);
+    	
+    	if ( dt == DrawType.PRE) {
 
             if (page < list.size()) {
 
-                drawPrivilegie(relative, resolution, 0, mouseX, mouseY, partialTicks,  list.get(page), 0, 0);
+                drawPrivilegie(g, g . getScaledResolution ( ), 0, mouseX, mouseY, partialTicks,  list.get(page), 0, 0);
                 
             }
-
-        } else if (dt == DrawType.POST) {
-
-            GL11.glEnable(GL11.GL_BLEND);
-            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-            GL11.glDisable(GL11.GL_ALPHA_TEST);
-            GL11.glShadeModel(GL11.GL_SMOOTH);
-            GL11.glDisable(GL11.GL_TEXTURE_2D);
-
-            //
-
-            Tessellator var18 = Tessellator.instance;
-            byte var20 = 12;
-
-            var18.startDrawingQuads();
-
-            var18.setColorRGBA_I(0, 0);
-
-            var18.addVertexWithUV((double) 30, (double) ((int) (resolution.getScaledHeight() * 0.1) + 19 + 20 + var20), 0.0D, 0.0D, 1.0D);
-            var18.addVertexWithUV((double) (int) resolution.getScaledWidth() - 30, (double) ((resolution.getScaledHeight() * 0.1) + 19 + 20 + var20), 0.0D, 1.0D, 1.0D);
-
-            var18.setColorRGBA_I(0, 105);
-
-            var18.addVertexWithUV((double) resolution.getScaledWidth() - 30, (double) (int) (resolution.getScaledHeight() * 0.1) + 19 + 20, 0.0D, 1.0D, 0.0D);
-            var18.addVertexWithUV((double) 30, (double) (int) (resolution.getScaledHeight() * 0.1) + 19 + 20, 0.0D, 0.0D, 0.0D);
-
-            var18.draw();
-
-
-            var18.startDrawingQuads();
-
-            var18.setColorRGBA_I(0, 105);
-
-            var18.addVertexWithUV((double) 30, (double) ((resolution.getScaledHeight()) - (resolution.getScaledHeight() * 0.1)) - 6, 0.0D, 0.0D, 1.0D);
-            var18.addVertexWithUV((double) resolution.getScaledWidth() - 30, (double) ((resolution.getScaledHeight()) - (resolution.getScaledHeight() * 0.1)) - 6, 0.0D, 1.0D, 1.0D);
-
-            var18.setColorRGBA_I(0, 0);
-
-            var18.addVertexWithUV((double) resolution.getScaledWidth() - 30, (double) (((resolution.getScaledHeight()) - (resolution.getScaledHeight() * 0.1)) - 6 - var20), 0.0D, 1.0D, 0.0D);
-            var18.addVertexWithUV((double) 30, (double) (((resolution.getScaledHeight()) - (resolution.getScaledHeight() * 0.1)) - 6 - var20), 0.0D, 0.0D, 0.0D);
-
-            var18.draw();
-
-            //
-
-            GL11.glEnable(GL11.GL_TEXTURE_2D);
-            GL11.glShadeModel(GL11.GL_FLAT);
-            GL11.glEnable(GL11.GL_ALPHA_TEST);
-            GL11.glDisable(GL11.GL_BLEND);
 
         }
 
@@ -230,7 +174,7 @@ public class PrivilegieCategory extends ShopCategory {
             buyButton = new BuyButton( info . getShopId ( ), info . getCategory ( ), info . merch_id, ShopGUI.getNextButtonId(), (buyButton!=null?buyButton.xPosition: resolution . getScaledWidth ( ) / 2 - MineDonate.cfgUI.cats.privelegies.itemBuyButton.width / 2), y_offset +  93, MineDonate.cfgUI.cats.privelegies.itemBuyButton.width, MineDonate.cfgUI.cats.privelegies.itemBuyButton.height, MineDonate.cfgUI.cats.privelegies.itemBuyButton.text);
             buttonsMap.put(info.merch_id, buyButton);
 
-            relative . addBtn ( buyButton, false ) ;
+            relative . addButton ( buyButton, false ) ;
             
         }
     }

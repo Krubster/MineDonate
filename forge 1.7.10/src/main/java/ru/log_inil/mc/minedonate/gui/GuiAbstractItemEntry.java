@@ -14,7 +14,6 @@ public abstract class GuiAbstractItemEntry extends MCGuiAccessable implements Co
 	protected ContextMenu cmm ;
 	
 	public GuiAbstractItemEntry ( ) {
-
 	}
 
 	public GuiAbstractItemEntry updateDrawData ( ) {
@@ -34,7 +33,7 @@ public abstract class GuiAbstractItemEntry extends MCGuiAccessable implements Co
 			
 			if ( cmm != null ) {
 
-				cmm . updateInteractArea ( this, x, y - 4 ) ;
+				cmm . updateInteractArea ( this, x+3, y - 2 ) ;
 				if ( ! nextMoveUpdate ) nextMoveUpdate = true ;
 				
 			}
@@ -54,21 +53,60 @@ public abstract class GuiAbstractItemEntry extends MCGuiAccessable implements Co
 	}
 	
 	GuiItemsScrollArea gi ;
+	boolean showFlag = true ;
+	
 	public void draw ( GuiItemsScrollArea _gi, int var2, int var3, int var4, int mouseX, int mouseY, Tessellator var5, DrawType dt, int index, int size ) {
 
 		gi = _gi ;
+			
+		if ( ! showFlag ) {
+			
+			postShow ( gi ) ;
+			showFlag = true ;
+			
+		}
 		
 		move ( var2, var3 ) ;
 		
 	}
 
+	boolean unShowed = false ;
+	
 	public void unDraw ( ) {
+				
+		if ( ! unShowed ) {
+			
+			unShow ( null ) ;
+			unShowed = true ;
+			
+		}
 		
+	}
+	
+	public void unShow ( ShopGUI g ) {
+
 		if ( cmm != null ) {
 
 			ContextMenuManager . removeMenu ( cmm ) ;
-			cmm = null ;
 			
+		}
+		
+		showFlag = false ;
+
+		unShowed = true ;
+		unDraw ( ) ;
+		
+	}
+	
+	public void postShow ( GuiItemsScrollArea gui ) { 
+		
+		unShowed = false ;
+		
+		if ( cmm != null ) {
+			
+			//System.err.println("postShow????");
+			ContextMenuManager . addNewMenu ( cmm ) ;
+		
 		}
 		
 	}

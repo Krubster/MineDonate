@@ -11,6 +11,8 @@ import java.sql.SQLException;
 
 public class UsersShops extends MerchCategory {
 
+	boolean enabled = MineDonate.cfg.userShops ;
+	
 	public UsersShops ( ) {
 		
 		super ( 0, 4, null ) ;
@@ -53,9 +55,16 @@ public class UsersShops extends MerchCategory {
 
     @Override
     public boolean isEnabled() {
-        return MineDonate.cfg.userShops;
+        return enabled;
     }
-
+    
+    @Override
+    public void setEnabled ( boolean _enabled ) {
+    	
+    	enabled = _enabled ;
+    	
+    }
+    
     @Override
     public void GiveMerch(EntityPlayerMP player, Merch merch, int amount) {
 

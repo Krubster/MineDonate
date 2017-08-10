@@ -25,8 +25,26 @@ public class ContextMenuManager {
 		}
 		
 	}
+	
+	public static void drawDebug ( MCGuiAccessable _gs, int mouseX, int mouseY ) {
+		
+		gs = _gs ;
+		
+		for ( ContextMenu cmm : menus ) {
 
-	public static void click ( ShopGUI gs, int x, int y, int t ) {
+			cmm . drawDebug ( _gs, mouseX, mouseY ) ;
+			
+		}
+	
+		if ( currentDrawMenu && currentMenu != null ) {
+			
+			currentMenu . drawDebugInteractable ( _gs, mouseX, mouseY ) ;
+			
+		}
+		
+	}
+
+	public static boolean click ( ShopGUI gs, int x, int y, int t ) {
 
 		if ( t == 1 ) {
 			
@@ -46,6 +64,7 @@ public class ContextMenuManager {
 					cmm . updateInteractArea ( gs, cmm . activateCoordX, cmm . activateCoordY ) ;
 					
 					currentMenu = cmm ;
+					return true ;
 					
 				}
 				
@@ -65,18 +84,18 @@ public class ContextMenuManager {
 						
 						cme . onClick ( gs, currentMenu ) ;
 						
-					} else {
-						
-						currentDrawMenu = false ;
-						currentMenu = null ;
-						
 					}
+
+					currentDrawMenu = false ;
+					currentMenu = null ;
+					
+					return true ;
 					
 				} else {
 					
 					currentDrawMenu = false ;
 					currentMenu = null ;
-					
+										
 				}
 				
 			}
@@ -89,6 +108,8 @@ public class ContextMenuManager {
 			
 		}
 		
+		return false ;
+		
 	}
 	
 	public static void addNewMenu ( ContextMenu cmm ) {
@@ -97,9 +118,15 @@ public class ContextMenuManager {
 		
 	}
 
-	public static void removeMenu(ContextMenu cmm) {
+	public static void removeMenu ( ContextMenu cmm ) {
 
 		menus . remove ( cmm ) ;
+
+	}
+
+	public static void clean() {
+		
+		menus . clear ( ) ;
 		
 	}
 		

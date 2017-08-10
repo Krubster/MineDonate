@@ -21,6 +21,8 @@ public class DataOfUIConfig {
 	public DataOfUIMoneyGroup [ ] moneyGroups ;
 	public DataOfUILang lang ;
 	
+	public DataOfUIElement mergeButton ;
+
 	public DataOfUIConfig ( ) {
 		
 		cats = new DataOfUICategories ( ) ;
@@ -42,6 +44,8 @@ public class DataOfUIConfig {
 		moneyGroups = new DataOfUIMoneyGroup [ ] { new DataOfUIMoneyGroup ( "rub", "minedonate:images/rub.png" ) } ;
 		lang = new DataOfUILang ( ) ;
 		
+		mergeButton = new DataOfUIElement ( "Accept", 40, 20 ) ;
+
 	}
 	
 	

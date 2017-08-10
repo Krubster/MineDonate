@@ -1,8 +1,10 @@
 package ru.log_inil.mc.minedonate.gui.context;
 
+import java.awt.Color;
 import java.util.List;
 
 import net.minecraft.client.gui.Gui;
+import ru.alastar.minedonate.rtnl.Utils;
 import ru.log_inil.mc.minedonate.gui.MCGuiAccessable;
 
 public class ContextMenu {
@@ -38,6 +40,9 @@ public class ContextMenu {
 	int tmpHeight ;
 	int maxWidth ;
 	int maxHeight ;
+
+	int dbgColorInteract = Utils.rgbaToInt(new Color(150, 1, 1, 255));
+	int dbgColor = Utils.rgbaToInt(new Color(1, 150, 1, 255));
 
 	public void draw ( MCGuiAccessable g, int mouseX, int mouseY ) {
 		
@@ -75,7 +80,7 @@ public class ContextMenu {
 		if ( x < drawPosX || drawPosX + maxWidth < x ) { return null ; }
 		if ( y < drawPosY || drawPosY + maxHeight < y ) { return null ; }
 
-		tmp = ( drawPosY - y ) / ( lineHeight - 2 ) ;
+		tmp = ( drawPosY - y ) / ( lineHeight  ) ;
 
 		if ( tmp < 0 ) { tmp = Math . abs ( tmp ) ; }
 		
@@ -107,8 +112,8 @@ public class ContextMenu {
 		
 		calcMaxs ( g ) ;
 		
-		activateCoordXEndInteract = drawPosX + maxWidth ;
-		activateCoordYEndInteract = drawPosY + maxHeight ;
+		activateCoordXEndInteract = drawPosX + maxWidth + 6 ;
+		activateCoordYEndInteract = drawPosY + maxHeight + 2 ;
 
 	}
 	
@@ -124,15 +129,40 @@ public class ContextMenu {
 	// check interach triger object area
 	public boolean coordContains ( int x, int y ) {
 
-		return ( activateCoordX <= x && x <= activateCoordXEnd ) && ( activateCoordY <= y && activateCoordYEnd >= y ) ;
+		return ( activateCoordX <= x && x <= activateCoordXEnd ) && ( activateCoordY - 2 <= y && activateCoordYEnd >= y ) ;
 		
 	}
 	
 	// check interact menu area
 	public boolean coordContainsInteract ( int x, int y ) {
 
-		return ( activateCoordX < x && x < activateCoordXEndInteract ) && ( activateCoordY < y && activateCoordYEndInteract > y ) ;
+		return ( activateCoordX < x && x < activateCoordXEndInteract ) && ( activateCoordY - 2 < y && activateCoordYEndInteract > y ) ;
 		
+	}
+
+	public void drawDebugInteractable(MCGuiAccessable g, int mouseX, int mouseY) {
+ 	
+
+      	g.drawRect(drawPosX, drawPosY-2, activateCoordXEndInteract, drawPosY-1, dbgColorInteract);
+    	
+    	g.drawRect(drawPosX, drawPosY-1, drawPosX+1, activateCoordYEndInteract, dbgColorInteract);
+
+    	g.drawRect(activateCoordXEndInteract, drawPosY-2,activateCoordXEndInteract+1, activateCoordYEndInteract, dbgColorInteract);
+
+    	g.drawRect(drawPosX, activateCoordYEndInteract, activateCoordXEndInteract+1, activateCoordYEndInteract + 1, dbgColorInteract);
+    	
+	}
+
+	public void drawDebug(MCGuiAccessable g, int mouseX, int mouseY) {
+		//dbgColor
+    	g.drawRect(activateCoordX, activateCoordY, activateCoordXEnd, activateCoordY+1, dbgColor);
+    	
+    	g.drawRect(activateCoordX, activateCoordY+1, activateCoordX+1, activateCoordYEnd, dbgColor);
+
+    	g.drawRect(activateCoordXEnd, activateCoordY,activateCoordXEnd+1, activateCoordYEnd, dbgColor);
+
+    	g.drawRect(activateCoordX, activateCoordYEnd, activateCoordXEnd+1, activateCoordYEnd + 1, dbgColor);
+    	
 	}
 			
 }

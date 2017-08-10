@@ -14,12 +14,17 @@ import ru.alastar.minedonate.gui.CountButton;
 import ru.alastar.minedonate.gui.ShopCategory;
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.merch.info.ItemInfo;
+import ru.alastar.minedonate.network.packets.manage.UnfreezeShopPacket;
 import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.gui.GuiAbstractItemEntry;
-import ru.log_inil.mc.minedonate.gui.GuiFrameItemRename;
 import ru.log_inil.mc.minedonate.gui.GuiItemsScrollArea;
 import ru.log_inil.mc.minedonate.gui.context.ContextMenu;
 import ru.log_inil.mc.minedonate.gui.context.ContextMenuManager;
+import ru.log_inil.mc.minedonate.gui.frames.GuiFrameDeleteItem;
+import ru.log_inil.mc.minedonate.gui.frames.GuiFrameDeleteShop;
+import ru.log_inil.mc.minedonate.gui.frames.GuiFrameFreezeShop;
+import ru.log_inil.mc.minedonate.gui.frames.GuiFrameRenameItem;
+import ru.log_inil.mc.minedonate.gui.frames.GuiFrameRenameShop;
 import ru.log_inil.mc.minedonate.gui.context.ContextElement;
 
 public class GuiItemEntryOfItemMerch extends GuiAbstractItemEntry {
@@ -46,7 +51,7 @@ public class GuiItemEntryOfItemMerch extends GuiAbstractItemEntry {
 			cmm = new ContextMenu ( 1, 1, cElements ) ;
 			
 			ContextMenuManager . addNewMenu ( cmm ) ;
-			
+
 		}
 		
 	}
@@ -84,7 +89,7 @@ public class GuiItemEntryOfItemMerch extends GuiAbstractItemEntry {
 		if ( updateDataNeed ) {
 			
 			costLineWidth = gi . getFontRenderer ( ) . getStringWidth ( costLine ) ;
-			this . updateSize ( xRightOffset - x_offset, 30 ) ;
+			this . updateSize ( xRightOffset - x_offset, 28 ) ;
 
 			updateDataNeed = false ;
 			
@@ -114,7 +119,7 @@ public class GuiItemEntryOfItemMerch extends GuiAbstractItemEntry {
 			
 			GL11 . glTranslatef ( 40, y_offset + 2, 10 ) ;
 			GL11 . glScalef ( 1.2f, 1.2f, 1f ) ;  
-
+			
 			gi . parent . getItemRender ( ) . renderItemAndEffectIntoGUI ( gi . getFontRenderer ( ), gi . parent . mc . getTextureManager ( ), info . m_stack, 0, 0 ) ;
 
 			GL11 . glPopMatrix ( ) ;
@@ -137,14 +142,14 @@ public class GuiItemEntryOfItemMerch extends GuiAbstractItemEntry {
 
 			RenderHelper . disableStandardItemLighting ( ) ;
 			
-		} else {
+		} else if ( dt == DrawType . OVERLAY ) {
 			
 			if ( mouseX >= 40 && 60 >= mouseX ) {
 				
 				if ( mouseY >= y_offset - 2 && y_offset + 20 >= mouseY ) {
 					
 					gi.parent.renderToolTipAccess(info.m_stack, mouseX, mouseY);
-					RenderHelper .disableStandardItemLighting ( ) ;
+					RenderHelper . disableStandardItemLighting ( ) ;
 
 				}
 				
@@ -160,7 +165,7 @@ public class GuiItemEntryOfItemMerch extends GuiAbstractItemEntry {
 		super . unDraw ( ) ;
 
 		if ( pl != null ) {
-			
+
 			pl . yPosition = -100 ;
 			min . yPosition = -100 ;
 			buy . yPosition = -100 ;
@@ -173,17 +178,17 @@ public class GuiItemEntryOfItemMerch extends GuiAbstractItemEntry {
 	public GuiAbstractItemEntry addButtons ( ShopGUI gui ) {
 				
 		buy = new BuyButton ( info . getShopId ( ), info . getCategory ( ), info . merch_id, ShopGUI . getNextButtonId ( ), gui . resolution . getScaledWidth ( ) - 91, -100, MineDonate . cfgUI . cats.itemsAndBlocks . itemBuyButton . width, MineDonate . cfgUI . cats . itemsAndBlocks . itemBuyButton . height, MineDonate . cfgUI . cats . itemsAndBlocks . itemBuyButton . text ) ;
-        gui . addBtn ( buy, false ) ;
+        gui . addButton ( buy, false ) ;
         
         min = new CountButton ( -1, info, ShopGUI . getNextButtonId ( ), buy . xPosition - 1 - 16, - 100, 16, 20, "-" ) ;
         min . setEntityOnUpdate ( this ) ;
         
-        gui . addBtn ( min, false ) ;
+        gui . addButton ( min, false ) ;
         
         pl = new CountButton ( 1, info, ShopGUI . getNextButtonId ( ), min . xPosition - 1 - 16, -100, 16, 20, "+" ) ;
         pl . setEntityOnUpdate ( this ) ;
         
-        gui . addBtn ( pl, false ) ;
+        gui . addButton ( pl, false ) ;
 
     	if ( ! pl . canModify ( ) && ! min . canModify ( ) ) {
         	
@@ -210,26 +215,50 @@ public class GuiItemEntryOfItemMerch extends GuiAbstractItemEntry {
 		
 	}
 
+	@Override 
+	public void postShow ( GuiItemsScrollArea gui ) { 
+		
+		super . postShow ( gui ) ;
+		
+		updateContextMenu ( ) ;
+		
+	}
+	
+	@Override 
+	public void updateContextMenu ( ) {
+		
+		super . updateContextMenu ( ) ;
+		
+	}
+	
 	@Override
 	public void onClickContextMenuElement ( ShopGUI g, ContextMenu cmm, ContextElement e ) {
 		
-		if ( e != null && e . name . equals ( "rename" ) ) {
-
-			GuiFrameItemRename gfir = ( GuiFrameItemRename ) g . showEntry ( "itemRename", true ) ;	
+		if ( e != null && info != null ) {
 			
-			if ( "" . equals ( info . name ) ) { //info . m_stack . getDisplayName ( ) . equals (  
-
-				gfir . setFieldData ( "", info . m_stack . getDisplayName ( ) ) ;
-
-			} else {
+			switch ( e . name ) {
 				
-				gfir . setFieldData ( info . name, MineDonate.cfgUI.frames.rename.renameField.textHolder ) ;
-
+				case "rename" :
+					
+					GuiFrameRenameItem gfrs = ( GuiFrameRenameItem ) g . showEntry ( e . name + "Item", true ) ;	
+					
+					gfrs . setInfo ( info . shopId, info . catId, info . merch_id ) ;
+					gfrs . setFieldData ( info . name, info . m_stack . getDisplayName ( ) ) ;
+					
+				break ;
+				
+				case "delete" :
+					
+					GuiFrameDeleteItem gfdi = ( GuiFrameDeleteItem ) g . showEntry ( e . name + "Item", true ) ;	
+					
+					gfdi . setInfo ( info . shopId, info . catId, info . merch_id ) ;
+					gfdi . setConfirmCode ( Integer . toString ( Math . abs ( info . hashCode ( ) ) ) . substring ( 0, 3 ) ) ;
+					
+				break ;
+				
 			}
 			
 		}
-		
-		System.err.println( ">" + e.name);
 		
 	}
 	

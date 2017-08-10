@@ -2,8 +2,8 @@ package ru.log_inil.mc.minedonate.gui;
 
 import java.awt.Color;
 
-import ru.alastar.minedonate.Utils;
 import ru.alastar.minedonate.gui.ShopGUI;
+import ru.alastar.minedonate.rtnl.Utils;
 
 public class GuiFrameLoading extends GuiEntry {
 

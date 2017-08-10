@@ -7,6 +7,7 @@ import net.minecraft.util.ChatComponentText;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.network.packets.BuyResponsePacket;
 import ru.alastar.minedonate.proxies.ClientProxy;
 
@@ -24,6 +25,7 @@ public class BuyResponsePacketHandler implements IMessageHandler<BuyResponsePack
         if (resp == 0) {
             Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new ChatComponentText("You're successfully bought a merch!"));
             ClientProxy.playCash();
+            ShopGUI.instance.initGui();
         }
         else {
             Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new ChatComponentText("Buy failed!"));

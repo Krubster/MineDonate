@@ -19,7 +19,6 @@ public class CategoryPacketHandler implements IMessageHandler<CategoryPacket, IM
     	try {
     	
 			ShopGUI . instance . initGui ( ) ;
-    		MineDonate . shops . get ( message . shopId ) . cats [ message . catId ] . subCategories = message . subCategories ;
     		
     	} catch ( Exception ex ) {
     		

@@ -17,7 +17,7 @@ public class MerchInfoPacketHandler  implements IMessageHandler<MerchInfoPacket,
     @Override public IMessage onMessage(MerchInfoPacket message, MessageContext ctx) {
         MineDonate.modify(message.shopId, message.m_category, message.info.getId(), message.info);
         if(ShopGUI.instance != null){
-            ShopGUI.instance.updateBtns();
+            ShopGUI.instance.updateButtons(true);
         }
         return null;
     }

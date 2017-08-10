@@ -7,10 +7,7 @@ import ru.alastar.minedonate.plugin.clean.WorldGuardPlugin;
 
 public class WorldGuardPluginReflection extends WorldGuardPlugin {
 
-	Method mLoad;
-	Method mAddPlayerToRegion;
-	Method mRemovePlayerFromRegion;
-	Method mCheckRegionMaxOut;
+	Method mLoad,  mAddPlayerToRegion, mRemovePlayerFromRegion, mCheckRegionMaxOut;
 	
 	Object o ;
 	

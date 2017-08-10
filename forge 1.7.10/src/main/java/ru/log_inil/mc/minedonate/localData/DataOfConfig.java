@@ -31,6 +31,7 @@ public class DataOfConfig {
 	public String dbShops = "md_shops" ;
 	public String defaultUserShopMoneyType = "coin" ;
 
+	public boolean autoFixMoneyProcessorsTableCollisions = true ;
 	public DataOfMoneyProcessor [ ] moneyProcessors ;
 
 	public boolean sendLogToDB = true;

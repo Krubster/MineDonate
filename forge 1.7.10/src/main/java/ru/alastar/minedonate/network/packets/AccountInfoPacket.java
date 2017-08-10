@@ -7,8 +7,8 @@ import java.util.List;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import io.netty.buffer.ByteBuf;
 import ru.alastar.minedonate.MineDonate;
-import ru.alastar.minedonate.Utils;
 import ru.alastar.minedonate.mproc.AbstractMoneyProcessor;
+import ru.alastar.minedonate.rtnl.Utils;
 
 /**
  * Created by Alastar on 18.07.2017.

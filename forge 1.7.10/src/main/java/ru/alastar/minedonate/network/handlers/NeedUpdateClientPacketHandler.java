@@ -20,10 +20,11 @@ public class NeedUpdateClientPacketHandler implements IMessageHandler<NeedUpdate
     	if ( message . r == 1 ) {
 	           
 			if ( ShopGUI . instance != null ) {
-				 
+
+				ShopGUI . instance . lastCategory = ShopGUI . instance . m_Selected_Category = ShopGUI . instance . defaultCategory ;
 				ShopGUI . instance . needNetUpdate = false ;
 				ShopGUI . instance . loading = false ;
-				
+
 			}      
     			
     	}
@@ -37,16 +38,22 @@ public class NeedUpdateClientPacketHandler implements IMessageHandler<NeedUpdate
 				if ( ShopGUI . instance . getCurrentCategory ( ) instanceof UsersShopsCategory ) {
 					
 					UsersShopsCategory usc = ( UsersShopsCategory ) ShopGUI . instance . getCurrentCategory ( )  ;
-					
+
 					if ( usc . selectedShop != 0 ) {
 
 						ShopGUI . instance . currentShop = usc . selectedShop ;
-						
+
 						ItemNBlockCategory cat = new ItemNBlockCategory ( ) ;
+						cat . setDisableCatCheck ( ) ;
+						
+						cat.preShow(ShopGUI.instance);
+						
 						cat . setShopId ( usc . selectedShop ) ;
 						
-						usc . updateUserShopCategory ( cat, true ) ;
+						usc . updateUserShopCategory ( ShopGUI . instance, cat, true ) ;
 						usc . postShow ( ShopGUI . instance ) ; 
+
+						//return null ;
 						
 					}
 			
@@ -56,8 +63,8 @@ public class NeedUpdateClientPacketHandler implements IMessageHandler<NeedUpdate
     			
     	}
     	
-		ShopGUI . instance . initGui ( ) ;
-    	
+    	ShopGUI . instance . initGui ( ) ;
+
         return null ;
         
     }

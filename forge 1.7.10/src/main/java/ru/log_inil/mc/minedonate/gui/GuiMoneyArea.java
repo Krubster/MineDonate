@@ -188,13 +188,13 @@ public class GuiMoneyArea {
 			}
 
 			if ( texture != null ) {
-				
-			    // 	RenderHelper . enableGUIStandardItemLighting ( ) ;
+								
+     		    GL11.glEnable(GL11.GL_BLEND);
 				
 			 	Minecraft . getMinecraft ( ) . renderEngine . bindTexture ( texture ) ;
 			 	gui . drawTexturedModalRectNormal ( tmpX, tmpY, 8, 8 ) ;
-						
-			    // 	RenderHelper . disableStandardItemLighting ( ) ;
+					
+     		    GL11.glDisable(GL11.GL_BLEND);
 
 				tmp += 10 ;
 				
@@ -214,12 +214,10 @@ public class GuiMoneyArea {
 			if ( texture != null ) {
 				
      		    GL11.glEnable(GL11.GL_BLEND);
-				RenderHelper . disableStandardItemLighting ( ) ;
 
 			 	Minecraft . getMinecraft ( ) . renderEngine . bindTexture ( texture ) ;
 			 	gui . drawTexturedModalRectNormal ( offsetX + 5 + tmpX / 2, offsetY, 9, 9 ) ;
 			 	
-			 	RenderHelper . enableGUIStandardItemLighting ( ) ;
      		    GL11.glDisable(GL11.GL_BLEND);
 		
 			}

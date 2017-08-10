@@ -10,6 +10,7 @@ import ru.alastar.minedonate.network.packets.AddMerchPacket;
 import ru.alastar.minedonate.network.packets.CategoryPacket;
 import ru.alastar.minedonate.network.packets.NeedShopCategoryPacket;
 import ru.alastar.minedonate.network.packets.NeedUpdatePacket;
+import ru.alastar.minedonate.rtnl.ModNetwork;
 
 public class NeedShopCategoryServerPacketHandler implements IMessageHandler<NeedShopCategoryPacket, IMessage> {
     
@@ -36,8 +37,8 @@ public class NeedShopCategoryServerPacketHandler implements IMessageHandler<Need
             	
             }
 
-            MineDonate . networkChannel . sendTo ( new CategoryPacket ( message . shopId, message . cat, MineDonate . shops . get ( message . shopId ) . cats [ message . cat ] . subCategories ), serverPlayer ) ;
-            
+            ModNetwork . sendToCategoryPacket ( ( EntityPlayerMP ) serverPlayer,  message . shopId, message . cat ) ;
+
             if ( MineDonate . shops . containsKey ( message . shopId ) && MineDonate . shops . get ( message . shopId ) . cats . length > message . cat ) {
                          
             	for ( int j = 0; j < MineDonate . shops . get ( message . shopId ) . cats [ message . cat ] . getMerch ( ) . length ; ++ j ) {
@@ -59,8 +60,8 @@ public class NeedShopCategoryServerPacketHandler implements IMessageHandler<Need
                     	
                     }
                     
-                    MineDonate . networkChannel . sendTo ( packet, serverPlayer ) ;
-                    
+                    ModNetwork . sendTo ( serverPlayer, packet ) ;
+
                 }
             
             }

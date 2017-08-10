@@ -15,5 +15,9 @@ public class PermissionsPlugin {
 	public void addGroup ( String user, String name, String world, Long time ) {
 		
 	}
+
+	public void removeGroup ( String user, String name ) {
+		
+	}
 	
 }

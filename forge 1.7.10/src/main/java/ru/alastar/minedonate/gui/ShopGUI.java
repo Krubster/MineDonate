@@ -12,14 +12,11 @@ import ru.alastar.minedonate.gui.categories.*;
 import ru.alastar.minedonate.network.packets.NeedShopCategoryPacket;
 import ru.alastar.minedonate.network.packets.NeedUpdatePacket;
 import ru.alastar.minedonate.proxies.ClientProxy;
-import ru.log_inil.mc.minedonate.gui.DrawType;
-import ru.log_inil.mc.minedonate.gui.GuiGradientButton;
-import ru.log_inil.mc.minedonate.gui.GuiGradientTextField;
-import ru.log_inil.mc.minedonate.gui.GuiFrameItemRename;
-import ru.log_inil.mc.minedonate.gui.GuiFrameLoading;
-import ru.log_inil.mc.minedonate.gui.GuiMoneyArea;
-import ru.log_inil.mc.minedonate.gui.MCGuiAccessable;
+import ru.alastar.minedonate.rtnl.ModNetwork;
+import ru.log_inil.mc.minedonate.gui.*;
 import ru.log_inil.mc.minedonate.gui.context.ContextMenuManager;
+import ru.log_inil.mc.minedonate.gui.frames.*;
+
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -37,13 +34,16 @@ public class ShopGUI extends MCGuiAccessable {
 
     public boolean needNetUpdate = true ;
     public boolean loading = false ;
+    public boolean dbg = false ;
     
     private static int buttonLastId = 3 ;
     
     public static int m_Page = 0 ;
     
     public int currentShop = 0 ;
-    private int m_Selected_Category = 0;
+    public int m_Selected_Category = 0;	
+    public int defaultCategory = 0 ;
+
     public int lastCategory = -1 ;
     
     private ShopCategory[] cats ;
@@ -60,7 +60,9 @@ public class ShopGUI extends MCGuiAccessable {
     public GuiGradientButton exitButton ;
     public GuiGradientButton searchButton ;
     
-    public Map < String, ru.log_inil.mc.minedonate.gui.GuiEntry > gEntries = new LinkedHashMap < > ( ) ;
+    public Map < String, GuiEntry > gEntries = new LinkedHashMap < > ( ) ;
+    GuiEntry lastEntry ;
+    
     GuiFrameLoading gfl ;
     
     public ShopGUI ( ) {
@@ -73,7 +75,17 @@ public class ShopGUI extends MCGuiAccessable {
     		
     	}
     	
-    	gEntries . put ( "itemRename", new GuiFrameItemRename ( MineDonate . cfgUI . frames . rename ) ) ;
+    	//gEntries . put ( "itemRename", new GuiFrameItemRename ( MineDonate . cfgUI . frames . rename ) ) ;
+    	gEntries . put ( "createShop", new GuiFrameCreateShop ( MineDonate . cfgUI . frames . createShop ) ) ;
+    	gEntries . put ( "renameShop", new GuiFrameRenameShop ( MineDonate . cfgUI . frames . renameShop ) ) ;
+    	gEntries . put ( "deleteShop", new GuiFrameDeleteShop ( MineDonate . cfgUI . frames . deleteShop ) ) ;
+    	gEntries . put ( "freezeShop", new GuiFrameFreezeShop ( MineDonate . cfgUI . frames . freezeShop ) ) ;
+
+    	gEntries . put ( "renameItem", new GuiFrameRenameItem ( MineDonate . cfgUI . frames . renameItem ) ) ;
+    	gEntries . put ( "deleteItem", new GuiFrameDeleteItem ( MineDonate . cfgUI . frames . deleteItem ) ) ;
+    	
+    	gEntries . put ( "renameEntity", new GuiFrameRenameEntity ( MineDonate . cfgUI . frames . renameEntity ) ) ;
+    	gEntries . put ( "deleteEntity", new GuiFrameDeleteEntity ( MineDonate . cfgUI . frames . deleteEntity ) ) ;
     	
     	gEntries . put ( "loading", ( gfl = new GuiFrameLoading ( ) ) ) ;
     	gfl . setText ( MineDonate . cfgUI . loadingText ) ;
@@ -86,11 +98,39 @@ public class ShopGUI extends MCGuiAccessable {
         
     }
 
-    public ru.log_inil.mc.minedonate.gui.GuiEntry showEntry ( String k, boolean v ) {
-    
+    public GuiEntry showEntry ( String k, boolean v ) {
+
     	if ( gEntries . containsKey ( k ) ) {
     		
+    		if ( v && lastEntry != null ) {
+    			
+    			lastEntry . show ( false ) ;
+    			lastEntry . unShow ( this ) ;
+
+    			if ( lastEntry . needReloadOnUnShow ( ) ) {
+    				
+    				initGui ( ) ;
+    				
+    			} 
+    			
+    		}
+    		
     		gEntries . get ( k ) . show ( v ) ;
+    		gEntries . get ( k ) . postShow ( this ) ;
+    			
+    		if ( v ) {
+    			
+    			lastEntry = gEntries . get ( k ) ;
+    			
+    		}
+    		/*
+    		if ( reload ) {
+    		
+    			initGui ( ) ;
+    		
+    		}*/
+    		
+    		return gEntries . get ( k ) ;
     		
     	}
     	
@@ -122,10 +162,24 @@ public class ShopGUI extends MCGuiAccessable {
     	
     }
     
+	public void setLoading ( boolean _loading ) {
+		
+		loading = _loading ;
+
+		showEntry ( "loading", loading ) ;
+    	
+	}
+    
+	public boolean isLoading ( ) {
+		
+		return loading ;
+		
+	}
+	
     @Override
     protected void keyTyped ( char p_73869_1_, int p_73869_2_ ) {
 
-        for ( ru.log_inil.mc.minedonate.gui.GuiEntry ge : gEntries.values() ) {
+        for ( ru.log_inil.mc.minedonate.gui.GuiEntry ge : gEntries . values ( ) ) {
 
         	if ( ge . isVisible ( ) && ge . onKey ( p_73869_1_, p_73869_2_ ) ) {
         		
@@ -134,16 +188,25 @@ public class ShopGUI extends MCGuiAccessable {
         	}
         	
         }
-        
-        
+           
     	if ( searchField != null && searchField . isFocused ( ) ) {
     		
     		searchField . textboxKeyTyped ( p_73869_1_, p_73869_2_ ) ;		
 
 			getCurrentCategory ( ) . search ( searchField . getText ( ) ) ;
 			
+			getCurrentCategory ( ) . unShow ( this ) ;
+			getCurrentCategory ( ) . preShow ( this ) ;
+			getCurrentCategory ( ) . postShow ( this ) ;
+			
             //updateGrid ( ) ;
             //updateBtns ( ) ;
+			
+            if ( "!DBGE" . equals ( searchField . getText ( ) ) ) {
+            	
+            	dbg = ! dbg ;
+            	
+            }
             
     		return ;
     		
@@ -178,9 +241,9 @@ public class ShopGUI extends MCGuiAccessable {
 
     		actionPerformed ( nb ) ;
 
-    	} else if ( ClientProxy . openHUD . getKeyCode ( ) == p_73869_2_ ) {
+    	} else if ( ClientProxy . openShop . getKeyCode ( ) == p_73869_2_ ) {
     		
-    		Minecraft . getMinecraft ( ) . displayGuiScreen( null ) ;
+    		Minecraft . getMinecraft ( ) . displayGuiScreen ( null ) ;
     		
     	} else {
     		
@@ -190,14 +253,20 @@ public class ShopGUI extends MCGuiAccessable {
     	
     }
     
-    boolean contextCallFlag = true ;
+    public boolean contextMenuClickCallFlag = true ;
     
     @Override
     protected void mouseClicked ( int p_73864_1_, int p_73864_2_, int p_73864_3_ ) {
     	
-    	contextCallFlag = true ;
+    	if ( dbg ) {
+
+    		System . err . println ( "Mouse click: x" + p_73864_1_ + ", y" + p_73864_2_ + ", k" + p_73864_3_ ) ;
+    		
+    	}
     	
-        for ( ru.log_inil.mc.minedonate.gui.GuiEntry ge : gEntries.values() ) {
+    	contextMenuClickCallFlag = true ;
+    	
+        for ( ru.log_inil.mc.minedonate.gui.GuiEntry ge : gEntries . values ( ) ) {
 
         	if ( ge . isVisible ( ) && ge . coordContains ( p_73864_1_,  p_73864_2_ ) ) {
         			
@@ -209,17 +278,25 @@ public class ShopGUI extends MCGuiAccessable {
         		
         		if ( ge . lockContextMenuUnderEntry ( ) ) {
         			
-        			contextCallFlag = false ;
+        			contextMenuClickCallFlag = false ;
         			
         		}
         		
+        	} else if ( ge . isVisible ( ) && ge . lockContextMenuUnderEntry ( ) ) {
+        	
+        		contextMenuClickCallFlag = false ;
+
         	}
         	
         }
           
-        if ( contextCallFlag ) {
-        	
-        	ContextMenuManager . click ( this, p_73864_1_, p_73864_2_, p_73864_3_ ) ;
+        if ( contextMenuClickCallFlag ) {
+
+        	if ( ContextMenuManager . click ( this, p_73864_1_, p_73864_2_, p_73864_3_ ) ) {
+        		
+        		return ;
+        		
+        	}
         	
         }
     	
@@ -236,6 +313,12 @@ public class ShopGUI extends MCGuiAccessable {
     @Override
     protected void actionPerformed(GuiButton button) {
 
+    	if ( dbg ) {
+    		
+    		System . err . println ( "" ) ;
+    		
+    	}
+    	
         for ( ru.log_inil.mc.minedonate.gui.GuiEntry ge : gEntries . values ( ) ) {
         	
         	if ( ge . isOwnerButton ( button ) ) {
@@ -270,14 +353,14 @@ public class ShopGUI extends MCGuiAccessable {
                 button.enabled = false;
                 m_Page = m_Page - 1;
                 updateGrid ( ) ;
-                updateBtns();
+                updateButtons ( true ) ;
                 
             } else if (button instanceof NextButton) {
 
                 button.enabled = false;
                 m_Page = m_Page + 1;
                 updateGrid ( ) ;
-                updateBtns();
+                updateButtons ( true ) ;
                 
             } else if (button instanceof BuyButton ) {
                 
@@ -290,7 +373,7 @@ public class ShopGUI extends MCGuiAccessable {
                     if ( cats [ m_Selected_Category ] instanceof UsersShopsCategory ) {
                     	
                     	( ( UsersShopsCategory ) cats [ m_Selected_Category ] ) . selectedShop = 0 ;
-                    	( ( UsersShopsCategory ) cats [ m_Selected_Category ] ) . updateUserShopCategory ( null, false ) ;
+                    	( ( UsersShopsCategory ) cats [ m_Selected_Category ] ) . updateUserShopCategory ( this, null, false ) ;
                    
                     }
                                 		
@@ -306,7 +389,8 @@ public class ShopGUI extends MCGuiAccessable {
                 m_Page = 0;
                 lastCategory = m_Selected_Category = ((CategoryButton) button).getCategory();
 
-                MineDonate . networkChannel . sendToServer ( new NeedShopCategoryPacket ( getCurrentShopId ( ), m_Selected_Category ) ) ;
+                ModNetwork . sendToServerNeedShopCategoryPacket ( getCurrentShopId ( ), m_Selected_Category ) ;
+
                 loading = true ;
                 
                 resolution = new ScaledResolution(this.mc, this.mc.displayWidth, this.mc.displayHeight);
@@ -318,13 +402,14 @@ public class ShopGUI extends MCGuiAccessable {
             	}
             	
                 updateGrid ( ) ;
-                updateBtns ( ) ;
+                updateButtons ( true ) ;
                 
             } else if ( button instanceof GoButton ) {
             	
             	// currentShop = ( ( GoButton ) button ) . shopId ;
             	( ( UsersShopsCategory ) getCurrentCategory ( ) ) . selectedShop = ( ( GoButton ) button ) . shopId ;
-                MineDonate . networkChannel . sendToServer ( new NeedShopCategoryPacket ( ( ( GoButton ) button ) . shopId, 0 ) ) ;
+                ModNetwork . sendToServerNeedShopCategoryPacket ( ( ( GoButton ) button ) . shopId, 0 ) ;
+
                 loading = true ;
                 
               //  returnButton . enabled = returnButton . visible = displayReturnButton = true ;
@@ -342,7 +427,12 @@ public class ShopGUI extends MCGuiAccessable {
 
                 			getCurrentCategory ( ) . search ( null ) ;
                 			
-                           updateGrid ( ) ;
+                  			getCurrentCategory ( ) . unShow ( this ) ;
+                			getCurrentCategory ( ) . preShow ( this ) ;
+                			getCurrentCategory ( ) . postShow ( this ) ;
+                			
+                            updateGrid ( ) ;       
+                			
                      //       updateBtns ( ) ;
                             
                     	} else {
@@ -352,6 +442,10 @@ public class ShopGUI extends MCGuiAccessable {
                         	searchField . setFocused ( true ) ;
                         	
                 			getCurrentCategory ( ) . search ( searchField . getText ( ) ) ;
+                			
+                  			getCurrentCategory ( ) . unShow ( this ) ;
+                			getCurrentCategory ( ) . preShow ( this ) ;
+                			getCurrentCategory ( ) . postShow ( this ) ;
                 			
                             updateGrid ( ) ;
                      //       updateBtns ( ) ;
@@ -364,7 +458,7 @@ public class ShopGUI extends MCGuiAccessable {
             	
             }
             
-            getCurrentCategory ( ) . actionPerformed ( button ) ;
+            getCurrentCategory ( ) . actionPerformed ( this, button ) ;
             
         }
         
@@ -372,7 +466,7 @@ public class ShopGUI extends MCGuiAccessable {
     
     @Override
     public void drawScreen ( int mouseX, int mouseY, float partialTicks ) {    	
-    	
+    
     	this . drawRect ( 0, 0, resolution . getScaledWidth ( ), resolution . getScaledHeight ( ), 1258291200 ) ;
 
         if ( ! needNetUpdate ) {
@@ -407,8 +501,9 @@ public class ShopGUI extends MCGuiAccessable {
 		    	getCurrentCategory ( ) . draw ( this, m_Page, mouseX, mouseY, partialTicks, DrawType . BG ) ;   
 
 		        super . drawScreen ( mouseX, mouseY, partialTicks ) ;  
-		        
+		      
 		    	getCurrentCategory ( ) . draw ( this, m_Page, mouseX, mouseY, partialTicks, DrawType . POST ) ;   
+		    	
 		        getCurrentCategory ( ) . draw ( this, m_Page, mouseX, mouseY, partialTicks, DrawType . OVERLAY ) ;   
 
 	        }
@@ -419,16 +514,18 @@ public class ShopGUI extends MCGuiAccessable {
 	    		
 		        can_process = false;
 	
-		        /*
-		    	this.drawRect((resolution.getScaledWidth()/2)-10-this.fontRendererObj.getStringWidth(MineDonate.cfgUI.loadingText)/2, (resolution.getScaledHeight()/2)-5, (resolution.getScaledWidth()/2)+10+this.fontRendererObj.getStringWidth(MineDonate.cfgUI.loadingText)/2, (resolution.getScaledHeight()/2) + 15, 1258291200);
-			  	   
-		    	this.drawCenteredString( this.fontRendererObj, MineDonate.cfgUI.loadingText, resolution.getScaledWidth()/2, resolution.getScaledHeight()/2, 16777215);
-		    	*/
+
 	    	}
 	    	
 	    }
 
-        ContextMenuManager . draw ( this, mouseX, mouseY  ) ;
+        ContextMenuManager . draw ( this, mouseX, mouseY ) ;
+        
+        if ( dbg ) {
+        	
+        	ContextMenuManager . drawDebug ( this, mouseX, mouseY ) ;
+        	
+        }
 
         for ( ru.log_inil.mc.minedonate.gui.GuiEntry ge : gEntries . values ( ) ) {
 
@@ -439,7 +536,7 @@ public class ShopGUI extends MCGuiAccessable {
         	}
         	
         }
-                
+          
     }
 
     public void drawHoveringText(ArrayList list, int mouseX, int mouseY, FontRenderer fontRenderer) {
@@ -448,16 +545,23 @@ public class ShopGUI extends MCGuiAccessable {
 
     @Override
     public void initGui() {
-    	
+
+    	super.initGui();
         instance = this ;
         
         resolution = new ScaledResolution ( this . mc, this . mc . displayWidth, this . mc . displayHeight ) ;
         
         m_Page = 0 ;
         
+		getCurrentCategory ( ) . unShow ( this ) ;
+
         updateGrid ( ) ;
-        updateBtns ( ) ;
-        
+        updateButtons ( false ) ;
+
+        getCurrentCategory ( ) . postShow ( this ) ;
+
+        //getCurrentCategory ( ) . updateButtons ( this, m_Page ) ;
+
         //
         
 		if ( moneyArea == null ) {
@@ -469,17 +573,16 @@ public class ShopGUI extends MCGuiAccessable {
 		moneyArea . initGui ( this ) ;
 		
 		//
-		
-        getCurrentCategory ( ) . postShow ( this ) ;
         
 		if ( needNetUpdate && ! loading ) {
 
-            MineDonate . networkChannel . sendToServer ( new NeedUpdatePacket ( 0 ) ) ;
+            ModNetwork . sendToServerNeedUpdatePacket ( 0 ) ;
+
             loading = true ;
             
         }
 
-        for ( ru.log_inil.mc.minedonate.gui.GuiEntry ge : gEntries.values() ) {
+        for ( ru.log_inil.mc.minedonate.gui.GuiEntry ge : gEntries . values ( ) ) {
 
         	if ( ge . isVisible ( ) ) {
         		
@@ -488,23 +591,28 @@ public class ShopGUI extends MCGuiAccessable {
         	}
         	
         }
-        
+                
     }
 
+    @Override
+    public void onGuiClosed ( ) {
+
+    	ContextMenuManager . clean ( ) ;
+
+    }
+    
     private void addCategories ( ) {
 
-    	resolution = new ScaledResolution(this.mc, this.mc.displayWidth, this.mc.displayHeight); // bull shit
-
-        int posX = 30 ; //( resolution . getScaledWidth ( ) / 2 ) - ( widthCatsBlock / 2 ) ;
+        int posX = 30 ;
         
         for (int i = 0; i < getCurrentShopCategories ( ) . length ; ++i) {
-        	
+
         	if ( getCurrentShopCategories ( ) [ i ] . getEnabled ( ) ) { //#LOG
         		
 	            CategoryButton btn = new CategoryButton ( i, getNextButtonId ( ), posX, (int) (resolution.getScaledHeight() * 0.1) + 19, getCurrentShopCategories ( ) [i].getButtonText() ) ;
 
-	            btn . width = getCurrentShopCategories ( ) [ i ] .getButtonWidth(); // 75
-	            this . addBtn ( btn, true ) ;
+	            btn . width = getCurrentShopCategories ( ) [ i ] . getButtonWidth ( ) ; // 75
+	            this . addButton ( btn, true ) ;
 	      
 	            posX += btn.width ;
 	            
@@ -523,8 +631,7 @@ public class ShopGUI extends MCGuiAccessable {
         }
     }
 
-
-    public void addBtn ( GuiButton b, boolean noHide ) {
+    public void addButton ( GuiButton b, boolean noHide ) {
     	        
     	this . buttonList . add ( b ) ;
     	
@@ -543,13 +650,12 @@ public class ShopGUI extends MCGuiAccessable {
     	
     }
 
-    public void updateBtns ( ) {
-    	
-        buttonList.clear();
+    public void updateButtons ( boolean updateInCat ) {
+
+    	buttonList.clear();
         noHidenButtonByGLScissor.clear();
-        
         addCategories();
-      
+
         if ( MineDonate . cfgUI . addSearchButton ){
         
         	buttonList . add ( searchButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), 30, ( int ) ( ( resolution . getScaledHeight ( ) ) - ( resolution . getScaledHeight ( ) * 0.1 ) ) - 5, MineDonate . cfgUI . searchButton . width, MineDonate . cfgUI . searchButton . height, MineDonate . cfgUI . searchButton . text, false ) ) ;
@@ -572,7 +678,7 @@ public class ShopGUI extends MCGuiAccessable {
         	
         }
         
-        buttonList . add ( exitButton = new GuiGradientButton ( 0, ( int ) ( resolution . getScaledWidth ( ) - 30 /** 0.5*/ ) - MineDonate . cfgUI . exitButton . width, ( int ) ( ( resolution . getScaledHeight ( ) ) - ( resolution . getScaledHeight ( ) * 0.1 ) - 5 ), MineDonate . cfgUI . exitButton . width, MineDonate . cfgUI . exitButton . height, MineDonate . cfgUI . exitButton . text, false ) ) ;
+        buttonList . add ( exitButton = new GuiGradientButton ( 0, ( int ) ( resolution . getScaledWidth ( ) - 30 ) - MineDonate . cfgUI . exitButton . width, ( int ) ( ( resolution . getScaledHeight ( ) ) - ( resolution . getScaledHeight ( ) * 0.1 ) - 5 ), MineDonate . cfgUI . exitButton . width, MineDonate . cfgUI . exitButton . height, MineDonate . cfgUI . exitButton . text, false ) ) ;
         noHidenButtonByGLScissor . add ( exitButton ) ;
         // buttonList . add ( returnButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), exitButton.xPosition -  MineDonate . cfgUI . returnButton . width, exitButton . yPosition, MineDonate . cfgUI . returnButton . width, MineDonate . cfgUI . returnButton . height, MineDonate . cfgUI . returnButton . text, false ) ) ;
         
@@ -595,11 +701,26 @@ public class ShopGUI extends MCGuiAccessable {
 
         }
         
-        getCurrentCategory ( ) . updateButtons ( this, m_Page ) ;
+        if ( updateInCat ) {
+        	
+        	getCurrentCategory ( ) . updateButtons ( this, m_Page ) ;
+        	
+        }
+        
+        for ( ru.log_inil.mc.minedonate.gui.GuiEntry ge : gEntries . values ( ) ) {
 
+        	if ( ge . isVisible ( ) ) {
+        		
+        		ge . postShow ( this ) ;
+        		
+        	}
+        	
+        }
+        
     }
 
     int tmpH ;
+
     public void updateGrid ( ) {
 			
 		int tmpW ;
@@ -626,11 +747,6 @@ public class ShopGUI extends MCGuiAccessable {
         return this.itemRender;
     }
 
-    public List getLabels() {
-        return this.labelList;
-    }
-    
-    
     public void drawGradientRectAccess(int par1, int par2, int par3, int par4, int par5, int par6) {
     	drawGradientRect(par1, par2, par3, par4, par5, par6) ;
     }
@@ -674,5 +790,10 @@ public class ShopGUI extends MCGuiAccessable {
     	return false ;
         
     }
-    
+
+	@Override
+	public void drawDefaultBackground ( ) {
+		
+	}
+	
 }

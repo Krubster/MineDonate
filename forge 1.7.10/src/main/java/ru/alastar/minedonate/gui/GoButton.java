@@ -1,8 +1,8 @@
 package ru.alastar.minedonate.gui;
 
-import net.minecraft.client.gui.GuiButton;
+import ru.log_inil.mc.minedonate.gui.GuiTexturedButton;
 
-public class GoButton extends GuiButton {
+public class GoButton extends GuiTexturedButton {
 	
     int shopId = -1;
 

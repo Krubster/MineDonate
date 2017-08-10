@@ -258,7 +258,7 @@ public abstract class GuiScrollingList
 	        if (this.client.theWorld == null) {
 	            GL11.glDisable(GL11.GL_LIGHTING);
 	            GL11.glDisable(GL11.GL_FOG);
-	            this.client.renderEngine.bindTexture(GuiStaticVariables.options);
+	            this.client.renderEngine.bindTexture(GuiStaticVariables.scrollTextures);
 	            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	            float var17 = 32.0F;
 	            var18.startDrawingQuads();
@@ -325,7 +325,7 @@ public abstract class GuiScrollingList
 	            }
 	        }
 
-	        GL11.glDisable(GL11.GL_DEPTH_TEST);
+	      //  GL11.glDisable(GL11.GL_DEPTH_TEST);
 	        //byte var20 = 12;
 	        if (this.client.theWorld == null)
 	        {
@@ -337,6 +337,10 @@ public abstract class GuiScrollingList
 	        GL11.glDisable(GL11.GL_ALPHA_TEST);
 	        GL11.glShadeModel(GL11.GL_SMOOTH);
 	        GL11.glDisable(GL11.GL_TEXTURE_2D);
+	        
+//	        GL11.glEnable(GL11.GL_DEPTH_TEST);
+
+		     
 	        /*var18.startDrawingQuads();
 	        var18.setColorRGBA_I(0, 0);
 	        var18.addVertexWithUV((double)this.left, (double)(this.top + var20), 0.0D, 0.0D, 1.0D);
@@ -424,7 +428,9 @@ public abstract class GuiScrollingList
 	        GL11.glShadeModel(GL11.GL_FLAT);
 	        GL11.glEnable(GL11.GL_ALPHA_TEST);
 	        GL11.glDisable(GL11.GL_BLEND);
+	    
 	        
+	        /*
     	} else if ( dt == DrawType . BG ) {//#LOG
 
             this.drawGradientRect(this.left, this.top, this.right, this.bottom, -1072689136, -804253680);
@@ -473,8 +479,47 @@ public abstract class GuiScrollingList
 	        GL11.glShadeModel(GL11.GL_FLAT);
 	        GL11.glEnable(GL11.GL_ALPHA_TEST);
 	        GL11.glDisable(GL11.GL_BLEND);
+*/
+    	} else if ( dt == DrawType . OVERLAY ) {
+    		
+    		this.mouseX = mouseX;
+	        this.mouseY = mouseY;
+	        //  this.drawBackground();
+	        int listLength = this.getSize();
+	        int scrollBarXStart = this.left + this.listWidth - 6;
+	        int scrollBarXEnd = scrollBarXStart + 6;
+	        int boxLeft = this.left;
+	        int boxRight = scrollBarXStart-1;
+	        int var10;
+	        int var11;
+	        int var13;
+	        int var19;
+	
+	        Tessellator var18 = Tessellator.instance;
 
-    	}
+	
+	 
+	        var10 = this.top + 4 - (int)this.scrollDistance;
+	
+	        if (this.field_27262_q)
+	        {
+	            this.func_27260_a(boxRight, var10, var18);
+	        }
+	
+	        int var14;
+
+	        for (var11 = 0; var11 < listLength; ++var11)
+	        {
+	            var19 = var10 + var11 * this.slotHeight + this.field_27261_r;
+	            var13 = this.slotHeight;
+	            if (var19 + 22/*#LOG*/ <= this.bottom && var19 + var13 - 36/*#LOG*/ >= this.top-2) {
+	                this.drawSlot(var11, boxRight, var19, var13, mouseX, mouseY, var18, DrawType.OVERLAY);
+	            }
+	        }
+
+	        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);	        
+	        
+    	} 
     	
     }
 

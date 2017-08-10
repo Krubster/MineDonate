@@ -71,6 +71,12 @@ public class GuiEntry {
 		
 	}
 	
+	public boolean needReloadOnUnShow ( ) {
+		
+		return true ;
+		
+	}
+	
 	public boolean coordContains ( int x, int y ) {
 		
 		return false ;
