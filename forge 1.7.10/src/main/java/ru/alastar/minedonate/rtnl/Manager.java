@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import ru.alastar.minedonate.MineDonate;
+import ru.alastar.minedonate.merch.categories.UsersShops;
 import ru.alastar.minedonate.merch.info.ShopInfo;
 
 public class Manager {
@@ -43,8 +44,7 @@ public class Manager {
 
 	public static void unFreezeShop ( Shop s, String unFreezer ) {
 
-		ShopInfo si = (ShopInfo) MineDonate.shops.get(0).cats[4].getMerch(s.sid);
-		System.err.println(si.name + ">" + s.name);
+		ShopInfo si = ( ( UsersShops ) MineDonate . shops . get ( 0 ) . cats [ 4 ] ) . getShop ( s . sid ) ;
 		
 		si . isFreezed = s . isFreezed = false ;
 		si . freezer = s . freezer = unFreezer ;
@@ -56,7 +56,7 @@ public class Manager {
 			
 			Statement st = MineDonate . getNewStatement ( ) ;
 			
-			st . executeQuery ( "UPDATE " + MineDonate.cfg.dbShops + " SET isFreezed = " + 0 + ", freezer=" + unFreezer + ", freezReason='' WHERE id=" + s . sid + ";" ) ;
+			st . executeUpdate ( "UPDATE " + MineDonate.cfg.dbShops + " SET isFreezed = " + 0 + ", freezer='" + unFreezer + "', freezReason='' WHERE id=" + s . sid + ";" ) ;
 			
 			st . close ( ) ;
 			
@@ -70,8 +70,8 @@ public class Manager {
 
 	public static void renameShop ( Shop s, String name ) {
 		
-		ShopInfo si = (ShopInfo) MineDonate.shops.get(0).cats[4].getMerch(s.sid);
-		
+		ShopInfo si = ( ( UsersShops ) MineDonate . shops . get ( 0 ) . cats [ 4 ] ) . getShop ( s . sid ) ;
+
 		si . name = s . name = name ;
 		
         ModNetwork . sendToAllAddMerchPacket ( si ) ;

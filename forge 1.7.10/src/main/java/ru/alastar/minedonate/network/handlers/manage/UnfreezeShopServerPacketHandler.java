@@ -19,9 +19,9 @@ public class UnfreezeShopServerPacketHandler implements IMessageHandler < Unfree
     @Override
     public IMessage onMessage ( UnfreezeShopPacket message, MessageContext ctx ) {
     	
-    	if ( ! MineDonate . checkShopExists ( message . shopId ) ) {
+    	if ( ! MineDonate . checkShopAndLoad ( message . shopId ) ) {
     		
-			return new ManageResponsePacket ( ManageResponsePacket.ResponseType.SHOP, ManageResponsePacket.ResponseCode.UNFREEZ, ManageResponsePacket.ResponseStatus.ERROR_UNKNOWN ) ;
+			return new ManageResponsePacket ( ManageResponsePacket.ResponseType.SHOP, ManageResponsePacket.ResponseCode.UNFREEZ, ManageResponsePacket.ResponseStatus.ERROR_SHOP_NOTFOUND ) ;
 
     	}
     	

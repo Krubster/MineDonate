@@ -18,12 +18,11 @@ public class RenameShopServerPacketHandler implements IMessageHandler < RenameSh
 
     @Override
     public IMessage onMessage ( RenameShopPacket message, MessageContext ctx ) {
-    	
-    	
-    	if ( ! MineDonate . checkShopExists ( message . shopId ) ) {
     		
-			return new ManageResponsePacket ( ManageResponsePacket.ResponseType.SHOP, ManageResponsePacket.ResponseCode.RENAME, ManageResponsePacket.ResponseStatus.ERROR_UNKNOWN ) ;
+    	if ( ! MineDonate . checkShopAndLoad ( message . shopId ) ) {
 
+			return new ManageResponsePacket ( ManageResponsePacket.ResponseType.SHOP, ManageResponsePacket.ResponseCode.RENAME, ManageResponsePacket.ResponseStatus.ERROR_SHOP_NOTFOUND ) ;
+			
     	}
     	
 		EntityPlayerMP serverPlayer = ctx . getServerHandler ( ) . playerEntity ;

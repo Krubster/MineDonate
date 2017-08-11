@@ -8,10 +8,13 @@ import ru.alastar.minedonate.merch.info.ShopInfo;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UsersShops extends MerchCategory {
 
 	boolean enabled = MineDonate.cfg.userShops ;
+	public Map<Integer, ShopInfo> map = new HashMap<>();
 	
 	public UsersShops ( ) {
 		
@@ -28,6 +31,20 @@ public class UsersShops extends MerchCategory {
     public void reverseFor(String log_msg, String player) {
     }
 
+    public ShopInfo getShop ( int sid ) {
+    
+    	return map . get ( sid ) ;
+    	
+    }
+    
+    @Override
+    public void addMerch ( Merch m ) {
+    	
+    	super . addMerch ( m ) ;
+    	
+        map . put ( ( ( ShopInfo ) m ) . shopId, ( ShopInfo ) m ) ;
+
+    }
     @Override
     public void loadMerchFromDB(ResultSet rs) {
         int i = 0;

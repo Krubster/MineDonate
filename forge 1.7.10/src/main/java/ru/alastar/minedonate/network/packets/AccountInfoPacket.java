@@ -116,7 +116,7 @@ public class AccountInfoPacket implements IMessage {
         	
         	allowShopCreate = buf . readBoolean ( ) ;
         	
-        	if ( allowShopCreate ) {
+        	if ( ! allowShopCreate ) {
         		
         		allowShopCreateBanner = Utils . netReadString ( buf ) ;
         		allowShopCreateReason = Utils . netReadString ( buf ) ;

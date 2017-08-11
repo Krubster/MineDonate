@@ -5,9 +5,9 @@ import io.netty.buffer.ByteBuf;
 
 public class ManageResponsePacket implements IMessage {
 
-	int type ;
-	int code ;
-	int status ;
+	public int type ;
+	public int code ;
+	public int status ;
 	
     public ManageResponsePacket ( ) { }
     
@@ -57,7 +57,7 @@ public class ManageResponsePacket implements IMessage {
     
     public enum ResponseStatus {
     	
-    	OK, ERROR_SHOP_CREATE_LIMIT, ERROR_SHOP_BAN, ERROR_SHOP_NO_FREEZED, ERROR_ACCESS_DENIED, ERROR_INVENTORY_FULL, ERROR_UNKNOWN
+    	OK, ERROR_SHOP_NOTFOUND, ERROR_SHOP_CREATE_LIMIT, ERROR_SHOP_BAN, ERROR_SHOP_NO_FREEZED, ERROR_ACCESS_DENIED, ERROR_INVENTORY_FULL, ERROR_UNKNOWN
     	
     }
     

@@ -9,6 +9,9 @@ public class DataOfConfig {
 	public String dbName = "shop";
 	public String dbUser = "username" ;
 	public String dbPassword = "password" ;
+
+	public String dbUsers = "md_accounts" ;
+	public String dbUsersNameColumn = "name" ;
 	
 	public boolean sellItems = true ;
 	public String dbItems = "md_items" ;
@@ -41,12 +44,12 @@ public class DataOfConfig {
 	public DataOfPermissionLine [ ] permissionsTriggerList ;
 	
 	public String dbModPermissionsTable = "md_perms" ;
-	public String dbModPermsUsersTable = "md_users" ;
 	
 	// public String dbShopsCategories = "md_subCats" ;
 
 	public String sessionPassword = "1234";
 	public int maxShopsCount = 3 ;
+	public boolean defaultUserAllowShopCreate = true ;
 
 	public DataOfConfig ( ) {
 		

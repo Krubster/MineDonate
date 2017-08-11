@@ -213,6 +213,21 @@ public class MineDonate {
     	
 	}
 	
+	public static boolean checkShopAndLoad ( int shopId ) {
+
+		if ( ! checkShopExists ( shopId ) ) {
+			
+			loadUserShop ( shopId ) ;
+			return checkShopExists ( shopId ) ;
+			
+		} else {
+			
+			return true ;
+			
+		}
+    	
+	}
+	
 	public static boolean checkCatExists ( int shopId, int catId ) {
 
 		return ( checkShopExists ( shopId ) ? shops . get ( shopId ) . cats . length > catId : false ) ;
@@ -533,7 +548,7 @@ public class MineDonate {
         try {
         	
         	Statement stmt = getNewStatement ( ) ;
-            ResultSet rs = stmt . executeQuery ( "SELECT * FROM " + cfg.dbUser + " WHERE name=" + name + ";" ) ;
+            ResultSet rs = stmt . executeQuery ( "SELECT * FROM " + cfg.dbUsers + " WHERE " + cfg.dbUsersNameColumn + "='" + name + "';" ) ;
 
             while ( rs . next ( ) ) {
 
@@ -567,7 +582,16 @@ public class MineDonate {
 			
 			ResultSet rs = getAccountData ( name ) ;
 
-			acc = new Account ( name, getPermissionsByUser ( name ), rs . getBoolean ( "allowShopCreate" ), rs . getString ( "allowShopCreateBanner" ), rs . getString ( "allowShopCreateReason" ), rs . getInt ( "shopsCount" ) );
+			if ( rs != null ) {
+				
+				acc = new Account ( name, getPermissionsByUser ( name ), rs . getBoolean ( "allowShopCreate" ), rs . getString ( "allowShopCreateBanner" ), rs . getString ( "allowShopCreateReason" ), rs . getInt ( "shopsCount" ) );
+				
+			} else {
+				
+				acc = new Account ( name, getPermissionsByUser ( name ), cfg.defaultUserAllowShopCreate, cfg.defaultUserAllowShopCreate ? "SERVER" : null, cfg.defaultUserAllowShopCreate ? "Properties" : null, 0 ) ;
+				
+			}
+			
 			users . put ( name, acc ) ;
 
 		} catch ( SQLException ex ) {
