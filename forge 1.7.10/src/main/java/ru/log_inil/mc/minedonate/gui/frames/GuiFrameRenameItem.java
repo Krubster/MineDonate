@@ -107,7 +107,7 @@ public class GuiFrameRenameItem extends GuiEntry {
 
     	cancelChangesButton . yPosition = saveChangesButton . yPosition = posY + height ;
     	cancelChangesButton . xPosition = posX + width - cancelChangesButton . width ;
-    	saveChangesButton . xPosition = cancelChangesButton . xPosition - cancelChangesButton . width ;
+    	saveChangesButton . xPosition = cancelChangesButton . xPosition - saveChangesButton . width ;
 
     }
     

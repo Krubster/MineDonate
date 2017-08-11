@@ -3,7 +3,10 @@ package ru.alastar.minedonate.network.handlers.manage;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayerMP;
 import ru.alastar.minedonate.MineDonate;
+import ru.alastar.minedonate.events.MineDonateGUIHandler;
 import ru.alastar.minedonate.network.packets.manage.ItemMergedPacket;
 
 public class ItemMergedClientPacketHandler implements IMessageHandler < ItemMergedPacket, IMessage > {
@@ -16,6 +19,12 @@ public class ItemMergedClientPacketHandler implements IMessageHandler < ItemMerg
     public IMessage onMessage ( ItemMergedPacket message, MessageContext ctx ) {
     	
     	MineDonate . acc . ms . currentItemStack = message . is ;
+    	
+    	if ( message . is != null && MineDonateGUIHandler . lastBacked != null ) {
+    		
+            Minecraft.getMinecraft().thePlayer.openGui(MineDonate.getInstance(), 0, Minecraft.getMinecraft().theWorld, (int)  Minecraft.getMinecraft().thePlayer.posX, (int)  Minecraft.getMinecraft().thePlayer.posY, (int)  Minecraft.getMinecraft().thePlayer.posZ);
+
+    	}
     	
         return null ;
         

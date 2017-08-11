@@ -110,7 +110,7 @@ public class GuiFrameDeleteEntity extends GuiEntry {
 
     	cancelChangesButton . yPosition = deleteButton . yPosition = posY + height ;
     	cancelChangesButton . xPosition = posX + width - cancelChangesButton . width ;
-    	deleteButton . xPosition = cancelChangesButton . xPosition - cancelChangesButton . width ;
+    	deleteButton . xPosition = cancelChangesButton . xPosition - deleteButton . width ;
 
     }
     

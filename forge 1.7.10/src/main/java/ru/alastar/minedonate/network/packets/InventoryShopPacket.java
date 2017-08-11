@@ -32,7 +32,7 @@ public class InventoryShopPacket implements IMessage {
     
     public enum Type {
     	
-    	OPEN_INV, CLOSE_WITH_MERGE
+    	OPEN_INV, CLOSE_WITH_MERGE, CLOSE_NO_MERGE
     	
     }
     

@@ -11,6 +11,7 @@ import ru.alastar.minedonate.gui.merge.ShopInventoryContainer;
 import ru.alastar.minedonate.gui.merge.ShopInventoryGUI;
 
 public class MineDonateGUIHandler implements IGuiHandler {
+	
     public static final int SHOP_ID = 0, STORE_ID = 1 ;
 
     @Override
@@ -29,7 +30,7 @@ public class MineDonateGUIHandler implements IGuiHandler {
         return null;
     }
 
-    ShopGUI lastOpened ;
+    public static ShopGUI lastOpened, lastBacked ;
     
     @Override
     public Object getClientGuiElement ( int id, EntityPlayer player, World world, int x, int y, int z) {
@@ -42,8 +43,18 @@ public class MineDonateGUIHandler implements IGuiHandler {
         		
         	}
 
-        	lastOpened = new ShopGUI ( ) ;//( ShopContainer ) getServerGuiElement ( ID, player, world, x, y, x ) ) ) ;
-        //	Minecraft.getMinecraft().displayGuiScreen(lastOpened);
+        	if ( lastBacked != null && MineDonate . getAccount ( ) . ms . currentItemStack != null ) {
+        	
+        		lastOpened = lastBacked ;
+        		
+        		lastBacked = null ;
+        		
+        	} else {
+        		
+        		lastOpened = new ShopGUI ( ) ;
+        	
+        	}
+        	
         	return lastOpened ;
         	
         } else if ( id == STORE_ID ) {
@@ -56,5 +67,19 @@ public class MineDonateGUIHandler implements IGuiHandler {
         return null ;
 
     }
+
+	public static void setBackShopGUI ( boolean b ) {
+		
+		if ( b ) {
+			
+			lastBacked = lastOpened ;
+			
+		} else {
+			
+			lastBacked = null ;
+			
+		}
+		
+	}
 
 }

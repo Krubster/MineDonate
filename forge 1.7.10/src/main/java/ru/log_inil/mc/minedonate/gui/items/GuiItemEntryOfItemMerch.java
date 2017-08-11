@@ -138,7 +138,7 @@ public class GuiItemEntryOfItemMerch extends GuiAbstractItemEntry {
 	  		}
 	  		
 	  		
-			gi . parent . getItemRender ( ) .renderItemOverlayIntoGUI ( gi . getFontRenderer ( ), gi . parent . mc . getTextureManager ( ), info . m_stack, 45, y_offset + 5, stackCountLine ) ;
+			gi . parent . getItemRender ( ) . renderItemOverlayIntoGUI ( gi . getFontRenderer ( ), gi . parent . mc . getTextureManager ( ), info . m_stack, 45, y_offset + 5, stackCountLine ) ;
 
 			RenderHelper . disableStandardItemLighting ( ) ;
 			

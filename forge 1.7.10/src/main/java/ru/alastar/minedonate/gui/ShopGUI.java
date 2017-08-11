@@ -81,6 +81,7 @@ public class ShopGUI extends MCGuiAccessible {
     	gEntries . put ( "deleteShop", new GuiFrameDeleteShop ( MineDonate . cfgUI . frames . deleteShop ) ) ;
     	gEntries . put ( "freezeShop", new GuiFrameFreezeShop ( MineDonate . cfgUI . frames . freezeShop ) ) ;
 
+    	gEntries . put ( "addItem", new GuiFrameAddItem ( MineDonate . cfgUI . frames . addItem ) ) ;
     	gEntries . put ( "renameItem", new GuiFrameRenameItem ( MineDonate . cfgUI . frames . renameItem ) ) ;
     	gEntries . put ( "deleteItem", new GuiFrameDeleteItem ( MineDonate . cfgUI . frames . deleteItem ) ) ;
     	

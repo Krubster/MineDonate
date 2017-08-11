@@ -3,6 +3,7 @@ package ru.log_inil.mc.minedonate.gui.frames;
 import java.awt.Color;
 
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.renderer.RenderHelper;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.rtnl.ModNetwork;
@@ -11,11 +12,12 @@ import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.gui.GuiEntry;
 import ru.log_inil.mc.minedonate.gui.GuiGradientButton;
 import ru.log_inil.mc.minedonate.gui.GuiGradientTextField;
+import ru.log_inil.mc.minedonate.localData.frames.DataOfUIFrameCreateItem;
 import ru.log_inil.mc.minedonate.localData.frames.DataOfUIFrameCreateShop;
 
-public class GuiFrameCreateShop extends GuiEntry {
+public class GuiFrameAddItem extends GuiEntry {
 
-	int width = 200 ;
+	int width = 220 ;
 	int height = 40 ;
 	
 	int posX ;
@@ -29,8 +31,11 @@ public class GuiFrameCreateShop extends GuiEntry {
 	int widthCenter = width / 2 ;
 	int heightCenter = height / 2 ;
 	
-	DataOfUIFrameCreateShop douifcs ;
-	public GuiFrameCreateShop ( DataOfUIFrameCreateShop _douifcs ) {
+	DataOfUIFrameCreateItem douifcs ;
+	
+	int shopId = -1, catId = -1 ;
+
+	public GuiFrameAddItem ( DataOfUIFrameCreateItem _douifcs ) {
 		
 		douifcs = _douifcs ;
 		
@@ -49,6 +54,16 @@ public class GuiFrameCreateShop extends GuiEntry {
     	
     	nameField . drawTextBox ( ) ;
     	
+    	if ( MineDonate.getAccount().ms.currentItemStack != null ) {
+    		
+			RenderHelper . enableGUIStandardItemLighting ( ) ;
+
+    		g . getItemRender ( ) . renderItemAndEffectIntoGUI ( g . getFontRenderer ( ), g . mc . getTextureManager ( ), MineDonate.getAccount().ms.currentItemStack, posX + 12, posY + 16 ) ;
+			g . getItemRender ( ) . renderItemOverlayIntoGUI ( g . getFontRenderer ( ), g . mc . getTextureManager ( ), MineDonate.getAccount().ms.currentItemStack, posX + 12, posY + 16 , Integer.toString(MineDonate.getAccount().ms.currentItemStack.stackSize) ) ;
+
+			RenderHelper . disableStandardItemLighting ( ) ;
+
+    	}
     	
     }
     
@@ -61,7 +76,7 @@ public class GuiFrameCreateShop extends GuiEntry {
     @Override
 	public void postShow ( ShopGUI g ) {
 		
-    	super.postShow(g);
+    	super . postShow ( g ) ;
 
     	posX = (g.getScaledResolution().getScaledWidth()/2) - widthCenter;
     	posY = (g.getScaledResolution().getScaledHeight()/2) - heightCenter;
@@ -101,16 +116,14 @@ public class GuiFrameCreateShop extends GuiEntry {
 		}
 		
 		nameField . setText ( fieldText != null ? fieldText : "" ) ;
-		nameField . setTextHolder ( fieldHolder ) ;
+		nameField . setTextHolder ( MineDonate.getAccount().ms.currentItemStack != null ? MineDonate.getAccount().ms.currentItemStack.getDisplayName() : fieldHolder ) ;
 		
-		nameField . xPosition = posX + 20 ;
+		nameField . xPosition = posX + 40 ;
 		nameField . yPosition = posY + 15 ;
 
     	cancelChangesButton . yPosition = saveChangesButton . yPosition = posY + height ;
     	cancelChangesButton . xPosition = posX + width - cancelChangesButton . width ;
     	saveChangesButton . xPosition = cancelChangesButton . xPosition - saveChangesButton . width ;
-
-    	
     	
     }
     
@@ -128,20 +141,12 @@ public class GuiFrameCreateShop extends GuiEntry {
 	public boolean actionPerformed ( ShopGUI g, GuiButton b ) {
 		
     	if ( b . id == saveChangesButton . id ) {
-    	
-    		if ( nameField . getText ( ) . trim ( ) . isEmpty ( ) ) {
-    			
-    			nameField . fieldBorderColor = fieldBorderRedColor ;
-    			
-    			return false ;
-    			
-    		}
     		
     		g . setLoading ( true ) ;
     		
-            ModNetwork . sendToServerCreateNewShopPacket ( this . nameField . getText ( ) ) ;
+            ModNetwork . sendToServerAddNewItemPacket ( shopId, catId, this . nameField . getText ( ) ) ;
             
-            g . showEntry ( "createShop", false ) ; 
+            g . showEntry ( "addItem", false ) ; 
 
     		unShow ( g ) ;
 
@@ -149,7 +154,13 @@ public class GuiFrameCreateShop extends GuiEntry {
     	
     	if ( b . id == cancelChangesButton . id ) {
     	
-    		g . showEntry ( "createShop", false ) ;
+    		if ( MineDonate . getAccount ( ) . ms . currentItemStack != null ) {
+    			
+    			ModNetwork . sendToServerCancelShopInventoryPacket ( ) ;
+    			
+    		}
+    		
+    		g . showEntry ( "addItem", false ) ;
     		unShow ( g ) ;
     		
     	}
@@ -223,6 +234,13 @@ public class GuiFrameCreateShop extends GuiEntry {
     	fieldHolder = _holder ;
 
     }
+
+	public void setInfo ( int _shopId, int _catId ) {
+
+		shopId = _shopId ;
+		catId = _catId ;
+
+	}
     
     
 }

@@ -109,7 +109,7 @@ public class GuiFrameFreezeShop extends GuiEntry {
 
     	cancelChangesButton . yPosition = freezeChangesButton . yPosition = posY + height ;
     	cancelChangesButton . xPosition = posX + width - cancelChangesButton . width ;
-    	freezeChangesButton . xPosition = cancelChangesButton . xPosition - cancelChangesButton . width ;
+    	freezeChangesButton . xPosition = cancelChangesButton . xPosition - freezeChangesButton . width ;
 
     	
     	

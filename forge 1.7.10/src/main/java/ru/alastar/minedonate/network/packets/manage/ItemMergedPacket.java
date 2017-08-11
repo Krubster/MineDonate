@@ -22,14 +22,20 @@ public class ItemMergedPacket implements IMessage {
     	
     	try {
 
-    		NBTTagCompound data = new NBTTagCompound ( ) ;
+    		buf . writeBoolean ( is != null ) ;
     		
-    		is . writeToNBT ( data ) ;
+    		if ( is != null ) {
+    			
+	    		NBTTagCompound data = new NBTTagCompound ( ) ;
+	    		
+	    		is . writeToNBT ( data ) ;
+	    		
+	            ByteBufUtils . writeTag ( buf, data ) ;
+				
+	            data = null ;
+	            
+    		}
     		
-            ByteBufUtils . writeTag ( buf, data ) ;
-			
-            data = null ;
-            
 		} catch ( Exception ex ) {
 			
 			ex . printStackTrace ( ) ;
@@ -43,12 +49,16 @@ public class ItemMergedPacket implements IMessage {
     	
        try {
     	   
-    	   NBTTagCompound data = ByteBufUtils . readTag ( buf ) ;
-    	   
-           is = ItemStack . loadItemStackFromNBT ( data ) ;
-           
-           data = null ;
-           
+    	   if ( buf . readBoolean ( ) ) {
+
+    		   NBTTagCompound data = ByteBufUtils . readTag ( buf ) ;
+
+    		   is = ItemStack . loadItemStackFromNBT ( data ) ;
+
+    		   data = null ;
+    		   
+		   }
+
        } catch ( Exception ex ) {
     	   
     	   ex . printStackTrace ( ) ;

@@ -10,6 +10,7 @@ public class DataOfUIFrames {
 	public DataOfUIFrameDeleteShop deleteShop ;
 	public DataOfUIFrameFreezeShop freezeShop ;
 	
+	public DataOfUIFrameCreateItem addItem ;
 	public DataOfUIFrameRenameItem renameItem ;
 	public DataOfUIFrameDeleteItem deleteItem ;
 	
@@ -25,6 +26,7 @@ public class DataOfUIFrames {
 		deleteShop = new DataOfUIFrameDeleteShop ( ) ;
 		freezeShop = new DataOfUIFrameFreezeShop ( ) ;
 		
+		addItem = new DataOfUIFrameCreateItem ( ) ;
 		renameItem = new DataOfUIFrameRenameItem ( ) ;
 		deleteItem = new DataOfUIFrameDeleteItem ( ) ;
 		

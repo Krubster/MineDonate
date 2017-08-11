@@ -32,12 +32,12 @@ public class ModNetwork {
         networkChannel . registerMessage ( RemoveMerchPacketHandler . class, RemoveMerchPacket . class, i ++, Side . CLIENT ) ;
         networkChannel . registerMessage ( MerchInfoPacketHandler . class, MerchInfoPacket . class, i ++, Side . CLIENT ) ;
 
-        i++ ;
+        i ++ ;
  
         networkChannel . registerMessage ( NeedUpdateServerPacketHandler . class, NeedUpdatePacket . class, i, Side .  SERVER ) ;
         networkChannel . registerMessage ( NeedUpdateClientPacketHandler . class, NeedUpdatePacket . class, i, Side . CLIENT ) ;
 
-        i++ ;
+        i ++ ;
 
         networkChannel . registerMessage ( NeedShopCategoryServerPacketHandler . class, NeedShopCategoryPacket . class, i ++, Side . SERVER ) ;
         
@@ -55,16 +55,22 @@ public class ModNetwork {
         networkChannel . registerMessage ( ItemMergedClientPacketHandler . class, ItemMergedPacket . class, i ++, Side . CLIENT ) ;
 
     }
-    
+
+	public static void sendToServerOpenShopInventoryPacket ( ) {
+
+		networkChannel . sendToServer ( new InventoryShopPacket ( InventoryShopPacket . Type . OPEN_INV ) ) ;
+		
+	}
+	
 	public static void sendToServerCloseShopInventoryPacket ( ) {
 		
 		networkChannel . sendToServer ( new InventoryShopPacket ( InventoryShopPacket . Type . CLOSE_WITH_MERGE ) ) ;
 		
 	}
+	
+	public static void sendToServerCancelShopInventoryPacket ( ) {
 
-	public static void sendToServerOpenShopInventoryPacket ( ) {
-
-		networkChannel . sendToServer ( new InventoryShopPacket ( InventoryShopPacket . Type . OPEN_INV ) ) ;
+		networkChannel . sendToServer ( new InventoryShopPacket ( InventoryShopPacket . Type . CLOSE_NO_MERGE ) ) ;
 		
 	}
 
@@ -137,6 +143,10 @@ public class ModNetwork {
 	public static void sendTo ( EntityPlayerMP player, IMessage packet ) {
 		
 		networkChannel . sendTo ( packet, player ) ;
+		
+	}
+
+	public static void sendToServerAddNewItemPacket ( int shopId, int catId, String name ) {
 		
 	}
 	
