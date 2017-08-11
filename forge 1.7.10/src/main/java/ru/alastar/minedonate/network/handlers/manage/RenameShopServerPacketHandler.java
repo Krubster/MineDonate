@@ -3,7 +3,9 @@ package ru.alastar.minedonate.network.handlers.manage;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+
 import net.minecraft.entity.player.EntityPlayerMP;
+
 import ru.alastar.minedonate.network.packets.manage.RenameShopPacket;
 import ru.alastar.minedonate.rtnl.Manager;
 import ru.alastar.minedonate.rtnl.Shop;
@@ -29,9 +31,9 @@ public class RenameShopServerPacketHandler implements IMessageHandler < RenameSh
 		
 		Shop s = MineDonate . shops . get ( message . shopId ) ;
 		
-		if ( MineDonate . getAccount ( serverPlayer . getDisplayName ( ) ) . canRenameShop ( s . owner ) ) {
+		if ( MineDonate . getAccount ( serverPlayer . getDisplayName ( ) . toLowerCase ( ) ) . canRenameShop ( s . owner ) ) {
 			
-			if ( message . name == null || message . name . length ( ) > 140 ) {
+			if ( message . name == null || message . name . isEmpty ( ) || message . name . length ( ) > 140 ) {
 
 				return new ManageResponsePacket ( ManageResponsePacket.ResponseType.SHOP, ManageResponsePacket.ResponseCode.RENAME, ManageResponsePacket.ResponseStatus.ERROR_UNKNOWN ) ;
 

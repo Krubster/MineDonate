@@ -5,6 +5,7 @@ import java.sql.Statement;
 
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
+
 import ru.log_inil.mc.minedonate.localData.DataOfMoneyProcessor;
 
 public class StandartMoneyProcessor extends AbstractMoneyProcessor {

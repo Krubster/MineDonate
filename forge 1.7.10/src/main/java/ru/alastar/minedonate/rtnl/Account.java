@@ -13,22 +13,22 @@ public class Account {
 	public List < String > permissions ;
 	public ManageSession ms = new ManageSession ( ) ;
 	
-	public boolean allowShopCreate ;
-	public String allowShopCreateBanner ;
-	public String allowShopCreateReason ;
+	public boolean freezShopCreate ;
+	public String freezShopCreateFreezer ;
+	public String freezShopCreateReason ;
 	public int shopsCount ;
 
 	@SideOnly(Side.SERVER)
 	public AdminSession adminSesson ;
 	
-	public Account ( String _name, List < String > _permissions, boolean _allowShopCreate, String _allowShopCreateBanner, String _allowShopCreateReason, int _shopsCount ) {
+	public Account ( String _name, List < String > _permissions, boolean _freezShopCreate, String _freezShopCreateFreezer, String _freezShopCreateReason, int _shopsCount ) {
 		
 		name = _name ;
 		permissions = _permissions ;
 		
-		allowShopCreate = _allowShopCreate ;
-		allowShopCreateBanner = _allowShopCreateBanner;
-		allowShopCreateReason = _allowShopCreateReason ;
+		freezShopCreate = _freezShopCreate ;
+		freezShopCreateFreezer = _freezShopCreateFreezer;
+		freezShopCreateReason = _freezShopCreateReason ;
 		shopsCount = _shopsCount ;
 		
 	}
@@ -75,9 +75,21 @@ public class Account {
 
 	}
 	
-	public boolean bannedShopCreate ( ) {
+	public boolean canFreezeOtherAccount ( ) {
 		
-		return ! this . allowShopCreate ;
+		return hasPermission ( "freezeAccount" ) || hasPermission ( "*" ) ;
+
+	}
+	
+	public boolean canUnFreezeOtherAccount ( ) {
+		
+		return hasPermission ( "unFreezeAccount" ) || hasPermission ( "*" ) ;
+
+	}
+	
+	public boolean freezedShopCreate ( ) {
+		
+		return this . freezShopCreate ;
 		
 	}
 	

@@ -13,8 +13,6 @@ import ru.alastar.minedonate.gui.GoButton;
 import ru.alastar.minedonate.gui.ShopCategory;
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.merch.info.ShopInfo;
-import ru.alastar.minedonate.network.packets.manage.RenameShopPacket;
-import ru.alastar.minedonate.network.packets.manage.UnfreezeShopPacket;
 import ru.alastar.minedonate.rtnl.ModNetwork;
 import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.gui.GuiAbstractItemEntry;
@@ -23,6 +21,7 @@ import ru.log_inil.mc.minedonate.gui.context.ContextElement;
 import ru.log_inil.mc.minedonate.gui.context.ContextMenu;
 import ru.log_inil.mc.minedonate.gui.context.ContextMenuManager;
 import ru.log_inil.mc.minedonate.gui.frames.GuiFrameDeleteShop;
+import ru.log_inil.mc.minedonate.gui.frames.GuiFrameFreezeAccount;
 import ru.log_inil.mc.minedonate.gui.frames.GuiFrameFreezeShop;
 import ru.log_inil.mc.minedonate.gui.frames.GuiFrameRenameShop;
 
@@ -77,6 +76,18 @@ public class GuiItemEntryOfUserShopMerch extends GuiAbstractItemEntry {
 		if ( MineDonate . getAccount ( ) . canDeleteShop ( info . owner ) ) {
 			
 			cElements . add ( new ContextElement ( 3, "delete", MineDonate.cfgUI.lang.deleteShop, this, 9 ) ) ;
+
+		}
+		
+		if ( MineDonate . getAccount ( ) . canFreezeOtherAccount ( ) ) {
+			
+			cElements . add ( new ContextElement ( 4, "freezeAcc", MineDonate.cfgUI.lang.freezeAccount, this, 9 ) ) ;
+
+		}
+		
+		if ( MineDonate . getAccount ( ) . canUnFreezeOtherAccount ( ) ) {
+			
+			cElements . add ( new ContextElement ( 4, "unFreezeAcc", MineDonate.cfgUI.lang.unfreezeAccount, this, 9 ) ) ;
 
 		}
 		
@@ -252,6 +263,23 @@ public class GuiItemEntryOfUserShopMerch extends GuiAbstractItemEntry {
 					gfds . setConfirmCode ( Integer . toString ( Math . abs ( info . hashCode ( ) ) ) . substring ( 0, 3 ) ) ;
 					
 				break ;
+				
+				case "freezeAcc" :
+					
+					GuiFrameFreezeAccount gffa = ( GuiFrameFreezeAccount ) g . showEntry ( "freezeAccount", true ) ;	
+					
+					gffa . setName ( info . owner ) ;
+					
+				break ;
+				
+				case "unFreezeAcc" :
+					
+		    		ModNetwork . sendToServerUnfreezeAccountPacket ( info . owner ) ;
+
+		    		g . setLoading ( true ) ;
+		    		
+				break ;
+				
 				
 			}
 			

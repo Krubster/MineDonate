@@ -28,7 +28,7 @@ public class NeedUpdateServerPacketHandler implements IMessageHandler<NeedUpdate
     		if ( MineDonate . m_Enabled ) {
     			
                 EntityPlayerMP serverPlayer = ctx . getServerHandler ( ) . playerEntity ;
-                String userName = serverPlayer . getDisplayName ( ) ;
+                String userName = serverPlayer . getDisplayName ( ) . toLowerCase ( ) ;
                 
                 for ( AbstractMoneyProcessor amp : MineDonate . moneyProcessors . values ( ) ) {
 

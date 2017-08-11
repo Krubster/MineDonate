@@ -3,7 +3,9 @@ package ru.alastar.minedonate.network.handlers.manage;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+
 import net.minecraft.entity.player.EntityPlayerMP;
+
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.network.packets.manage.CreateNewShopPacket;
 import ru.alastar.minedonate.network.packets.manage.ManageResponsePacket;
@@ -21,7 +23,7 @@ public class CreateNewShopServerPacketHandler implements IMessageHandler < Creat
     	
 		EntityPlayerMP serverPlayer = ctx . getServerHandler ( ) . playerEntity ;
 		
-		Account acc = MineDonate . getAccount ( serverPlayer . getDisplayName ( ) ) ;
+		Account acc = MineDonate . getAccount ( serverPlayer . getDisplayName ( ) . toLowerCase ( ) ) ;
 		
 		if ( acc == null ) {
 			
@@ -31,7 +33,7 @@ public class CreateNewShopServerPacketHandler implements IMessageHandler < Creat
 		
 		if ( acc . canCreateShop ( ) ) {
 			
-			if ( acc . bannedShopCreate ( ) ) {
+			if ( acc . freezedShopCreate ( ) ) {
 
 				return new ManageResponsePacket ( ManageResponsePacket.ResponseType.SHOP, ManageResponsePacket.ResponseCode.CREATE, ManageResponsePacket.ResponseStatus.ERROR_SHOP_BAN ) ;
 
@@ -43,7 +45,7 @@ public class CreateNewShopServerPacketHandler implements IMessageHandler < Creat
 
 			}
 			
-			if ( message . name == null || message . name . length ( ) > 140 ) {
+			if ( message . name == null || message . name . isEmpty ( ) || message . name . length ( ) > 140 ) {
 
 				return new ManageResponsePacket ( ManageResponsePacket.ResponseType.SHOP, ManageResponsePacket.ResponseCode.CREATE, ManageResponsePacket.ResponseStatus.ERROR_UNKNOWN ) ;
 

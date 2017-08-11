@@ -51,7 +51,7 @@ public class NeedShopCategoryServerPacketHandler implements IMessageHandler<Need
                     	ShopInfo si = ( ( ShopInfo ) packet . info ) ;
                     	if ( ! si . owner . equalsIgnoreCase ( serverPlayer . getDisplayName ( ) ) ) {
                     		
-                    		if ( ! MineDonate . getAccount ( serverPlayer . getDisplayName ( ) ) . canViewOtherFreezText ( ) ) {
+                    		if ( ! MineDonate . getAccount ( serverPlayer . getDisplayName ( ) . toLowerCase ( ) ) . canViewOtherFreezText ( ) ) {
                     			
                     			si . cleanFreezVisibleData ( ) ; 
                     			

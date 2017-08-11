@@ -8,25 +8,25 @@ public class AdminSessionManager {
 
     public static void beginAdminSession ( EntityPlayerMP player ) {
     	
-    	MineDonate . getAccount ( player . getDisplayName ( ) ) . createAdminSession ( ) ; 
+    	MineDonate . getAccount ( player . getDisplayName ( ) . toLowerCase ( ) ) . createAdminSession ( ) ; 
 
     }
     
     public static void endAdminSession ( EntityPlayerMP player ) {
     	
-    	MineDonate . getAccount ( player . getDisplayName ( ) ) . adminSesson = null ;
+    	MineDonate . getAccount ( player . getDisplayName ( )  . toLowerCase ( )) . adminSesson = null ;
     	
     }
     
     public static Account . AdminSession getAdminSession ( EntityPlayerMP player ) {
 
-    	return MineDonate . getAccount ( player . getDisplayName ( ) ) . adminSesson ;
+    	return MineDonate . getAccount ( player . getDisplayName ( ) . toLowerCase ( ) ) . adminSesson ;
     	
     }
 
     public static boolean checkAdminSession ( EntityPlayerMP player ) {
     
-    	return MineDonate . getAccount ( player . getDisplayName ( ) ) . adminSesson != null && FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().func_152596_g(player.getGameProfile());
+    	return MineDonate . getAccount ( player . getDisplayName ( ) . toLowerCase ( ) ) . adminSesson != null && FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().func_152596_g(player.getGameProfile());
     
     }
     

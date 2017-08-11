@@ -22,9 +22,9 @@ public class AccountInfoPacket implements IMessage {
     
     public List < String > permissions ;
     
-	public boolean allowShopCreate ;
-	public String allowShopCreateBanner ;
-	public String allowShopCreateReason ;
+	public boolean freezShopCreate ;
+	public String freezShopCreateFreezer ;
+	public String freezShopCreateReason ;
 	public int shopsCount ;
 	
     String userName ;
@@ -57,7 +57,7 @@ public class AccountInfoPacket implements IMessage {
             	
             }
 				
-            Account acc = MineDonate . getAccount ( userName ) ;
+            Account acc = MineDonate . getAccount ( userName . toLowerCase ( ) ) ;
     		
             buf . writeInt ( acc . permissions . size ( ) ) ;
             
@@ -67,12 +67,12 @@ public class AccountInfoPacket implements IMessage {
             	
             }
                         
-            buf . writeBoolean ( acc . allowShopCreate ) ;
+            buf . writeBoolean ( acc . freezShopCreate ) ;
             
-            if ( ! acc . allowShopCreate ) {
+            if ( acc . freezShopCreate ) {
             	
-        		Utils . netWriteString ( buf, acc . allowShopCreateBanner ) ;
-        		Utils . netWriteString ( buf, acc . allowShopCreateReason ) ;
+        		Utils . netWriteString ( buf, acc . freezShopCreateFreezer ) ;
+        		Utils . netWriteString ( buf, acc . freezShopCreateReason ) ;
 
             }
             
@@ -114,12 +114,12 @@ public class AccountInfoPacket implements IMessage {
         		
         	}
         	
-        	allowShopCreate = buf . readBoolean ( ) ;
+        	freezShopCreate = buf . readBoolean ( ) ;
         	
-        	if ( ! allowShopCreate ) {
+        	if ( freezShopCreate ) {
         		
-        		allowShopCreateBanner = Utils . netReadString ( buf ) ;
-        		allowShopCreateReason = Utils . netReadString ( buf ) ;
+        		freezShopCreateFreezer = Utils . netReadString ( buf ) ;
+        		freezShopCreateReason = Utils . netReadString ( buf ) ;
         		
         	}
         	

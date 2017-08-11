@@ -584,11 +584,11 @@ public class MineDonate {
 
 			if ( rs != null ) {
 				
-				acc = new Account ( name, getPermissionsByUser ( name ), rs . getBoolean ( "allowShopCreate" ), rs . getString ( "allowShopCreateBanner" ), rs . getString ( "allowShopCreateReason" ), rs . getInt ( "shopsCount" ) );
+				acc = new Account ( name, getPermissionsByUser ( name ), rs . getBoolean ( "freezShopCreate" ), rs . getString ( "freezShopCreateFreezer" ), rs . getString ( "freezShopCreateReason" ), rs . getInt ( "shopsCount" ) );
 				
 			} else {
 				
-				acc = new Account ( name, getPermissionsByUser ( name ), cfg.defaultUserAllowShopCreate, cfg.defaultUserAllowShopCreate ? "SERVER" : null, cfg.defaultUserAllowShopCreate ? "Properties" : null, 0 ) ;
+				acc = new Account ( name, getPermissionsByUser ( name ), cfg.defaultUserAllowShopCreate, cfg.defaultUserAllowShopCreate ? "SERVER" : null, cfg.defaultUserAllowShopCreate ? "Properties policy" : null, 0 ) ;
 				
 			}
 			

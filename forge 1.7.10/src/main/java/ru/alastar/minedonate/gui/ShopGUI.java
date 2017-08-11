@@ -88,6 +88,8 @@ public class ShopGUI extends MCGuiAccessible {
     	gEntries . put ( "renameEntity", new GuiFrameRenameEntity ( MineDonate . cfgUI . frames . renameEntity ) ) ;
     	gEntries . put ( "deleteEntity", new GuiFrameDeleteEntity ( MineDonate . cfgUI . frames . deleteEntity ) ) ;
     	
+    	gEntries . put ( "freezeAccount", new GuiFrameFreezeAccount ( MineDonate . cfgUI . frames . freezeAccount ) ) ;
+
     	gEntries . put ( "loading", ( gfl = new GuiFrameLoading ( ) ) ) ;
     	gfl . setText ( MineDonate . cfgUI . loadingText ) ;
     	

@@ -48,12 +48,17 @@ public class ModNetwork {
 
         networkChannel . registerMessage ( CreateNewShopServerPacketHandler . class, CreateNewShopPacket . class, i ++, Side . SERVER ) ;
         networkChannel . registerMessage ( RenameShopServerPacketHandler . class, RenameShopPacket . class, i ++, Side . SERVER ) ;
+        networkChannel . registerMessage ( FreezeShopServerPacketHandler . class, FreezeShopPacket . class, i ++, Side . SERVER ) ;
         networkChannel . registerMessage ( UnfreezeShopServerPacketHandler . class, UnfreezeShopPacket . class, i ++, Side . SERVER ) ;
 
+        networkChannel . registerMessage ( FreezeAccountServerPacketHandler . class, FreezeAccountPacket . class, i ++, Side . SERVER ) ;
+        networkChannel . registerMessage ( UnfreezeAccountServerPacketHandler . class, UnfreezeAccountPacket . class, i ++, Side . SERVER ) ;
+        
         networkChannel . registerMessage ( InventoryShopServerPacketHandler . class, InventoryShopPacket . class, i ++, Side . SERVER ) ;
         
         networkChannel . registerMessage ( ItemMergedClientPacketHandler . class, ItemMergedPacket . class, i ++, Side . CLIENT ) ;
 
+        
     }
 
 	public static void sendToServerOpenShopInventoryPacket ( ) {
@@ -133,20 +138,39 @@ public class ModNetwork {
 		networkChannel . sendToServer ( new RenameShopPacket ( shopId, name ) ) ;
 
 	}
+	
+	public static void sendToServerFreezeShopPacket ( int shopId, String reason ) {
 
+		networkChannel . sendToServer ( new FreezeShopPacket ( shopId, reason ) ) ;
+		
+	}
+	
 	public static void sendToServerUnfreezeShopPacket ( int shopId ) {
 
 		networkChannel . sendToServer ( new UnfreezeShopPacket ( shopId ) ) ;
 		
 	}
 	
-	public static void sendTo ( EntityPlayerMP player, IMessage packet ) {
-		
-		networkChannel . sendTo ( packet, player ) ;
+
+	public static void sendToServerAddNewItemPacket ( int shopId, int catId, String name ) {
 		
 	}
 
-	public static void sendToServerAddNewItemPacket ( int shopId, int catId, String name ) {
+	public static void sendToServerFreezeAccountPacket ( String player, String reason ) {
+		
+		networkChannel . sendToServer ( new FreezeAccountPacket ( player, reason ) ) ;
+		
+	}
+	
+	public static void sendToServerUnfreezeAccountPacket ( String player ) {
+		
+		networkChannel . sendToServer ( new UnfreezeAccountPacket ( player ) ) ;
+		
+	}
+	
+	public static void sendTo ( EntityPlayerMP player, IMessage packet ) {
+		
+		networkChannel . sendTo ( packet, player ) ;
 		
 	}
 	

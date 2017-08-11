@@ -94,7 +94,7 @@ public class GuiFrameRenameItem extends GuiEntry {
 		if ( renameField == null ) {
 		
 			renameField = new GuiGradientTextField ( g.getFontRenderer(), 30, 10, douifri . renameField . width - 1, douifri . renameField . height, true ) ;
-			renameField . setMaxStringLength ( 143 ) ;
+			renameField . setMaxStringLength ( 140 ) ;
 			renameField . setEnableBorderDrawing ( true, fieldBorderColor ) ;
 			
 		}

@@ -4,6 +4,7 @@ import java.awt.Color;
 
 import net.minecraft.client.gui.GuiButton;
 import ru.alastar.minedonate.gui.ShopGUI;
+import ru.alastar.minedonate.rtnl.ModNetwork;
 import ru.alastar.minedonate.rtnl.Utils;
 import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.gui.GuiEntry;
@@ -96,7 +97,7 @@ public class GuiFrameFreezeShop extends GuiEntry {
 		if ( reasonField == null ) {
 		
 			reasonField = new GuiGradientTextField ( g.getFontRenderer(), 30, 10, douiffs . reasonField . width - 1, douiffs . reasonField . height, true ) ;
-			reasonField . setMaxStringLength ( 143 ) ;
+			reasonField . setMaxStringLength ( 140 ) ;
 			reasonField . setEnableBorderDrawing ( true, fieldBorderColor ) ;
 			
 		}
@@ -140,8 +141,8 @@ public class GuiFrameFreezeShop extends GuiEntry {
     		
     		g . setLoading ( true ) ;
     		
-            // MineDonate . networkChannel . sendToServer ( new CreateNewShopPacket ( this . reasonField . getText ( ) ) ) ;
-
+    		ModNetwork . sendToServerFreezeShopPacket ( this . shopId, reasonField . getText ( ) ) ;
+    		
             g . showEntry ( "freezeShop", false ) ; 
 
             unShow ( g ) ;

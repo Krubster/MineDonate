@@ -110,7 +110,7 @@ public class GuiFrameAddItem extends GuiEntry {
 		if ( nameField == null ) {
 		
 			nameField = new GuiGradientTextField ( g.getFontRenderer(), 30, 10, douifcs . nameField . width - 1, douifcs . nameField . height, true ) ;
-			nameField . setMaxStringLength ( 143 ) ;
+			nameField . setMaxStringLength ( 140 ) ;
 			nameField . setEnableBorderDrawing ( true, fieldBorderColor ) ;
 			
 		}

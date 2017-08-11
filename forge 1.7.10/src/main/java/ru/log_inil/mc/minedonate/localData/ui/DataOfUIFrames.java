@@ -16,8 +16,8 @@ public class DataOfUIFrames {
 	
 	public DataOfUIFrameRenameEntity renameEntity ;
 	public DataOfUIFrameDeleteEntity deleteEntity ;
-
-	//public DataOfUIFrameDeleteItem deleteEntity ;
+	
+	public DataOfUIFrameFreezeAccount freezeAccount;
 
 	public DataOfUIFrames ( ) {
 	
@@ -33,8 +33,8 @@ public class DataOfUIFrames {
 		renameEntity = new DataOfUIFrameRenameEntity ( ) ;
 		deleteEntity = new DataOfUIFrameDeleteEntity ( ) ;
 		
-		//rename = new DataOfUIFrameRenameItem ( ) ;
-		
+		freezeAccount = new DataOfUIFrameFreezeAccount ( ) ;
+				
 	}
 	
 }

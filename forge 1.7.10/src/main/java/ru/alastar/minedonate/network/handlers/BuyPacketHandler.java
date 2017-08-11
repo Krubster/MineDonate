@@ -40,33 +40,44 @@ public class BuyPacketHandler implements IMessageHandler<BuyPacket, IMessage> {
                     if ( info != null ) {
                     	
                         //int playerMoney = MineDonate.getMoneyFor(serverPlayer.getDisplayName());
+                    	if ( ! MineDonate . checkShopExists ( info . shopId ) ) {
+                    		
+                    		resp = 2 ;
+                    		
+                    	} else if ( MineDonate . shops . get ( info . shopId ) . isFreezed  ) {
                     	
-                        if ( info . canBuy ( serverPlayer, message . amount ) ) { // info . getCost ( ) * message.amount <= playerMoney && 
-                        	
-                        	int procMoney = -1 ;
-                        	
-                        	if ( ( procMoney = MineDonate . getMoneyProcessor ( info . getMoneyType ( ) ) . canBuy ( info, serverPlayer . getDisplayName ( ), message . amount ) ) != -1 ) {
-                        		
-	                    //        MineDonate . logBuy ( info, serverPlayer, message . amount, info . getMoneyType ( ) ) ;
-	                            int currentMoney = info . withdrawMoney ( serverPlayer . getDisplayName ( ), procMoney ) ;
-	                               
-	                            ModNetwork . sendToMoneyChangedPacket ( ( EntityPlayerMP ) serverPlayer, currentMoney, info . getMoneyType ( ) ) ;
+                    		resp = 3 ;
 
-	                            MineDonate . shops . get ( message . shopId ) . cats [ category ] . GiveMerch ( serverPlayer, info, message . amount ) ;
+                    	} else {
+                    		
+	                        if ( info . canBuy ( serverPlayer, message . amount ) ) { // info . getCost ( ) * message.amount <= playerMoney && 
+	                        	
+	                        	int procMoney = -1 ;
+	                        	
+	                        	if ( ( procMoney = MineDonate . getMoneyProcessor ( info . getMoneyType ( ) ) . canBuy ( info, serverPlayer . getDisplayName ( ), message . amount ) ) != -1 ) {
+	                        		
+		                    //        MineDonate . logBuy ( info, serverPlayer, message . amount, info . getMoneyType ( ) ) ;
+		                            int currentMoney = info . withdrawMoney ( serverPlayer . getDisplayName ( ), procMoney ) ;
+		                               
+		                            ModNetwork . sendToMoneyChangedPacket ( ( EntityPlayerMP ) serverPlayer, currentMoney, info . getMoneyType ( ) ) ;
+	
+		                            MineDonate . shops . get ( message . shopId ) . cats [ category ] . GiveMerch ( serverPlayer, info, message . amount ) ;
+		                            
+		                            resp = 0;
+		                            
+	                        	} else {
+	                        		
+	                        		resp = 1 ;
+	                        		
+	                        	}
+	                        	
+	                        } else {
+	                        	
+	                            resp = 1;
 	                            
-	                            resp = 0;
-	                            
-                        	} else {
-                        		
-                        		resp = 1 ;
-                        		
-                        	}
-                        	
-                        } else {
-                        	
-                            resp = 1;
-                            
-                        }
+	                        }
+	                        
+                    	}
                     }
                 }
             

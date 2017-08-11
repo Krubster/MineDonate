@@ -13,6 +13,9 @@ public class DataOfUILang {
 	public String renameShop ;
 	public String deleteShop ;
 	
+	public String freezeAccount ;
+	public String unfreezeAccount ;
+	
 	public String shopFreezer ;
 	public String shopFreezReason ;
 	
@@ -29,8 +32,12 @@ public class DataOfUILang {
 		renameShop = "Rename this shop" ;
 		deleteShop = "Delete this shop";
 		
+		freezeAccount = "Freeze owner account" ;
+		unfreezeAccount = "Unfreeze owner account" ;
+
 		shopFreezer = "Freezer: ";
 		shopFreezReason = "Reason: ";
+		
 		
 	}
 	

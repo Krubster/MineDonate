@@ -42,6 +42,35 @@ public class Manager {
         
 	}
 
+	public static void freezeShop ( Shop s, String freezer, String reason ) {
+		
+		ShopInfo si = ( ( UsersShops ) MineDonate . shops . get ( 0 ) . cats [ 4 ] ) . getShop ( s . sid ) ;
+
+		si . isFreezed = s . isFreezed = true ;
+		si . freezer = s . freezer = freezer ;
+		si . freezReason = s . freezReason = reason ;
+		
+        ModNetwork . sendToAllAddMerchPacket ( si ) ;
+
+        try {
+        	
+            PreparedStatement statement = MineDonate.getDBConnection().prepareStatement("UPDATE " + MineDonate.cfg.dbShops + " SET isFreezed = 1, freezer = ?, freezReason = ? WHERE id = ?");
+            
+            statement.setString(1, freezer);
+            statement.setString(2, reason);
+            statement.setInt(3, s.sid);
+            
+            statement.execute();
+            statement.close();
+            
+        } catch (SQLException e) {
+            
+        	e.printStackTrace();
+            
+        }
+		
+	}
+	
 	public static void unFreezeShop ( Shop s, String unFreezer ) {
 
 		ShopInfo si = ( ( UsersShops ) MineDonate . shops . get ( 0 ) . cats [ 4 ] ) . getShop ( s . sid ) ;
@@ -93,5 +122,55 @@ public class Manager {
         }
 
  	}
+	
+	public static void freezePlayer ( Account acc, String freezer, String reason ) {
+		
+		acc . freezShopCreate = true ;
+		acc . freezShopCreateFreezer = freezer ;
+		acc . freezShopCreateReason = reason ;
+		
+        try {
+        	
+            PreparedStatement statement = MineDonate.getDBConnection().prepareStatement("UPDATE " + MineDonate.cfg.dbUsers + " SET freezShopCreate = 1, freezShopCreateFreezer = ?, freezShopCreateReason = ? WHERE " + MineDonate.cfg.dbUsersNameColumn + " = ?");
+            
+            statement.setString(1, freezer);
+            statement.setString(2, reason);
+            statement.setString(3, acc.name);
+            
+            statement.execute();
+            statement.close();
+            
+        } catch (SQLException e) {
+            
+        	e.printStackTrace();
+            
+        }
+		
+	}
+
+	public static void unFreezePlayer ( Account acc, String unFreezer ) {
+
+		acc . freezShopCreate = false ;
+		acc . freezShopCreateFreezer = unFreezer ;
+		acc . freezShopCreateReason = "" ;
+		
+		try {
+			
+            PreparedStatement statement = MineDonate.getDBConnection().prepareStatement("UPDATE " + MineDonate.cfg.dbUsers + " SET freezShopCreate = 0, freezShopCreateFreezer = ?, freezShopCreateReason = ? WHERE " + MineDonate.cfg.dbUsersNameColumn + " = ?");
+            
+            statement.setString(1, unFreezer);
+            statement.setString(2, "");
+            statement.setString(3, acc.name);
+            
+            statement.execute();
+            statement.close();
+			
+		} catch ( Exception ex ) {
+			
+			ex . printStackTrace ( ) ;
+			
+		}
+		
+	}
 	
 }

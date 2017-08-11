@@ -14,17 +14,13 @@ import ru.alastar.minedonate.gui.CountButton;
 import ru.alastar.minedonate.gui.ShopCategory;
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.merch.info.ItemInfo;
-import ru.alastar.minedonate.network.packets.manage.UnfreezeShopPacket;
 import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.gui.GuiAbstractItemEntry;
 import ru.log_inil.mc.minedonate.gui.GuiItemsScrollArea;
 import ru.log_inil.mc.minedonate.gui.context.ContextMenu;
 import ru.log_inil.mc.minedonate.gui.context.ContextMenuManager;
 import ru.log_inil.mc.minedonate.gui.frames.GuiFrameDeleteItem;
-import ru.log_inil.mc.minedonate.gui.frames.GuiFrameDeleteShop;
-import ru.log_inil.mc.minedonate.gui.frames.GuiFrameFreezeShop;
 import ru.log_inil.mc.minedonate.gui.frames.GuiFrameRenameItem;
-import ru.log_inil.mc.minedonate.gui.frames.GuiFrameRenameShop;
 import ru.log_inil.mc.minedonate.gui.context.ContextElement;
 
 public class GuiItemEntryOfItemMerch extends GuiAbstractItemEntry {

@@ -22,9 +22,7 @@ import ru.log_inil.mc.minedonate.gui.GuiItemsScrollArea;
 import ru.log_inil.mc.minedonate.gui.context.ContextMenu;
 import ru.log_inil.mc.minedonate.gui.context.ContextMenuManager;
 import ru.log_inil.mc.minedonate.gui.frames.GuiFrameDeleteEntity;
-import ru.log_inil.mc.minedonate.gui.frames.GuiFrameDeleteItem;
 import ru.log_inil.mc.minedonate.gui.frames.GuiFrameRenameEntity;
-import ru.log_inil.mc.minedonate.gui.frames.GuiFrameRenameItem;
 import ru.log_inil.mc.minedonate.gui.context.ContextElement;
 
 public class GuiItemEntryOfEntityMerch extends GuiAbstractItemEntry {

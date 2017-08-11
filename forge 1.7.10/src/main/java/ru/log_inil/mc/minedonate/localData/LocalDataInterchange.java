@@ -3,25 +3,13 @@ package ru.log_inil.mc.minedonate.localData;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.io.StringWriter;
-import java.lang.reflect.Constructor;
-import java.util.HashMap;
-import java.util.Map;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.internal.Streams;
 import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-
-import net.minecraft.client.Minecraft;
 
 public class LocalDataInterchange {
 
