@@ -8,14 +8,16 @@ public class DataOfUIFrameCreateItem {
 	public DataOfUIElement createButton ;
 	public DataOfUIElement cancelButton ;
 	public String title;
-	public DataOfUITextHolderElement nameField ;
+	public DataOfUITextHolderElement nameField, limitField, costField ;
 	
 	public DataOfUIFrameCreateItem ( ) {
 		
 		title = "Add item to shop" ;
 		createButton = new DataOfUIElement ( "Add", 35, 20 ) ;
 		cancelButton = new DataOfUIElement ( "Cancel", 40, 20 ) ;
-		nameField = new DataOfUITextHolderElement ( "", "Item name", 160, 20 ) ;
+		nameField = new DataOfUITextHolderElement ( "", "Item name", 120, 20 ) ;
+		limitField = new DataOfUITextHolderElement ( "", "Limit", 40, 20 ) ;
+		costField = new DataOfUITextHolderElement ( "", "Cost", 40, 20 ) ;
 		
 	}
 	

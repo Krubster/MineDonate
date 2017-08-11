@@ -35,7 +35,7 @@ public class CreateNewShopServerPacketHandler implements IMessageHandler < Creat
 			
 			if ( acc . freezedShopCreate ( ) ) {
 
-				return new ManageResponsePacket ( ManageResponsePacket.ResponseType.SHOP, ManageResponsePacket.ResponseCode.CREATE, ManageResponsePacket.ResponseStatus.ERROR_SHOP_BAN ) ;
+				return new ManageResponsePacket ( ManageResponsePacket.ResponseType.SHOP, ManageResponsePacket.ResponseCode.CREATE, ManageResponsePacket.ResponseStatus.ERROR_SHOP_CREATE_BAN ) ;
 
 			}
 			

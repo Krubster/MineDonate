@@ -69,7 +69,7 @@ public class GuiFrameAddItem extends GuiEntry {
     
     GuiButton saveChangesButton ;
     GuiButton cancelChangesButton ;
-    GuiGradientTextField nameField ; 
+    GuiGradientTextField nameField, costField, limitField ; 
     
     String fieldText, fieldHolder ;
     
@@ -108,7 +108,7 @@ public class GuiFrameAddItem extends GuiEntry {
     	}
 
 		if ( nameField == null ) {
-		
+			
 			nameField = new GuiGradientTextField ( g.getFontRenderer(), 30, 10, douifcs . nameField . width - 1, douifcs . nameField . height, true ) ;
 			nameField . setMaxStringLength ( 140 ) ;
 			nameField . setEnableBorderDrawing ( true, fieldBorderColor ) ;
@@ -120,6 +120,45 @@ public class GuiFrameAddItem extends GuiEntry {
 		
 		nameField . xPosition = posX + 40 ;
 		nameField . yPosition = posY + 15 ;
+
+		if ( limitField == null ) {
+			
+			limitField = new GuiGradientTextField ( g.getFontRenderer(), 30, 10, douifcs . limitField . width - 1, douifcs . limitField . height, true ) ;
+			limitField . setMaxStringLength ( 10 ) ;
+			limitField . setEnableBorderDrawing ( true, fieldBorderColor ) ;
+			
+		}
+
+		limitField . setEnabled ( MineDonate . getAccount ( ) . canUnlimitedItems ( ) ) ;
+		limitField . setVisible ( MineDonate . getAccount ( ) . canUnlimitedItems ( ) ) ;
+		
+		limitField . setText ( "" ) ;
+		limitField . setTextHolder ( "" ) ;
+		
+		if ( MineDonate . getAccount ( ) . canUnlimitedItems ( ) ) {
+			
+			height = 60 ;
+			limitField . xPosition = nameField . xPosition ;
+			limitField . yPosition = nameField . yPosition + nameField . height ;
+			
+			limitField . setText ( douifcs . limitField . text ) ;
+			limitField . setTextHolder ( douifcs . limitField . textHolder ) ;
+			
+		}
+		
+		if ( costField == null ) {
+			
+			costField = new GuiGradientTextField ( g.getFontRenderer(), 30, 10, douifcs . costField . width - 1, douifcs . costField . height, true ) ;
+			costField . setMaxStringLength ( 10 ) ;
+			costField . setEnableBorderDrawing ( true, fieldBorderColor ) ;
+			
+			costField . setText ( douifcs . costField . text ) ;
+			costField . setTextHolder ( douifcs . costField . textHolder ) ;
+						
+		}
+	
+		costField . xPosition = nameField . xPosition + nameField . width + 5 ;
+		costField . yPosition = nameField . yPosition ;
 
     	cancelChangesButton . yPosition = saveChangesButton . yPosition = posY + height ;
     	cancelChangesButton . xPosition = posX + width - cancelChangesButton . width ;
@@ -141,10 +180,42 @@ public class GuiFrameAddItem extends GuiEntry {
 	public boolean actionPerformed ( ShopGUI g, GuiButton b ) {
 		
     	if ( b . id == saveChangesButton . id ) {
+
+    		if ( costField . getText ( ) . trim ( ) . isEmpty ( ) ) {
+    			
+    			costField . fieldBorderColor = fieldBorderRedColor ;
+    			
+    			return false ;
+    			
+    		} else {
+    			
+    			try {
+    				
+    				Integer i = Integer . parseInt ( costField . getText ( ) ) ;
+    				
+    				if ( i < 1 ) {
+    					
+    	    			costField . fieldBorderColor = fieldBorderRedColor ;
+    	    			
+    	    			return false ;
+    	    			
+    				}
+    				
+    			} catch ( Exception ex ) {
+    				
+    				ex . printStackTrace ( ) ;
+        			
+    				costField . fieldBorderColor = fieldBorderRedColor ;
+        			
+        			return false ;
+        			
+    			}
+    			
+    		}
     		
     		g . setLoading ( true ) ;
     		
-            ModNetwork . sendToServerAddNewItemPacket ( shopId, catId, this . nameField . getText ( ) ) ;
+            ModNetwork . sendToServerAddNewItemPacket ( shopId, catId, Integer.parseInt(this.limitField.getText()), Integer.parseInt(this.costField.getText()), this . nameField . getText ( ) ) ;
             
             g . showEntry ( "addItem", false ) ; 
 
@@ -180,6 +251,22 @@ public class GuiFrameAddItem extends GuiEntry {
 
     	}
     	
+    	if ( limitField != null ) {
+
+    		limitField . mouseClicked ( x, y, i ) ;
+    		    		
+    		limitField . fieldBorderColor = fieldBorderColor ;
+
+    	}
+    	
+    	if ( costField != null ) {
+
+    		costField . mouseClicked ( x, y, i ) ;
+    		    		
+    		costField . fieldBorderColor = fieldBorderColor ;
+
+    	}
+    	
 		return false ;
 		
 	}
@@ -192,6 +279,26 @@ public class GuiFrameAddItem extends GuiEntry {
     		nameField . textboxKeyTyped ( c, k ) ;
     		
 			nameField . fieldBorderColor = fieldBorderColor ;
+
+    		return true ;
+    		
+    	}
+    	
+    	if ( limitField != null && limitField . isFocused ( ) ) {
+    		
+    		limitField . textboxKeyTyped ( c, k ) ;
+    		
+    		limitField . fieldBorderColor = fieldBorderColor ;
+
+    		return true ;
+    		
+    	}
+    	
+    	if ( costField != null && costField . isFocused ( ) ) {
+    		
+    		costField . textboxKeyTyped ( c, k ) ;
+    		
+    		costField . fieldBorderColor = fieldBorderColor ;
 
     		return true ;
     		

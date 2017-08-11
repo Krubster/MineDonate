@@ -69,6 +69,12 @@ public class Account {
 
 	}
 	
+	public boolean canUnlimitedItems ( ) {
+		
+		return hasPermission ( "unlimitedItems" ) || hasPermission ( "*" ) ;
+
+	}
+	
 	public boolean canCreateShop ( ) {
 		
 		return hasPermission ( "createShop" ) || hasPermission ( "*" ) ;

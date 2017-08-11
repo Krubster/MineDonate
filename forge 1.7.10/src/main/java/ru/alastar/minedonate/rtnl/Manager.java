@@ -1,11 +1,18 @@
 package ru.alastar.minedonate.rtnl;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import cpw.mods.fml.common.network.ByteBufUtils;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import net.minecraft.nbt.NBTTagCompound;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.categories.UsersShops;
+import ru.alastar.minedonate.merch.info.ItemInfo;
 import ru.alastar.minedonate.merch.info.ShopInfo;
 
 public class Manager {
@@ -171,6 +178,50 @@ public class Manager {
 			
 		}
 		
+	}
+
+	public static void addItemToShop ( Account acc, Shop s, int catId, int cost, int limit, String name) {
+
+		if ( limit != -1 ) {
+			
+			limit = acc . ms . currentItemStack . stackSize ;
+			
+		}
+		
+    	ItemInfo info = new ItemInfo(s.sid, catId, s.cats[catId].getMerch().length, Integer.valueOf(cost), name, "new merch", Integer.valueOf(limit), acc.ms.currentItemStack);
+        
+        s.cats[catId].addMerch(info);
+       
+        ModNetwork . sendToAllAddMerchPacket ( info ) ;
+
+        try {
+          
+        	ByteBuf buf = Unpooled.buffer();
+         
+            NBTTagCompound nbt = new NBTTagCompound();
+            
+            acc.ms.currentItemStack.writeToNBT(nbt);
+          
+            ByteBufUtils.writeTag(buf, nbt);
+
+            InputStream stream = new ByteArrayInputStream(buf.array());
+           
+            PreparedStatement statement = MineDonate.getDBConnection().prepareStatement("INSERT INTO " + s.cats[catId].getDatabase() + " (name, info, cost, lim, stack_data) VALUES(?,?,?,?,?)");
+         
+            statement.setString(1, name);
+            statement.setString(2, "new merch");
+            statement.setInt(3, Integer.valueOf(cost));
+            statement.setInt(4, Integer.valueOf(limit));
+            statement.setBlob(5, stream);
+            statement.execute();
+            statement.close();
+            
+        } catch (SQLException e) {
+            
+        	e.printStackTrace();
+            
+        }
+        
 	}
 	
 }

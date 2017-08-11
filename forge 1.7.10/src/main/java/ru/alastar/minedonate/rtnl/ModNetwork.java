@@ -55,8 +55,8 @@ public class ModNetwork {
         networkChannel . registerMessage ( UnfreezeAccountServerPacketHandler . class, UnfreezeAccountPacket . class, i ++, Side . SERVER ) ;
         
         networkChannel . registerMessage ( InventoryShopServerPacketHandler . class, InventoryShopPacket . class, i ++, Side . SERVER ) ;
-        
         networkChannel . registerMessage ( ItemMergedClientPacketHandler . class, ItemMergedPacket . class, i ++, Side . CLIENT ) ;
+        networkChannel . registerMessage ( AddNewItemServerPacketHandler . class, AddNewItemPacket . class, i ++, Side . SERVER ) ;
 
         
     }
@@ -152,7 +152,9 @@ public class ModNetwork {
 	}
 	
 
-	public static void sendToServerAddNewItemPacket ( int shopId, int catId, String name ) {
+	public static void sendToServerAddNewItemPacket ( int shopId, int catId, int limit, int cost, String name ) {
+		
+		networkChannel . sendToServer ( new AddNewItemPacket ( shopId, catId, limit, cost, name ) ) ;
 		
 	}
 
