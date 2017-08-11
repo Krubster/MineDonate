@@ -33,5 +33,9 @@ public class CommonProxy {
     @Mod.EventHandler
     public void serverStarting(FMLServerStartingEvent event) {
     }
+
+	public void clientOpenGui ( int id ) {	
+		
+	}
      
 }

@@ -5,7 +5,7 @@ import io.netty.buffer.ByteBuf;
 
 public class UnfreezeShopPacket implements IMessage {
 
-	int shopId ;
+	public int shopId ;
 	
     public UnfreezeShopPacket ( ) { }
     public UnfreezeShopPacket ( int _shopId ) {

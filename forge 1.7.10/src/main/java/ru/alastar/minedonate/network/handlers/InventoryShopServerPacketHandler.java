@@ -47,7 +47,7 @@ public class InventoryShopServerPacketHandler implements IMessageHandler<Invento
     		}
     		
     	} else if ( message.type == InventoryShopPacket . Type . CLOSE_NO_MERGE ) {
-    		System.err.println("DROP: " + MineDonate . mergeContainers . containsKey ( serverPlayer . getDisplayName ( ) ) );
+
     		if ( MineDonate . mergeContainers . containsKey ( serverPlayer . getDisplayName ( ) ) ) {
     			
     			ShopInventoryContainer sic = MineDonate . mergeContainers . get ( serverPlayer . getDisplayName ( ) ) ;
@@ -63,7 +63,6 @@ public class InventoryShopServerPacketHandler implements IMessageHandler<Invento
     			sic = null ;
     			
 				is = MineDonate . getAccount ( serverPlayer . getDisplayName ( ) ) . ms . currentItemStack ;
-	    		System.err.println("DROP: " + is );
 
 				MineDonate . getAccount ( serverPlayer . getDisplayName ( ) ) . ms . setItemStack ( null ) ;
 

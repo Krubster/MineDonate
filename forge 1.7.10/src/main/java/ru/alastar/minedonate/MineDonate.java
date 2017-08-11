@@ -118,6 +118,12 @@ public class MineDonate {
     	
     }
     
+    public static Connection getDBConnection ( ) {
+    	
+    	return m_DB_Connection ;
+    	
+    }
+    
     @SideOnly(Side.SERVER)
     public static void initDataBase ( ) {
 
@@ -201,9 +207,15 @@ public class MineDonate {
         
     }
     
+	public static boolean checkShopExists ( int shopId ) {
+
+		return shops . containsKey ( shopId ) ;
+    	
+	}
+	
 	public static boolean checkCatExists ( int shopId, int catId ) {
 
-		return ( shops . containsKey ( shopId ) ? shops . get ( shopId ) . cats . length > catId : false ) ;
+		return ( checkShopExists ( shopId ) ? shops . get ( shopId ) . cats . length > catId : false ) ;
     	
 	}
 
@@ -243,6 +255,32 @@ public class MineDonate {
         return false ;
 
     }
+    
+    public static int getNextShopId ( ) {
+    	
+        try {
+        	
+        	Statement stmt = getNewStatement ( ) ;
+            ResultSet rs = stmt . executeQuery ( "SHOW TABLE STATUS LIKE '" + cfg.dbShops + "';" ) ;
+
+            while ( rs . next ( ) ) {
+
+                return rs . getInt ( "Auto_increment" ) ;
+
+            }
+            
+            stmt . close ( ) ;
+
+        } catch ( Exception ex ) {
+            
+        	ex . printStackTrace ( ) ;
+            
+        }
+
+        return -1;
+
+    }
+    
 
     public static ResultSet getShopData ( int shopId ) {
         
@@ -490,6 +528,31 @@ public class MineDonate {
 	
 	public static Map < String, Account > users = new HashMap < > ( ) ;
 	
+    public static ResultSet getAccountData ( String name ) {
+        
+        try {
+        	
+        	Statement stmt = getNewStatement ( ) ;
+            ResultSet rs = stmt . executeQuery ( "SELECT * FROM " + cfg.dbUser + " WHERE name=" + name + ";" ) ;
+
+            while ( rs . next ( ) ) {
+
+                return rs;
+
+            }
+            
+            stmt . close ( ) ;
+
+        } catch ( Exception ex ) {
+            
+        	ex . printStackTrace ( ) ;
+            
+        }
+
+        return null;
+
+    }
+    
 	public static Account getAccount ( String name ) {
 
 		if ( users . containsKey ( name ) ) {
@@ -498,10 +561,21 @@ public class MineDonate {
 			
 		}
 		
-		Account acc = new Account ( name, getPermissionsByUser ( name ) ) ;
+		Account acc = null ;
 		
-		users . put ( name, acc ) ;
-		
+		try {
+			
+			ResultSet rs = getAccountData ( name ) ;
+
+			acc = new Account ( name, getPermissionsByUser ( name ), rs . getBoolean ( "allowShopCreate" ), rs . getString ( "allowShopCreateBanner" ), rs . getString ( "allowShopCreateReason" ), rs . getInt ( "shopsCount" ) );
+			users . put ( name, acc ) ;
+
+		} catch ( SQLException ex ) {
+			
+			ex . printStackTrace ( ) ;
+			
+		}
+				
 		return acc ;
 		
 	}
@@ -549,24 +623,20 @@ public class MineDonate {
         
     }
     
-	@SideOnly ( Side . CLIENT )
 	public static Account acc ;
 	
-	@SideOnly ( Side . CLIENT )
 	public static Account getAccount ( ) {
 		
 		return acc ;
 
 	}
 	
-	@SideOnly ( Side . CLIENT )
 	public static void setAccount ( Account _acc ) {
 		
 		acc = _acc ;
 		
 	}
 
-    @SideOnly(Side.CLIENT)
     public static void setMoney ( String moneyType, int money ) {
 
     	clientMoney . put ( moneyType, money ) ;

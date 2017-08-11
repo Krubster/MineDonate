@@ -6,7 +6,7 @@ import ru.alastar.minedonate.rtnl.Utils;
 
 public class CreateNewShopPacket implements IMessage {
 
-	String name ;
+	public String name ;
 	
     public CreateNewShopPacket ( ) { }
     public CreateNewShopPacket ( String _name ) {

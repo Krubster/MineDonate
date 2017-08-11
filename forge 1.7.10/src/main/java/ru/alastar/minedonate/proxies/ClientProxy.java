@@ -73,4 +73,11 @@ public class ClientProxy extends CommonProxy {
         return m_Privelegies_Icons[id];
     }
 
+    @Override
+	public void clientOpenGui ( int id ) {	
+
+    	Minecraft.getMinecraft().thePlayer.openGui(MineDonate.getInstance(), id, Minecraft.getMinecraft().theWorld, (int)  Minecraft.getMinecraft().thePlayer.posX, (int)  Minecraft.getMinecraft().thePlayer.posY, (int)  Minecraft.getMinecraft().thePlayer.posZ);
+    
+    }
+    
 }

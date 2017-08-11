@@ -8,6 +8,7 @@ import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import io.netty.buffer.ByteBuf;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.mproc.AbstractMoneyProcessor;
+import ru.alastar.minedonate.rtnl.Account;
 import ru.alastar.minedonate.rtnl.Utils;
 
 /**
@@ -21,6 +22,11 @@ public class AccountInfoPacket implements IMessage {
     
     public List < String > permissions ;
     
+	public boolean allowShopCreate ;
+	public String allowShopCreateBanner ;
+	public String allowShopCreateReason ;
+	public int shopsCount ;
+	
     String userName ;
     
     public AccountInfoPacket ( String _userName ) {
@@ -51,15 +57,26 @@ public class AccountInfoPacket implements IMessage {
             	
             }
 				
-    		List < String > perms = MineDonate . getPermissionsByUser ( userName ) ;
+            Account acc = MineDonate . getAccount ( userName ) ;
     		
-            buf . writeInt ( perms . size ( ) ) ;
+            buf . writeInt ( acc . permissions . size ( ) ) ;
             
-            for ( String p : perms ) {
+            for ( String p : acc . permissions  ) {
             	
             	Utils . netWriteString ( buf, p ) ;
             	
             }
+                        
+            buf . writeBoolean ( acc . allowShopCreate ) ;
+            
+            if ( ! acc . allowShopCreate ) {
+            	
+        		Utils . netWriteString ( buf, acc . allowShopCreateBanner ) ;
+        		Utils . netWriteString ( buf, acc . allowShopCreateReason ) ;
+
+            }
+            
+            buf . writeInt ( acc . shopsCount ) ;
             
 		} catch ( Exception ex ) {
 			
@@ -97,6 +114,17 @@ public class AccountInfoPacket implements IMessage {
         		
         	}
         	
+        	allowShopCreate = buf . readBoolean ( ) ;
+        	
+        	if ( allowShopCreate ) {
+        		
+        		allowShopCreateBanner = Utils . netReadString ( buf ) ;
+        		allowShopCreateReason = Utils . netReadString ( buf ) ;
+        		
+        	}
+        	
+        	shopsCount = buf . readInt ( ) ;
+        	               
 		} catch ( UnsupportedEncodingException ex ) {
 			
 			ex . printStackTrace ( ) ;

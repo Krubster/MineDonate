@@ -51,13 +51,13 @@ public class ManageResponsePacket implements IMessage {
     
     public enum ResponseCode {
     	
-    	CREATE, ADD, RENAME, REMOVE, PUTT, FREEZ, UNFREEZ
+    	CREATE, ADD, RENAME, REMOVE, PUT, FREEZ, UNFREEZ
     	
     }
     
     public enum ResponseStatus {
     	
-    	OK, ERROR_SHOP_CREATE_LIMIT, ERROR_ACCESS_DENIED, ERROR_INVENTORY_FULL, ERROR_UNKNOWN
+    	OK, ERROR_SHOP_CREATE_LIMIT, ERROR_SHOP_BAN, ERROR_SHOP_NO_FREEZED, ERROR_ACCESS_DENIED, ERROR_INVENTORY_FULL, ERROR_UNKNOWN
     	
     }
     

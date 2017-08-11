@@ -46,6 +46,7 @@ public class DataOfConfig {
 	// public String dbShopsCategories = "md_subCats" ;
 
 	public String sessionPassword = "1234";
+	public int maxShopsCount = 3 ;
 
 	public DataOfConfig ( ) {
 		

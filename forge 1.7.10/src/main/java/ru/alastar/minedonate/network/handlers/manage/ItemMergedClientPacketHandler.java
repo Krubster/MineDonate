@@ -3,6 +3,8 @@ package ru.alastar.minedonate.network.handlers.manage;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayerMP;
 import ru.alastar.minedonate.MineDonate;
@@ -22,8 +24,8 @@ public class ItemMergedClientPacketHandler implements IMessageHandler < ItemMerg
     	
     	if ( message . is != null && MineDonateGUIHandler . lastBacked != null ) {
     		
-            Minecraft.getMinecraft().thePlayer.openGui(MineDonate.getInstance(), 0, Minecraft.getMinecraft().theWorld, (int)  Minecraft.getMinecraft().thePlayer.posX, (int)  Minecraft.getMinecraft().thePlayer.posY, (int)  Minecraft.getMinecraft().thePlayer.posZ);
-
+            MineDonate . proxy . clientOpenGui ( MineDonateGUIHandler . SHOP_ID ) ;
+             
     	}
     	
         return null ;

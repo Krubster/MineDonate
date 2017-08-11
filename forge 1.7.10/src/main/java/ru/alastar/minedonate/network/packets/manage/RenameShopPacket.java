@@ -6,8 +6,8 @@ import ru.alastar.minedonate.rtnl.Utils;
 
 public class RenameShopPacket implements IMessage {
 
-	int shopId ;
-	String name ;
+	public int shopId ;
+	public String name ;
 	
     public RenameShopPacket ( ) { }
     public RenameShopPacket ( int _shopId, String _name ) {
