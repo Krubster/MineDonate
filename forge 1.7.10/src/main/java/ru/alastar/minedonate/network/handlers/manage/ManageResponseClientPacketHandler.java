@@ -22,7 +22,7 @@ public class ManageResponseClientPacketHandler implements IMessageHandler < Mana
     	ShopGUI . instance . setLoading ( false ) ;
     	ShopGUI . instance . initGui ( ) ;
     	
-    	System.err.println(ResponseType.values()[message.type] + "> " + ResponseCode.values()[message.code] + "> " + ResponseStatus.values()[message.status] );
+    	System.err.println(message.type + "> " + message.code + "> " + message.status );
         return null;
         
     }

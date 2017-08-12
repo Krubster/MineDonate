@@ -23,7 +23,9 @@ import java.util.List;
  */
 public class EntitiesCategory extends ShopCategory {
     
-	public EntitiesCategory ( ) {
+	public EntitiesCategory ( String _name ) {
+		
+		super ( _name ) ;
 		
 		catId = 3 ;
 		

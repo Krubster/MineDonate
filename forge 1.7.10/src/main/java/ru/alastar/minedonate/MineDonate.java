@@ -588,7 +588,7 @@ public class MineDonate {
 				
 			} else {
 				
-				acc = new Account ( name, getPermissionsByUser ( name ), cfg.defaultUserAllowShopCreate, cfg.defaultUserAllowShopCreate ? "SERVER" : null, cfg.defaultUserAllowShopCreate ? "Properties policy" : null, 0 ) ;
+				acc = new Account ( name, getPermissionsByUser ( name ), ! cfg . defaultUserAllowShopCreate, cfg.defaultUserAllowShopCreate ? "SERVER" : null, cfg.defaultUserAllowShopCreate ? "Properties policy" : null, 0 ) ;
 				
 			}
 			

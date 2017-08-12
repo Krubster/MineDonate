@@ -25,12 +25,14 @@ import org.lwjgl.opengl.GL12;
  */
 public class RegionsCategory extends ShopCategory {
 
-    public RegionsCategory ( ) {
+    public RegionsCategory ( String _name ) {
+		
+		super ( _name ) ;
+		
+		catId = 2 ;
     	 
-		 catId = 2 ;
-    	 
-    	 rowCount = 4 ;
-    	 colCount = 2 ;
+    	rowCount = 4 ;
+    	colCount = 2 ;
     	 
     }
     

@@ -57,11 +57,11 @@ public class GuiItemEntryOfUserShopMerch extends GuiAbstractItemEntry {
 			
 			if ( info . isFreezed ) {
 			
-				cElements . add ( new ContextElement ( 1, "unfreeze", MineDonate.cfgUI.lang.unfreezeShop, this, 9 ) ) ;
+				cElements . add ( new ContextElement ( 1, "unfreeze", MineDonate.cfgUI.lang.unfreezeShop, this, 10 ) ) ;
 
 			} else {
 			
-				cElements . add ( new ContextElement ( 0, "freeze", MineDonate.cfgUI.lang.freezeShop, this, 9 ) ) ;
+				cElements . add ( new ContextElement ( 0, "freeze", MineDonate.cfgUI.lang.freezeShop, this, 10 ) ) ;
 			
 			}
 			
@@ -69,25 +69,25 @@ public class GuiItemEntryOfUserShopMerch extends GuiAbstractItemEntry {
 		
 		if ( MineDonate . getAccount ( ) . canRenameShop ( info . owner ) ) {
 			
-			cElements . add ( new ContextElement ( 2, "rename", MineDonate.cfgUI.lang.renameShop, this, 9 ) ) ;
+			cElements . add ( new ContextElement ( 2, "rename", MineDonate.cfgUI.lang.renameShop, this, 10 ) ) ;
 
 		}
 		
 		if ( MineDonate . getAccount ( ) . canDeleteShop ( info . owner ) ) {
 			
-			cElements . add ( new ContextElement ( 3, "delete", MineDonate.cfgUI.lang.deleteShop, this, 9 ) ) ;
+			cElements . add ( new ContextElement ( 3, "delete", MineDonate.cfgUI.lang.deleteShop, this, 10 ) ) ;
 
 		}
 		
 		if ( MineDonate . getAccount ( ) . canFreezeOtherAccount ( ) ) {
 			
-			cElements . add ( new ContextElement ( 4, "freezeAcc", MineDonate.cfgUI.lang.freezeAccount, this, 9 ) ) ;
+			cElements . add ( new ContextElement ( 4, "freezeAcc", MineDonate.cfgUI.lang.freezeAccount, this, 10 ) ) ;
 
 		}
 		
 		if ( MineDonate . getAccount ( ) . canUnFreezeOtherAccount ( ) ) {
 			
-			cElements . add ( new ContextElement ( 4, "unFreezeAcc", MineDonate.cfgUI.lang.unfreezeAccount, this, 9 ) ) ;
+			cElements . add ( new ContextElement ( 4, "unFreezeAcc", MineDonate.cfgUI.lang.unfreezeAccount, this, 10 ) ) ;
 
 		}
 		
@@ -232,7 +232,7 @@ public class GuiItemEntryOfUserShopMerch extends GuiAbstractItemEntry {
 				
 				case "freeze" :
 					
-					GuiFrameFreezeShop gffs = ( GuiFrameFreezeShop ) g . showEntry ( e . name + "Shop", true ) ;	
+					GuiFrameFreezeShop gffs = ( GuiFrameFreezeShop ) g . showEntry ( "frame.shop.freeze",true ) ;	
 					
 					gffs . setShopId ( info . shopId ) ;
 					
@@ -248,7 +248,7 @@ public class GuiItemEntryOfUserShopMerch extends GuiAbstractItemEntry {
 				
 				case "rename" :
 					
-					GuiFrameRenameShop gfrs = ( GuiFrameRenameShop ) g . showEntry ( e . name + "Shop", true ) ;	
+					GuiFrameRenameShop gfrs = ( GuiFrameRenameShop ) g . showEntry ( "frame.shop.rename", true ) ;	
 					
 					gfrs . setShopId ( info . shopId ) ;
 					gfrs . setFieldData ( info . name, gfrs . fieldHolder ) ;
@@ -257,7 +257,7 @@ public class GuiItemEntryOfUserShopMerch extends GuiAbstractItemEntry {
 				
 				case "delete" :
 					
-					GuiFrameDeleteShop gfds = ( GuiFrameDeleteShop ) g . showEntry ( e . name + "Shop", true ) ;	
+					GuiFrameDeleteShop gfds = ( GuiFrameDeleteShop ) g . showEntry ( "frame.shop.delete", true ) ;	
 					
 					gfds . setShopId ( info . shopId ) ;
 					gfds . setConfirmCode ( Integer . toString ( Math . abs ( info . hashCode ( ) ) ) . substring ( 0, 3 ) ) ;
@@ -266,7 +266,7 @@ public class GuiItemEntryOfUserShopMerch extends GuiAbstractItemEntry {
 				
 				case "freezeAcc" :
 					
-					GuiFrameFreezeAccount gffa = ( GuiFrameFreezeAccount ) g . showEntry ( "freezeAccount", true ) ;	
+					GuiFrameFreezeAccount gffa = ( GuiFrameFreezeAccount ) g . showEntry ( "frame.acc.freeze", true ) ;	
 					
 					gffa . setName ( info . owner ) ;
 					

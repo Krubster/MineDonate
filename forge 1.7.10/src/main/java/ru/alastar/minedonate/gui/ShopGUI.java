@@ -67,7 +67,7 @@ public class ShopGUI extends MCGuiAccessible {
     
     public ShopGUI ( ) {
 
-    	cats = new ShopCategory [ ] { new ItemNBlockCategory ( ), new PrivilegieCategory ( ), new RegionsCategory ( ), new EntitiesCategory ( ), new UsersShopsCategory ( ) } ;
+    	cats = new ShopCategory [ ] { new ItemNBlockCategory ( "cat.items.base" ), new PrivilegieCategory ( "cat.privilegies" ), new RegionsCategory ( "cat.regions" ), new EntitiesCategory ( "cat.entities" ), new UsersShopsCategory ( "cat.shops" ) } ;
     
     	for ( ShopCategory sc: cats ) {
     		
@@ -76,21 +76,22 @@ public class ShopGUI extends MCGuiAccessible {
     	}
     	
     	//gEntries . put ( "itemRename", new GuiFrameItemRename ( MineDonate . cfgUI . frames . rename ) ) ;
-    	gEntries . put ( "createShop", new GuiFrameCreateShop ( MineDonate . cfgUI . frames . createShop ) ) ;
-    	gEntries . put ( "renameShop", new GuiFrameRenameShop ( MineDonate . cfgUI . frames . renameShop ) ) ;
-    	gEntries . put ( "deleteShop", new GuiFrameDeleteShop ( MineDonate . cfgUI . frames . deleteShop ) ) ;
-    	gEntries . put ( "freezeShop", new GuiFrameFreezeShop ( MineDonate . cfgUI . frames . freezeShop ) ) ;
+    	gEntries . put ( "frame.shop.create", new GuiFrameCreateShop ( "frame.shop.create", MineDonate . cfgUI . frames . createShop ) ) ;
+    	gEntries . put ( "frame.shop.rename", new GuiFrameRenameShop ( "frame.shop.rename", MineDonate . cfgUI . frames . renameShop ) ) ;
+    	gEntries . put ( "frame.shop.delete", new GuiFrameDeleteShop ( "frame.shop.delete", MineDonate . cfgUI . frames . deleteShop ) ) ;
+    	gEntries . put ( "frame.shop.freeze", new GuiFrameFreezeShop ( "frame.shop.freeze", MineDonate . cfgUI . frames . freezeShop ) ) ;
 
-    	gEntries . put ( "addItem", new GuiFrameAddItem ( MineDonate . cfgUI . frames . addItem ) ) ;
-    	gEntries . put ( "renameItem", new GuiFrameRenameItem ( MineDonate . cfgUI . frames . renameItem ) ) ;
-    	gEntries . put ( "deleteItem", new GuiFrameDeleteItem ( MineDonate . cfgUI . frames . deleteItem ) ) ;
+    	gEntries . put ( "frame.item.add", new GuiFrameAddItem ( "frame.item.add", MineDonate . cfgUI . frames . addItem ) ) ;
+    	gEntries . put ( "frame.item.edit", new GuiFrameEditItem ( "frame.item.edit", MineDonate . cfgUI . frames . editItem ) ) ;
+    	gEntries . put ( "frame.item.delete", new GuiFrameDeleteItem ( "frame.item.delete", MineDonate . cfgUI . frames . deleteItem ) ) ;
     	
-    	gEntries . put ( "renameEntity", new GuiFrameRenameEntity ( MineDonate . cfgUI . frames . renameEntity ) ) ;
-    	gEntries . put ( "deleteEntity", new GuiFrameDeleteEntity ( MineDonate . cfgUI . frames . deleteEntity ) ) ;
+    	gEntries . put ( "frame.entity.add", new GuiFrameAddEntity ( "frame.entity.add", MineDonate . cfgUI . frames . addEntity ) ) ;
+    	gEntries . put ( "frame.entity.edit", new GuiFrameEditEntity ( "frame.entity.edit", MineDonate . cfgUI . frames . editEntity ) ) ;
+    	gEntries . put ( "frame.entity.delete", new GuiFrameDeleteEntity ( "frame.entity.delete", MineDonate . cfgUI . frames . deleteEntity ) ) ;
     	
-    	gEntries . put ( "freezeAccount", new GuiFrameFreezeAccount ( MineDonate . cfgUI . frames . freezeAccount ) ) ;
+    	gEntries . put ( "frame.acc.freeze", new GuiFrameFreezeAccount ( "frame.acc.freeze", MineDonate . cfgUI . frames . freezeAccount ) ) ;
 
-    	gEntries . put ( "loading", ( gfl = new GuiFrameLoading ( ) ) ) ;
+    	gEntries . put ( "frame.loading", ( gfl = new GuiFrameLoading ( "frame.loading" ) ) ) ;
     	gfl . setText ( MineDonate . cfgUI . loadingText ) ;
     	
     }

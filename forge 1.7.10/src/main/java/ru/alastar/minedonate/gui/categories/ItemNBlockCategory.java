@@ -23,7 +23,9 @@ import ru.log_inil.mc.minedonate.gui.items.GuiItemEntryOfItemMerch;
  */
 public class ItemNBlockCategory extends ShopCategory {
 
-	public ItemNBlockCategory ( ) {
+	public ItemNBlockCategory ( String _name ) {
+		
+		super ( _name ) ;
 		
 		catId = 0 ;
 		shopId = 0 ;
@@ -137,7 +139,7 @@ public class ItemNBlockCategory extends ShopCategory {
             
         } else if ( addButton != null && button . id == addButton . id ) {
         	
-        	GuiFrameAddItem gfai = ( GuiFrameAddItem ) g . showEntry ( "addItem", true ) ;
+        	GuiFrameAddItem gfai = ( GuiFrameAddItem ) g . showEntry ( "frame.item.add", true ) ;
         	
         	gfai . setInfo ( g . getCurrentShopId ( ), g . getCurrentCategory ( ) . getCatId ( ) ) ;
         	

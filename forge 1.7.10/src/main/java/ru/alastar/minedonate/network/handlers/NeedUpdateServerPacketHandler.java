@@ -41,7 +41,7 @@ public class NeedUpdateServerPacketHandler implements IMessageHandler<NeedUpdate
                 }
 
                 SupportedFeaturesPacket features_packet = new SupportedFeaturesPacket ( MineDonate . cfg ) ;
-
+System.err.println("ttt");
         		ModNetwork . sendTo ( serverPlayer, features_packet ) ;
         		ModNetwork . sendTo ( serverPlayer, new AccountInfoPacket ( userName ) ) ;
                                         

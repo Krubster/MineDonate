@@ -22,7 +22,7 @@ import ru.log_inil.mc.minedonate.gui.GuiItemsScrollArea;
 import ru.log_inil.mc.minedonate.gui.context.ContextMenu;
 import ru.log_inil.mc.minedonate.gui.context.ContextMenuManager;
 import ru.log_inil.mc.minedonate.gui.frames.GuiFrameDeleteEntity;
-import ru.log_inil.mc.minedonate.gui.frames.GuiFrameRenameEntity;
+import ru.log_inil.mc.minedonate.gui.frames.GuiFrameEditEntity;
 import ru.log_inil.mc.minedonate.gui.context.ContextElement;
 
 public class GuiItemEntryOfEntityMerch extends GuiAbstractItemEntry {
@@ -42,8 +42,8 @@ public class GuiItemEntryOfEntityMerch extends GuiAbstractItemEntry {
 			
 			List < ContextElement > cElements = new ArrayList < > ( ) ;
 	
-			cElements . add ( new ContextElement ( 0, "rename", MineDonate.cfgUI.lang.renameEntityMerch, this, 9 ) ) ;
-			cElements . add ( new ContextElement ( 1, "delete", MineDonate.cfgUI.lang.deleteEntityMerch, this, 9 ) ) ;
+			cElements . add ( new ContextElement ( 0, "edit", MineDonate.cfgUI.lang.editEntityMerch, this, 10 ) ) ;
+			cElements . add ( new ContextElement ( 1, "delete", MineDonate.cfgUI.lang.deleteEntityMerch, this, 10 ) ) ;
 	
 			cmm = new ContextMenu ( 1, 1, cElements ) ;
 			
@@ -272,18 +272,18 @@ public class GuiItemEntryOfEntityMerch extends GuiAbstractItemEntry {
 			
 			switch ( e . name ) {
 				
-				case "rename" :
+				case "edit" :
 					
-					GuiFrameRenameEntity gfre = ( GuiFrameRenameEntity ) g . showEntry ( e . name + "Entity", true ) ;	
+					GuiFrameEditEntity gfre = ( GuiFrameEditEntity ) g . showEntry ( "frame.entity.edit", true ) ;	
 					
-					gfre . setInfo ( info . shopId, info . catId, info . merch_id ) ;
+					gfre . setInfo ( info . shopId, info . catId, info . merch_id, info . cost ) ;
 					gfre . setFieldData ( info . name, gfre . fieldHolder ) ;
 					
 				break ;
 				
 				case "delete" :
 					
-					GuiFrameDeleteEntity gfde = ( GuiFrameDeleteEntity ) g . showEntry ( e . name + "Entity", true ) ;	
+					GuiFrameDeleteEntity gfde = ( GuiFrameDeleteEntity ) g . showEntry ( "frame.entity.delete", true ) ;	
 					
 					gfde . setInfo ( info . shopId, info . catId, info . merch_id ) ;
 					gfde . setConfirmCode ( Integer . toString ( Math . abs ( info . hashCode ( ) ) ) . substring ( 0, 3 ) ) ;

@@ -6,9 +6,15 @@ import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.rtnl.Utils;
 
 import ru.log_inil.mc.minedonate.gui.DrawType;
-import ru.log_inil.mc.minedonate.gui.GuiEntry;
+import ru.log_inil.mc.minedonate.gui.GuiFrame;
 
-public class GuiFrameExample extends GuiEntry {
+public class GuiFrameExample extends GuiFrame {
+
+	public GuiFrameExample ( String _name ) {
+	
+		super ( _name ) ;
+
+	}
 
 	int width = 200 ;
 	int height = 120 ;

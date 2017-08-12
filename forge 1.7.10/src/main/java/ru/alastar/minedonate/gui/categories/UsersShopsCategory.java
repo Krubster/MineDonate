@@ -18,7 +18,9 @@ import ru.log_inil.mc.minedonate.gui.items.GuiItemEntryOfUserShopMerch;
 
 public class UsersShopsCategory extends ShopCategory {
 
-	public UsersShopsCategory ( ) {
+	public UsersShopsCategory ( String _name ) {
+		
+		super ( _name ) ;
 		
 		catId = 4 ;
 		
@@ -224,7 +226,7 @@ public class UsersShopsCategory extends ShopCategory {
 
 			gui . lockProcess ( ) ;
 
-			g . showEntry ( "createShop", true ) ;	
+			g . showEntry ( "frame.shop.create", true ) ;	
 
 			/*
 			if ( createNewShop && ! createNewShopFirst ) {

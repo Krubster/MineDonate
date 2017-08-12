@@ -31,9 +31,9 @@ public class DeleteShopServerPacketHandler implements IMessageHandler < DeleteSh
 		
 		if ( MineDonate . getAccount ( serverPlayer . getDisplayName ( ) . toLowerCase ( ) ) . canDeleteShop ( s . owner ) ) {
 			
-			if ( ! s . isFreezed ) {
+			if ( s . isFreezed ) {
 
-				return new ManageResponsePacket ( ManageResponsePacket.ResponseType.SHOP, ManageResponsePacket.ResponseCode.REMOVE, ManageResponsePacket.ResponseStatus.ERROR_SHOP_NO_FREEZED ) ;
+				return new ManageResponsePacket ( ManageResponsePacket.ResponseType.SHOP, ManageResponsePacket.ResponseCode.REMOVE, ManageResponsePacket.ResponseStatus.ERROR_SHOP_FREEZED ) ;
 
 			}
 			

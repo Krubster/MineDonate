@@ -3,10 +3,10 @@ package ru.log_inil.mc.minedonate.gui.frames;
 import java.awt.Color;
 
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.renderer.RenderHelper;
-
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.gui.ShopGUI;
+import ru.alastar.minedonate.network.packets.manage.EditMerchNumberPacket;
+import ru.alastar.minedonate.network.packets.manage.EditMerchStringPacket;
 import ru.alastar.minedonate.rtnl.ModNetwork;
 import ru.alastar.minedonate.rtnl.Utils;
 
@@ -14,29 +14,29 @@ import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.gui.GuiFrame;
 import ru.log_inil.mc.minedonate.gui.GuiGradientButton;
 import ru.log_inil.mc.minedonate.gui.GuiGradientTextField;
-import ru.log_inil.mc.minedonate.localData.frames.DataOfUIFrameAddItem;
+import ru.log_inil.mc.minedonate.localData.frames.DataOfUIFramEditItem;
 
-public class GuiFrameAddItem extends GuiFrame {
+public class GuiFrameEditItem extends GuiFrame {
 
-	int width = 220 ;
+	int width = 200 ;
 	int height = 40 ;
 	
 	int posX ;
 	int posY ;
 	
-	static int backgroundColor = Utils . rgbaToInt ( new Color ( 0, 0, 0, 150 ) ) ;
-	static int fieldBorderRedColor = Utils . rgbaToInt ( new Color ( 255, 0, 0, 150 ) ) ;
-	static int fieldBorderColor = Utils . rgbaToInt ( new Color ( 255, 255, 255, 150 ) ) ;
 	static int titleColor = Utils . rgbaToInt ( new Color ( 255, 255, 255, 180 ) ) ;
+	static int backgroundColor = Utils . rgbaToInt ( new Color ( 0, 0, 0, 150 ) ) ;
+	static int fieldBorderColor = Utils . rgbaToInt ( new Color ( 255, 255, 255, 150 ) ) ;
+	static int fieldBorderRedColor = Utils . rgbaToInt ( new Color ( 255, 0, 0, 150 ) ) ;
 	
 	int widthCenter = width / 2 ;
 	int heightCenter = height / 2 ;
 	
-	DataOfUIFrameAddItem douifcs ;
-	
-	int shopId = -1, catId = -1 ;
+	public DataOfUIFramEditItem douifcs ;
 
-	public GuiFrameAddItem ( String _name, DataOfUIFrameAddItem _douifcs ) {
+	int shopId = -1, catId = -1, merch_id = -1, limit = -1, cost = -1 ;
+	
+	public GuiFrameEditItem ( String _name, DataOfUIFramEditItem _douifcs ) {
 		
 		super ( _name ) ;
 
@@ -51,32 +51,21 @@ public class GuiFrameAddItem extends GuiFrame {
 
     	g . drawRect ( posX, posY, posX + width, posY + height, backgroundColor ) ;
     	
-    	super . draw( g, page, mouseX, mouseY, partialTicks, dt ) ;
+    	super . draw ( g, page, mouseX, mouseY, partialTicks, dt ) ;
     	
     	g . drawString ( g . getFontRenderer ( ), douifcs . title, posX + 5, posY + 3, titleColor ) ;
     	
     	nameField . drawTextBox ( ) ;
     	costField . drawTextBox ( ) ;
-    	limitField . drawTextBox ( ) ;
-    	
-    	if ( MineDonate.getAccount().ms.currentItemStack != null ) {
-    		
-			RenderHelper . enableGUIStandardItemLighting ( ) ;
-
-    		g . getItemRender ( ) . renderItemAndEffectIntoGUI ( g . getFontRenderer ( ), g . mc . getTextureManager ( ), MineDonate.getAccount().ms.currentItemStack, posX + 12, posY + 16 ) ;
-			g . getItemRender ( ) . renderItemOverlayIntoGUI ( g . getFontRenderer ( ), g . mc . getTextureManager ( ), MineDonate.getAccount().ms.currentItemStack, posX + 12, posY + 16 , Integer.toString(MineDonate.getAccount().ms.currentItemStack.stackSize) ) ;
-
-			RenderHelper . disableStandardItemLighting ( ) ;
-
-    	}
+    	limitField . drawTextBox ( ) ;    	
     	
     }
     
-    GuiButton saveChangesButton ;
-    GuiButton cancelChangesButton ;
-    GuiGradientTextField nameField, costField, limitField ; 
+    public GuiButton saveChangesButton ;
+    public GuiButton cancelChangesButton ;
+    public GuiGradientTextField nameField, costField, limitField ; 
     
-    String fieldText, fieldHolder ;
+    public String fieldText, fieldHolder ;
     
     @Override
 	public void postShow ( ShopGUI g ) {
@@ -89,7 +78,7 @@ public class GuiFrameAddItem extends GuiFrame {
     	if ( saveChangesButton == null ) {
         	
     		saveChangesButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), posX, posY + height, 
-    				douifcs.createButton.width, douifcs.createButton.height, douifcs.createButton.text, false ) ;
+    				douifcs.editButton.width, douifcs.editButton.height, douifcs.editButton.text, false ) ;
     	
     	}
     	
@@ -185,57 +174,67 @@ public class GuiFrameAddItem extends GuiFrame {
 	public boolean actionPerformed ( ShopGUI g, GuiButton b ) {
 		
     	if ( b . id == saveChangesButton . id ) {
+    	
+    		g . setLoading ( true ) ;
+    		
+    		if ( MineDonate . getAccount ( ) . canUnlimitedItems ( ) ) {
 
-    		if ( costField . getText ( ) . trim ( ) . isEmpty ( ) ) {
-    			
-    			costField . fieldBorderColor = fieldBorderRedColor ;
-    			
-    			return false ;
-    			
-    		} else {
-    			
     			try {
     				
-    				Integer i = Integer . parseInt ( costField . getText ( ) ) ;
-    				
-    				if ( i < 1 ) {
+    				Integer n = Integer . parseInt ( limitField . getText ( ) ) ;
+	    			
+    				if ( limit != n ) {
     					
-    	    			costField . fieldBorderColor = fieldBorderRedColor ;
-    	    			
-    	    			return false ;
-    	    			
+    					hideFrame ( g ) ;
+    			    		
+    					ModNetwork . sendToServerEditMerchNumberPacket ( shopId, catId, merch_id, EditMerchNumberPacket . Type . LIMIT, ( int ) n ) ;
+    					
+    					limit = n ;
+    					    						
     				}
     				
-    			} catch ( Exception ex ) {
-    				
-    				ex . printStackTrace ( ) ;
-        			
-    				costField . fieldBorderColor = fieldBorderRedColor ;
-        			
-        			return false ;
-        			
-    			}
+	    		} catch ( Exception ex ) {
+	    			
+	    			ex . printStackTrace ( ) ;
+	    			
+	    		}
     			
     		}
     		
-    		g . setLoading ( true ) ;
+			try {
+				
+				Integer n = Integer . parseInt ( costField . getText ( ) ) ;
+    			
+				if ( cost != n ) {
+					
+					hideFrame ( g ) ;
+			        
+					ModNetwork . sendToServerEditMerchNumberPacket ( shopId, catId, merch_id, EditMerchNumberPacket . Type . COST, ( int ) n ) ;
+					
+					cost = n ;
+										
+				}
+				
+    		} catch ( Exception ex ) {
+    			
+    			ex . printStackTrace ( ) ;
+    			
+    		}
+
+    		if ( ! nameField . getText ( ) . trim ( ) . equals ( fieldText ) ) {
+    			
+				hideFrame ( g ) ;
+		        
+    			ModNetwork . sendToServerRenameMerchPacket ( shopId, catId, merch_id, EditMerchStringPacket . Type . NAME, ( fieldText = nameField . getText ( ) ) ) ;
+    			
+    		}
     		
-            ModNetwork . sendToServerAddNewItemPacket ( shopId, catId, Integer.parseInt(this.limitField.getText()), Integer.parseInt(this.costField.getText()), this . nameField . getText ( ) ) ;
-            
-            this . hideFrame ( g ) ;
-           
     	}
     	
     	if ( b . id == cancelChangesButton . id ) {
     	
-    		if ( MineDonate . getAccount ( ) . ms . currentItemStack != null ) {
-    			
-    			ModNetwork . sendToServerCancelShopInventoryPacket ( ) ;
-    			
-    		}
-    		
-            this . hideFrame ( g ) ;
-    		
+			hideFrame ( g ) ;
+
     	}
     	
 		return false ;
@@ -244,7 +243,7 @@ public class GuiFrameAddItem extends GuiFrame {
 	
     @Override
 	public boolean onClick ( int x, int y, int i ) {
-		
+
     	if ( nameField != null ) {
 
     		nameField . mouseClicked ( x, y, i ) ;
@@ -275,7 +274,7 @@ public class GuiFrameAddItem extends GuiFrame {
 
     @Override
 	public boolean onKey ( char c, int k ) {
-		
+
     	if ( nameField != null && nameField . isFocused ( ) ) {
     		
     		nameField . textboxKeyTyped ( c, k ) ;
@@ -342,14 +341,19 @@ public class GuiFrameAddItem extends GuiFrame {
     	fieldText = _text ;
     	fieldHolder = _holder ;
 
+		nameField . setText ( fieldText != null ? fieldText : "" ) ;
+		nameField . setTextHolder ( fieldHolder ) ;
+		
     }
 
-	public void setInfo ( int _shopId, int _catId ) {
-
+	public void setInfo ( int _shopId, int _catId, int _merch_id, int _limit, int _cost ) {
+		
 		shopId = _shopId ;
 		catId = _catId ;
-
+		merch_id = _merch_id ;
+		limit = _limit ;
+		cost = _cost ;
+		
 	}
-    
     
 }

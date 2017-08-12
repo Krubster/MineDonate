@@ -1,11 +1,20 @@
-package ru.log_inil.mc.minedonate.gui;
+package ru.log_inil.mc.minedonate.gui.frames;
 
 import java.awt.Color;
 
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.rtnl.Utils;
 
-public class GuiFrameLoading extends GuiEntry {
+import ru.log_inil.mc.minedonate.gui.DrawType;
+import ru.log_inil.mc.minedonate.gui.GuiFrame;
+
+public class GuiFrameLoading extends GuiFrame {
+
+	public GuiFrameLoading ( String _name ) {
+	
+		super ( _name ) ;
+
+	}
 
 	int width = 200 ;
 	int height = 120 ;

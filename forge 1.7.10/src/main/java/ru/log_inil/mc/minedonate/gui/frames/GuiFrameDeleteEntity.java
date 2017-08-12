@@ -8,12 +8,12 @@ import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.rtnl.Utils;
 
 import ru.log_inil.mc.minedonate.gui.DrawType;
-import ru.log_inil.mc.minedonate.gui.GuiEntry;
+import ru.log_inil.mc.minedonate.gui.GuiFrame;
 import ru.log_inil.mc.minedonate.gui.GuiGradientButton;
 import ru.log_inil.mc.minedonate.gui.GuiGradientTextField;
 import ru.log_inil.mc.minedonate.localData.frames.DataOfUIFrameDeleteEntity;
 
-public class GuiFrameDeleteEntity extends GuiEntry {
+public class GuiFrameDeleteEntity extends GuiFrame {
 
 	int width = 200 ;
 	int height = 50 ;
@@ -33,8 +33,10 @@ public class GuiFrameDeleteEntity extends GuiEntry {
 
 	int shopId = -1, catId = -1, merch_id = -1 ;
 
-	public GuiFrameDeleteEntity ( DataOfUIFrameDeleteEntity _douifdi ) {
+	public GuiFrameDeleteEntity ( String _name, DataOfUIFrameDeleteEntity _douifdi ) {
 		
+		super ( _name ) ;
+
 		douifdi = _douifdi ;
 		
 		fieldText = douifdi . codeField . text ;
@@ -143,16 +145,13 @@ public class GuiFrameDeleteEntity extends GuiEntry {
     		
     		// ModNetwork . sendToServerDeleteShopPacket ( shopId ) ;
 
-            g . showEntry ( "deleteEntity", false ) ; 
-
-    		unShow ( g ) ;
+			hideFrame ( g ) ;
 
     	}
     	
     	if ( b . id == cancelChangesButton . id ) {
     	
-    		g . showEntry ( "deleteEntity", false ) ;
-    		unShow ( g ) ;
+			hideFrame ( g ) ;
     		
     	}
     	

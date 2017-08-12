@@ -175,6 +175,18 @@ public class ModNetwork {
 		
 	}
 	
+	public static void sendToServerEditMerchNumberPacket ( int shopId, int catId, int merchId, EditMerchNumberPacket . Type type, int number ) {
+		
+		networkChannel . sendToServer ( new EditMerchNumberPacket ( shopId, catId, merchId, type, number ) ) ;
+		
+	}
+	
+	public static void sendToServerRenameMerchPacket ( int shopId, int catId, int merchId, EditMerchStringPacket . Type type, String s ) {
+		
+		networkChannel . sendToServer ( new EditMerchStringPacket ( shopId, catId, merchId, type,s ) ) ;
+		
+	}
+	
 	public static void sendTo ( EntityPlayerMP player, IMessage packet ) {
 		
 		networkChannel . sendTo ( packet, player ) ;

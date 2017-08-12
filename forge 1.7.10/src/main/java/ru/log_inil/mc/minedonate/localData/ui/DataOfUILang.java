@@ -2,10 +2,10 @@ package ru.log_inil.mc.minedonate.localData.ui;
 
 public class DataOfUILang {
 
-	public String renameEntityMerch ;
+	public String editEntityMerch ;
 	public String deleteEntityMerch ;
 	
-	public String renameItemMerch ;
+	public String editItemMerch ;
 	public String deleteItemMerch ;
 	
 	public String freezeShop ;
@@ -21,10 +21,10 @@ public class DataOfUILang {
 	
 	public DataOfUILang ( ) {
 		
-		renameEntityMerch = "Rename this" ;
+		editEntityMerch = "Edit this" ;
 		deleteEntityMerch = "Delete this" ;
 		
-		renameItemMerch = "Rename this" ;
+		editItemMerch = "Edit this" ;
 		deleteItemMerch = "Delete this" ;
 		
 		freezeShop = "Freeze this shop" ;

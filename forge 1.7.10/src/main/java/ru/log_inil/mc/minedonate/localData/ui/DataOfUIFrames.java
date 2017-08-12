@@ -10,11 +10,12 @@ public class DataOfUIFrames {
 	public DataOfUIFrameDeleteShop deleteShop ;
 	public DataOfUIFrameFreezeShop freezeShop ;
 	
-	public DataOfUIFrameCreateItem addItem ;
-	public DataOfUIFrameRenameItem renameItem ;
+	public DataOfUIFrameAddItem addItem ;
+	public DataOfUIFramEditItem editItem ;
 	public DataOfUIFrameDeleteItem deleteItem ;
 	
-	public DataOfUIFrameRenameEntity renameEntity ;
+	public DataOfUIFrameAddEntity addEntity ;
+	public DataOfUIFrameEditEntity editEntity ;
 	public DataOfUIFrameDeleteEntity deleteEntity ;
 	
 	public DataOfUIFrameFreezeAccount freezeAccount;
@@ -26,11 +27,12 @@ public class DataOfUIFrames {
 		deleteShop = new DataOfUIFrameDeleteShop ( ) ;
 		freezeShop = new DataOfUIFrameFreezeShop ( ) ;
 		
-		addItem = new DataOfUIFrameCreateItem ( ) ;
-		renameItem = new DataOfUIFrameRenameItem ( ) ;
+		addItem = new DataOfUIFrameAddItem ( ) ;
+		editItem = new DataOfUIFramEditItem ( ) ;
 		deleteItem = new DataOfUIFrameDeleteItem ( ) ;
 		
-		renameEntity = new DataOfUIFrameRenameEntity ( ) ;
+		addEntity = new DataOfUIFrameAddEntity ( ) ;
+		editEntity = new DataOfUIFrameEditEntity ( ) ;
 		deleteEntity = new DataOfUIFrameDeleteEntity ( ) ;
 		
 		freezeAccount = new DataOfUIFrameFreezeAccount ( ) ;

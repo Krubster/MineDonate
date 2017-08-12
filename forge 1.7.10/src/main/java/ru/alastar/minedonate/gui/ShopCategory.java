@@ -31,6 +31,12 @@ public abstract class ShopCategory extends GuiEntry {
 
     protected List < Merch > noSearchedEntries = new ArrayList < > ( ) ;
 
+	public ShopCategory ( String _name ) {
+		
+		super ( _name ) ;
+		
+	}
+	
     public void setCatId ( int _catId ) {
     	
     	catId = _catId ;

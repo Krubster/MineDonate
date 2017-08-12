@@ -25,8 +25,10 @@ import java.util.Map;
  */
 public class PrivilegieCategory extends ShopCategory {
 
-    public PrivilegieCategory() {
-
+    public PrivilegieCategory( String _name ) {
+		
+		super ( _name ) ;
+		
         catId = 1 ;
         
     }

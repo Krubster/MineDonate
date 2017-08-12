@@ -43,7 +43,8 @@ public class ContextMenu {
 
 	int dbgColorInteract = Utils.rgbaToInt(new Color(150, 1, 1, 255));
 	int dbgColor = Utils.rgbaToInt(new Color(1, 150, 1, 255));
-
+	int dbgColorElementInteractable = Utils.rgbaToInt(new Color(100, 1, 1, 255));
+	
 	public void draw ( MCGuiAccessible g, int mouseX, int mouseY ) {
 		
 		Gui . drawRect ( drawPosX, drawPosY - 2, drawPosX + maxWidth + 7, drawPosY + tmpHeight + 2, 1258291200 ) ;
@@ -142,7 +143,12 @@ public class ContextMenu {
 
 	public void drawDebugInteractable(MCGuiAccessible g, int mouseX, int mouseY) {
  	
+		for ( int i = 0 ; i < l . size ( ) ; i ++ ) {
 
+	      	g.drawRect(drawPosX, drawPosY-2 + ( lineHeight * ( i + 1 ) ), activateCoordXEndInteract, drawPosY-1 +  ( lineHeight * ( i + 1 ) ), dbgColorElementInteractable);
+
+		}
+		
       	g.drawRect(drawPosX, drawPosY-2, activateCoordXEndInteract, drawPosY-1, dbgColorInteract);
     	
     	g.drawRect(drawPosX, drawPosY-1, drawPosX+1, activateCoordYEndInteract, dbgColorInteract);

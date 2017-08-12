@@ -43,7 +43,7 @@ public class NeedUpdateClientPacketHandler implements IMessageHandler<NeedUpdate
 
 						ShopGUI . instance . currentShop = usc . selectedShop ;
 
-						ItemNBlockCategory cat = new ItemNBlockCategory ( ) ;
+						ItemNBlockCategory cat = new ItemNBlockCategory ( "cat.items.custom" ) ;
 						cat . setDisableCatCheck ( ) ;
 						
 						cat.preShow(ShopGUI.instance);

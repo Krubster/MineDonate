@@ -8,19 +8,21 @@ import org.lwjgl.opengl.GL12;
 
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
+
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.gui.BuyButton;
 import ru.alastar.minedonate.gui.CountButton;
 import ru.alastar.minedonate.gui.ShopCategory;
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.merch.info.ItemInfo;
+
 import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.gui.GuiAbstractItemEntry;
 import ru.log_inil.mc.minedonate.gui.GuiItemsScrollArea;
 import ru.log_inil.mc.minedonate.gui.context.ContextMenu;
 import ru.log_inil.mc.minedonate.gui.context.ContextMenuManager;
 import ru.log_inil.mc.minedonate.gui.frames.GuiFrameDeleteItem;
-import ru.log_inil.mc.minedonate.gui.frames.GuiFrameRenameItem;
+import ru.log_inil.mc.minedonate.gui.frames.GuiFrameEditItem;
 import ru.log_inil.mc.minedonate.gui.context.ContextElement;
 
 public class GuiItemEntryOfItemMerch extends GuiAbstractItemEntry {
@@ -41,8 +43,8 @@ public class GuiItemEntryOfItemMerch extends GuiAbstractItemEntry {
 			
 			List < ContextElement > cElements = new ArrayList < > ( ) ;
 	
-			cElements . add ( new ContextElement ( 0, "rename",  MineDonate.cfgUI.lang.renameItemMerch, this, 9 ) ) ;
-			cElements . add ( new ContextElement ( 1, "delete", MineDonate.cfgUI.lang.deleteItemMerch, this, 9 ) ) ;
+			cElements . add ( new ContextElement ( 0, "edit",  MineDonate.cfgUI.lang.editItemMerch, this, 10 ) ) ;
+			cElements . add ( new ContextElement ( 1, "delete", MineDonate.cfgUI.lang.deleteItemMerch, this, 10 ) ) ;
 	
 			cmm = new ContextMenu ( 1, 1, cElements ) ;
 			
@@ -234,18 +236,18 @@ public class GuiItemEntryOfItemMerch extends GuiAbstractItemEntry {
 			
 			switch ( e . name ) {
 				
-				case "rename" :
+				case "edit" :
 					
-					GuiFrameRenameItem gfrs = ( GuiFrameRenameItem ) g . showEntry ( e . name + "Item", true ) ;	
+					GuiFrameEditItem gfrs = ( GuiFrameEditItem ) g . showEntry ( "frame.item.edit", true ) ;	
 					
-					gfrs . setInfo ( info . shopId, info . catId, info . merch_id ) ;
+					gfrs . setInfo ( info . shopId, info . catId, info . merch_id, info . limit, info . cost ) ;
 					gfrs . setFieldData ( info . name, info . m_stack . getDisplayName ( ) ) ;
 					
 				break ;
 				
 				case "delete" :
 					
-					GuiFrameDeleteItem gfdi = ( GuiFrameDeleteItem ) g . showEntry ( e . name + "Item", true ) ;	
+					GuiFrameDeleteItem gfdi = ( GuiFrameDeleteItem ) g . showEntry ( "frame.item.delete", true ) ;	
 					
 					gfdi . setInfo ( info . shopId, info . catId, info . merch_id ) ;
 					gfdi . setConfirmCode ( Integer . toString ( Math . abs ( info . hashCode ( ) ) ) . substring ( 0, 3 ) ) ;
