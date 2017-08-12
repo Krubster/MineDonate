@@ -47,6 +47,7 @@ public class ModNetwork {
         networkChannel . registerMessage ( ManageResponseClientPacketHandler . class, ManageResponsePacket . class, i ++, Side . CLIENT ) ;
 
         networkChannel . registerMessage ( CreateNewShopServerPacketHandler . class, CreateNewShopPacket . class, i ++, Side . SERVER ) ;
+        networkChannel . registerMessage ( DeleteShopServerPacketHandler . class, DeleteShopPacket . class, i ++, Side . SERVER ) ;
         networkChannel . registerMessage ( RenameShopServerPacketHandler . class, RenameShopPacket . class, i ++, Side . SERVER ) ;
         networkChannel . registerMessage ( FreezeShopServerPacketHandler . class, FreezeShopPacket . class, i ++, Side . SERVER ) ;
         networkChannel . registerMessage ( UnfreezeShopServerPacketHandler . class, UnfreezeShopPacket . class, i ++, Side . SERVER ) ;
@@ -58,7 +59,6 @@ public class ModNetwork {
         networkChannel . registerMessage ( ItemMergedClientPacketHandler . class, ItemMergedPacket . class, i ++, Side . CLIENT ) ;
         networkChannel . registerMessage ( AddNewItemServerPacketHandler . class, AddNewItemPacket . class, i ++, Side . SERVER ) ;
 
-        
     }
 
 	public static void sendToServerOpenShopInventoryPacket ( ) {
@@ -133,6 +133,12 @@ public class ModNetwork {
 
 	}
 	
+	public static void sendToServerDeleteShopPacket ( int shopId ) {
+
+        networkChannel . sendToServer ( new DeleteShopPacket ( shopId ) ) ;
+
+	}
+	
 	public static void sendToServerRenameShopPacket ( int shopId, String name ) {
 
 		networkChannel . sendToServer ( new RenameShopPacket ( shopId, name ) ) ;
@@ -150,7 +156,6 @@ public class ModNetwork {
 		networkChannel . sendToServer ( new UnfreezeShopPacket ( shopId ) ) ;
 		
 	}
-	
 
 	public static void sendToServerAddNewItemPacket ( int shopId, int catId, int limit, int cost, String name ) {
 		

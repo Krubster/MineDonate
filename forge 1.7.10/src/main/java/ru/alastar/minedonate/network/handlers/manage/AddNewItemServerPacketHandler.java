@@ -6,7 +6,6 @@ import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import net.minecraft.entity.player.EntityPlayerMP;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.network.packets.manage.AddNewItemPacket;
-import ru.alastar.minedonate.network.packets.manage.FreezeShopPacket;
 import ru.alastar.minedonate.network.packets.manage.ManageResponsePacket;
 import ru.alastar.minedonate.rtnl.Account;
 import ru.alastar.minedonate.rtnl.Manager;

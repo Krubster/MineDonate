@@ -49,6 +49,29 @@ public class Manager {
         
 	}
 
+	public static void deleteShop ( Shop s ) {
+		
+		ShopInfo si = ( ( UsersShops ) MineDonate . shops . get ( 0 ) . cats [ 4 ] ) . getShop ( s . sid ) ;
+		
+		MineDonate . shops . get ( 0 ) . cats [ 4 ] . removeMerch ( si ) ;
+		MineDonate . shops . remove ( s . sid ) ;
+		
+		try {
+			
+			Statement st = MineDonate . getNewStatement ( ) ;
+			
+			st . executeUpdate ( "DELETE FROM " + MineDonate.cfg.dbShops + " WHERE id=" + s . sid + ";" ) ;
+			
+			st . close ( ) ;
+			
+		} catch ( Exception ex ) {
+			
+			ex . printStackTrace ( ) ;
+			
+		}
+		
+	}
+	
 	public static void freezeShop ( Shop s, String freezer, String reason ) {
 		
 		ShopInfo si = ( ( UsersShops ) MineDonate . shops . get ( 0 ) . cats [ 4 ] ) . getShop ( s . sid ) ;
