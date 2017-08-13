@@ -313,9 +313,9 @@ public class Manager {
 			
 			ItemInfo ii = ( ItemInfo ) m ;
 			
-			if ( ii . limit != -1 && ii . m_stack.stackSize > 0 ) {
+			if ( ii . limit != -1 && ii . m_stack . stackSize > 0 ) {
 					
-				player . dropPlayerItemWithRandomChoice ( ii . m_stack, false ) ;
+				MineDonate . shops . get ( s . sid ) . cats [ catId ] . GiveMerch ( player, m, ii . limit ) ;
 				
 			}
 			

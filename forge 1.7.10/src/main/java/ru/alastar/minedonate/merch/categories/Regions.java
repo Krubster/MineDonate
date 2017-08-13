@@ -63,12 +63,10 @@ public class Regions extends MerchCategory {
 
     @Override
     public void loadMerchFromDB(ResultSet rs) {
-        int i = 0;
         try {
             while (rs.next()) {
-                final RegionInfo info = new RegionInfo(shopId, catId, i, rs.getInt("cost"), rs.getString("name"), rs.getString("world"));
+                final RegionInfo info = new RegionInfo(shopId, catId, rs.getInt("id"), rs.getInt("cost"), rs.getString("name"), rs.getString("world"));
                 this.addMerch(info);
-                ++i;
             }
         } catch (SQLException e) {
             e.printStackTrace();

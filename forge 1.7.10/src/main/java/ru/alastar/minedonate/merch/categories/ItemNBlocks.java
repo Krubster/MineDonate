@@ -39,17 +39,15 @@ public class ItemNBlocks extends MerchCategory {
 
     @Override
     public void loadMerchFromDB(ResultSet rs) {
-        int i = 0;
         try {
             while (rs.next()) {
-                final ItemInfo info = new ItemInfo(shopId, catId, i,
+                final ItemInfo info = new ItemInfo(shopId, catId, rs.getInt("id"),
                         rs.getInt("cost"),
                         rs.getString("name"),
                         rs.getString("info"),
                         rs.getInt("lim"),
                         rs.getBlob("stack_data"));
                 this.addMerch(info);
-                ++i;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -82,8 +80,14 @@ public class ItemNBlocks extends MerchCategory {
     public void GiveMerch(EntityPlayerMP player, Merch merch, int amount) {
 
         ItemInfo info = (ItemInfo) merch;
-        if (info.limit > -1)
-            info.limit -= amount * info.stack_data.getInteger("Count");
+        int toPut = amount * info.stack_data.getInteger("Count") ;
+        
+        if ( info.limit > -1) {
+         
+        	info.limit -= toPut;
+        
+        }
+        
         ItemStack stack = ItemStack.loadItemStackFromNBT(info.stack_data);
         if ( info . name != null && ! info . name . trim ( ) . isEmpty ( ) ) {
         	
@@ -91,7 +95,51 @@ public class ItemNBlocks extends MerchCategory {
         	
         }
 
-        player.inventory.addItemStackToInventory(stack);
+        ItemStack tmpCopy = stack . copy ( ) ;
+        
+        if ( toPut > stack . stackSize ) {
+        	
+        	int left = toPut ;
+        	
+        	for ( int i = 0 ; i < ( toPut / stack . getMaxStackSize ( ) ) + 1 ; i ++ ) {	
+
+        		if ( left == -1 ) {
+        			
+        			continue ;
+        			
+        		}
+        		
+        		tmpCopy = stack . copy ( ) ;
+        		
+        		if ( left - stack . getMaxStackSize ( ) > 0 ) {
+        		
+        			System.err.println("DROPA: " + (left - stack . getMaxStackSize ( ) ));
+        			tmpCopy . stackSize = stack . getMaxStackSize ( ) ;
+                	addItemStackToInventory ( player, tmpCopy ) ;
+                	
+                	left -= stack . getMaxStackSize ( ) ;
+        			System.err.println("DROPA_left: " + left);
+
+        		} else {
+        			
+        			tmpCopy . stackSize = left ;
+
+        			left = -1 ;
+        			
+                	addItemStackToInventory ( player, tmpCopy ) ;
+
+        		}
+        		
+        	}
+        	
+        } else {
+        	
+        	addItemStackToInventory ( player, tmpCopy ) ;
+            
+        }
+        
+        tmpCopy = null ;
+        
         player.inventory.markDirty();
         
         if (info.limit > -1)
@@ -99,6 +147,18 @@ public class ItemNBlocks extends MerchCategory {
 
     }
 
+    public void addItemStackToInventory ( EntityPlayerMP player, ItemStack is ) {
+    	
+        boolean b = player . inventory . addItemStackToInventory ( is ) ;
+        
+        if ( ! b ) {
+        	
+        	player . dropPlayerItemWithRandomChoice ( is, false ) ;
+        	
+        } 
+        
+    }
+    
     private void updateItemInfo(ItemInfo info) {
         Statement stmt = null;
         try {

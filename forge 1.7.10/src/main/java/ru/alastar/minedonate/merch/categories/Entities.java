@@ -37,12 +37,10 @@ public class Entities extends MerchCategory {
 
     @Override
     public void loadMerchFromDB(ResultSet rs) {
-        int i = 0;
         try {
             while (rs.next()) {
-                final EntityInfo info = new EntityInfo(shopId, catId, i, rs.getInt("cost"), rs.getBlob("data"), rs.getString("name"), rs.getInt("lim"));
+                final EntityInfo info = new EntityInfo(shopId, catId, rs.getInt("id"), rs.getInt("cost"), rs.getBlob("data"), rs.getString("name"), rs.getInt("lim"));
                 this.addMerch(info);
-                ++i;
             }
         } catch (SQLException e) {
             e.printStackTrace();

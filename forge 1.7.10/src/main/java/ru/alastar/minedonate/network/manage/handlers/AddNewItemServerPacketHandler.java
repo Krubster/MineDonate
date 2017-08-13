@@ -58,6 +58,18 @@ public class AddNewItemServerPacketHandler implements IMessageHandler < AddNewIt
 
 			}
 			
+			if ( acc . ms . currentItemStack . stackSize != message . limit && ! acc . canUnlimitedItems ( ) ) {
+				
+		        return new ManageResponsePacket ( ManageResponsePacket.ResponseType.ITEM, ManageResponsePacket.ResponseCode.ADD, ManageResponsePacket.ResponseStatus.ERROR_ACCESS_DENIED ) ;
+
+			}
+			
+			if ( message . limit > 0 ) {
+			
+				acc . ms . currentItemStack . stackSize = message . limit ;
+		
+			}
+			
 			Manager . addItemToShop ( acc, s, message . catId, message . limit, message . cost, message . name ) ;
 			
 	        return new ManageResponsePacket ( ManageResponsePacket.ResponseType.ITEM, ManageResponsePacket.ResponseCode.ADD, ManageResponsePacket.ResponseStatus.OK ) ;

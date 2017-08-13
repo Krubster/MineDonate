@@ -48,12 +48,10 @@ public class UsersShops extends MerchCategory {
     }
     @Override
     public void loadMerchFromDB(ResultSet rs) {
-        int i = 0;
         try {        	
             while (rs.next()) {
-                final ShopInfo info = new ShopInfo(i, rs.getInt("id"), rs.getString("owner"), rs.getString("name"), rs.getBoolean("isFreezed"), rs.getString("freezer"), rs.getString("freezReason"), false, rs.getString("moneyType"));
+                final ShopInfo info = new ShopInfo(rs.getInt("id"), rs.getInt("id"), rs.getString("owner"), rs.getString("name"), rs.getBoolean("isFreezed"), rs.getString("freezer"), rs.getString("freezReason"), false, rs.getString("moneyType"));
                 this.addMerch(info);
-                ++i;
             }
         } catch (SQLException e) {
             e.printStackTrace();

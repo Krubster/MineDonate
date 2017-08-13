@@ -28,7 +28,15 @@ public class PermissionsBukkitPlugin extends PermissionsPlugin {
 	@Override
 	public boolean hasPermission ( String user, String name ) {
 		
-		return pexMgr . has ( Bukkit . getPlayer ( user ), name ) ;
+		if ( Bukkit . getPlayer ( user ) != null ) {
+		
+			return pexMgr . has ( Bukkit . getPlayer ( user ), name ) ;
+		
+		} else {
+			
+			return false ;
+			
+		}
 		
 	}
 	
