@@ -244,10 +244,10 @@ public class Manager {
 	}
 
 	public static void addItemToShop ( Account acc, Shop s, int catId, int limit, int cost, String name ) {
-
-		if ( limit != -1 ) {
+		
+		if ( ! acc . canUnlimitedItems ( ) ) {
 			
-			limit = acc . ms . currentItemStack . stackSize ;
+			limit = 1 ; // acc . ms . currentItemStack . stackSize ;
 			
 		}
 		
@@ -312,8 +312,8 @@ public class Manager {
 		if ( s . cats [ catId ] . getCatType ( ) == MerchCategory . Type . ITEMS ) {
 			
 			ItemInfo ii = ( ItemInfo ) m ;
-			
-			if ( ii . limit != -1 && ii . m_stack . stackSize > 0 ) {
+
+			if ( ii . limit > 0 ) {
 					
 				MineDonate . shops . get ( s . sid ) . cats [ catId ] . GiveMerch ( player, m, ii . limit ) ;
 				
@@ -332,8 +332,22 @@ public class Manager {
 		
 			case LIMIT :
 				
-				( ( ItemInfo ) m ) . limit = number ;
-
+				switch ( mc . getCatType ( ) ) {
+				
+					case ITEMS :
+						
+						( ( ItemInfo ) m ) . limit = number ;
+	
+					break ;
+					
+					case ENTITIES :
+						
+						( ( EntityInfo ) m ) . limit = number ;
+	
+					break ;
+					
+				}
+				
 			break;
 			
 			case COST :
@@ -345,6 +359,7 @@ public class Manager {
 		}
 		
 		mc . updateMerch ( m . getId ( ), m ) ;
+        ModNetwork . sendToAllMerchInfoPacket ( m ) ;
 
 	}
 	
@@ -378,6 +393,7 @@ public class Manager {
 		}
 		
 		mc . updateMerch ( m . getId ( ), m ) ;
+        ModNetwork . sendToAllMerchInfoPacket ( m ) ;
 
 	}
 	

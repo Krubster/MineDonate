@@ -82,12 +82,14 @@ public class ItemNBlocks extends MerchCategory {
         ItemInfo info = (ItemInfo) merch;
         int toPut = amount * info.stack_data.getInteger("Count") ;
         
-        if ( info.limit > -1) {
-         
-        	info.limit -= toPut;
-        
+        if ( toPut < 1 ) {
+        	
+        	return ;
+        	
         }
         
+        info.limit -= amount;
+  
         ItemStack stack = ItemStack.loadItemStackFromNBT(info.stack_data);
         if ( info . name != null && ! info . name . trim ( ) . isEmpty ( ) ) {
         	
@@ -113,12 +115,10 @@ public class ItemNBlocks extends MerchCategory {
         		
         		if ( left - stack . getMaxStackSize ( ) > 0 ) {
         		
-        			System.err.println("DROPA: " + (left - stack . getMaxStackSize ( ) ));
         			tmpCopy . stackSize = stack . getMaxStackSize ( ) ;
                 	addItemStackToInventory ( player, tmpCopy ) ;
                 	
                 	left -= stack . getMaxStackSize ( ) ;
-        			System.err.println("DROPA_left: " + left);
 
         		} else {
         			
@@ -142,9 +142,12 @@ public class ItemNBlocks extends MerchCategory {
         
         player.inventory.markDirty();
         
-        if (info.limit > -1)
-            updateItemInfo(info);
-
+        if (info.limit > -1) {
+        
+        	updateItemInfo(info);
+        
+        }
+        
     }
 
     public void addItemStackToInventory ( EntityPlayerMP player, ItemStack is ) {

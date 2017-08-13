@@ -34,6 +34,10 @@ public class GuiFrameFreezeShop extends GuiFrame {
 
 	int shopId = -1 ;
 
+	public String fieldText, fieldHolder ;
+
+	public static String lastReason ;
+	
 	public GuiFrameFreezeShop ( String _name, DataOfUIFrameFreezeShop _douiffs ) {
 		
 		super ( _name ) ;
@@ -61,11 +65,15 @@ public class GuiFrameFreezeShop extends GuiFrame {
     GuiButton freezeChangesButton ;
     GuiButton cancelChangesButton ;
     GuiGradientTextField reasonField ; 
-    
-    String fieldText, fieldHolder ;
-    
+        
     @Override
 	public void postShow ( ShopGUI g ) {
+		
+		if ( ! isVisible ( ) ) {
+			
+			return ;
+			
+		}
 		
     	super . postShow ( g ) ;
 
@@ -145,7 +153,7 @@ public class GuiFrameFreezeShop extends GuiFrame {
     		
     		g . setLoading ( true ) ;
     		
-    		ModNetwork . sendToServerFreezeShopPacket ( this . shopId, reasonField . getText ( ) ) ;
+    		ModNetwork . sendToServerFreezeShopPacket ( this . shopId, ( lastReason = reasonField . getText ( ) ) ) ;
     		
 			hideFrame ( g ) ;
 

@@ -37,6 +37,12 @@ public class GuiFrameExample extends GuiFrame {
     
     @Override
 	public void postShow ( ShopGUI g ) {
+    	
+		if ( ! isVisible ( ) ) {
+			
+			return ;
+			
+		}
 		
     	super.postShow(g);
     	

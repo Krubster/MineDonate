@@ -44,21 +44,28 @@ public class NeedShopCategoryServerPacketHandler implements IMessageHandler<Need
                          
             	for ( int j = 0; j < MineDonate . shops . get ( message . shopId ) . cats [ message . cat ] . getMerch ( ) . length ; ++ j ) {
                 	
-                    AddMerchPacket packet = new AddMerchPacket ( MineDonate . shops . get ( message . shopId ) . cats [ message . cat ] . getMerch ( ) [ j ] ) ;
+                    AddMerchPacket packet ;
                     
-                    if ( packet . info instanceof ShopInfo ) {
+                    if ( MineDonate . shops . get ( message . shopId ) . cats [ message . cat ] . getMerch ( ) [ j ] instanceof ShopInfo ) {
                     	
-                    	ShopInfo si = ( ( ShopInfo ) packet . info ) ;
+                    	ShopInfo si = ( ( ShopInfo ) MineDonate . shops . get ( message . shopId ) . cats [ message . cat ] . getMerch ( ) [ j ] ) ;
+
                     	if ( ! si . owner . equalsIgnoreCase ( serverPlayer . getDisplayName ( ) ) ) {
                     		
                     		if ( ! MineDonate . getAccount ( serverPlayer . getDisplayName ( ) . toLowerCase ( ) ) . canViewOtherFreezText ( ) ) {
                     			
-                    			si . cleanFreezVisibleData ( ) ; 
+                    			( si = ( ShopInfo ) si . copy ( ) ) . cleanFreezVisibleData ( ) ; 
                     			
                     		}
                     		
                     	}
                     	
+                    	packet = new AddMerchPacket ( si ) ;
+                        
+                    } else {
+                    	
+                    	packet = new AddMerchPacket ( MineDonate . shops . get ( message . shopId ) . cats [ message . cat ] . getMerch ( ) [ j ] ) ;
+
                     }
                     
                     ModNetwork . sendTo ( serverPlayer, packet ) ;

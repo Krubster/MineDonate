@@ -210,9 +210,9 @@ public class ModNetwork {
 		
 	}
 	
-	public static void sendToServerRenameMerchPacket ( int shopId, int catId, int merchId, EditMerchStringPacket . Type type, String s ) {
+	public static void sendToServerEditMerchStringPacket ( int shopId, int catId, int merchId, EditMerchStringPacket . Type type, String str ) {
 
-		networkChannel . sendToServer ( new EditMerchStringPacket ( shopId, catId, merchId, type,s ) ) ;
+		networkChannel . sendToServer ( new EditMerchStringPacket ( shopId, catId, merchId, type, str ) ) ;
 		
 	}
 	

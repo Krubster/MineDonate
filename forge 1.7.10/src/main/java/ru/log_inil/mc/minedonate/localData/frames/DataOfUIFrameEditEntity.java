@@ -10,7 +10,6 @@ public class DataOfUIFrameEditEntity extends DataOfUIFramEditItem {
 		
 		title = "Edit entity" ;
 		nameField = new DataOfUITextHolderElement ( "", "Entity name", 120, 20 ) ;
-		limitField = null ;
 		
 	}
 	

@@ -41,7 +41,7 @@ public class ItemInfo extends Merch {
 
     @Override
     public boolean canBuy(EntityPlayerMP serverPlayer, int amount) {
-        if(limit != -1 && limit < amount * stack_data.getInteger("Count"))
+        if(limit != -1 && limit < amount)// amount * stack_data.getInteger("Count"))
             return false;
         return true;
     }

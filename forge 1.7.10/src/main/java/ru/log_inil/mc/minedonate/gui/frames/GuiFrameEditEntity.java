@@ -19,16 +19,15 @@ public class GuiFrameEditEntity extends GuiFrameEditItem {
 
 	@Override
 	public void postShow ( ShopGUI g ) {
+	
+		if ( ! isVisible ( ) ) {
+			
+			return ;
+			
+		}
 		
     	super . postShow ( g ) ;
 
-    	if ( limitField != null ) {
-	    
-    		limitField.setEnabled(false);
-	    	limitField.setVisible(false);
-	    	
-    	}
-    	
     }
 	
     @Override
@@ -82,8 +81,8 @@ public class GuiFrameEditEntity extends GuiFrameEditItem {
     			
 				hideFrame ( g ) ;
 		        
-    			ModNetwork . sendToServerRenameMerchPacket ( shopId, catId, merch_id, EditMerchStringPacket . Type . NAME, ( fieldText = nameField . getText ( ) ) ) ;
-    			
+    			ModNetwork . sendToServerEditMerchStringPacket ( shopId, catId, merch_id, EditMerchStringPacket . Type . NAME, ( fieldText = nameField . getText ( ) ) ) ;
+    			System.err.println(fieldText);
     		}
     		
     	}

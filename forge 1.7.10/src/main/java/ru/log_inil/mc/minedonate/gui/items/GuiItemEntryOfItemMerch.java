@@ -195,13 +195,7 @@ public class GuiItemEntryOfItemMerch extends GuiAbstractItemEntry {
 
         }
         
-        if ( info . limit != -1 && info.stack_data.getInteger("Count") > info . limit ) {
-        	
-        	buy . enabled = false ;
-
-        }
-        
-        if ( info . limit == 0 ) {
+        if ( info . limit < 1 && info . limit != -1 ) {
         	
         	buy . enabled = false ;
             pl . enabled = false ;
@@ -239,10 +233,11 @@ public class GuiItemEntryOfItemMerch extends GuiAbstractItemEntry {
 				case "edit" :
 					
 					GuiFrameEditItem gfrs = ( GuiFrameEditItem ) g . showEntry ( "frame.item.edit", true ) ;	
-					
+
 					gfrs . setInfo ( info . shopId, info . catId, info . merch_id, info . limit, info . cost ) ;
-					gfrs . setFieldData ( info . name, info . m_stack . getDisplayName ( ) ) ;
-					
+					gfrs . setFieldData ( info . m_stack . getDisplayName ( ) . equals ( info . name ) ? "" :  info . name, info . m_stack . getDisplayName ( ) ) ;
+					gfrs . postShow ( g ) ;
+
 				break ;
 				
 				case "delete" :
@@ -251,6 +246,7 @@ public class GuiItemEntryOfItemMerch extends GuiAbstractItemEntry {
 					
 					gfdi . setInfo ( info . shopId, info . catId, info . merch_id ) ;
 					gfdi . setConfirmCode ( Integer . toString ( Math . abs ( info . hashCode ( ) ) ) . substring ( 0, 3 ) ) ;
+					gfdi . postShow ( g ) ;
 					
 				break ;
 				

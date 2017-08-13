@@ -48,6 +48,12 @@ public abstract class Merch {
         buf.writeInt(merch_id);
     }
 
+    public Merch copy ( ) {
+    	
+    	return null ;
+    	
+    }
+    
     public String getBoughtMessage() {
         return "";
     }

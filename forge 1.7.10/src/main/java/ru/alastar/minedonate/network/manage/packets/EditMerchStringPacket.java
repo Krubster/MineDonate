@@ -34,7 +34,7 @@ public class EditMerchStringPacket implements IMessage {
 		
 		buf . writeBoolean ( b ) ;
 		
-		if ( b ) {
+		if ( ! b ) {
 			
 			try {
 				
@@ -60,7 +60,7 @@ public class EditMerchStringPacket implements IMessage {
 
     	boolean b = buf . readBoolean ( ) ;
     	
-    	if ( b ) {
+    	if ( ! b ) {
     		
 			try {
 				

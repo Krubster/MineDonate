@@ -112,7 +112,8 @@ public class GuiItemEntryOfUserShopMerch extends GuiAbstractItemEntry {
 			freezText . add ( MineDonate.cfgUI.lang.shopFreezReason + info . freezReason ) ;
 
 		}
-		
+			
+		System.err.println(freezText);
 		
 		updateDataNeed = true ;
 		
@@ -232,10 +233,18 @@ public class GuiItemEntryOfUserShopMerch extends GuiAbstractItemEntry {
 				
 				case "freeze" :
 					
-					GuiFrameFreezeShop gffs = ( GuiFrameFreezeShop ) g . showEntry ( "frame.shop.freeze",true ) ;	
+					GuiFrameFreezeShop gffs = ( GuiFrameFreezeShop ) g . showEntry ( "frame.shop.freeze", true ) ;	
 					
 					gffs . setShopId ( info . shopId ) ;
+
+					if ( GuiFrameFreezeShop . lastReason != null ) {
+						
+						gffs . setFieldData ( GuiFrameFreezeShop . lastReason, gffs . fieldHolder ) ;
+						
+					}
 					
+					gffs . postShow ( g ) ;
+
 				break ;
 					
 				case "unfreeze" :
@@ -252,7 +261,8 @@ public class GuiItemEntryOfUserShopMerch extends GuiAbstractItemEntry {
 					
 					gfrs . setShopId ( info . shopId ) ;
 					gfrs . setFieldData ( info . name, gfrs . fieldHolder ) ;
-					
+					gfrs . postShow ( g ) ;
+
 				break ;
 				
 				case "delete" :
@@ -261,7 +271,8 @@ public class GuiItemEntryOfUserShopMerch extends GuiAbstractItemEntry {
 					
 					gfds . setShopId ( info . shopId ) ;
 					gfds . setConfirmCode ( Integer . toString ( Math . abs ( info . hashCode ( ) ) ) . substring ( 0, 3 ) ) ;
-					
+					gfds . postShow ( g ) ;
+
 				break ;
 				
 				case "freezeAcc" :
@@ -269,7 +280,8 @@ public class GuiItemEntryOfUserShopMerch extends GuiAbstractItemEntry {
 					GuiFrameFreezeAccount gffa = ( GuiFrameFreezeAccount ) g . showEntry ( "frame.acc.freeze", true ) ;	
 					
 					gffa . setName ( info . owner ) ;
-					
+					gffa . postShow ( g ) ;
+
 				break ;
 				
 				case "unFreezeAcc" :

@@ -18,6 +18,12 @@ public class GuiFrameAddEntity extends GuiFrameAddItem {
     @Override
 	public void postShow ( ShopGUI g ) {
 		
+		if ( ! isVisible ( ) ) {
+			
+			return ;
+			
+		}
+		
     	super . postShow ( g ) ;
 
     	limitField.setEnabled(false);

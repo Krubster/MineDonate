@@ -278,7 +278,8 @@ public class GuiItemEntryOfEntityMerch extends GuiAbstractItemEntry {
 					
 					gfre . setInfo ( info . shopId, info . catId, info . merch_id, info . cost ) ;
 					gfre . setFieldData ( info . name, gfre . fieldHolder ) ;
-					
+					gfre . postShow ( g ) ;
+
 				break ;
 				
 				case "delete" :
@@ -287,7 +288,8 @@ public class GuiItemEntryOfEntityMerch extends GuiAbstractItemEntry {
 					
 					gfde . setInfo ( info . shopId, info . catId, info . merch_id ) ;
 					gfde . setConfirmCode ( Integer . toString ( Math . abs ( info . hashCode ( ) ) ) . substring ( 0, 3 ) ) ;
-					
+					gfde . postShow ( g ) ;
+
 				break ;
 				
 			}

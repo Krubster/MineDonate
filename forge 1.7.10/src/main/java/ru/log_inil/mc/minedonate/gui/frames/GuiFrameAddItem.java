@@ -80,6 +80,12 @@ public class GuiFrameAddItem extends GuiFrame {
     
     @Override
 	public void postShow ( ShopGUI g ) {
+    	
+		if ( ! isVisible ( ) ) {
+			
+			return ;
+			
+		}
 		
     	super . postShow ( g ) ;
 
@@ -186,6 +192,7 @@ public class GuiFrameAddItem extends GuiFrame {
 		
     	if ( b . id == saveChangesButton . id ) {
 
+    		int cost = 1, limit = 1 ;
     		if ( costField . getText ( ) . trim ( ) . isEmpty ( ) ) {
     			
     			costField . fieldBorderColor = fieldBorderRedColor ;
@@ -196,9 +203,9 @@ public class GuiFrameAddItem extends GuiFrame {
     			
     			try {
     				
-    				Integer i = Integer . parseInt ( costField . getText ( ) ) ;
+    				cost = Integer . parseInt ( costField . getText ( ) ) ;
     				
-    				if ( i < 1 ) {
+    				if ( cost < 1 ) {
     					
     	    			costField . fieldBorderColor = fieldBorderRedColor ;
     	    			
@@ -218,9 +225,31 @@ public class GuiFrameAddItem extends GuiFrame {
     			
     		}
     		
+    		if ( MineDonate . getAccount ( ) . canUnlimitedItems ( ) ) {
+    			
+    			try {
+
+    				limit = Integer . parseInt ( this . limitField . getText ( ) ) ;
+
+    			} catch ( Exception ex ) {
+    				
+    				ex . printStackTrace ( ) ;
+        			
+    				limitField . fieldBorderColor = fieldBorderRedColor ;
+        			
+        			return false ;
+        			
+    			}
+    			
+    		} else {
+    			
+    			limit = MineDonate . getAccount ( ) . ms . currentItemStack . stackSize ;
+    			
+    		}
+    		
     		g . setLoading ( true ) ;
     		
-            ModNetwork . sendToServerAddNewItemPacket ( shopId, catId, Integer.parseInt(this.limitField.getText()), Integer.parseInt(this.costField.getText()), this . nameField . getText ( ) ) ;
+            ModNetwork . sendToServerAddNewItemPacket ( shopId, catId, limit, cost, this . nameField . getText ( ) ) ;
             
             this . hideFrame ( g ) ;
            

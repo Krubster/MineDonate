@@ -29,6 +29,7 @@ public class ShopInfo extends Merch {
        	
         this.merch_id = _merch_id;
     	this.catId = 4;
+    	
        	shopId = _shopId;
        	
         this . owner = _owner ;
@@ -111,6 +112,13 @@ public class ShopInfo extends Merch {
         
     }
 
+    @Override
+    public Merch copy ( ) {
+    	
+    	return new ShopInfo ( merch_id, shopId, owner, name, isFreezed, freezer, freezReason, canVisibleFreezedText, moneyType )  ;
+    	
+    }
+    
     String readString ( ByteBuf buf ) throws UnsupportedEncodingException {
     	
         return new String ( buf . readBytes ( buf . readInt ( ) ) . array ( ), "UTF-8" ) ;
@@ -186,7 +194,7 @@ public class ShopInfo extends Merch {
 		return EnumChatFormatting . getTextWithoutFormattingCodes ( name + owner ) ;
 		
 	}
-
+	
 	public void cleanFreezVisibleData ( ) {
 		
 		freezer = "" ;

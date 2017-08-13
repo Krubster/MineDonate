@@ -34,7 +34,7 @@ public class BuyButton extends GuiTexturedButton {
 
     }
 
-    public void buy( ) {
+    public void buy ( ) {
     	
         if ( merch_id != -1 ) {
         	

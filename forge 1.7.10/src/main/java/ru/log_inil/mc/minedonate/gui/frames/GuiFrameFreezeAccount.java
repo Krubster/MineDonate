@@ -67,6 +67,12 @@ public class GuiFrameFreezeAccount extends GuiFrame {
     @Override
 	public void postShow ( ShopGUI g ) {
 		
+		if ( ! isVisible ( ) ) {
+			
+			return ;
+			
+		}
+		
     	super . postShow ( g ) ;
 
     	posX = (g.getScaledResolution().getScaledWidth()/2) - widthCenter;

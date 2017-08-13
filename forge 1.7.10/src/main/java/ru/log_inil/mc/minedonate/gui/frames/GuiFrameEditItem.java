@@ -18,7 +18,7 @@ import ru.log_inil.mc.minedonate.localData.frames.DataOfUIFramEditItem;
 
 public class GuiFrameEditItem extends GuiFrame {
 
-	int width = 200 ;
+	int width = 20 ;
 	int height = 40 ;
 	
 	int posX ;
@@ -75,7 +75,29 @@ public class GuiFrameEditItem extends GuiFrame {
     @Override
 	public void postShow ( ShopGUI g ) {
 		
+		if ( ! isVisible ( ) ) {
+			
+			return ;
+			
+		}
+		
     	super . postShow ( g ) ;
+
+    	width = 5 ;
+    			
+		width += douifcs . nameField . width ;
+		
+		if ( MineDonate . getAccount ( ) . canUnlimitedItems ( ) && douifcs . limitField != null ) {
+			
+			width += douifcs . limitField . width ;
+			width += 6 ;
+			
+		}
+		
+		width += douifcs . costField . width ;
+		width += 19 ;
+
+		widthCenter = width / 2 ;
 
     	posX = (g.getScaledResolution().getScaledWidth()/2) - widthCenter;
     	posY = (g.getScaledResolution().getScaledHeight()/2) - heightCenter;
@@ -107,7 +129,7 @@ public class GuiFrameEditItem extends GuiFrame {
     	}
 
 		if ( nameField == null ) {
-			
+						
 			nameField = new GuiGradientTextField ( g.getFontRenderer(), 30, 10, douifcs . nameField . width - 1, douifcs . nameField . height, true ) ;
 			nameField . setMaxStringLength ( 140 ) ;
 			nameField . setEnableBorderDrawing ( true, fieldBorderColor ) ;
@@ -117,7 +139,7 @@ public class GuiFrameEditItem extends GuiFrame {
 		nameField . setText ( fieldText != null ? fieldText : "" ) ;
 		nameField . setTextHolder ( MineDonate.getAccount().ms.currentItemStack != null ? MineDonate.getAccount().ms.currentItemStack.getDisplayName() : fieldHolder ) ;
 		
-		nameField . xPosition = posX + 40 ;
+		nameField . xPosition = posX + 10 ;
 		nameField . yPosition = posY + 15 ;
 
 		if ( limitField == null && douifcs . limitField != null ) {
@@ -130,33 +152,8 @@ public class GuiFrameEditItem extends GuiFrame {
 
 		if ( limitField != null ) {
 			
-			limitField . setEnabled ( MineDonate . getAccount ( ) . canUnlimitedItems ( ) ) ;
-			limitField . setVisible ( MineDonate . getAccount ( ) . canUnlimitedItems ( ) ) ;
-			
 			limitField . setText ( "" ) ;
 			limitField . setTextHolder ( "" ) ;
-			
-		}
-		
-		if ( MineDonate . getAccount ( ) . canUnlimitedItems ( ) ) {
-				
-			nameField . xPosition = posX + 20 ;
-
-			if ( limitField != null ) {
-
-				height = 65 ;
-
-				limitField . xPosition = nameField . xPosition ;
-				limitField . yPosition = nameField . yPosition + nameField . height + 5 ;
-				
-				limitField . setText ( douifcs . limitField . text ) ;
-				limitField . setTextHolder ( douifcs . limitField . textHolder ) ; 
-			
-			} else {
-								
-				height = 40 ;
-
-			}
 			
 		}
 		
@@ -165,14 +162,31 @@ public class GuiFrameEditItem extends GuiFrame {
 			costField = new GuiGradientTextField ( g.getFontRenderer(), 30, 10, douifcs . costField . width - 1, douifcs . costField . height, true ) ;
 			costField . setMaxStringLength ( 10 ) ;
 			costField . setEnableBorderDrawing ( true, fieldBorderColor ) ;
-			
-			costField . setText ( douifcs . costField . text ) ;
-			costField . setTextHolder ( douifcs . costField . textHolder ) ;
 						
 		}
 	
-		costField . xPosition = nameField . xPosition + nameField . width + 5 ;
+		costField . setText ( Integer . toString ( cost ) ) ; // douifcs . costField . text ) ;
+		costField . setTextHolder ( douifcs . costField . textHolder ) ; // . isEmpty ( ) ? Integer.toString ( cost ) : douifcs . costField . textHolder  ) ;
+		
+		costField . xPosition = nameField . xPosition + nameField . width + 6 ;
 		costField . yPosition = nameField . yPosition ;
+
+		if ( limitField != null ) {
+
+			if ( MineDonate . getAccount ( ) . canUnlimitedItems ( ) ) {
+
+				limitField . xPosition = costField . xPosition + costField . width + 6 ;
+				limitField . yPosition = nameField . yPosition ;
+				
+				limitField . setText ( Integer.toString ( limit ) ) ; // douifcs . limitField . text ) ;
+				limitField . setTextHolder ( douifcs . limitField . textHolder ) ; // . isEmpty ( ) ? Integer.toString ( limit ) : douifcs . limitField . textHolder ) ; 
+				
+			}
+		
+			limitField . setEnabled ( MineDonate . getAccount ( ) . canUnlimitedItems ( ) ) ;
+			limitField . setVisible ( MineDonate . getAccount ( ) . canUnlimitedItems ( ) ) ;
+			
+		}
 
     	cancelChangesButton . yPosition = saveChangesButton . yPosition = posY + height ;
     	cancelChangesButton . xPosition = posX + width - cancelChangesButton . width ;
@@ -195,18 +209,18 @@ public class GuiFrameEditItem extends GuiFrame {
 		
     	if ( b . id == saveChangesButton . id ) {
     	
-    		g . setLoading ( true ) ;
     		
     		if ( MineDonate . getAccount ( ) . canUnlimitedItems ( ) ) {
 
     			try {
     				
-    				if ( limitField != null ) {
+    				if ( limitField != null && ! limitField . getText ( ) . isEmpty ( ) ) {
     					
 	    				Integer n = Integer . parseInt ( limitField . getText ( ) ) ;
 		    			
 	    				if ( limit != n ) {
 	    					
+	    					g . setLoading ( true ) ;
 	    					hideFrame ( g ) ;
 	    			    		
 	    					ModNetwork . sendToServerEditMerchNumberPacket ( shopId, catId, merch_id, EditMerchNumberPacket . Type . LIMIT, ( int ) n ) ;
@@ -225,16 +239,21 @@ public class GuiFrameEditItem extends GuiFrame {
     		
 			try {
 				
-				Integer n = Integer . parseInt ( costField . getText ( ) ) ;
-    			
-				if ( cost != n ) {
+				if ( ! costField . getText ( ) .isEmpty ( ) ) {
 					
-					hideFrame ( g ) ;
-			        
-					ModNetwork . sendToServerEditMerchNumberPacket ( shopId, catId, merch_id, EditMerchNumberPacket . Type . COST, ( int ) n ) ;
-					
-					cost = n ;
-										
+					Integer n = Integer . parseInt ( costField . getText ( ) ) ;
+	    			
+					if ( cost != n ) {
+						
+						g . setLoading ( true ) ;
+						hideFrame ( g ) ;
+				        
+						ModNetwork . sendToServerEditMerchNumberPacket ( shopId, catId, merch_id, EditMerchNumberPacket . Type . COST, ( int ) n ) ;
+						
+						cost = n ;
+											
+					}
+				
 				}
 				
     		} catch ( Exception ex ) {
@@ -243,11 +262,13 @@ public class GuiFrameEditItem extends GuiFrame {
 
     		if ( ! nameField . getText ( ) . trim ( ) . equals ( fieldText ) ) {
     			
+    			g . setLoading ( true ) ;
 				hideFrame ( g ) ;
 		        
-    			ModNetwork . sendToServerRenameMerchPacket ( shopId, catId, merch_id, EditMerchStringPacket . Type . NAME, ( fieldText = nameField . getText ( ) ) ) ;
+    			ModNetwork . sendToServerEditMerchStringPacket ( shopId, catId, merch_id, EditMerchStringPacket . Type . NAME, ( fieldText = nameField . getText ( ) ) ) ;
     			
     		}
+    		
     		
     	}
     	
@@ -361,7 +382,7 @@ public class GuiFrameEditItem extends GuiFrame {
     	fieldText = _text ;
     	fieldHolder = _holder ;
 
-		nameField . setText ( fieldText != null ? fieldText : "" ) ;
+    	nameField . setText ( fieldText != null ? fieldText : "" ) ;
 		nameField . setTextHolder ( fieldHolder ) ;
 		
     }

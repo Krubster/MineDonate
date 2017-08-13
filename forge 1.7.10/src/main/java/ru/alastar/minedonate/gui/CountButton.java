@@ -43,7 +43,13 @@ public class CountButton extends GuiTexturedButton {
 
         if (info.limit != -1) {
 
-            return ((info.modified + mod) * info.stack_data.getInteger("Count") <= info.limit && (info.modified + mod) > 0);
+        	if ( info.limit < 1 ) {
+        		
+        		return false ;
+        		
+        	}
+        	
+        	return ((info.modified + mod) <= info.limit && (info.modified + mod) > 0);
 
         } else {
 

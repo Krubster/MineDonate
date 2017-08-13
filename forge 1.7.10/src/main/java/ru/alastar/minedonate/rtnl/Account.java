@@ -105,8 +105,7 @@ public class Account {
 		
 	}
 	
- 
-	public boolean canViewOtherFreezText() {
+	public boolean canViewOtherFreezText ( ) {
 
 		return hasPermission ( "canViewOtherFreezText" ) || hasPermission ( "*" ) ;
 		

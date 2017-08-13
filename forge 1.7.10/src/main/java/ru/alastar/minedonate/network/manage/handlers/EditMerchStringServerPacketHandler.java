@@ -8,8 +8,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 
 import ru.alastar.minedonate.MineDonate;
 
-import ru.alastar.minedonate.network.manage.packets.AddNewItemPacket;
-import ru.alastar.minedonate.network.manage.packets.EditMerchNumberPacket;
 import ru.alastar.minedonate.network.manage.packets.EditMerchStringPacket;
 import ru.alastar.minedonate.network.manage.packets.ManageResponsePacket;
 
@@ -46,6 +44,12 @@ public class EditMerchStringServerPacketHandler implements IMessageHandler < Edi
 
 			}
 			
+			if ( message . str . length ( ) > 140 ) {
+
+				return new ManageResponsePacket ( ManageResponsePacket.ResponseType.ENTRIES, ManageResponsePacket.ResponseCode.EDIT, ManageResponsePacket.ResponseStatus.ERROR_UNKNOWN ) ;
+
+			}
+			
 			if ( ! MineDonate . checkCatExists ( s . sid, message . catId ) ) {
 				
 				return new ManageResponsePacket ( ManageResponsePacket.ResponseType.ENTRIES, ManageResponsePacket.ResponseCode.EDIT, ManageResponsePacket.ResponseStatus.ERROR_CAT_NOTFOUND ) ;
@@ -57,7 +61,7 @@ public class EditMerchStringServerPacketHandler implements IMessageHandler < Edi
 		        return new ManageResponsePacket ( ManageResponsePacket.ResponseType.ENTRIES, ManageResponsePacket.ResponseCode.EDIT, ManageResponsePacket.ResponseStatus.ERROR_ENTRY_NOTFOUND ) ;
 
 			}
-			
+			System.err.println( message . str);
 			Manager . editShopEntryString ( serverPlayer, s, message . catId, message . merchId, message . type, message . str ) ;
 			
 	        return new ManageResponsePacket ( ManageResponsePacket.ResponseType.ENTRIES, ManageResponsePacket.ResponseCode.EDIT, ManageResponsePacket.ResponseStatus.OK ) ;

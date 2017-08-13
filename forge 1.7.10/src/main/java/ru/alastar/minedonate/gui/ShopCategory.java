@@ -309,7 +309,7 @@ public abstract class ShopCategory extends GuiEntry {
 		for ( Merch m : MineDonate . shops . get ( gui . getCurrentShopId ( )  ) . cats [ catId ] . getMerch ( ) ) {
 
 			if ( m != null && ( m . subCatId == _subCatId || _subCatId == -1 ) ) {
-				
+
 				noSearchedEntries . add ( m ) ;
 				
 			}
