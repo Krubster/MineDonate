@@ -50,7 +50,7 @@ public class ClientProxy extends CommonProxy {
         Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.func_147675_a(res, x, y, z));
     }
 
-    public static void loadIcon(String url, int id) {
+    public void loadIcon(String url, int id) {
         BufferedImage image = null;
         System.out.println("Icon url: " + url);
 

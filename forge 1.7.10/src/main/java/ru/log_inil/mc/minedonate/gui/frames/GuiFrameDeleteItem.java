@@ -5,6 +5,7 @@ import java.awt.Color;
 import net.minecraft.client.gui.GuiButton;
 
 import ru.alastar.minedonate.gui.ShopGUI;
+import ru.alastar.minedonate.rtnl.ModNetwork;
 import ru.alastar.minedonate.rtnl.Utils;
 
 import ru.log_inil.mc.minedonate.gui.DrawType;
@@ -31,7 +32,7 @@ public class GuiFrameDeleteItem extends GuiFrame {
 	
 	DataOfUIFrameDeleteItem douifdi ;
 
-	int shopId = -1, catId = -1, merch_id = -1 ;
+	int shopId = -1, catId = -1, merchId = -1 ;
 
 	public GuiFrameDeleteItem ( String _name, DataOfUIFrameDeleteItem _douifdi ) {
 		
@@ -143,9 +144,9 @@ public class GuiFrameDeleteItem extends GuiFrame {
     		
     		g . setLoading ( true ) ;
     		
-            // MineDonate . networkChannel . sendToServer ( new CreateNewShopPacket ( this . codeField . getText ( ) ) ) ;
+    		ModNetwork . sendToServerDeleteShopMerchPacket ( shopId, catId, merchId ) ;
 
-			hideFrame ( g ) ;;
+			hideFrame ( g ) ;
 
     	}
     	
@@ -225,11 +226,11 @@ public class GuiFrameDeleteItem extends GuiFrame {
 
     }
 
-	public void setInfo ( int _shopId, int _catId, int _merch_id ) {
+	public void setInfo ( int _shopId, int _catId, int _merchId ) {
 		
 		shopId = _shopId ;
 		catId = _catId ;
-		merch_id = _merch_id ;
+		merchId = _merchId ;
 		
 	}
 	

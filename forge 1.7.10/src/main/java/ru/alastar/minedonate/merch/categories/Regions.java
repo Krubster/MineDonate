@@ -5,6 +5,7 @@ import net.minecraft.server.MinecraftServer;
 
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
+import ru.alastar.minedonate.merch.categories.MerchCategory.Type;
 import ru.alastar.minedonate.merch.info.RegionInfo;
 import ru.alastar.minedonate.plugin.PluginHelper;
 import ru.alastar.minedonate.rtnl.ModNetwork;
@@ -40,7 +41,7 @@ public class Regions extends MerchCategory {
         
         PluginHelper.wgMgr.removePlayerFromRegion(world_name, name, player);
 
-        returnToStock(new RegionInfo(shopId, catId, m_Merch.length, Integer.valueOf(log_msg.split(":")[4]), name, world_name));
+        returnToStock(new RegionInfo(shopId, catId, m_Merch.size(), Integer.valueOf(log_msg.split(":")[4]), name, world_name));
     }
 
     private void returnToStock(RegionInfo regionInfo) {
@@ -72,7 +73,7 @@ public class Regions extends MerchCategory {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        MinecraftServer.getServer().logInfo("Loaded " + m_Merch.length + " regions");
+        MinecraftServer.getServer().logInfo("Loaded " + m_Merch.size() + " regions");
     }
 
     @Override
@@ -81,7 +82,7 @@ public class Regions extends MerchCategory {
     }
 
     @Override
-    public String getDatabase() {
+    public String getDatabaseTable ( ) {
         return MineDonate.cfg.dbRegions;
     }
 
@@ -124,4 +125,11 @@ public class Regions extends MerchCategory {
 		
 	}
 	
+	@Override
+    public Type getCatType ( ) {
+    	
+    	return Type . REGIONS ;
+    	
+    }
+    
 }

@@ -1,17 +1,17 @@
-package ru.alastar.minedonate.network.packets.manage;
+package ru.alastar.minedonate.network.manage.packets;
 
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import io.netty.buffer.ByteBuf;
 import ru.alastar.minedonate.rtnl.Utils;
 
-public class CreateNewShopPacket implements IMessage {
+public class UnfreezeAccountPacket implements IMessage {
 
-	public String name ;
+	public String player ;
 	
-    public CreateNewShopPacket ( ) { }
-    public CreateNewShopPacket ( String _name ) {
+    public UnfreezeAccountPacket ( ) { }
+    public UnfreezeAccountPacket ( String _player ) {
     	
-    	name = _name ;
+    	player = _player ;
     	
     }
 
@@ -20,7 +20,7 @@ public class CreateNewShopPacket implements IMessage {
     	
     	try {
 			
-    		Utils . netWriteString ( buf, name ) ;
+    		Utils . netWriteString ( buf, player ) ;
 			
 		} catch ( Exception ex ) {
 			
@@ -35,7 +35,7 @@ public class CreateNewShopPacket implements IMessage {
     	
        try {
     	   
-    	   name = Utils . netReadString ( buf ) ;
+    	   player = Utils . netReadString ( buf ) ;
            
        } catch ( Exception ex ) {
     	   

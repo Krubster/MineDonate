@@ -1,14 +1,14 @@
-package ru.alastar.minedonate.network.packets.manage;
+package ru.alastar.minedonate.network.manage.packets;
 
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import io.netty.buffer.ByteBuf;
 
-public class DeleteShopPacket implements IMessage {
+public class UnfreezeShopPacket implements IMessage {
 
 	public int shopId ;
-
-    public DeleteShopPacket ( ) { }
-    public DeleteShopPacket ( int _shopId ) {
+	
+    public UnfreezeShopPacket ( ) { }
+    public UnfreezeShopPacket ( int _shopId ) {
     	
     	shopId = _shopId ;
     	
@@ -28,4 +28,4 @@ public class DeleteShopPacket implements IMessage {
 
     }
     
-}
+ }

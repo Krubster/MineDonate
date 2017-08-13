@@ -9,19 +9,25 @@ import java.sql.Statement;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import ru.alastar.minedonate.MineDonate;
+import ru.alastar.minedonate.merch.Merch;
+import ru.alastar.minedonate.merch.categories.MerchCategory;
 import ru.alastar.minedonate.merch.categories.UsersShops;
+import ru.alastar.minedonate.merch.info.EntityInfo;
 import ru.alastar.minedonate.merch.info.ItemInfo;
 import ru.alastar.minedonate.merch.info.ShopInfo;
+import ru.alastar.minedonate.network.manage.packets.EditMerchNumberPacket;
+import ru.alastar.minedonate.network.manage.packets.EditMerchStringPacket;
 
 public class Manager {
 
 	public static void createShop ( String owner, String name ) {
 		
-        ShopInfo info = new ShopInfo( MineDonate.shops.get(0).cats[4].getMerch().length, MineDonate.getNextShopId(), owner, name, false, null, null, false, MineDonate.cfg.defaultUserShopMoneyType ) ;
+        ShopInfo info = new ShopInfo ( MineDonate . shops . get ( 0 ) . cats [ 4 ] . getMerch ( ) . length, MineDonate.getNextShopId(), owner, name, false, null, null, false, MineDonate.cfg.defaultUserShopMoneyType ) ;
        
-        MineDonate.shops.get(0).cats[4].addMerch(info);
+        MineDonate . shops . get ( 0 ) . cats [ 4 ] . addMerch ( info ) ;
       
         try {
         	
@@ -44,6 +50,22 @@ public class Manager {
             
         }
         
+        MineDonate . getAccount ( owner ) . shopsCount ++ ;
+        
+		try {
+			
+			Statement st = MineDonate . getNewStatement ( ) ;
+			
+			st . executeUpdate ( "UPDATE " + MineDonate.cfg.dbUsers + " SET shopsCount = " + MineDonate . getAccount ( owner ) . shopsCount + " WHERE " + MineDonate.cfg.dbUsersNameColumn + "= '" + owner+ "';" ) ;
+			
+			st . close ( ) ;
+			
+		} catch ( Exception ex ) {
+			
+			ex . printStackTrace ( ) ;
+		
+		}
+				
         MineDonate . loadUserShop ( info . shopId ) ;
         ModNetwork . sendToAllAddMerchPacket ( info ) ;
         
@@ -70,6 +92,24 @@ public class Manager {
 			
 		}
 		
+        MineDonate . getAccount ( s . owner ) . shopsCount -- ;
+        
+		try {
+			
+			Statement st = MineDonate . getNewStatement ( ) ;
+			
+			st . executeUpdate ( "UPDATE " + MineDonate.cfg.dbUsers + " SET shopsCount = " + MineDonate . getAccount ( s . owner ) . shopsCount + " WHERE " + MineDonate.cfg.dbUsersNameColumn + "= '" + s . owner + "';" ) ;
+			
+			st . close ( ) ;
+			
+		} catch ( Exception ex ) {
+			
+			ex . printStackTrace ( ) ;
+		
+		}
+		
+        ModNetwork . sendToAllRemoveMerchPacket ( 0, 4, si . getId ( ) ) ;
+
 	}
 	
 	public static void freezeShop ( Shop s, String freezer, String reason ) {
@@ -203,7 +243,7 @@ public class Manager {
 		
 	}
 
-	public static void addItemToShop ( Account acc, Shop s, int catId, int cost, int limit, String name) {
+	public static void addItemToShop ( Account acc, Shop s, int catId, int limit, int cost, String name ) {
 
 		if ( limit != -1 ) {
 			
@@ -229,7 +269,7 @@ public class Manager {
 
             InputStream stream = new ByteArrayInputStream(buf.array());
            
-            PreparedStatement statement = MineDonate.getDBConnection().prepareStatement("INSERT INTO " + s.cats[catId].getDatabase() + " (name, info, cost, lim, stack_data) VALUES(?,?,?,?,?)");
+            PreparedStatement statement = MineDonate.getDBConnection().prepareStatement("INSERT INTO " + s.cats[catId].getDatabaseTable() + " (name, info, cost, lim, stack_data) VALUES(?,?,?,?,?)");
          
             statement.setString(1, name);
             statement.setString(2, "new merch");
@@ -245,6 +285,100 @@ public class Manager {
             
         }
         
+	}
+	
+	public static void removeEntryFromShop ( EntityPlayerMP player, Shop s, int catId, int merchId ) {
+		
+		Merch m = s . cats [ catId ] . getMerch ( merchId ) ;
+		
+		MineDonate . shops . get ( s . sid ) . cats [ catId ] . removeMerch ( m ) ;
+		
+		try {
+			
+			Statement st = MineDonate . getNewStatement ( ) ;
+			
+			st . executeUpdate ( "DELETE FROM " + s . cats [ catId ] . getDatabaseTable ( ) + " WHERE id=" + merchId + ";" ) ;
+			
+			st . close ( ) ;
+			
+		} catch ( Exception ex ) {
+			
+			ex . printStackTrace ( ) ;
+			
+		}
+		
+        ModNetwork . sendToAllRemoveMerchPacket ( s . sid, catId, merchId ) ;
+        
+		if ( s . cats [ catId ] . getCatType ( ) == MerchCategory . Type . ITEMS ) {
+			
+			ItemInfo ii = ( ItemInfo ) m ;
+			
+			if ( ii . limit != -1 && ii . m_stack.stackSize > 0 ) {
+					
+				player . dropPlayerItemWithRandomChoice ( ii . m_stack, false ) ;
+				
+			}
+			
+		}
+		
+	}
+
+	public static void editShopEntryNumber ( EntityPlayerMP player, Shop s, int catId, int merchId, EditMerchNumberPacket . Type type, int number) {
+		
+		MerchCategory mc = s . cats [ catId ] ;
+		Merch m = mc . getMerch ( merchId ) ;
+		
+		switch ( type ) {
+		
+			case LIMIT :
+				
+				( ( ItemInfo ) m ) . limit = number ;
+
+			break;
+			
+			case COST :
+			
+				m . cost = number ;
+			
+			break ;
+				
+		}
+		
+		mc . updateMerch ( m . getId ( ), m ) ;
+
+	}
+	
+	public static void editShopEntryString ( EntityPlayerMP player, Shop s, int catId, int merchId, EditMerchStringPacket . Type type, String str ) {
+		
+		MerchCategory mc = s . cats [ catId ] ;
+		Merch m = mc . getMerch ( merchId ) ;
+		
+		switch ( type ) {
+		
+			case NAME :
+				
+				switch ( mc . getCatType ( ) ) {
+				
+					case ITEMS :
+						
+						( ( ItemInfo ) m ) . name = str ;
+	
+					break ;
+					
+					case ENTITIES :
+						
+						( ( EntityInfo ) m ) . name = str ;
+	
+					break ;
+					
+				}
+	
+			break;
+		
+		}
+		
+		mc . updateMerch ( m . getId ( ), m ) ;
+
 	}
 	
 }

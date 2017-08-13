@@ -5,6 +5,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
+import ru.alastar.minedonate.merch.categories.MerchCategory.Type;
 import ru.alastar.minedonate.merch.info.EntityInfo;
 
 import java.lang.reflect.InvocationTargetException;
@@ -46,11 +47,11 @@ public class Entities extends MerchCategory {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        MinecraftServer.getServer().logInfo("Loaded " + m_Merch.length + " entities");
+        MinecraftServer.getServer().logInfo("Loaded " + m_Merch.size() + " entities");
     }
 
     @Override
-    public String getDatabase() {
+    public String getDatabaseTable ( ) {
         return MineDonate.cfg.dbEntities;
     }
 
@@ -99,4 +100,11 @@ public class Entities extends MerchCategory {
 		
 	}
 	
+	@Override
+    public Type getCatType ( ) {
+    	
+    	return Type . ENTITIES ;
+    	
+    }
+    
 }

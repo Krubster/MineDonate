@@ -1,22 +1,18 @@
-package ru.alastar.minedonate.network.packets.manage;
+package ru.alastar.minedonate.network.manage.packets;
 
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import io.netty.buffer.ByteBuf;
 import ru.alastar.minedonate.rtnl.Utils;
 
-public class AddNewItemPacket implements IMessage {
+public class RenameShopPacket implements IMessage {
 
-	public int shopId, catId, limit, cost ;
+	public int shopId ;
 	public String name ;
 	
-    public AddNewItemPacket ( ) { }
-    public AddNewItemPacket ( int _shopId, int _catId, int _limit, int _cost, String _name ) {
+    public RenameShopPacket ( ) { }
+    public RenameShopPacket ( int _shopId, String _name ) {
     	
     	shopId = _shopId ;
-    	catId = _catId ;
-    	limit = _limit ;
-    	cost = _cost ;
-    	
     	name = _name ;
     	
     }
@@ -26,12 +22,7 @@ public class AddNewItemPacket implements IMessage {
     	
     	try {
 			
-    		buf . writeInt ( shopId ) ; 
-    		buf . writeInt ( catId ) ;
-    		
-    		buf . writeInt ( limit ) ; 
-    		buf . writeInt ( cost ) ;
-
+    		buf . writeInt ( shopId ) ;
     		Utils . netWriteString ( buf, name ) ;
 			
 		} catch ( Exception ex ) {
@@ -48,11 +39,6 @@ public class AddNewItemPacket implements IMessage {
        try {
     	   
     	   shopId = buf . readInt ( ) ;
-    	   catId = buf . readInt ( ) ;
-    	   
-    	   limit = buf . readInt ( ) ;
-    	   cost = buf . readInt ( ) ;
-
     	   name = Utils . netReadString ( buf ) ;
            
        } catch ( Exception ex ) {

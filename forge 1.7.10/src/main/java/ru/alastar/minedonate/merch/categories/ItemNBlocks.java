@@ -6,6 +6,7 @@ import net.minecraft.server.MinecraftServer;
 
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
+import ru.alastar.minedonate.merch.categories.MerchCategory.Type;
 import ru.alastar.minedonate.merch.info.ItemInfo;
 import ru.alastar.minedonate.rtnl.ModNetwork;
 
@@ -53,13 +54,13 @@ public class ItemNBlocks extends MerchCategory {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        MinecraftServer.getServer().logInfo("Loaded " + m_Merch.length + " lots");
+        MinecraftServer.getServer().logInfo("Loaded " + m_Merch.size() + " lots");
     }
 
     String dbTable = MineDonate.cfg.dbItems;
 
     @Override
-    public String getDatabase() {
+    public String getDatabaseTable ( ) {
 
         return dbTable;
 
@@ -103,7 +104,8 @@ public class ItemNBlocks extends MerchCategory {
         try {
             stmt = MineDonate.m_DB_Connection.createStatement();
             String sql;
-            sql = "UPDATE " + getDatabase() + " SET " + getDatabase() + ".lim=" + info.limit + " WHERE name='" + info.name + "', and cost=" + info.cost + "  and info='" + info.info + "';";
+            System.err.println("WARN! REPLACE TO PREPARED STATEMENT!");
+            sql = "UPDATE " + getDatabaseTable() + " SET lim=" + info.limit + " WHERE name='" + info.name + "', and cost=" + info.cost + "  and info='" + info.info + "';";
             stmt.executeUpdate(sql);
             stmt.close();
         } catch (SQLException e) {
@@ -123,6 +125,13 @@ public class ItemNBlocks extends MerchCategory {
 
         dbTable = _dbTable;
 
+    }
+
+	@Override
+    public Type getCatType ( ) {
+    	
+    	return Type . ITEMS ;
+    	
     }
 
 }

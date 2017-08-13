@@ -5,8 +5,8 @@ import java.awt.Color;
 import net.minecraft.client.gui.GuiButton;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.gui.ShopGUI;
-import ru.alastar.minedonate.network.packets.manage.EditMerchNumberPacket;
-import ru.alastar.minedonate.network.packets.manage.EditMerchStringPacket;
+import ru.alastar.minedonate.network.manage.packets.EditMerchNumberPacket;
+import ru.alastar.minedonate.network.manage.packets.EditMerchStringPacket;
 import ru.alastar.minedonate.rtnl.ModNetwork;
 import ru.alastar.minedonate.rtnl.Utils;
 
@@ -57,7 +57,12 @@ public class GuiFrameEditItem extends GuiFrame {
     	
     	nameField . drawTextBox ( ) ;
     	costField . drawTextBox ( ) ;
-    	limitField . drawTextBox ( ) ;    	
+    	
+    	if ( limitField != null ) {
+    	
+    		limitField . drawTextBox ( ) ;    	
+    	
+    	}
     	
     }
     
@@ -115,7 +120,7 @@ public class GuiFrameEditItem extends GuiFrame {
 		nameField . xPosition = posX + 40 ;
 		nameField . yPosition = posY + 15 ;
 
-		if ( limitField == null ) {
+		if ( limitField == null && douifcs . limitField != null ) {
 			
 			limitField = new GuiGradientTextField ( g.getFontRenderer(), 30, 10, douifcs . limitField . width - 1, douifcs . limitField . height, true ) ;
 			limitField . setMaxStringLength ( 10 ) ;
@@ -123,20 +128,35 @@ public class GuiFrameEditItem extends GuiFrame {
 			
 		}
 
-		limitField . setEnabled ( MineDonate . getAccount ( ) . canUnlimitedItems ( ) ) ;
-		limitField . setVisible ( MineDonate . getAccount ( ) . canUnlimitedItems ( ) ) ;
-		
-		limitField . setText ( "" ) ;
-		limitField . setTextHolder ( "" ) ;
+		if ( limitField != null ) {
+			
+			limitField . setEnabled ( MineDonate . getAccount ( ) . canUnlimitedItems ( ) ) ;
+			limitField . setVisible ( MineDonate . getAccount ( ) . canUnlimitedItems ( ) ) ;
+			
+			limitField . setText ( "" ) ;
+			limitField . setTextHolder ( "" ) ;
+			
+		}
 		
 		if ( MineDonate . getAccount ( ) . canUnlimitedItems ( ) ) {
+				
+			nameField . xPosition = posX + 20 ;
+
+			if ( limitField != null ) {
+
+				height = 65 ;
+
+				limitField . xPosition = nameField . xPosition ;
+				limitField . yPosition = nameField . yPosition + nameField . height + 5 ;
+				
+				limitField . setText ( douifcs . limitField . text ) ;
+				limitField . setTextHolder ( douifcs . limitField . textHolder ) ; 
 			
-			height = 60 ;
-			limitField . xPosition = nameField . xPosition ;
-			limitField . yPosition = nameField . yPosition + nameField . height ;
-			
-			limitField . setText ( douifcs . limitField . text ) ;
-			limitField . setTextHolder ( douifcs . limitField . textHolder ) ;
+			} else {
+								
+				height = 40 ;
+
+			}
 			
 		}
 		
@@ -181,22 +201,24 @@ public class GuiFrameEditItem extends GuiFrame {
 
     			try {
     				
-    				Integer n = Integer . parseInt ( limitField . getText ( ) ) ;
-	    			
-    				if ( limit != n ) {
+    				if ( limitField != null ) {
     					
-    					hideFrame ( g ) ;
-    			    		
-    					ModNetwork . sendToServerEditMerchNumberPacket ( shopId, catId, merch_id, EditMerchNumberPacket . Type . LIMIT, ( int ) n ) ;
-    					
-    					limit = n ;
-    					    						
+	    				Integer n = Integer . parseInt ( limitField . getText ( ) ) ;
+		    			
+	    				if ( limit != n ) {
+	    					
+	    					hideFrame ( g ) ;
+	    			    		
+	    					ModNetwork . sendToServerEditMerchNumberPacket ( shopId, catId, merch_id, EditMerchNumberPacket . Type . LIMIT, ( int ) n ) ;
+	    					
+	    					limit = n ;
+	    					    						
+	    				}
+	    				
     				}
     				
 	    		} catch ( Exception ex ) {
-	    			
-	    			ex . printStackTrace ( ) ;
-	    			
+	    				    			
 	    		}
     			
     		}
@@ -216,9 +238,7 @@ public class GuiFrameEditItem extends GuiFrame {
 				}
 				
     		} catch ( Exception ex ) {
-    			
-    			ex . printStackTrace ( ) ;
-    			
+    			    			
     		}
 
     		if ( ! nameField . getText ( ) . trim ( ) . equals ( fieldText ) ) {

@@ -34,6 +34,9 @@ public class CommonProxy {
     public void serverStarting(FMLServerStartingEvent event) {
     }
 
+    public void loadIcon(String url, int id) {
+    }
+    
 	public void clientOpenGui ( int id ) {	
 		
 	}

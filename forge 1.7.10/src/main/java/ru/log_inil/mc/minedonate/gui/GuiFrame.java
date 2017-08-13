@@ -15,6 +15,8 @@ public class GuiFrame extends GuiEntry {
 	    g . showEntry ( name, false ) ; 
         unShow ( g ) ;
         
+        g . initGui ( ) ;
+        
 	}
 	
 }

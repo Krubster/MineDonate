@@ -1,29 +1,28 @@
-package ru.alastar.minedonate.network.packets.manage;
+package ru.alastar.minedonate.network.manage.packets;
 
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import io.netty.buffer.ByteBuf;
 import ru.alastar.minedonate.rtnl.Utils;
 
-public class FreezeShopPacket implements IMessage {
+public class FreezeAccountPacket implements IMessage {
 
-	public int shopId ;
+	public String player ;
 	public String reason ;
 	
-    public FreezeShopPacket ( ) { }
-    public FreezeShopPacket ( int _shopId, String _reason ) {
+    public FreezeAccountPacket ( ) { }
+    public FreezeAccountPacket ( String _player, String _reason ) {
     	
-    	shopId = _shopId ;
+    	player = _player ;
     	reason = _reason ;
     	
     }
 
     @Override 
     public void toBytes ( ByteBuf buf ) {
-    	
-    	buf . writeInt ( shopId ) ;
-    	
+    	    	
     	try {
     	
+    		Utils . netWriteString ( buf, player ) ;
     		Utils . netWriteString ( buf, reason ) ;
     		
     	} catch ( Exception ex ) {
@@ -37,10 +36,9 @@ public class FreezeShopPacket implements IMessage {
     @Override 
     public void fromBytes ( ByteBuf buf ) {
 
-	   shopId = buf . readInt ( ) ;
-
 	   	try {
 	    	
+	   		player = Utils . netReadString ( buf ) ;
 	   		reason = Utils . netReadString ( buf ) ;
 			
 		} catch ( Exception ex ) {

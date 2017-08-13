@@ -8,9 +8,9 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.network.handlers.*;
-import ru.alastar.minedonate.network.handlers.manage.*;
+import ru.alastar.minedonate.network.manage.handlers.*;
+import ru.alastar.minedonate.network.manage.packets.*;
 import ru.alastar.minedonate.network.packets.*;
-import ru.alastar.minedonate.network.packets.manage.*;
 
 public class ModNetwork {
 
@@ -22,16 +22,20 @@ public class ModNetwork {
     	
     	int i = 0 ;
     	
+        networkChannel . registerMessage ( SupportedFeaturesPacketHandler . class, SupportedFeaturesPacket . class, i ++, Side . CLIENT ) ;
         networkChannel . registerMessage ( AccountInfoPacketHandler . class, AccountInfoPacket . class, i ++, Side . CLIENT ) ;
+        networkChannel . registerMessage ( MoneyChangedPacketHandler . class, MoneyChangedPacket . class, i ++, Side . CLIENT ) ;
+
         networkChannel . registerMessage ( AddMerchPacketHandler . class, AddMerchPacket . class, i ++, Side . CLIENT ) ;
         
         networkChannel . registerMessage ( BuyPacketHandler . class, BuyPacket . class, i ++, Side . SERVER ) ;
         networkChannel . registerMessage ( BuyResponsePacketHandler . class, BuyResponsePacket . class, i ++, Side . CLIENT ) ;
 
-        networkChannel . registerMessage ( SupportedFeaturesPacketHandler . class, SupportedFeaturesPacket . class, i ++, Side . CLIENT ) ;
         networkChannel . registerMessage ( RemoveMerchPacketHandler . class, RemoveMerchPacket . class, i ++, Side . CLIENT ) ;
         networkChannel . registerMessage ( MerchInfoPacketHandler . class, MerchInfoPacket . class, i ++, Side . CLIENT ) ;
 
+        //
+        
         i ++ ;
  
         networkChannel . registerMessage ( NeedUpdateServerPacketHandler . class, NeedUpdatePacket . class, i, Side .  SERVER ) ;
@@ -41,23 +45,42 @@ public class ModNetwork {
 
         networkChannel . registerMessage ( NeedShopCategoryServerPacketHandler . class, NeedShopCategoryPacket . class, i ++, Side . SERVER ) ;
         
-        networkChannel . registerMessage ( CategoryPacketHandler . class, CategoryPacket . class, i ++, Side . CLIENT ) ;
-        networkChannel . registerMessage ( MoneyChangedPacketHandler . class, MoneyChangedPacket . class, i ++, Side . CLIENT ) ;
+        //
         
-        networkChannel . registerMessage ( ManageResponseClientPacketHandler . class, ManageResponsePacket . class, i ++, Side . CLIENT ) ;
-
+        networkChannel . registerMessage ( CategoryPacketHandler . class, CategoryPacket . class, i ++, Side . CLIENT ) ;
+        
+        //
+        
         networkChannel . registerMessage ( CreateNewShopServerPacketHandler . class, CreateNewShopPacket . class, i ++, Side . SERVER ) ;
         networkChannel . registerMessage ( DeleteShopServerPacketHandler . class, DeleteShopPacket . class, i ++, Side . SERVER ) ;
         networkChannel . registerMessage ( RenameShopServerPacketHandler . class, RenameShopPacket . class, i ++, Side . SERVER ) ;
+     
         networkChannel . registerMessage ( FreezeShopServerPacketHandler . class, FreezeShopPacket . class, i ++, Side . SERVER ) ;
         networkChannel . registerMessage ( UnfreezeShopServerPacketHandler . class, UnfreezeShopPacket . class, i ++, Side . SERVER ) ;
 
+        //
+        
         networkChannel . registerMessage ( FreezeAccountServerPacketHandler . class, FreezeAccountPacket . class, i ++, Side . SERVER ) ;
         networkChannel . registerMessage ( UnfreezeAccountServerPacketHandler . class, UnfreezeAccountPacket . class, i ++, Side . SERVER ) ;
         
+        //
+        
         networkChannel . registerMessage ( InventoryShopServerPacketHandler . class, InventoryShopPacket . class, i ++, Side . SERVER ) ;
         networkChannel . registerMessage ( ItemMergedClientPacketHandler . class, ItemMergedPacket . class, i ++, Side . CLIENT ) ;
+   
+        //
+        
         networkChannel . registerMessage ( AddNewItemServerPacketHandler . class, AddNewItemPacket . class, i ++, Side . SERVER ) ;
+        
+        //
+        
+        networkChannel . registerMessage ( DeleteShopMerchServerPacketHandler . class, DeleteShopMerchPacket . class, i ++, Side . SERVER ) ;
+        networkChannel . registerMessage ( EditMerchNumberServerPacketHandler . class, EditMerchNumberPacket . class, i ++, Side . SERVER ) ;
+        networkChannel . registerMessage ( EditMerchStringServerPacketHandler . class, EditMerchStringPacket . class, i ++, Side . SERVER ) ;
+        
+        //
+        
+        networkChannel . registerMessage ( ManageResponseClientPacketHandler . class, ManageResponsePacket . class, i ++, Side . CLIENT ) ;
 
     }
 
@@ -103,9 +126,9 @@ public class ModNetwork {
 
 	}
 
-	public static void sendToAllRemoveMerchPacket ( int shopId, int id, int catId ) {
+	public static void sendToAllRemoveMerchPacket ( int shopId, int catId, int id ) {
 	
-	    networkChannel . sendToAll ( new RemoveMerchPacket ( shopId, id, catId ) ) ;
+	    networkChannel . sendToAll ( new RemoveMerchPacket ( shopId, catId, id ) ) ;
 
 	}
 
@@ -163,6 +186,12 @@ public class ModNetwork {
 		
 	}
 
+	public static void sendToServerDeleteShopMerchPacket ( int shopId, int catId, int merchId ) {
+
+        networkChannel . sendToServer ( new DeleteShopMerchPacket ( shopId, catId, merchId ) ) ;
+
+	}
+	
 	public static void sendToServerFreezeAccountPacket ( String player, String reason ) {
 		
 		networkChannel . sendToServer ( new FreezeAccountPacket ( player, reason ) ) ;
@@ -182,7 +211,7 @@ public class ModNetwork {
 	}
 	
 	public static void sendToServerRenameMerchPacket ( int shopId, int catId, int merchId, EditMerchStringPacket . Type type, String s ) {
-		
+
 		networkChannel . sendToServer ( new EditMerchStringPacket ( shopId, catId, merchId, type,s ) ) ;
 		
 	}

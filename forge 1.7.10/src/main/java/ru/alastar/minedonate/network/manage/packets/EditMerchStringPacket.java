@@ -1,4 +1,4 @@
-package ru.alastar.minedonate.network.packets.manage;
+package ru.alastar.minedonate.network.manage.packets;
 
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import io.netty.buffer.ByteBuf;
@@ -8,17 +8,17 @@ public class EditMerchStringPacket implements IMessage {
 
 	public int shopId, catId, merchId ;
 	public Type type ;
-	public String s ;
+	public String str ;
 	
     public EditMerchStringPacket ( ) { }
     
-    public EditMerchStringPacket ( int _shopId, int _catId, int _merchId, Type _type, String _s ) {
+    public EditMerchStringPacket ( int _shopId, int _catId, int _merchId, Type _type, String _str ) {
     	
     	shopId = _shopId ;
     	catId = _catId ;
     	merchId = _merchId ;
     	type = _type ;
-    	s = _s ;
+    	str = _str ;
     	
     }
     
@@ -30,7 +30,7 @@ public class EditMerchStringPacket implements IMessage {
 		buf . writeInt ( merchId ) ;
 		buf . writeInt ( type . ordinal ( ) ) ;
 
-		boolean b = s == null || s . trim ( ) . isEmpty ( ) ;
+		boolean b = str == null || str . trim ( ) . isEmpty ( ) ;
 		
 		buf . writeBoolean ( b ) ;
 		
@@ -38,7 +38,7 @@ public class EditMerchStringPacket implements IMessage {
 			
 			try {
 				
-				Utils . netWriteString ( buf, s ) ;
+				Utils . netWriteString ( buf, str ) ;
 				
 			} catch ( Exception ex ) {
 				
@@ -64,7 +64,7 @@ public class EditMerchStringPacket implements IMessage {
     		
 			try {
 				
-				s = Utils . netReadString ( buf ) ;
+				str = Utils . netReadString ( buf ) ;
 				
 			} catch ( Exception ex ) {
 				
@@ -74,7 +74,7 @@ public class EditMerchStringPacket implements IMessage {
 			
     	} else {
     		
-    		s = "" ;
+    		str = "" ;
     		
     	}
     	

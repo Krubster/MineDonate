@@ -5,6 +5,7 @@ import net.minecraft.server.MinecraftServer;
 
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
+import ru.alastar.minedonate.merch.categories.MerchCategory.Type;
 import ru.alastar.minedonate.merch.info.PrivilegieInfo;
 import ru.alastar.minedonate.plugin.PluginHelper;
 import ru.alastar.minedonate.proxies.ClientProxy;
@@ -47,7 +48,7 @@ public class Privelegies extends MerchCategory {
     public void addMerch(Merch merch) {
         super.addMerch(merch);
         final PrivilegieInfo info = (PrivilegieInfo) merch;
-        ClientProxy.loadIcon(info.picture_url, info.merch_id);
+        MineDonate.proxy.loadIcon(info.picture_url, info.merch_id);
     }
 
     @Override
@@ -56,18 +57,17 @@ public class Privelegies extends MerchCategory {
         try {
             while (rs.next()) {
                 final PrivilegieInfo info = new PrivilegieInfo(shopId, catId, i, rs.getString("name"), rs.getString("description"), rs.getString("pic_url"), rs.getInt("cost"), rs.getLong("time"), rs.getString("worlds"));
-                this.m_Merch = Arrays.copyOf(m_Merch, i + 1);
-                m_Merch[i] = info;
+                this.addMerch(info);
                 ++i;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        MinecraftServer.getServer().logInfo("Loaded " + m_Merch.length + " groups");
+        MinecraftServer.getServer().logInfo("Loaded " + m_Merch.size() + " groups");
     }
 
     @Override
-    public String getDatabase() {
+    public String getDatabaseTable ( ) {
         return MineDonate.cfg.dbPrivelegies;
     }
 
@@ -119,4 +119,11 @@ public class Privelegies extends MerchCategory {
 
     }
 
+	@Override
+    public Type getCatType ( ) {
+    	
+    	return Type . PRIVELEGIES ;
+    	
+    }
+    
 }

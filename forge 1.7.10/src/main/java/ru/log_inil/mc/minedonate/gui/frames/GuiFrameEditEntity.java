@@ -3,8 +3,8 @@ package ru.log_inil.mc.minedonate.gui.frames;
 import net.minecraft.client.gui.GuiButton;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.gui.ShopGUI;
-import ru.alastar.minedonate.network.packets.manage.EditMerchNumberPacket;
-import ru.alastar.minedonate.network.packets.manage.EditMerchStringPacket;
+import ru.alastar.minedonate.network.manage.packets.EditMerchNumberPacket;
+import ru.alastar.minedonate.network.manage.packets.EditMerchStringPacket;
 import ru.alastar.minedonate.rtnl.ModNetwork;
 
 import ru.log_inil.mc.minedonate.localData.frames.DataOfUIFramEditItem;
@@ -22,9 +22,13 @@ public class GuiFrameEditEntity extends GuiFrameEditItem {
 		
     	super . postShow ( g ) ;
 
-    	limitField.setEnabled(false);
-    	limitField.setVisible(false);
-
+    	if ( limitField != null ) {
+	    
+    		limitField.setEnabled(false);
+	    	limitField.setVisible(false);
+	    	
+    	}
+    	
     }
 	
     @Override
@@ -51,9 +55,7 @@ public class GuiFrameEditEntity extends GuiFrameEditItem {
     				}
     				
 	    		} catch ( Exception ex ) {
-	    			
-	    			ex . printStackTrace ( ) ;
-	    			
+	    				    			
 	    		}
     			
     		}
@@ -73,9 +75,7 @@ public class GuiFrameEditEntity extends GuiFrameEditItem {
 				}
 				
     		} catch ( Exception ex ) {
-    			
-    			ex . printStackTrace ( ) ;
-    			
+    			    			
     		}
 
     		if ( ! nameField . getText ( ) . trim ( ) . equals ( fieldText ) ) {

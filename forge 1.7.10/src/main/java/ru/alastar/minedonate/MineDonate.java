@@ -171,7 +171,7 @@ public class MineDonate {
                 	
                     stmt = m_DB_Connection . createStatement ( ) ;
                     
-                    rs = stmt . executeQuery ( "SELECT * FROM " + shops . get ( 0 ) . cats [ i ] . getDatabase ( ) + ";" ) ;
+                    rs = stmt . executeQuery ( "SELECT * FROM " + shops . get ( 0 ) . cats [ i ] . getDatabaseTable ( ) + ";" ) ;
                     
                     shops . get ( 0 ) . cats [ i ] . loadMerchFromDB ( rs ) ;
                     
@@ -364,7 +364,7 @@ public class MineDonate {
                 	
                     Statement stmt = getNewStatement ( ) ;
                     
-                    ResultSet rs = stmt . executeQuery ( "SELECT * FROM " + shops . get ( shopId ) . cats [ i ] . getDatabase ( ) + " WHERE shopId = " + shopId + ";" ) ;
+                    ResultSet rs = stmt . executeQuery ( "SELECT * FROM " + shops . get ( shopId ) . cats [ i ] . getDatabaseTable ( ) + " WHERE shopId = " + shopId + ";" ) ;
                     
                     shops . get ( shopId ) . cats [ i ] . loadMerchFromDB ( rs ) ;
                     
