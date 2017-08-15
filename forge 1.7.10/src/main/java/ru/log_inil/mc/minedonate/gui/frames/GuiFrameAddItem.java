@@ -47,7 +47,7 @@ public class GuiFrameAddItem extends GuiFrame {
 		
 	}
 	
-    public void draw(ShopGUI g, int page, int mouseX, int mouseY, float partialTicks, DrawType dt ) {
+    public void draw ( ShopGUI g, int page, int mouseX, int mouseY, float partialTicks, DrawType dt ) {
 
     	g . drawRect ( posX, posY, posX + width, posY + height, backgroundColor ) ;
     	
@@ -59,7 +59,7 @@ public class GuiFrameAddItem extends GuiFrame {
     	costField . drawTextBox ( ) ;
     	limitField . drawTextBox ( ) ;
     	
-    	if ( MineDonate.getAccount().ms.currentItemStack != null ) {
+    	if ( MineDonate . getAccount ( ) . ms . currentItemStack != null ) {
     		
 			RenderHelper . enableGUIStandardItemLighting ( ) ;
 
@@ -249,7 +249,7 @@ public class GuiFrameAddItem extends GuiFrame {
     		
     		g . setLoading ( true ) ;
     		
-            ModNetwork . sendToServerAddNewItemPacket ( shopId, catId, limit, cost, this . nameField . getText ( ) ) ;
+            ModNetwork . sendToServerAddNewEntryPacket ( shopId, catId, limit, cost, this . nameField . getText ( ) ) ;
             
             this . hideFrame ( g ) ;
            

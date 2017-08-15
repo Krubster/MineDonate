@@ -9,6 +9,7 @@ import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.commands.AddEntityCommand;
 import ru.alastar.minedonate.commands.AddItemCommand;
 import ru.alastar.minedonate.commands.AdminCommand;
+import ru.alastar.minedonate.events.EntitySelectEventHandler;
 import ru.alastar.minedonate.events.MouseEventHandler;
 import ru.alastar.minedonate.plugin.PluginHelper;
 import ru.alastar.minedonate.rtnl.ModNetwork;
@@ -29,7 +30,8 @@ public class ServerProxy extends CommonProxy {
         MineDonate.initDataBase();
 
         MinecraftForge.EVENT_BUS.register(new MouseEventHandler());
-        
+        MinecraftForge.EVENT_BUS.register(new EntitySelectEventHandler());
+
     }
     
     

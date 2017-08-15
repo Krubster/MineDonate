@@ -397,7 +397,7 @@ public class MineDonate {
 	
     public static void AddItemToStock(ItemStack heldItem, String name, String cost, String limit) {
        
-    	ItemInfo info = new ItemInfo(0, 0, shops.get(0).cats[0].getMerch().length, Integer.valueOf(cost), name, "new merch", Integer.valueOf(limit), heldItem);
+    	ItemInfo info = new ItemInfo(0, 0, shops.get(0).cats[0].getMerch().length, Integer.valueOf(cost), name, Integer.valueOf(limit), heldItem);
        
         shops.get(0).cats[0].addMerch(info);
        
@@ -568,6 +568,18 @@ public class MineDonate {
 
     }
     
+	public static Account getAccountFromCache ( String name ) {
+
+		if ( users . containsKey ( name ) ) {
+			
+			return users . get ( name ) ;
+			
+		}
+		
+		return null ;
+	
+	}
+	
 	public static Account getAccount ( String name ) {
 
 		if ( users . containsKey ( name ) ) {

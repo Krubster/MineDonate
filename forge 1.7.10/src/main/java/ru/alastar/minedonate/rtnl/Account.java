@@ -4,7 +4,9 @@ import java.util.List;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import ru.alastar.minedonate.MineDonate;
 
 public class Account {
@@ -75,6 +77,12 @@ public class Account {
 
 	}
 	
+	public boolean canUnlimitedEntities ( ) {
+		
+		return hasPermission ( "unlimitedEntities" ) || hasPermission ( "*" ) ;
+
+	}
+	
 	public boolean canCreateShop ( ) {
 		
 		return hasPermission ( "createShop" ) || hasPermission ( "*" ) ;
@@ -131,7 +139,9 @@ public class Account {
 	public class ManageSession {
 	
 		public ItemStack currentItemStack ;
-		
+	    public boolean mobSelect = false ;
+		public Entity currentMob ;
+
 		public void setItemStack ( ItemStack _currentItemStack ) {
 			
 			currentItemStack = _currentItemStack ;

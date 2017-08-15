@@ -37,7 +37,7 @@ public class GuiFrameEditEntity extends GuiFrameEditItem {
     	
     		g . setLoading ( true ) ;
     		
-    		if ( MineDonate . getAccount ( ) . canUnlimitedItems ( ) ) {
+    		if ( MineDonate . getAccount ( ) . canUnlimitedEntities ( ) ) {
 
     			try {
     				

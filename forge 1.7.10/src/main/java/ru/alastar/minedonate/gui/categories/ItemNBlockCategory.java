@@ -88,7 +88,9 @@ public class ItemNBlockCategory extends ShopCategory {
 
     @Override
     public void updateButtons(ShopGUI relative, int page ) {
-    	    	    	    	
+
+    	rightButton = relative.rightButton;
+    	/*
     	if ( ! ( relative.getCurrentCategory() instanceof ItemNBlockCategory ) ) {
     		
     		rightButton = (GuiButton) relative.getButtonList().get(relative.getButtonList().size()-1);
@@ -105,7 +107,7 @@ public class ItemNBlockCategory extends ShopCategory {
 
     		rightButton = relative.exitButton;
     		
-    	}
+    	}*/
 
     	if ( addButton != null ) {
     		
@@ -115,10 +117,25 @@ public class ItemNBlockCategory extends ShopCategory {
 
     	if ( rightButton != null ) {
     		
-    		relative . getButtonList ( ) . add ( addButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), 
-        			rightButton . xPosition -  MineDonate . cfgUI . cats . itemsAndBlocks . addButton . width,
-        			rightButton . yPosition, MineDonate . cfgUI . cats . itemsAndBlocks . addButton . width, MineDonate . cfgUI . cats . itemsAndBlocks . addButton . height, MineDonate . cfgUI . cats . itemsAndBlocks . addButton . text, false ) ) ;
-	
+    		if ( addButton == null ) {
+	    	
+    			relative . getButtonList ( ) . add ( addButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), 
+	        			rightButton . xPosition -  MineDonate . cfgUI . cats . itemsAndBlocks . addButton . width,
+	        			rightButton . yPosition, MineDonate . cfgUI . cats . itemsAndBlocks . addButton . width, MineDonate . cfgUI . cats . itemsAndBlocks . addButton . height, MineDonate . cfgUI . cats . itemsAndBlocks . addButton . text, false ) ) ;
+    		
+    		} else {
+    			
+    			if ( ! relative . getButtonList ( ) . contains ( addButton ) ) {
+    				
+    				relative . getButtonList ( ) . add ( addButton ) ;
+    				
+    			}
+    			
+    			addButton . xPosition = rightButton . xPosition - MineDonate . cfgUI . cats . itemsAndBlocks . addButton . width ;
+    			addButton . yPosition = rightButton . yPosition ;
+    			
+    		}
+
     	}
     	
     	super.updateButtons(relative, page);
@@ -129,8 +146,8 @@ public class ItemNBlockCategory extends ShopCategory {
     public boolean actionPerformed(ShopGUI g, GuiButton button) {
     	
     	super.actionPerformed(g, button);
-    	
-        if ( button instanceof CountButton ) {
+
+    	if ( button instanceof CountButton ) {
         	
             CountButton countButton = (CountButton) button;
             countButton.tryModify();
@@ -141,7 +158,7 @@ public class ItemNBlockCategory extends ShopCategory {
         	
         	GuiFrameAddItem gfai = ( GuiFrameAddItem ) g . showEntry ( "frame.item.add", true ) ;
         	
-        	gfai . setInfo ( g . getCurrentShopId ( ), g . getCurrentCategory ( ) . getCatId ( ) ) ;
+        	gfai . setInfo ( g . getCurrentShopId ( ), catId ) ; // g . getCurrentCategory ( ) . getCatId ( ) ) ;
         	
         	MineDonateGUIHandler . setBackShopGUI ( true ) ;
         	

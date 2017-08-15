@@ -4,11 +4,12 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import net.minecraft.entity.player.EntityPlayerMP;
-
+import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.rtnl.ModNetwork;
 
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -71,6 +72,35 @@ public abstract class MerchCategory {
         
     }
 
+	public int getNextMerchId ( ) {
+		
+        try {
+        	
+        	Statement stmt = MineDonate . getNewStatement ( ) ;
+            ResultSet rs = stmt . executeQuery ( "SHOW TABLE STATUS LIKE '" + getDatabaseTable ( ) + "';" ) ;
+
+            int r = -1 ;
+            while ( rs . next ( ) ) {
+
+                r = rs . getInt ( "Auto_increment" ) ;
+
+            }
+            
+            rs . close ( ) ;
+            stmt . close ( ) ;
+
+            return r ;
+            
+        } catch ( Exception ex ) {
+            
+        	ex . printStackTrace ( ) ;
+            
+        }
+
+        return -1 ;
+        
+	}
+    
     public Merch [ ] getMerch() {
     	
     	Merch [ ] m = new Merch [ m_Merch . size ( ) ] ;
@@ -113,5 +143,5 @@ public abstract class MerchCategory {
     	ITEMS, PRIVELEGIES, REGIONS, ENTITIES, SHOPS
     	
     }
-    
+
 }

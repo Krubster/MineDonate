@@ -10,6 +10,9 @@ import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.network.handlers.*;
 import ru.alastar.minedonate.network.manage.handlers.*;
 import ru.alastar.minedonate.network.manage.packets.*;
+import ru.alastar.minedonate.network.manage.packets.ManageResponsePacket.ResponseCode;
+import ru.alastar.minedonate.network.manage.packets.ManageResponsePacket.ResponseStatus;
+import ru.alastar.minedonate.network.manage.packets.ManageResponsePacket.ResponseType;
 import ru.alastar.minedonate.network.packets.*;
 
 public class ModNetwork {
@@ -70,8 +73,11 @@ public class ModNetwork {
    
         //
         
-        networkChannel . registerMessage ( AddNewItemServerPacketHandler . class, AddNewItemPacket . class, i ++, Side . SERVER ) ;
+        networkChannel . registerMessage ( AddNewEntryServerPacketHandler . class, AddNewEntryPacket . class, i ++, Side . SERVER ) ;
         
+        networkChannel . registerMessage ( MobSelectServerPacketHandler . class, MobSelectPacket . class, i ++, Side . SERVER ) ;
+        networkChannel . registerMessage ( MobSelectClientPacketHandler . class, MobSelectPacket . class, i ++, Side . CLIENT ) ;
+
         //
         
         networkChannel . registerMessage ( DeleteShopMerchServerPacketHandler . class, DeleteShopMerchPacket . class, i ++, Side . SERVER ) ;
@@ -150,6 +156,18 @@ public class ModNetwork {
 
 	}
 
+	public static void sendToManageResponsePacket ( EntityPlayerMP player, ResponseType type, ResponseCode code, ResponseStatus status ) {
+		
+        networkChannel . sendTo ( new ManageResponsePacket ( type, code, status ), player ) ;
+
+	}
+	
+	public static void sendToMobSelectPacket ( EntityPlayerMP player, int s ) {
+
+		networkChannel . sendTo ( new MobSelectPacket ( s ), player ) ;
+
+	}
+
 	public static void sendToServerCreateNewShopPacket ( String createNewShop ) {
 
         networkChannel . sendToServer ( new CreateNewShopPacket ( createNewShop ) ) ;
@@ -180,12 +198,18 @@ public class ModNetwork {
 		
 	}
 
-	public static void sendToServerAddNewItemPacket ( int shopId, int catId, int limit, int cost, String name ) {
+	public static void sendToServerAddNewEntryPacket ( int shopId, int catId, int limit, int cost, String name ) {
 		
-		networkChannel . sendToServer ( new AddNewItemPacket ( shopId, catId, limit, cost, name ) ) ;
+		networkChannel . sendToServer ( new AddNewEntryPacket ( shopId, catId, limit, cost, name ) ) ;
 		
 	}
 
+	public static void sendToServerMobSelectPacket ( int s ) {
+
+		networkChannel . sendToServer ( new MobSelectPacket ( s ) ) ;
+
+	}
+	
 	public static void sendToServerDeleteShopMerchPacket ( int shopId, int catId, int merchId ) {
 
         networkChannel . sendToServer ( new DeleteShopMerchPacket ( shopId, catId, merchId ) ) ;

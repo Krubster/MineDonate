@@ -4,13 +4,13 @@ import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import io.netty.buffer.ByteBuf;
 import ru.alastar.minedonate.rtnl.Utils;
 
-public class AddNewItemPacket implements IMessage {
+public class AddNewEntryPacket implements IMessage {
 
 	public int shopId, catId, limit, cost ;
 	public String name ;
 	
-    public AddNewItemPacket ( ) { }
-    public AddNewItemPacket ( int _shopId, int _catId, int _limit, int _cost, String _name ) {
+    public AddNewEntryPacket ( ) { }
+    public AddNewEntryPacket ( int _shopId, int _catId, int _limit, int _cost, String _name ) {
     	
     	shopId = _shopId ;
     	catId = _catId ;

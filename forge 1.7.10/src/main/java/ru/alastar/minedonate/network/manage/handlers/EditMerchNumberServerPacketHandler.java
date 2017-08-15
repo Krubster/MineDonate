@@ -22,7 +22,7 @@ public class EditMerchNumberServerPacketHandler implements IMessageHandler < Edi
         
     	if ( ! MineDonate . checkShopAndLoad ( message . shopId ) ) {
     		
-			return new ManageResponsePacket ( ManageResponsePacket.ResponseType.ENTRIES, ManageResponsePacket.ResponseCode.EDIT, ManageResponsePacket.ResponseStatus.ERROR_SHOP_NOTFOUND ) ;
+			return new ManageResponsePacket ( ManageResponsePacket.ResponseType.OBJ, ManageResponsePacket.ResponseCode.EDIT, ManageResponsePacket.ResponseStatus.ERROR_SHOP_NOTFOUND ) ;
 
     	}
     	
@@ -36,35 +36,57 @@ public class EditMerchNumberServerPacketHandler implements IMessageHandler < Edi
 			
 			if ( s . isFreezed ) {
 
-				return new ManageResponsePacket ( ManageResponsePacket.ResponseType.ENTRIES, ManageResponsePacket.ResponseCode.EDIT, ManageResponsePacket.ResponseStatus.ERROR_SHOP_FREEZED ) ;
+				return new ManageResponsePacket ( ManageResponsePacket.ResponseType.OBJ, ManageResponsePacket.ResponseCode.EDIT, ManageResponsePacket.ResponseStatus.ERROR_SHOP_FREEZED ) ;
 
 			}
 			
 			if ( ! MineDonate . checkCatExists ( s . sid, message . catId ) ) {
 				
-				return new ManageResponsePacket ( ManageResponsePacket.ResponseType.ENTRIES, ManageResponsePacket.ResponseCode.EDIT, ManageResponsePacket.ResponseStatus.ERROR_CAT_NOTFOUND ) ;
+				return new ManageResponsePacket ( ManageResponsePacket.ResponseType.OBJ, ManageResponsePacket.ResponseCode.EDIT, ManageResponsePacket.ResponseStatus.ERROR_CAT_NOTFOUND ) ;
 
 			}
 			
 			if ( ! s . cats [ message . catId ] . merchExists ( message . merchId ) ) {
 				
-		        return new ManageResponsePacket ( ManageResponsePacket.ResponseType.ENTRIES, ManageResponsePacket.ResponseCode.EDIT, ManageResponsePacket.ResponseStatus.ERROR_ENTRY_NOTFOUND ) ;
+		        return new ManageResponsePacket ( ManageResponsePacket.ResponseType.OBJ, ManageResponsePacket.ResponseCode.EDIT, ManageResponsePacket.ResponseStatus.ERROR_ENTRY_NOTFOUND ) ;
 
 			}
 			
-			if ( message.type == EditMerchNumberPacket.Type.LIMIT && ! acc . canUnlimitedItems ( ) ) {
+			if ( message . type == EditMerchNumberPacket . Type . LIMIT ) {
+	
+				switch ( s . cats [ message . catId ] . getCatType ( ) ) {
+					
+					case ITEMS :
+						
+						if ( ! acc . canUnlimitedItems ( ) ) {
+							
+							return new ManageResponsePacket ( ManageResponsePacket.ResponseType.OBJ, ManageResponsePacket.ResponseCode.EDIT, ManageResponsePacket.ResponseStatus.ERROR_ACCESS_DENIED ) ;
 
-				return new ManageResponsePacket ( ManageResponsePacket.ResponseType.ENTRIES, ManageResponsePacket.ResponseCode.EDIT, ManageResponsePacket.ResponseStatus.ERROR_ACCESS_DENIED ) ;
+						}
+						
+					break ;
+					
+					case ENTITIES :
+						
+						if ( ! acc . canUnlimitedEntities ( ) ) {
+							
+							return new ManageResponsePacket ( ManageResponsePacket.ResponseType.OBJ, ManageResponsePacket.ResponseCode.EDIT, ManageResponsePacket.ResponseStatus.ERROR_ACCESS_DENIED ) ;
+
+						}
+						
+					break ;
+					
+				}		
 				
 			}
 			
 			Manager . editShopEntryNumber ( serverPlayer, s, message . catId, message . merchId, message . type, message . number ) ;
 			
-	        return new ManageResponsePacket ( ManageResponsePacket.ResponseType.ENTRIES, ManageResponsePacket.ResponseCode.EDIT, ManageResponsePacket.ResponseStatus.OK ) ;
+	        return new ManageResponsePacket ( ManageResponsePacket.ResponseType.OBJ, ManageResponsePacket.ResponseCode.EDIT, ManageResponsePacket.ResponseStatus.OK ) ;
 
 		} else {
 		
-	        return new ManageResponsePacket ( ManageResponsePacket.ResponseType.ENTRIES, ManageResponsePacket.ResponseCode.EDIT, ManageResponsePacket.ResponseStatus.ERROR_ACCESS_DENIED ) ;
+	        return new ManageResponsePacket ( ManageResponsePacket.ResponseType.OBJ, ManageResponsePacket.ResponseCode.EDIT, ManageResponsePacket.ResponseStatus.ERROR_ACCESS_DENIED ) ;
 
 		}
 		

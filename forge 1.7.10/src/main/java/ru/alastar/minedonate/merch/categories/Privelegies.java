@@ -83,6 +83,7 @@ public class Privelegies extends MerchCategory {
 
     @Override
     public void GiveMerch(EntityPlayerMP serverPlayer, Merch merch, int amount) {
+    	
         try {
             
         	final PrivilegieInfo info = (PrivilegieInfo) merch;

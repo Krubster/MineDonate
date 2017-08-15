@@ -83,7 +83,7 @@ public class UsersShopsCategory extends ShopCategory {
     	if ( returnButton != null ) {
     		
     		relative . removeButton ( returnButton ) ;
-    		
+
     	}
     	
     	if ( viewMyShopsButton != null ) {
@@ -99,7 +99,8 @@ public class UsersShopsCategory extends ShopCategory {
     	}
     	
     	relative . getButtonList ( ) . add ( returnButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), relative.exitButton.xPosition -  MineDonate . cfgUI . returnButton . width, relative . exitButton . yPosition, MineDonate . cfgUI . returnButton . width, MineDonate . cfgUI . returnButton . height, MineDonate . cfgUI . returnButton . text, false ) ) ;
-        
+        relative . rightButton = returnButton ;
+
     	relative . getButtonList ( ) . add ( viewMyShopsButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), relative.exitButton.xPosition -  MineDonate . cfgUI . cats . shops . viewMyShopsButton . width, relative . exitButton . yPosition, MineDonate . cfgUI . cats . shops . viewMyShopsButton . width, MineDonate . cfgUI . cats . shops . viewMyShopsButton . height, MineDonate . cfgUI . cats . shops . viewMyShopsButton . text, false ) ) ;
     	relative . getButtonList ( ) . add ( createNewShopButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), viewMyShopsButton.xPosition -  MineDonate . cfgUI . cats . shops . createNewShopButton . width, viewMyShopsButton . yPosition, MineDonate . cfgUI . cats . shops . createNewShopButton . width, MineDonate . cfgUI . cats . shops . createNewShopButton . height, MineDonate . cfgUI . cats . shops . createNewShopButton . text, false ) ) ;
     	
@@ -107,11 +108,11 @@ public class UsersShopsCategory extends ShopCategory {
     		
     		//userSC . updateButtons(relative, page);
     		userSC . postShow ( relative ) ;
-    		
+    	/*	
     		relative . getButtonList ( ) . add ( ( (ItemNBlockCategory) userSC ) . addButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), 
     				createNewShopButton . xPosition -  MineDonate . cfgUI . cats . itemsAndBlocks . addButton . width,
     				createNewShopButton.yPosition, MineDonate . cfgUI . cats . itemsAndBlocks . addButton . width, MineDonate . cfgUI . cats . itemsAndBlocks . addButton . height, MineDonate . cfgUI . cats . itemsAndBlocks . addButton . text, false ) ) ;
-	
+	*/
     	}
 
 
@@ -130,7 +131,7 @@ public class UsersShopsCategory extends ShopCategory {
     public boolean actionPerformed(ShopGUI g, GuiButton button) {
 
     	super.actionPerformed(g, button);
-    	
+
     	if ( userSC != null ) {
     		
     		userSC . actionPerformed ( g, button ) ;
@@ -151,53 +152,19 @@ public class UsersShopsCategory extends ShopCategory {
     				
     			}
     			
-    			/*
-    			if ( createNewShop ) {
-    			
-    				//gui . listTextFields . remove ( this . newShopNameField ) ;
-    				//createNewShop = false ;
-    				
-        			gui . updateButtons ( true ) ;
-        			updateButtons ( ) ;
-        			postShow ( g ) ;
-
-    				return true ;
-    				
-    			}*/
-    			
 				ShopGUI . instance . currentShop = selectedShop = 0 ;
 
     			updateUserShopCategory ( g, null, true ) ;
     			gui . updateButtons ( true ) ;
     			updateButtons ( ) ;
     			postShow ( g ) ;
-        		//relative . returnButton . enabled = relative . returnButton . visible =ShopGUI .instance . displayReturnButton = false ;
+
     			return true ;
     			
 			}
     		
     	}
     	
-    	/*
-		if ( returnButton != null && button . id == returnButton . id ) {
-
-			if ( createNewShop ) {
-				
-				//g . showEntry ( "createShop", true ) ;	
-
-				//gui . listTextFields . remove ( this . newShopNameField ) ;
-				//createNewShop = false ;
-				
-				gui . updateButtons ( true ) ;
-				updateButtons ( ) ;
-    			postShow ( g ) ;
-
-				return true ;
-				
-			}
-			
-		}*/
-		
 		if ( viewMyShopsButton != null && button . id == this . viewMyShopsButton . id ) {
 
 			gui . lockProcess ( ) ;
@@ -227,17 +194,6 @@ public class UsersShopsCategory extends ShopCategory {
 			gui . lockProcess ( ) ;
 
 			g . showEntry ( "frame.shop.create", true ) ;	
-
-			/*
-			if ( createNewShop && ! createNewShopFirst ) {
-
-				gui . loading = true ;
-                MineDonate . networkChannel . sendToServer ( new CreateNewShopPacket ( this . newShopNameField . getText ( ) ) ) ;
-
-			}*/
-			
-			//createNewShop = ! createNewShop ;
-			//createNewShopFirst = false ;
 
 			gui . updateButtons ( true ) ;
 			updateButtons ( ) ;

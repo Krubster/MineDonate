@@ -22,6 +22,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
+
 /**
  * Created by Alastar on 18.07.2017.
  */
@@ -49,7 +52,6 @@ public class ShopGUI extends MCGuiAccessible {
     private ShopCategory[] cats ;
     
     public List < GuiGradientTextField > listTextFields = new ArrayList < > ( ) ;
-    public List < GuiButton > noHidenButtonByGLScissor = new ArrayList < > ( ) ;
 
     public ScaledResolution resolution ;
 
@@ -64,7 +66,8 @@ public class ShopGUI extends MCGuiAccessible {
     GuiEntry lastEntry ;
     
     GuiFrameLoading gfl ;
-    
+    public GuiButton rightButton ;
+
     public ShopGUI ( ) {
 
     	cats = new ShopCategory [ ] { new ItemNBlockCategory ( "cat.items.base" ), new PrivilegieCategory ( "cat.privilegies" ), new RegionsCategory ( "cat.regions" ), new EntitiesCategory ( "cat.entities" ), new UsersShopsCategory ( "cat.shops" ) } ;
@@ -478,11 +481,14 @@ public class ShopGUI extends MCGuiAccessible {
         
     }
     
+    boolean show = true ;
+    int a = 0;
+
     @Override
     public void drawScreen ( int mouseX, int mouseY, float partialTicks ) {    	
-    
-    	this . drawRect ( 0, 0, resolution . getScaledWidth ( ), resolution . getScaledHeight ( ), 1258291200 ) ;
 
+    	this . drawRect ( 0, 0, resolution . getScaledWidth ( ), resolution . getScaledHeight ( ), 1258291200 ) ;
+    	
         if ( ! needNetUpdate ) {
         	
         	moneyArea . drawBalanceArea ( ( int ) resolution . getScaledWidth ( ) - 20, ( int ) ( resolution . getScaledHeight ( ) * 0.1 + 25 ), mouseX, mouseY ) ;
@@ -517,8 +523,7 @@ public class ShopGUI extends MCGuiAccessible {
 		        super . drawScreen ( mouseX, mouseY, partialTicks ) ;  
 		      
 		    	getCurrentCategory ( ) . draw ( this, m_Page, mouseX, mouseY, partialTicks, DrawType . POST ) ;   
-		    	
-		        getCurrentCategory ( ) . draw ( this, m_Page, mouseX, mouseY, partialTicks, DrawType . OVERLAY ) ;   
+		        // getCurrentCategory ( ) . draw ( this, m_Page, mouseX, mouseY, partialTicks, DrawType . OVERLAY ) ;   
 
 	        }
 	        
@@ -648,32 +653,23 @@ public class ShopGUI extends MCGuiAccessible {
     public void addButton ( GuiButton b, boolean noHide ) {
     	        
     	this . buttonList . add ( b ) ;
-    	
-        if ( noHide ) {
-        	
-        	noHidenButtonByGLScissor . add ( b ) ;
-        	
-        }
         
     }
     
     public void removeButton ( GuiButton but ) {
     	
     	this . buttonList . remove ( but ) ;
-    	this . noHidenButtonByGLScissor . remove ( but ) ;
     	
     }
 
     public void updateButtons ( boolean updateInCat ) {
 
     	buttonList.clear();
-        noHidenButtonByGLScissor.clear();
         addCategories();
 
         if ( MineDonate . cfgUI . addSearchButton ){
         
         	buttonList . add ( searchButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), 30, ( int ) ( ( resolution . getScaledHeight ( ) ) - ( resolution . getScaledHeight ( ) * 0.1 ) ) - 5, MineDonate . cfgUI . searchButton . width, MineDonate . cfgUI . searchButton . height, MineDonate . cfgUI . searchButton . text, false ) ) ;
-            noHidenButtonByGLScissor . add ( searchButton ) ;
 
         	if ( searchField == null ) {
         		
@@ -692,15 +688,12 @@ public class ShopGUI extends MCGuiAccessible {
         	
         }
         
-        buttonList . add ( exitButton = new GuiGradientButton ( 0, ( int ) ( resolution . getScaledWidth ( ) - 30 ) - MineDonate . cfgUI . exitButton . width, ( int ) ( ( resolution . getScaledHeight ( ) ) - ( resolution . getScaledHeight ( ) * 0.1 ) - 5 ), MineDonate . cfgUI . exitButton . width, MineDonate . cfgUI . exitButton . height, MineDonate . cfgUI . exitButton . text, false ) ) ;
-        noHidenButtonByGLScissor . add ( exitButton ) ;
+        buttonList . add ( rightButton = exitButton = new GuiGradientButton ( 0, ( int ) ( resolution . getScaledWidth ( ) - 30 ) - MineDonate . cfgUI . exitButton . width, ( int ) ( ( resolution . getScaledHeight ( ) ) - ( resolution . getScaledHeight ( ) * 0.1 ) - 5 ), MineDonate . cfgUI . exitButton . width, MineDonate . cfgUI . exitButton . height, MineDonate . cfgUI . exitButton . text, false ) ) ;
         // buttonList . add ( returnButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), exitButton.xPosition -  MineDonate . cfgUI . returnButton . width, exitButton . yPosition, MineDonate . cfgUI . returnButton . width, MineDonate . cfgUI . returnButton . height, MineDonate . cfgUI . returnButton . text, false ) ) ;
         
         buttonList . add ( pb = new PreviousButton ( ShopGUI . getNextButtonId ( ), ( int ) ( resolution . getScaledWidth ( ) * 0.5 ) - 20 - 2 , ( int ) ( ( resolution . getScaledHeight ( ) ) - ( resolution . getScaledHeight ( ) * 0.1 ) ) - 20 - 10, 20, 20, "<" ) ) ;
-        noHidenButtonByGLScissor . add ( pb ) ;
 
         buttonList . add ( nb = new NextButton ( ShopGUI . getNextButtonId ( ), pb . xPosition + pb . width + 4, pb . yPosition, 20, 20, ">" ) ) ;
-        noHidenButtonByGLScissor . add ( nb ) ;
 
         if ( getCurrentCategory ( ) . elementsOnPage ( ) != 0 && getCurrentCategory ( ) . getSourceCount ( getCurrentShopId ( ) ) > getCurrentCategory ( ) . elementsOnPage ( ) ) {
 

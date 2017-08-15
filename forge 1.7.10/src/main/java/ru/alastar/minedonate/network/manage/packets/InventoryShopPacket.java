@@ -1,4 +1,4 @@
-package ru.alastar.minedonate.network.packets;
+package ru.alastar.minedonate.network.manage.packets;
 
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import io.netty.buffer.ByteBuf;

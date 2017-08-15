@@ -22,7 +22,7 @@ public class DeleteShopMerchServerPacketHandler implements IMessageHandler < Del
     
     	if ( ! MineDonate . checkShopAndLoad ( message . shopId ) ) {
     		
-			return new ManageResponsePacket ( ManageResponsePacket.ResponseType.ENTRIES, ManageResponsePacket.ResponseCode.REMOVE, ManageResponsePacket.ResponseStatus.ERROR_SHOP_NOTFOUND ) ;
+			return new ManageResponsePacket ( ManageResponsePacket.ResponseType.OBJ, ManageResponsePacket.ResponseCode.REMOVE, ManageResponsePacket.ResponseStatus.ERROR_SHOP_NOTFOUND ) ;
 
     	}
     	
@@ -36,29 +36,29 @@ public class DeleteShopMerchServerPacketHandler implements IMessageHandler < Del
 			
 			if ( s . isFreezed ) {
 
-				return new ManageResponsePacket ( ManageResponsePacket.ResponseType.ENTRIES, ManageResponsePacket.ResponseCode.REMOVE, ManageResponsePacket.ResponseStatus.ERROR_SHOP_FREEZED ) ;
+				return new ManageResponsePacket ( ManageResponsePacket.ResponseType.OBJ, ManageResponsePacket.ResponseCode.REMOVE, ManageResponsePacket.ResponseStatus.ERROR_SHOP_FREEZED ) ;
 
 			}
 			
 			if ( ! MineDonate . checkCatExists ( s . sid, message . catId ) ) {
 				
-				return new ManageResponsePacket ( ManageResponsePacket.ResponseType.ENTRIES, ManageResponsePacket.ResponseCode.REMOVE, ManageResponsePacket.ResponseStatus.ERROR_CAT_NOTFOUND ) ;
+				return new ManageResponsePacket ( ManageResponsePacket.ResponseType.OBJ, ManageResponsePacket.ResponseCode.REMOVE, ManageResponsePacket.ResponseStatus.ERROR_CAT_NOTFOUND ) ;
 
 			}
 			
 			if ( ! s . cats [ message . catId ] . merchExists ( message . merchId ) ) {
 				
-		        return new ManageResponsePacket ( ManageResponsePacket.ResponseType.ENTRIES, ManageResponsePacket.ResponseCode.REMOVE, ManageResponsePacket.ResponseStatus.ERROR_ENTRY_NOTFOUND ) ;
+		        return new ManageResponsePacket ( ManageResponsePacket.ResponseType.OBJ, ManageResponsePacket.ResponseCode.REMOVE, ManageResponsePacket.ResponseStatus.ERROR_ENTRY_NOTFOUND ) ;
 
 			}
 			
 			Manager . removeEntryFromShop ( serverPlayer, s, message . catId, message . merchId ) ;
 			
-	        return new ManageResponsePacket ( ManageResponsePacket.ResponseType.ENTRIES, ManageResponsePacket.ResponseCode.REMOVE, ManageResponsePacket.ResponseStatus.OK ) ;
+	        return new ManageResponsePacket ( ManageResponsePacket.ResponseType.OBJ, ManageResponsePacket.ResponseCode.REMOVE, ManageResponsePacket.ResponseStatus.OK ) ;
 
 		} else {
 		
-	        return new ManageResponsePacket ( ManageResponsePacket.ResponseType.ENTRIES, ManageResponsePacket.ResponseCode.REMOVE, ManageResponsePacket.ResponseStatus.ERROR_ACCESS_DENIED ) ;
+	        return new ManageResponsePacket ( ManageResponsePacket.ResponseType.OBJ, ManageResponsePacket.ResponseCode.REMOVE, ManageResponsePacket.ResponseStatus.ERROR_ACCESS_DENIED ) ;
 
 		}
 	

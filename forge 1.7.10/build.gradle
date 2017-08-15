@@ -9,6 +9,7 @@ buildscript {
             name = "sonatype"
             url = "https://oss.sonatype.org/content/repositories/snapshots/"
         }
+		flatDir dirs: "libs/"
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
@@ -18,7 +19,7 @@ buildscript {
 apply plugin: 'forge'
 
 version = "0.7.1"
-group= "ru.alastar.minedonate" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group= "minedonate" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "minedonate"
 
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
@@ -34,7 +35,7 @@ minecraft {
 }
 
 dependencies {
-    compile files('libs/bukkit.jar','libs/pex.jar','libs/we.jar','libs/wg.jar')
+	compile files('libs/bukkit.jar', 'libs/we.jar', 'libs/wg.jar', 'libs/pex.jar')
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..
     //compile "some.group:artifact:version:classifier"

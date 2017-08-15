@@ -44,7 +44,6 @@ public class ItemNBlocks extends MerchCategory {
                 final ItemInfo info = new ItemInfo(shopId, catId, rs.getInt("id"),
                         rs.getInt("cost"),
                         rs.getString("name"),
-                        rs.getString("info"),
                         rs.getInt("lim"),
                         rs.getBlob("stack_data"));
                 this.addMerch(info);
@@ -88,9 +87,14 @@ public class ItemNBlocks extends MerchCategory {
         	
         }
         
-        info.limit -= amount;
+        if ( info.limit != -1 ) {
+        	
+        	info . limit -= amount ;
+        
+        }
   
         ItemStack stack = ItemStack.loadItemStackFromNBT(info.stack_data);
+        
         if ( info . name != null && ! info . name . trim ( ) . isEmpty ( ) ) {
         	
         	stack.setStackDisplayName(info.name);
@@ -167,8 +171,7 @@ public class ItemNBlocks extends MerchCategory {
         try {
             stmt = MineDonate.m_DB_Connection.createStatement();
             String sql;
-            System.err.println("WARN! REPLACE TO PREPARED STATEMENT!");
-            sql = "UPDATE " + getDatabaseTable() + " SET lim=" + info.limit + " WHERE name='" + info.name + "', and cost=" + info.cost + "  and info='" + info.info + "';";
+            sql = "UPDATE " + getDatabaseTable ( ) + " SET lim=" + info.limit + " WHERE id=" + info . merch_id + ( info . shopId > 0 ? " AND shopId=" + info . shopId : "" ) + ";";//name='" + info.name + "', and cost=" + info.cost + ";";
             stmt.executeUpdate(sql);
             stmt.close();
         } catch (SQLException e) {
