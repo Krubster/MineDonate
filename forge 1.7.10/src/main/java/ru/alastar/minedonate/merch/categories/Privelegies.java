@@ -2,14 +2,14 @@ package ru.alastar.minedonate.merch.categories;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import org.bukkit.Bukkit;
+
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
+import ru.alastar.minedonate.merch.categories.MerchCategory.Type;
 import ru.alastar.minedonate.merch.info.PrivilegieInfo;
 import ru.alastar.minedonate.plugin.PluginHelper;
 import ru.alastar.minedonate.proxies.ClientProxy;
 
-import java.lang.reflect.InvocationTargetException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -18,6 +18,8 @@ import java.util.Arrays;
  * Created by Alastar on 21.07.2017.
  */
 public class Privelegies extends MerchCategory {
+
+	boolean enabled = MineDonate.cfg.sellPrivelegies ;
 
     public Privelegies(int _shopId, int _catId, String _moneyType) {
 
@@ -32,17 +34,9 @@ public class Privelegies extends MerchCategory {
 
     @Override
     public void reverseFor(String log_msg, String player) {
-        try {
-            String name = log_msg.split(":")[2].split("-")[1];
-            Object obj = Bukkit.getPluginManager().getPlugin("PermissionsEx").getClass().getMethod("getUser", String.class).invoke(null, player);
-            obj.getClass().getMethod("removeGroup", String.class).invoke(obj, name);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        }
+        
+    	PluginHelper.pexMgr.removeGroup ( player, log_msg.split(":")[2].split("-")[1] ) ;
+
     }
 
     @Override
@@ -54,49 +48,42 @@ public class Privelegies extends MerchCategory {
     public void addMerch(Merch merch) {
         super.addMerch(merch);
         final PrivilegieInfo info = (PrivilegieInfo) merch;
-        ClientProxy.loadIcon(info.picture_url, info.merch_id);
+        MineDonate.proxy.loadIcon(info.picture_url, info.merch_id);
     }
 
     @Override
     public void loadMerchFromDB(ResultSet rs) {
-        int i = 0;
         try {
             while (rs.next()) {
-                final PrivilegieInfo info = new PrivilegieInfo(shopId, catId, i, rs.getString("name"), rs.getString("description"), rs.getString("pic_url"), rs.getInt("cost"), rs.getLong("time"), rs.getString("worlds"));
-                this.m_Merch = Arrays.copyOf(m_Merch, i + 1);
-                m_Merch[i] = info;
-                ++i;
+                final PrivilegieInfo info = new PrivilegieInfo(shopId, catId, rs.getInt("id"), rs.getString("name"), rs.getString("description"), rs.getString("pic_url"), rs.getInt("cost"), rs.getLong("time"), rs.getString("worlds"));
+                this.addMerch(info);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        MinecraftServer.getServer().logInfo("Loaded " + m_Merch.length + " groups");
+        MinecraftServer.getServer().logInfo("Loaded " + m_Merch.size() + " groups");
     }
 
     @Override
-    public String getDatabase() {
+    public String getDatabaseTable ( ) {
         return MineDonate.cfg.dbPrivelegies;
     }
 
     @Override
     public boolean isEnabled() {
-        return MineDonate.cfg.sellPrivelegies;
+        return enabled;
+    }
+    
+    @Override
+    public void setEnabled ( boolean _enabled ) {
+    	
+    	enabled = _enabled ;
+    	
     }
 
     @Override
     public void GiveMerch(EntityPlayerMP serverPlayer, Merch merch, int amount) {
         try {
-<<<<<<< HEAD
-            final PrivilegieInfo info = (PrivilegieInfo) merch;
-            if (info.worlds.length > 0) {
-                for (String world : info.worlds) {
-                    Object obj = Bukkit.getPluginManager().getPlugin("PermissionsEx").getClass().getMethod("getUser", String.class).invoke(null, serverPlayer.getDisplayName());
-                    obj.getClass().getMethod("addGroup", String.class, String.class, long.class).invoke(obj, info.name, world, info.getTimeInSeconds());
-                }
-            } else {
-                Object obj = Bukkit.getPluginManager().getPlugin("PermissionsEx").getClass().getMethod("getUser", String.class).invoke(null, serverPlayer.getDisplayName());
-                obj.getClass().getMethod("addGroup", String.class, String.class, long.class).invoke(obj, info.name, "*", info.getTimeInSeconds());
-=======
             
         	final PrivilegieInfo info = (PrivilegieInfo) merch;
             
@@ -113,7 +100,6 @@ public class Privelegies extends MerchCategory {
             	PluginHelper.pexMgr.addGroup(serverPlayer.getDisplayName(), info.name, null, info.getTimeInSeconds());
               //  Object obj = Bukkit.getPluginManager().getPlugin("PermissionsEx").getClass().getMethod("getUser", String.class).invoke(null, serverPlayer.getDisplayName());
               // obj.getClass().getMethod("addGroup", String.class, String.class, long.class).invoke(obj, info.name, "*", info.getTimeInSeconds());
->>>>>>> log_inil
             }
             
         } catch ( Exception ex ) {
@@ -131,14 +117,11 @@ public class Privelegies extends MerchCategory {
 
     }
 
-<<<<<<< HEAD
-    @Override
-    public String getMoneyType() {
-
-        return moneyType;
-
+	@Override
+    public Type getCatType ( ) {
+    	
+    	return Type . PRIVELEGIES ;
+    	
     }
-
-=======
->>>>>>> log_inil
+    
 }

@@ -14,10 +14,12 @@ public class RemoveMerchPacketHandler  implements IMessageHandler<RemoveMerchPac
     public RemoveMerchPacketHandler(){
 
     }
-    @Override public IMessage onMessage(RemoveMerchPacket message, MessageContext ctx) {
-        MineDonate.RemoveMerch(message.shopId, message.category_id, message.merch_id);
+    @Override 
+    public IMessage onMessage(RemoveMerchPacket message, MessageContext ctx) {
+    	System.err.println(message.category_id + ">> " + message.merch_id);
+        MineDonate.removeMerch(message.shopId, message.category_id, message.merch_id);
         if(ShopGUI.instance != null){
-            ShopGUI.instance.updateBtns();
+            ShopGUI.instance.updateButtons(true);
         }
         return null;
     }

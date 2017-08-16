@@ -1,13 +1,14 @@
 package ru.alastar.minedonate.gui;
 
-import net.minecraft.client.gui.GuiButton;
 import ru.alastar.minedonate.merch.info.ItemInfo;
+
 import ru.log_inil.mc.minedonate.gui.GuiAbstractItemEntry;
+import ru.log_inil.mc.minedonate.gui.GuiTexturedButton;
 
 /**
  * Created by Alastar on 23.07.2017.
  */
-public class CountButton extends GuiButton {
+public class CountButton extends GuiTexturedButton {
     private int mod;
     private ItemInfo info;
     private static int max_mul = 10;
@@ -42,7 +43,13 @@ public class CountButton extends GuiButton {
 
         if (info.limit != -1) {
 
-            return ((info.modified + mod) * info.stack_data.getInteger("Count") <= info.limit && (info.modified + mod) > 0);
+        	if ( info.limit < 1 ) {
+        		
+        		return false ;
+        		
+        	}
+        	
+        	return ((info.modified + mod) <= info.limit && (info.modified + mod) > 0);
 
         } else {
 

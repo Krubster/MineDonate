@@ -5,9 +5,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.renderer.Tessellator;
+
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
+
+import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.gui.GuiAbstractItemEntry;
 import ru.log_inil.mc.minedonate.gui.GuiEntry;
 import ru.log_inil.mc.minedonate.gui.GuiScrollingList;
@@ -25,6 +31,23 @@ public abstract class ShopCategory extends GuiEntry {
 
     protected List < Merch > noSearchedEntries = new ArrayList < > ( ) ;
 
+	public ShopCategory ( String _name ) {
+		
+		super ( _name ) ;
+		
+	}
+	
+    public void setCatId ( int _catId ) {
+    	
+    	catId = _catId ;
+
+    }
+    
+    public int getCatId ( ) {
+    	
+    	return catId ; 
+    	
+    }
 	
 	public boolean getEnabled ( ) {
 		
@@ -48,8 +71,6 @@ public abstract class ShopCategory extends GuiEntry {
     
     public void updateButtons ( ShopGUI g, int page ) {
     	
-    	postShow ( g ) ;
-
     }
 
     public int elementsOnPage ( ) {
@@ -58,7 +79,8 @@ public abstract class ShopCategory extends GuiEntry {
     	
     }
 
-    public void actionPerformed ( GuiButton button ) {
+    /*
+    public void actionPerformed ( ShopGUI g, GuiButton button ) {
     
     	if ( subButtonsMap . containsKey ( button . id ) ) {
     		
@@ -68,7 +90,7 @@ public abstract class ShopCategory extends GuiEntry {
 
     	// postShow ( ) ;
     	
-    }
+    }*/
     
     public int getButtonWidth ( ) {
     	
@@ -154,6 +176,68 @@ public abstract class ShopCategory extends GuiEntry {
 		
 	}
 	
+    public void draw(ShopGUI g, int page, int mouseX, int mouseY, float partialTicks, DrawType dt ) {
+    	
+    	super.draw(g, page, mouseX, mouseY, partialTicks, dt);
+    	
+    	if ( dt == DrawType.BG ) {
+    		
+        	g . drawGradientRectAccess(30, (int) (g . getScaledResolution ( ).getScaledHeight() * 0.1) + 19 + 20, g . getScaledResolution ( ).getScaledWidth() - 30, (int) ((g . getScaledResolution ( ).getScaledHeight()) - (g . getScaledResolution ( ).getScaledHeight() * 0.1)) - 5, -1072689136, -804253680);
+
+    	} else if ( dt == DrawType . POST ) {
+    		
+            GL11.glEnable(GL11.GL_BLEND);
+            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+            GL11.glDisable(GL11.GL_ALPHA_TEST);
+            GL11.glShadeModel(GL11.GL_SMOOTH);
+            GL11.glDisable(GL11.GL_TEXTURE_2D);
+
+            //
+
+            Tessellator var18 = Tessellator.instance;
+            byte var20 = 12;
+
+            var18.startDrawingQuads();
+
+            var18.setColorRGBA_I(0, 0);
+
+            var18.addVertexWithUV((double) 30, (double) ((int) (g . getScaledResolution ( ).getScaledHeight() * 0.1) + 19 + 20 + var20), 0.0D, 0.0D, 1.0D);
+            var18.addVertexWithUV((double) (int) g . getScaledResolution ( ).getScaledWidth() - 30, (double) ((g . getScaledResolution ( ).getScaledHeight() * 0.1) + 19 + 20 + var20), 0.0D, 1.0D, 1.0D);
+
+            var18.setColorRGBA_I(0, 105);
+
+            var18.addVertexWithUV((double) g . getScaledResolution ( ).getScaledWidth() - 30, (double) (int) (g . getScaledResolution ( ).getScaledHeight() * 0.1) + 19 + 20, 0.0D, 1.0D, 0.0D);
+            var18.addVertexWithUV((double) 30, (double) (int) (g . getScaledResolution ( ).getScaledHeight() * 0.1) + 19 + 20, 0.0D, 0.0D, 0.0D);
+
+            var18.draw();
+
+
+            var18.startDrawingQuads();
+
+            var18.setColorRGBA_I(0, 105);
+
+            var18.addVertexWithUV((double) 30, (double) ((g . getScaledResolution ( ).getScaledHeight()) - (g . getScaledResolution ( ).getScaledHeight() * 0.1)) - 6, 0.0D, 0.0D, 1.0D);
+            var18.addVertexWithUV((double) g . getScaledResolution ( ).getScaledWidth() - 30, (double) ((g . getScaledResolution ( ).getScaledHeight()) - (g . getScaledResolution ( ).getScaledHeight() * 0.1)) - 6, 0.0D, 1.0D, 1.0D);
+
+            var18.setColorRGBA_I(0, 0);
+
+            var18.addVertexWithUV((double) g . getScaledResolution ( ).getScaledWidth() - 30, (double) (((g . getScaledResolution ( ).getScaledHeight()) - (g . getScaledResolution ( ).getScaledHeight() * 0.1)) - 6 - var20), 0.0D, 1.0D, 0.0D);
+            var18.addVertexWithUV((double) 30, (double) (((g . getScaledResolution ( ).getScaledHeight()) - (g . getScaledResolution ( ).getScaledHeight() * 0.1)) - 6 - var20), 0.0D, 0.0D, 0.0D);
+
+            var18.draw();
+
+            //
+
+            GL11.glEnable(GL11.GL_TEXTURE_2D);
+            GL11.glShadeModel(GL11.GL_FLAT);
+            GL11.glEnable(GL11.GL_ALPHA_TEST);
+            GL11.glDisable(GL11.GL_BLEND);
+
+    	}
+    	
+    	
+    }
+    
 	SubCategory subCat ;
 	public SubCategory [ ] subCats ;
 	int xOffset, yOffset ;
@@ -165,119 +249,19 @@ public abstract class ShopCategory extends GuiEntry {
 	@Override
 	public void postShow ( ShopGUI g ) {
 		
+    	updateButtons ( g, g . m_Page ) ;
+
 		if ( ! MineDonate . checkCatExists ( gui . getCurrentShopId ( ), catId ) ) {
-			
+
 			return ;
 			
 		}
 		
 		super . unShow ( g ) ;
 
-		subCats = MineDonate . shops . get ( gui . getCurrentShopId ( )  ) . cats [ catId ] . subCategories ;
 		drawn = 0 ;
 
-		if ( subCats != null && subCats . length > 0 ) {
-			
-			if ( subCatId == -1 ) {
-				
-				subCatIdMap . clear ( ) ;
-
-				for ( GuiButton gb : subButtonsMap . values ( ) ) {
-				//	System.err.println(gb);
-					gui . removeButton ( gb ) ;
-					
-				}
-				
-				subButtonsMap . clear ( ) ;
-				
-				updateMaxRowAndColCount ( ) ;
-
-				int added = 0 ;
-				
-				int en = 0 ;
-				int bccx = 0 ;
-				int brcy = 0 ;
-				
-		        for ( int i = 0; i < buttonsRowCount ; i ++ ) {
-
-		            for ( int j = 0; j < buttonsColCount; j ++ ) {
-
-		                if ( en < subCats . length ) {
-		                	
-		                	brcy = Math.max(i+1, brcy);
-		                	bccx = Math.max(j+1, bccx);
-
-		                	en ++ ;
-		                	
-		                }
-		                
-		            }
-		            
-		        }
-		        
-		        buttonsRowCount = brcy ;
-		        buttonsColCount = bccx ;
-				
-		        for ( int i = 0; i < buttonsRowCount ; i ++ ) {
-
-		            for ( int j = 0; j < buttonsColCount; j ++ ) {
-
-		                if ( added < subCats . length ) {
-		                	
-		                	subCat = subCats [ added ] ;
-		                	added ++ ;
-		                	
-		                	if ( search ? subCat . displayName . toLowerCase ( ) . contains ( searchValue ) : true ) {
-		                		
-			                	xOffset = 15 + ( (int) ( ( gui . getScaledResolution ( ) . getScaledWidth ( ) / 2 - 45 - ( buttonsColCount * 75 ) / 2 ) / 2 ) + 75 * ( j + 1 ) ) ;
-			                	yOffset = (int) (gui . getScaledResolution ( ) . getScaledHeight ( )*0.05) + ( ( ( gui . getScaledResolution ( ) . getScaledHeight ( ) / 2 - ( buttonsRowCount * MineDonate.cfgUI.cats.regions.itemBuyButton.height ) ) ) + MineDonate.cfgUI.cats.regions.itemBuyButton.height * 2 * ( i ) ) ;
-		  		                  
-			                	if( yOffset > gui . getScaledResolution ( ) . getScaledHeight ( ) - 55 ) {
-				                	
-			                		continue ;
-			                		
-			                	}
-			                	
-		                		if( yOffset < 55 ) {
-				                	
-			                		continue ;
-			                		
-			                	}
-			                	
-			                	if( xOffset > gui . getScaledResolution ( ) . getScaledWidth ( ) - 55 ) {
-				                	
-			                		continue ;
-			                		
-			                	}
-
-			                	openSubCatButton = new GuiButton ( ShopGUI . getNextButtonId ( ), xOffset, yOffset, gui . getFontRenderer ( ) . getStringWidth ( subCat . displayName ) + 15, MineDonate.cfgUI.cats.regions.itemBuyButton.height, subCat . displayName ) ;
-			                	openSubCatButton.xPosition-=  openSubCatButton . width/2 ;
-			                	
-			                	subButtonsMap . put ( openSubCatButton . id, openSubCatButton ) ;
-	
-			                	subCatIdMap . put ( openSubCatButton . id, subCat . subCatId ) ;
-			                	
-			                    gui . addBtn ( openSubCatButton, true ) ;
-			                    
-			                    drawn ++ ;
-
-		                	}
-	                	}
-		                
-		            }
-		           
-		        }
-				
-			} else {
-				
-				
-			}
-			
-		} else {
-			
-    		setSubCategory ( -1 ) ;
-
-		}
+		setSubCategory ( -1 ) ;
 		
 	}
 	
@@ -293,19 +277,27 @@ public abstract class ShopCategory extends GuiEntry {
 	public void unShow ( ShopGUI g ) {
 		
 		super . unShow ( g ) ;
-		
+
 		for ( GuiAbstractItemEntry gie : entrs ) {
 
-			gie . unDraw ( ) ;
+			gie . unShow ( g ) ;
 			
 		}
 		
 	}
 	
-	public void setSubCategory ( int _subCatId ) {
+	boolean catCheck = true ;
+	
+	public void setDisableCatCheck ( ) {
 		
-		if ( ! MineDonate . checkCatExists (  gui . getCurrentShopId ( ) , catId ) ) {
-			
+		catCheck = false ;
+		
+	}
+	
+	public void setSubCategory ( int _subCatId ) {
+
+		if ( catCheck && ! MineDonate . checkCatExists ( gui . getCurrentShopId ( ) , catId ) ) {
+
 			return ;
 			
 		}
@@ -313,17 +305,17 @@ public abstract class ShopCategory extends GuiEntry {
 		subCatId = _subCatId ;
 		
 		noSearchedEntries . clear ( ) ;
-			
+
 		for ( Merch m : MineDonate . shops . get ( gui . getCurrentShopId ( )  ) . cats [ catId ] . getMerch ( ) ) {
-			
+
 			if ( m != null && ( m . subCatId == _subCatId || _subCatId == -1 ) ) {
-				
+
 				noSearchedEntries . add ( m ) ;
 				
 			}
 			
 		}	
-		
+
 	}
 	
 	protected boolean search ;
@@ -331,7 +323,7 @@ public abstract class ShopCategory extends GuiEntry {
 	
 	public void search ( String text ) {
 		
-		boolean b = search ;
+		//boolean b = searchValue != null ? ! searchValue . equals ( text ) : searchValue != text ;
 
 		search = ! ( text == null || text . trim ( ) . isEmpty ( ) ) ;
 		
@@ -344,12 +336,14 @@ public abstract class ShopCategory extends GuiEntry {
 			searchValue = "" ;
 			
 		}
+		
+		if ( searchValue . isEmpty ( ) ) {
 			
-		if ( b ) {
-			
-			updateButtons ( gui, 0 ) ;
+			search = false ;
 			
 		}
+
+		updateButtons ( gui, 0 ) ;	
 		
 	}
 

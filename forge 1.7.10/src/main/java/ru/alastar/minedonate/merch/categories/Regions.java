@@ -2,11 +2,13 @@ package ru.alastar.minedonate.merch.categories;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
+import ru.alastar.minedonate.merch.categories.MerchCategory.Type;
 import ru.alastar.minedonate.merch.info.RegionInfo;
-import ru.alastar.minedonate.network.packets.AddMerchPacket;
 import ru.alastar.minedonate.plugin.PluginHelper;
+import ru.alastar.minedonate.rtnl.ModNetwork;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,6 +19,8 @@ import java.sql.Statement;
  */
 public class Regions extends MerchCategory {
 	
+	boolean enabled = MineDonate.cfg.sellRegions ;
+
 	public Regions ( int _shopId, int _catId, String _moneyType ) {
 	
     	super ( _shopId, _catId, _moneyType ) ;
@@ -36,29 +40,8 @@ public class Regions extends MerchCategory {
         String name = msg.split("=")[0];
         
         PluginHelper.wgMgr.removePlayerFromRegion(world_name, name, player);
-        /*
-        try {
-        	
-        	
-            World bukkit_world = Bukkit.getWorld(world_name);
-            Object wg = MineDonate.wg_plugin.getClass().getMethod("inst").invoke(null);
-            Object reg_cont = wg.getClass().getMethod("getRegionContainer").invoke(wg);
-            Object region_manager = reg_cont.getClass().getMethod("get", org.bukkit.World.class).invoke(reg_cont, bukkit_world);
-            Object region = region_manager.getClass().getMethod("getRegion", String.class).invoke(region_manager, name);
-            if (region != null) {
-                Object owners = region.getClass().getMethod("getOwners").invoke(region);
-                if (owners != null) {
-                    owners.getClass().getMethod("removePlayer", String.class).invoke(owners, player);
-                }
-            }
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        }*/
-        returnToStock(new RegionInfo(shopId, catId, m_Merch.length, Integer.valueOf(log_msg.split(":")[4]), name, world_name));
+
+        returnToStock(new RegionInfo(shopId, catId, m_Merch.size(), Integer.valueOf(log_msg.split(":")[4]), name, world_name));
     }
 
     private void returnToStock(RegionInfo regionInfo) {
@@ -73,23 +56,22 @@ public class Regions extends MerchCategory {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        MineDonate.networkChannel.sendToAll(new AddMerchPacket(regionInfo));
+
+        ModNetwork . sendToAllAddMerchPacket ( regionInfo ) ;
 
     }
 
     @Override
     public void loadMerchFromDB(ResultSet rs) {
-        int i = 0;
         try {
             while (rs.next()) {
-                final RegionInfo info = new RegionInfo(shopId, catId, i, rs.getInt("cost"), rs.getString("name"), rs.getString("world"));
+                final RegionInfo info = new RegionInfo(shopId, catId, rs.getInt("id"), rs.getInt("cost"), rs.getString("name"), rs.getString("world"));
                 this.addMerch(info);
-                ++i;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        MinecraftServer.getServer().logInfo("Loaded " + m_Merch.length + " regions");
+        MinecraftServer.getServer().logInfo("Loaded " + m_Merch.size() + " regions");
     }
 
     @Override
@@ -98,41 +80,27 @@ public class Regions extends MerchCategory {
     }
 
     @Override
-    public String getDatabase() {
+    public String getDatabaseTable ( ) {
         return MineDonate.cfg.dbRegions;
     }
 
     @Override
     public boolean isEnabled() {
-        return MineDonate.cfg.sellRegions;
+        return enabled;
     }
-
+    
+    @Override
+    public void setEnabled ( boolean _enabled ) {
+    	
+    	enabled = _enabled ;
+    	
+    }
+    
     @Override
     public void GiveMerch(EntityPlayerMP player, Merch merch, int amount) {
-        final RegionInfo info = (RegionInfo) merch;
+
+    	final RegionInfo info = (RegionInfo) merch;
         PluginHelper.wgMgr.addPlayerToRegion(info.world_name, info.name, player.getDisplayName());
-        /*
-        try {
-            World bukkit_world = Bukkit.getWorld(info.world_name);
-            Object wg = MineDonate.wg_plugin.getClass().getMethod("inst").invoke(null);
-            Object reg_cont = wg.getClass().getMethod("getRegionContainer").invoke(wg);
-            Object region_manager = reg_cont.getClass().getMethod("get", org.bukkit.World.class).invoke(reg_cont, bukkit_world);
-            Object region = region_manager.getClass().getMethod("getRegion", String.class).invoke(region_manager, info.name);
-            if (region != null) {
-                Object owners = region.getClass().getMethod("getOwners").invoke(region);
-                if (owners != null) {
-                    owners.getClass().getMethod("addPlayer", String.class).invoke(owners, player.getDisplayName());
-                }
-            }
-            removeRegion(info.name, info.world_name);
-            removeMerch(merch);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        }*/
 
     }
 
@@ -155,4 +123,11 @@ public class Regions extends MerchCategory {
 		
 	}
 	
+	@Override
+    public Type getCatType ( ) {
+    	
+    	return Type . REGIONS ;
+    	
+    }
+    
 }

@@ -7,8 +7,9 @@ import java.util.List;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import io.netty.buffer.ByteBuf;
 import ru.alastar.minedonate.MineDonate;
-import ru.alastar.minedonate.Utils;
 import ru.alastar.minedonate.mproc.AbstractMoneyProcessor;
+import ru.alastar.minedonate.rtnl.Account;
+import ru.alastar.minedonate.rtnl.Utils;
 
 /**
  * Created by Alastar on 18.07.2017.
@@ -21,6 +22,11 @@ public class AccountInfoPacket implements IMessage {
     
     public List < String > permissions ;
     
+	public boolean freezShopCreate ;
+	public String freezShopCreateFreezer ;
+	public String freezShopCreateReason ;
+	public int shopsCount ;
+	
     String userName ;
     
     public AccountInfoPacket ( String _userName ) {
@@ -51,15 +57,26 @@ public class AccountInfoPacket implements IMessage {
             	
             }
 				
-    		List < String > perms = MineDonate . getPermissionsByUser ( userName ) ;
+            Account acc = MineDonate . getAccount ( userName . toLowerCase ( ) ) ;
     		
-            buf . writeInt ( perms . size ( ) ) ;
+            buf . writeInt ( acc . permissions . size ( ) ) ;
             
-            for ( String p : perms ) {
+            for ( String p : acc . permissions  ) {
             	
             	Utils . netWriteString ( buf, p ) ;
             	
             }
+                        
+            buf . writeBoolean ( acc . freezShopCreate ) ;
+            
+            if ( acc . freezShopCreate ) {
+            	
+        		Utils . netWriteString ( buf, acc . freezShopCreateFreezer ) ;
+        		Utils . netWriteString ( buf, acc . freezShopCreateReason ) ;
+
+            }
+            
+            buf . writeInt ( acc . shopsCount ) ;
             
 		} catch ( Exception ex ) {
 			
@@ -97,6 +114,17 @@ public class AccountInfoPacket implements IMessage {
         		
         	}
         	
+        	freezShopCreate = buf . readBoolean ( ) ;
+        	
+        	if ( freezShopCreate ) {
+        		
+        		freezShopCreateFreezer = Utils . netReadString ( buf ) ;
+        		freezShopCreateReason = Utils . netReadString ( buf ) ;
+        		
+        	}
+        	
+        	shopsCount = buf . readInt ( ) ;
+        	               
 		} catch ( UnsupportedEncodingException ex ) {
 			
 			ex . printStackTrace ( ) ;

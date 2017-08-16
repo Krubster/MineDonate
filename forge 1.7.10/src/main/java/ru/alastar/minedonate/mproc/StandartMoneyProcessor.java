@@ -5,6 +5,7 @@ import java.sql.Statement;
 
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
+
 import ru.log_inil.mc.minedonate.localData.DataOfMoneyProcessor;
 
 public class StandartMoneyProcessor extends AbstractMoneyProcessor {
@@ -66,12 +67,16 @@ public class StandartMoneyProcessor extends AbstractMoneyProcessor {
             
             stat . close ( ) ;
             
-			for ( AbstractMoneyProcessor amp : pl ) {
+			if ( MineDonate . cfg . autoFixMoneyProcessorsTableCollisions ) {
 				
-				if ( domp . dbTable . equals ( amp . domp . dbTable ) ) {
+				for ( AbstractMoneyProcessor amp : pl ) {
 					
-					amp . setMoney ( name, domp . regMoney ) ;
+					if ( domp . dbTable . equals ( amp . domp . dbTable ) ) {
+						
+						amp . setMoney ( name, domp . regMoney ) ;
 
+					}
+					
 				}
 				
 			}

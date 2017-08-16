@@ -5,6 +5,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
+import ru.alastar.minedonate.merch.categories.MerchCategory.Type;
 import ru.alastar.minedonate.merch.info.EntityInfo;
 
 import java.lang.reflect.InvocationTargetException;
@@ -15,7 +16,9 @@ import java.sql.SQLException;
  * Created by Alastar on 21.07.2017.
  */
 public class Entities extends MerchCategory {
-	
+
+	boolean enabled = MineDonate.cfg.sellEntities ;
+
 	public Entities ( int _shopId, int _catId, String _moneyType ) {
 		
     	super ( _shopId, _catId, _moneyType ) ;
@@ -34,27 +37,32 @@ public class Entities extends MerchCategory {
 
     @Override
     public void loadMerchFromDB(ResultSet rs) {
-        int i = 0;
         try {
             while (rs.next()) {
-                final EntityInfo info = new EntityInfo(shopId, catId, i, rs.getInt("cost"), rs.getBlob("data"), rs.getString("name"), rs.getInt("lim"));
+                final EntityInfo info = new EntityInfo(shopId, catId, rs.getInt("id"), rs.getInt("cost"), rs.getBlob("data"), rs.getString("name"), rs.getInt("lim"));
                 this.addMerch(info);
-                ++i;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        MinecraftServer.getServer().logInfo("Loaded " + m_Merch.length + " entities");
+        MinecraftServer.getServer().logInfo("Loaded " + m_Merch.size() + " entities");
     }
 
     @Override
-    public String getDatabase() {
+    public String getDatabaseTable ( ) {
         return MineDonate.cfg.dbEntities;
     }
 
     @Override
     public boolean isEnabled() {
-        return MineDonate.cfg.sellEntities;
+        return enabled;
+    }
+    
+    @Override
+    public void setEnabled ( boolean _enabled ) {
+    	
+    	enabled = _enabled ;
+    	
     }
 
     @Override
@@ -90,4 +98,11 @@ public class Entities extends MerchCategory {
 		
 	}
 	
+	@Override
+    public Type getCatType ( ) {
+    	
+    	return Type . ENTITIES ;
+    	
+    }
+    
 }

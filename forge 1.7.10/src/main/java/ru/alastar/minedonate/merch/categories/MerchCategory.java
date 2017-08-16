@@ -2,14 +2,16 @@ package ru.alastar.minedonate.merch.categories;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import net.minecraft.entity.player.EntityPlayerMP;
-import ru.alastar.minedonate.MineDonate;
-import ru.alastar.minedonate.gui.ShopCategory;
+
 import ru.alastar.minedonate.merch.Merch;
-import ru.alastar.minedonate.network.packets.RemoveMerchPacket;
+import ru.alastar.minedonate.rtnl.ModNetwork;
 
 import java.sql.ResultSet;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Alastar on 21.07.2017.
@@ -28,9 +30,7 @@ public abstract class MerchCategory {
 
     }
     
-    public ShopCategory . SubCategory [ ] subCategories ;
-
-    protected Merch[] m_Merch = new Merch[0];
+    protected Map < Integer, Merch > m_Merch = new HashMap < > ( ) ;
 
     @SideOnly(Side.SERVER)
     public abstract boolean canReverse();
@@ -42,58 +42,62 @@ public abstract class MerchCategory {
     public abstract void loadMerchFromDB(ResultSet rs);
 
     @SideOnly(Side.SERVER)
-    public abstract String getDatabase();
+    public abstract String getDatabaseTable();
 
-    public void addMerch(Merch merch) {
-        if (merch.getId() >= m_Merch.length)
-            m_Merch = Arrays.copyOf(m_Merch, merch.getId() + 1);
+    public void addMerch ( Merch merch ) {
+    	
+        //if (merch.getId() >= m_Merch.length)
+         //   m_Merch = Arrays.copyOf(m_Merch, merch.getId() + 1);
 
-        m_Merch[merch.getId()] = merch;
+        m_Merch . put ( merch . getId ( ), merch ) ;
+        
     }
 
     public abstract boolean isEnabled();
-
+    public abstract void setEnabled ( boolean _enabled ) ;
+    
     @SideOnly(Side.SERVER)
     public abstract void GiveMerch(EntityPlayerMP player, Merch merch, int amount);
 
-    public Merch getMerch(int id) {
-        if (id < m_Merch.length) {
-            return m_Merch[id];
-        }
-        return null;
+    public boolean merchExists ( int id ) {
+    	
+    	return m_Merch . containsKey ( id ) ;
+    	
+    }
+    
+    public Merch getMerch ( int id ) {
+        
+    	return m_Merch . get ( id ) ;
+        
     }
 
-    public Merch[] getMerch() {
-        return m_Merch;
+    public Merch [ ] getMerch() {
+    	
+    	Merch [ ] m = new Merch [ m_Merch . size ( ) ] ;
+    	
+        return m_Merch . values ( ) . toArray ( m ) ;
     }
 
-    public abstract Merch constructMerch();
+    public abstract Merch constructMerch ( ) ;
 
-    public void removeMerch(int info) {
-        for (int i = info; i < m_Merch.length - 1; ++i) {
-            m_Merch[i] = m_Merch[i + 1];
-        }
-        m_Merch = Arrays.copyOf(m_Merch, m_Merch.length - 1);
-        for (int i = 0; i < m_Merch.length; ++i) {
-            m_Merch[i].setId(i);
-        }
+    public void removeMerch ( int id ) {
+
+    	m_Merch . remove ( id ) ;
+    	
     }
-
+    
     @SideOnly(Side.SERVER)
-    public void removeMerch(Merch info) {
-        for (int i = info.getId(); i < m_Merch.length - 1; ++i) {
-            m_Merch[i] = m_Merch[i + 1];
-        }
-        m_Merch = Arrays.copyOf(m_Merch, m_Merch.length - 1);
-        for (int i = 0; i < m_Merch.length; ++i) {
-            m_Merch[i].setId(i);
-        }
-        MineDonate.networkChannel.sendToAll(new RemoveMerchPacket(info.getShopId(), info.getId(), info.getCategory()));
+    public void removeMerch ( Merch info ) {
+    	System.err.println( "remove: " + info + "> " + info.getId());
 
+    	m_Merch . remove ( info . getId ( ) ) ;
+    	
     }
 
     public void updateMerch(int id, Merch info) {
-        m_Merch[id] = info;
+        
+    	m_Merch . put ( id, info ) ;  
+        
     }
     
     public String getMoneyType ( ) {
@@ -101,5 +105,13 @@ public abstract class MerchCategory {
     	return moneyType ;
     	
     }
+    
+    public abstract Type getCatType ( ) ;
 
+    public enum Type { 
+    	
+    	ITEMS, PRIVELEGIES, REGIONS, ENTITIES, SHOPS
+    	
+    }
+    
 }

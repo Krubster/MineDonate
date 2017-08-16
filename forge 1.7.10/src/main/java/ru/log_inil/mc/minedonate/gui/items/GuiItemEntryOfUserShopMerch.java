@@ -13,12 +13,17 @@ import ru.alastar.minedonate.gui.GoButton;
 import ru.alastar.minedonate.gui.ShopCategory;
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.merch.info.ShopInfo;
+import ru.alastar.minedonate.rtnl.ModNetwork;
 import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.gui.GuiAbstractItemEntry;
 import ru.log_inil.mc.minedonate.gui.GuiItemsScrollArea;
 import ru.log_inil.mc.minedonate.gui.context.ContextElement;
 import ru.log_inil.mc.minedonate.gui.context.ContextMenu;
 import ru.log_inil.mc.minedonate.gui.context.ContextMenuManager;
+import ru.log_inil.mc.minedonate.gui.frames.GuiFrameDeleteShop;
+import ru.log_inil.mc.minedonate.gui.frames.GuiFrameFreezeAccount;
+import ru.log_inil.mc.minedonate.gui.frames.GuiFrameFreezeShop;
+import ru.log_inil.mc.minedonate.gui.frames.GuiFrameRenameShop;
 
 public class GuiItemEntryOfUserShopMerch extends GuiAbstractItemEntry {
 
@@ -31,34 +36,8 @@ public class GuiItemEntryOfUserShopMerch extends GuiAbstractItemEntry {
 
 		info = _usi ;
 		sc = _sc ;
-
-		List < ContextElement > cElements = new ArrayList < > ( ) ;
-
-		if ( MineDonate . getAccount ( ) . canFreezeShop ( info . owner ) ) {
 			
-			if ( info . isFreezed ) {
-			
-				cElements . add ( new ContextElement ( 1, "unfreeze", MineDonate.cfgUI.lang.unfreezeShop, this, 9 ) ) ;
-
-			} else {
-			
-				cElements . add ( new ContextElement ( 0, "freeze", MineDonate.cfgUI.lang.freezeShop, this, 9 ) ) ;
-			
-			}
-			
-		}
-		
-		if ( MineDonate . getAccount ( ) . canRenameShop ( info . owner ) ) {
-			
-			cElements . add ( new ContextElement ( 2, "rename", MineDonate.cfgUI.lang.renameShop, this, 9 ) ) ;
-
-		}
-		
-		if ( MineDonate . getAccount ( ) . canDeleteShop ( info . owner ) ) {
-			
-			cElements . add ( new ContextElement ( 3, "delete", MineDonate.cfgUI.lang.deleteShop, this, 9 ) ) ;
-
-		}
+		List < ContextElement > cElements = getContextElements ( ) ;
 				
 		if ( ! cElements . isEmpty ( ) ) {
 			
@@ -67,9 +46,55 @@ public class GuiItemEntryOfUserShopMerch extends GuiAbstractItemEntry {
 			ContextMenuManager . addNewMenu ( cmm ) ;
 			
 		}
-			
+		
 	}
 		
+	public List<ContextElement> getContextElements() {
+		
+		List < ContextElement > cElements = new ArrayList < > ( ) ;
+
+		if ( MineDonate . getAccount ( ) . canFreezeShop ( info . owner ) ) {
+			
+			if ( info . isFreezed ) {
+			
+				cElements . add ( new ContextElement ( 1, "unfreeze", MineDonate.cfgUI.lang.unfreezeShop, this, 10 ) ) ;
+
+			} else {
+			
+				cElements . add ( new ContextElement ( 0, "freeze", MineDonate.cfgUI.lang.freezeShop, this, 10 ) ) ;
+			
+			}
+			
+		}
+		
+		if ( MineDonate . getAccount ( ) . canRenameShop ( info . owner ) ) {
+			
+			cElements . add ( new ContextElement ( 2, "rename", MineDonate.cfgUI.lang.renameShop, this, 10 ) ) ;
+
+		}
+		
+		if ( MineDonate . getAccount ( ) . canDeleteShop ( info . owner ) ) {
+			
+			cElements . add ( new ContextElement ( 3, "delete", MineDonate.cfgUI.lang.deleteShop, this, 10 ) ) ;
+
+		}
+		
+		if ( MineDonate . getAccount ( ) . canFreezeOtherAccount ( ) ) {
+			
+			cElements . add ( new ContextElement ( 4, "freezeAcc", MineDonate.cfgUI.lang.freezeAccount, this, 10 ) ) ;
+
+		}
+		
+		if ( MineDonate . getAccount ( ) . canUnFreezeOtherAccount ( ) ) {
+			
+			cElements . add ( new ContextElement ( 4, "unFreezeAcc", MineDonate.cfgUI.lang.unfreezeAccount, this, 10 ) ) ;
+
+		}
+		
+		return cElements ;
+		
+	}
+
 	String shopTitle ;
 	boolean updateDataNeed = false ;
 	List < String > freezText ;
@@ -87,7 +112,8 @@ public class GuiItemEntryOfUserShopMerch extends GuiAbstractItemEntry {
 			freezText . add ( MineDonate.cfgUI.lang.shopFreezReason + info . freezReason ) ;
 
 		}
-		
+			
+		System.err.println(freezText);
 		
 		updateDataNeed = true ;
 		
@@ -138,7 +164,7 @@ public class GuiItemEntryOfUserShopMerch extends GuiAbstractItemEntry {
 		
 			}
 			
-		} else {
+		} else if ( dt == DrawType . OVERLAY ) {
 			
 			if ( info . isFreezed && freezText != null ) {
 				
@@ -163,7 +189,7 @@ public class GuiItemEntryOfUserShopMerch extends GuiAbstractItemEntry {
 
 		super . unDraw ( ) ;
 		if ( go != null ) {
-			
+
 			go . yPosition = -100 ;
 
 		}
@@ -176,15 +202,101 @@ public class GuiItemEntryOfUserShopMerch extends GuiAbstractItemEntry {
 		go = new GoButton ( info . shopId, ShopGUI . getNextButtonId ( ), gui . resolution . getScaledWidth ( ) - 16 - 30 - ( info . isFreezed ? MineDonate . cfgUI . cats . shops . lockedGoButton . width : MineDonate . cfgUI . cats . shops . itemBuyButton . width ), -100, info . isFreezed ? MineDonate . cfgUI . cats . shops . lockedGoButton . width : MineDonate . cfgUI . cats . shops . itemBuyButton . width, info . isFreezed ? MineDonate . cfgUI . cats . shops . lockedGoButton . height : MineDonate . cfgUI . cats . shops . itemBuyButton . height, info . isFreezed ? MineDonate . cfgUI . cats . shops . lockedGoButton . text : MineDonate . cfgUI . cats . shops . itemBuyButton . text ) ;
 		go . enabled = info . isFreezed ? ! MineDonate . cfgUI . cats . shops . lockGoShopButtonWhenFreezed : true ;
 		
-        gui . addBtn ( go, false ) ;
+        gui . addButton ( go, false ) ;
                 
 		return this ;
+		
+	}
+
+	@Override 
+	public void postShow ( GuiItemsScrollArea gui ) { 
+		
+		super . postShow ( gui ) ;
+		
+		updateContextMenu ( ) ;
+		
+	}
+	
+	@Override 
+	public void updateContextMenu ( ) {
+		
+		super . updateContextMenu ( ) ;
 		
 	}
 	
 	@Override
 	public void onClickContextMenuElement(ShopGUI g, ContextMenu cmm, ContextElement e) {
-		System.err.println( ">" + e.name);
+		
+		if ( e != null && info != null ) {
+		
+			switch ( e . name ) {
+				
+				case "freeze" :
+					
+					GuiFrameFreezeShop gffs = ( GuiFrameFreezeShop ) g . showEntry ( "frame.shop.freeze", true ) ;	
+					
+					gffs . setShopId ( info . shopId ) ;
+
+					if ( GuiFrameFreezeShop . lastReason != null ) {
+						
+						gffs . setFieldData ( GuiFrameFreezeShop . lastReason, gffs . fieldHolder ) ;
+						
+					}
+					
+					gffs . postShow ( g ) ;
+
+				break ;
+					
+				case "unfreeze" :
+					
+		    		ModNetwork . sendToServerUnfreezeShopPacket ( info . shopId ) ;
+
+		    		g . setLoading ( true ) ;
+
+				break ;
+				
+				case "rename" :
+					
+					GuiFrameRenameShop gfrs = ( GuiFrameRenameShop ) g . showEntry ( "frame.shop.rename", true ) ;	
+					
+					gfrs . setShopId ( info . shopId ) ;
+					gfrs . setFieldData ( info . name, gfrs . fieldHolder ) ;
+					gfrs . postShow ( g ) ;
+
+				break ;
+				
+				case "delete" :
+					
+					GuiFrameDeleteShop gfds = ( GuiFrameDeleteShop ) g . showEntry ( "frame.shop.delete", true ) ;	
+					
+					gfds . setShopId ( info . shopId ) ;
+					gfds . setConfirmCode ( Integer . toString ( Math . abs ( info . hashCode ( ) ) ) . substring ( 0, 3 ) ) ;
+					gfds . postShow ( g ) ;
+
+				break ;
+				
+				case "freezeAcc" :
+					
+					GuiFrameFreezeAccount gffa = ( GuiFrameFreezeAccount ) g . showEntry ( "frame.acc.freeze", true ) ;	
+					
+					gffa . setName ( info . owner ) ;
+					gffa . postShow ( g ) ;
+
+				break ;
+				
+				case "unFreezeAcc" :
+					
+		    		ModNetwork . sendToServerUnfreezeAccountPacket ( info . owner ) ;
+
+		    		g . setLoading ( true ) ;
+		    		
+				break ;
+				
+				
+			}
+			
+		}
+		
 	}
 	
 }

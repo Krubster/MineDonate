@@ -8,7 +8,7 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.events.MineDonateGUIHandler;
-import ru.alastar.minedonate.plugin.PluginHelper;
+import ru.alastar.minedonate.rtnl.ModNetwork;
 
 /**
  * Created by Alastar on 01.04.2017.
@@ -19,8 +19,11 @@ public class CommonProxy {
     }
 
     @Mod.EventHandler
-    public void load(FMLInitializationEvent event) {
-        NetworkRegistry.INSTANCE.registerGuiHandler(MineDonate.getInstance(), new MineDonateGUIHandler());
+    public void init(FMLInitializationEvent event) {
+
+    	NetworkRegistry.INSTANCE.registerGuiHandler(MineDonate.getInstance(), new MineDonateGUIHandler());
+        ModNetwork . register ( ) ;
+
     }
 
     @Mod.EventHandler
@@ -30,5 +33,12 @@ public class CommonProxy {
     @Mod.EventHandler
     public void serverStarting(FMLServerStartingEvent event) {
     }
+
+    public void loadIcon(String url, int id) {
+    }
+    
+	public void clientOpenGui ( int id ) {	
+		
+	}
      
 }

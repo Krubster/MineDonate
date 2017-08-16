@@ -2,7 +2,7 @@ package ru.alastar.minedonate.network.packets;
 
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import io.netty.buffer.ByteBuf;
-import ru.alastar.minedonate.Utils;
+import ru.alastar.minedonate.rtnl.Utils;
 import ru.log_inil.mc.minedonate.localData.DataOfConfig;
 
 /**
@@ -21,7 +21,9 @@ public class SupportedFeaturesPacket implements IMessage {
     public boolean entities;
     public String entitiesMoneyType ;
     public boolean userShops;
-
+    
+    public int firstCatId ;
+    
     public SupportedFeaturesPacket ( DataOfConfig _cfg ) {
     	
     	items = _cfg . sellItems ;
@@ -38,6 +40,8 @@ public class SupportedFeaturesPacket implements IMessage {
     	
     	userShops = _cfg . userShops ;
     	
+		firstCatId = ( items ? 0 : privelegies ? 1 : regions ? 2 : entities ? 3 : userShops ? 4 : 0 ) ;
+
     }
 
     @Override 
@@ -58,6 +62,8 @@ public class SupportedFeaturesPacket implements IMessage {
             Utils . netWriteString ( buf, entitiesMoneyType ) ;
             
             buf.writeBoolean(userShops);
+            
+            buf . writeInt ( firstCatId ) ;
             
         } catch ( Exception ex ) {
         	
@@ -85,6 +91,8 @@ public class SupportedFeaturesPacket implements IMessage {
     	   this.entitiesMoneyType = Utils . netReadString ( buf ) ;
     	   
            this.userShops = buf.readBoolean();
+           
+           this . firstCatId = buf . readInt ( ) ;
            
        } catch ( Exception ex ) {
     	   

@@ -1,18 +1,21 @@
 package ru.alastar.minedonate.gui.categories;
 
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.ScaledResolution;
+
 import ru.alastar.minedonate.MineDonate;
+import ru.alastar.minedonate.events.MineDonateGUIHandler;
 import ru.alastar.minedonate.gui.CountButton;
 import ru.alastar.minedonate.gui.ShopCategory;
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.merch.info.ItemInfo;
+import ru.alastar.minedonate.rtnl.ModNetwork;
 import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.gui.GuiAbstractItemEntry;
 import ru.log_inil.mc.minedonate.gui.GuiGradientButton;
 import ru.log_inil.mc.minedonate.gui.GuiItemsScrollArea;
 import ru.log_inil.mc.minedonate.gui.GuiScrollingList;
+import ru.log_inil.mc.minedonate.gui.frames.GuiFrameAddItem;
 import ru.log_inil.mc.minedonate.gui.items.GuiItemEntryOfItemMerch;
 
 /**
@@ -20,7 +23,9 @@ import ru.log_inil.mc.minedonate.gui.items.GuiItemEntryOfItemMerch;
  */
 public class ItemNBlockCategory extends ShopCategory {
 
-	public ItemNBlockCategory ( ) {
+	public ItemNBlockCategory ( String _name ) {
+		
+		super ( _name ) ;
 		
 		catId = 0 ;
 		shopId = 0 ;
@@ -29,7 +34,9 @@ public class ItemNBlockCategory extends ShopCategory {
 	
     @Override
     public boolean getEnabled() {
-        return MineDonate.cfg.sellItems;
+        
+    	return MineDonate . cfg . sellItems ;
+        
     }
 
     @Override
@@ -43,13 +50,11 @@ public class ItemNBlockCategory extends ShopCategory {
     public String getName() {
         return "Items & Blocks";
     }
-
-    ScaledResolution resolution;
     
     @Override
-    public void draw(ShopGUI relative, int m_Page, int mouseX, int mouseY, float partialTicks, DrawType dt) {
+    public void draw(ShopGUI g, int page, int mouseX, int mouseY, float partialTicks, DrawType dt) {
     	
-        resolution = new ScaledResolution(relative.mc, relative.mc.displayWidth, relative.mc.displayHeight);
+    	super.draw(g, page, mouseX, mouseY, partialTicks, dt);
 
         if ( subCats != null && subCats . length > 0 && subCatId == -1 && dt == DrawType . PRE ){        	
         
@@ -57,7 +62,11 @@ public class ItemNBlockCategory extends ShopCategory {
         	
         }
         
-    	gi.drawScreen(mouseX, mouseY, partialTicks, dt);
+    	if ( gi != null ) {
+    		
+    		gi.drawScreen(mouseX, mouseY, partialTicks, dt);
+    		
+    	}
 
     }
     
@@ -83,7 +92,7 @@ public class ItemNBlockCategory extends ShopCategory {
     	if ( ! ( relative.getCurrentCategory() instanceof ItemNBlockCategory ) ) {
     		
     		rightButton = (GuiButton) relative.getButtonList().get(relative.getButtonList().size()-1);
-    		
+
     		if(rightButton.visible){
         		rightButton = (GuiButton) relative.getButtonList().get(relative.getButtonList().size()-2);
     		}
@@ -103,30 +112,46 @@ public class ItemNBlockCategory extends ShopCategory {
     		relative . removeButton ( addButton ) ;
     		
     	}
-    	
-    	relative . getButtonList ( ) . add ( addButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), 
-    			rightButton . xPosition -  MineDonate . cfgUI . cats . itemsAndBlocks . addButton . width,
-    			rightButton.yPosition, MineDonate . cfgUI . cats . itemsAndBlocks . addButton . width, MineDonate . cfgUI . cats . itemsAndBlocks . addButton . height, MineDonate . cfgUI . cats . itemsAndBlocks . addButton . text, false ) ) ;
 
+    	if ( rightButton != null ) {
+    		
+    		relative . getButtonList ( ) . add ( addButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), 
+        			rightButton . xPosition -  MineDonate . cfgUI . cats . itemsAndBlocks . addButton . width,
+        			rightButton . yPosition, MineDonate . cfgUI . cats . itemsAndBlocks . addButton . width, MineDonate . cfgUI . cats . itemsAndBlocks . addButton . height, MineDonate . cfgUI . cats . itemsAndBlocks . addButton . text, false ) ) ;
+	
+    	}
+    	
     	super.updateButtons(relative, page);
     	
     }
     
     @Override
-    public void actionPerformed(GuiButton button) {
+    public boolean actionPerformed(ShopGUI g, GuiButton button) {
     	
-    	super.actionPerformed(button);
+    	super.actionPerformed(g, button);
     	
-        if (button instanceof CountButton) {
+        if ( button instanceof CountButton ) {
         	
             CountButton countButton = (CountButton) button;
             countButton.tryModify();
             
+            return true ;
+            
+        } else if ( addButton != null && button . id == addButton . id ) {
+        	
+        	GuiFrameAddItem gfai = ( GuiFrameAddItem ) g . showEntry ( "frame.item.add", true ) ;
+        	
+        	gfai . setInfo ( g . getCurrentShopId ( ), g . getCurrentCategory ( ) . getCatId ( ) ) ;
+        	
+        	MineDonateGUIHandler . setBackShopGUI ( true ) ;
+        	
+        	ModNetwork . sendToServerOpenShopInventoryPacket ( ) ;
+        	
         }
         
+        return false ;
+        
     }
-
-    // #LOG
     
 	@Override
 	public int getButtonWidth ( ) {
@@ -148,18 +173,24 @@ public class ItemNBlockCategory extends ShopCategory {
 	
 	@Override
 	public void postShow ( ShopGUI g ) {
-	
+
 		if ( subCatId == -1 ) {
-			
+
 			setSubCategory ( subCatId ) ;
 			
 		}
-		
-		resolution = new ScaledResolution ( gui . mc, gui.mc.displayWidth, gui.mc.displayHeight); // bull shit
 
 		super . postShow ( g ) ;
 		
-		gi = new GuiItemsScrollArea ( resolution, gui, entrs, 0 ) ;
+		if ( gi == null ) {
+		
+			gi = new GuiItemsScrollArea ( g . getScaledResolution ( ), gui, entrs, 0 ) ;
+		
+		} else {
+			
+			gi . updateSizes ( g . getScaledResolution ( ) ) ;
+			
+		}
 	
 		for ( GuiAbstractItemEntry gie : entrs ) {
 
@@ -168,7 +199,13 @@ public class ItemNBlockCategory extends ShopCategory {
 		}
 		
 		entrs . clear ( ) ;	
-        
+
+		if ( g . isLoading ( ) ) {
+			
+			return ;
+			
+		}
+		
         if ( subCats != null && subCats . length > 0 && subCatId == -1 ) {
         	
         	return ;
@@ -204,10 +241,10 @@ public class ItemNBlockCategory extends ShopCategory {
 	    	}
 		
 		}
-		
+
     	gi . entrs = entrs ;
     	gi . applyScrollLimits ( ) ;
-
+    	
 	}
 	
 	public void setShopId ( int _shopId ) { 
@@ -222,4 +259,5 @@ public class ItemNBlockCategory extends ShopCategory {
 		return gi ;
 		
 	}
+
 }

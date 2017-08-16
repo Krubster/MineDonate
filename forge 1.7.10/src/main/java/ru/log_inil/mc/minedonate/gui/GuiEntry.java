@@ -3,11 +3,19 @@ package ru.log_inil.mc.minedonate.gui;
 import net.minecraft.client.gui.GuiButton;
 import ru.alastar.minedonate.gui.ShopGUI;
 
-public class GuiEntry {
+public abstract class GuiEntry {
 
 	boolean visible = false ;
 	boolean needUnShow = false ;
 
+	String name ;
+	
+	public GuiEntry ( String _name ) {
+		
+		name = _name ;
+		
+	}
+	
     public void draw(ShopGUI relative, int page, int mouseX, int mouseY, float partialTicks, DrawType dt ) {
     	
     }
@@ -68,6 +76,12 @@ public class GuiEntry {
 	public boolean needUnShow ( ) {
 		
 		return needUnShow ;
+		
+	}
+	
+	public boolean needReloadOnUnShow ( ) {
+		
+		return true ;
 		
 	}
 	

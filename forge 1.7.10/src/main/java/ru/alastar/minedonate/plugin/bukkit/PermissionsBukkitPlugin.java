@@ -1,10 +1,7 @@
 package ru.alastar.minedonate.plugin.bukkit;
 
-import java.net.URL;
-
 import org.bukkit.Bukkit;
 
-import ru.alastar.minedonate.plugin.PluginHelper;
 import ru.alastar.minedonate.plugin.clean.PermissionsPlugin;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 
@@ -31,7 +28,15 @@ public class PermissionsBukkitPlugin extends PermissionsPlugin {
 	@Override
 	public boolean hasPermission ( String user, String name ) {
 		
-		return pexMgr . has ( Bukkit . getPlayer ( user ), name ) ;
+		if ( Bukkit . getPlayer ( user ) != null ) {
+		
+			return pexMgr . has ( Bukkit . getPlayer ( user ), name ) ;
+		
+		} else {
+			
+			return false ;
+			
+		}
 		
 	}
 	
@@ -42,5 +47,11 @@ public class PermissionsBukkitPlugin extends PermissionsPlugin {
 		
 	}
 	
+	@Override
+	public void removeGroup ( String user, String name ) {
+		
+		pexMgr . getUser ( Bukkit . getPlayer ( user ) ) . removeGroup ( name ) ;
+		
+	}
 	
 }

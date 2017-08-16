@@ -177,26 +177,24 @@ INSERT INTO `md_logs` (`date`, `bought_by`, `message`, `amount`, `spent`) VALUES
 -- Структура таблицы `md_privelegies`
 --
 
-
-CREATE TABLE IF NOT EXISTS `md_privelegies` (
+CREATE TABLE `md_privelegies` (
   `name` text NOT NULL,
   `description` text NOT NULL,
   `pic_url` text NOT NULL,
   `cost` int(11) NOT NULL,
   `time` bigint(20) NOT NULL,
-  `id` int(11) NOT NULL,
-  `worlds` text NOT NULL
+  `id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `md_privelegies`
 --
 
-INSERT INTO `md_privelegies` (`name`, `description`, `pic_url`, `cost`, `time`, `id`, `worlds`) VALUES
-('VIP', 'JUST VIP\r\nANOTHER STRING\r\n???\r\n/SOME COMMANDS\r\nBITCH\r\n&2COlor', 'http://www.mkyong.com/image/mypic.jpg', 12345, 2592000, 1, '*'),
-('PREMIUUUM', 'asdasdasddfsdaf\r\nsadg\r\nfag\r\n\r\nafg\r\nf\r\ndgdhgfhf\r\ngh\r\nfdj\r\nfd\r\nhj\r\n', 'http://www.mkyong.com/image/mypic.jpg', 1234565, 10, 2, '*'),
-('VIP1', 'JUST VIP\r\nANOTHER STRING\r\n???\r\n/SOME COMMANDS\r\nBITCH\r\n&2COlor', 'http://www.mkyong.com/image/mypic.jpg', 123456, 2592000, 3, '*'),
-('PREMIUUUM2', 'asdasdasddfsdaf\r\nsadg\r\nfag\r\n\r\nafg\r\nf\r\ndgdhgfhf\r\ngh\r\nfdj\r\nfd\r\nhj\r\n', 'http://www.mkyong.com/image/mypic.jpg', 1278654, 10, 4, '*');
+INSERT INTO `md_privelegies` (`name`, `description`, `pic_url`, `cost`, `time`, `id`) VALUES
+('VIP', 'JUST VIP\r\nANOTHER STRING\r\n???\r\n/SOME COMMANDS\r\nBITCH\r\n&2COlor', 'http://www.mkyong.com/image/mypic.jpg', 12345, 2592000, 1),
+('PREMIUUUM', 'asdasdasddfsdaf\r\nsadg\r\nfag\r\n\r\nafg\r\nf\r\ndgdhgfhf\r\ngh\r\nfdj\r\nfd\r\nhj\r\n', 'http://www.mkyong.com/image/mypic.jpg', 1234565, 10, 2),
+('VIP1', 'JUST VIP\r\nANOTHER STRING\r\n???\r\n/SOME COMMANDS\r\nBITCH\r\n&2COlor', 'http://www.mkyong.com/image/mypic.jpg', 123456, 2592000, 3),
+('PREMIUUUM2', 'asdasdasddfsdaf\r\nsadg\r\nfag\r\n\r\nafg\r\nf\r\ndgdhgfhf\r\ngh\r\nfdj\r\nfd\r\nhj\r\n', 'http://www.mkyong.com/image/mypic.jpg', 1278654, 10, 4);
 
 -- --------------------------------------------------------
 

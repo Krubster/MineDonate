@@ -28,8 +28,6 @@ public class PluginHelper {
 	
 	public static void loadPlugins ( ) {
 		
-		ClassLoader cll = PluginHelper . class . getClassLoader ( ) ;
-
 		if ( MineDonate . cfg . sellPrivelegies && hasExists ( "PermissionsEx" ) ) {
 			
 			try {
@@ -97,7 +95,7 @@ public class PluginHelper {
 			InputStream stream = PluginHelper . class . getClassLoader ( ) . getResourceAsStream ( cl . replace ( '.', '/' ) . concat ( ".class" ) ) ;
 			byte [ ] b =  ByteStreams . toByteArray ( stream ) ;
 			
-			Method m = ClassLoader . class . getDeclaredMethod ( "defineClass", String . class, byte [ ] . class, int . class, int . class ) ;
+			Method m = ClassLoader . class . getDeclaredMethod ( "defineClass", new Class [ ] { String . class, byte [ ] . class, int . class, int . class } ) ;
 			
 			m . setAccessible ( true ) ;
 			m . invoke(classLoader, null, b, 0, b . length ) ;

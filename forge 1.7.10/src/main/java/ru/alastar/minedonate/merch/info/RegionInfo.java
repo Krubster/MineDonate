@@ -43,37 +43,6 @@ public class RegionInfo extends Merch {
                
     	}
 
-    	/*
-        try {       	
-        	
-            World bukkit_world = Bukkit.getWorld(this.world_name);
-            Object plr = Bukkit.getPlayer(serverPlayer.getDisplayName());
-            Object wg = MineDonate.wg_plugin.getClass().getMethod("inst").invoke(null);
-            Object localPlayer = wg.getClass().getMethod("wrapPlayer", org.bukkit.entity.Player.class).invoke(wg, plr);
-            Object reg_cont = wg.getClass().getMethod("getRegionContainer").invoke(wg);
-            Object region_manager = reg_cont.getClass().getMethod("get", org.bukkit.World.class).invoke(reg_cont, bukkit_world);
-            Object g_state_manager = wg.getClass().getMethod("getGlobalStateManager").invoke(wg);
-            Object tmp = g_state_manager.getClass().getMethod("get", org.bukkit.World.class).invoke(g_state_manager, bukkit_world);
-            Object resolver = tmp.getClass().getMethod("getMaxRegionCount", Player.class).invoke(tmp, plr);
-            int res = (Integer) resolver;
-            int plr_cnt = (Integer) region_manager.getClass().getMethod("getRegionCountOfPlayer", MineDonate.local_player_class).invoke(region_manager, localPlayer);
-            System.out.println(res + " resolver, count " + plr_cnt);
-            if (res >= 0 && plr_cnt >= res) {
-                serverPlayer.addChatMessage(new ChatComponentText("You can't have more regions!"));
-                return false;
-            } else {
-                return true;
-            }
-
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        }*/
-      //  serverPlayer.addChatMessage(new ChatComponentText("Errorrrrrrrr!"));
-      //  return false;
     }
 
     @Override

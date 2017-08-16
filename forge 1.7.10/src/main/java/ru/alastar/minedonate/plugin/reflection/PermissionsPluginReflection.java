@@ -6,9 +6,7 @@ import ru.alastar.minedonate.plugin.clean.PermissionsPlugin;
 
 public class PermissionsPluginReflection extends PermissionsPlugin {
 
-	Method mLoad;
-	Method mHasPermission;
-	Method mAddGroup;
+	Method mLoad,  mHasPermission, mAddGroup, mRemoveGroup;
 	
 	Object o ;
 
@@ -21,6 +19,7 @@ public class PermissionsPluginReflection extends PermissionsPlugin {
 			mLoad = o.getClass().getMethod("load");
 			mHasPermission = o.getClass().getMethod("hasPermission", new Class[]{String.class, String.class});
 			mAddGroup = o.getClass().getMethod("addGroup", new Class[]{String.class, String.class, String.class, Long.class});
+			mRemoveGroup  = o.getClass().getMethod("removeGroup", new Class[]{String.class, String.class});
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -56,7 +55,18 @@ public class PermissionsPluginReflection extends PermissionsPlugin {
 	public void addGroup(String user, String name, String world, Long time) {
 		
 		try {
-			mHasPermission.invoke(o, new Object[]{user, name, world, time});
+			mAddGroup.invoke(o, new Object[]{user, name, world, time});
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	@Override
+	public void removeGroup(String user, String name ) {
+		
+		try {
+			mRemoveGroup.invoke(o, new Object[]{user, name});
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

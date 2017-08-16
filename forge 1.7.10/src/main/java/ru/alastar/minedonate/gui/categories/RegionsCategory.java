@@ -2,13 +2,14 @@ package ru.alastar.minedonate.gui.categories;
 
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
+
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.gui.BuyButton;
 import ru.alastar.minedonate.gui.ShopCategory;
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.merch.info.RegionInfo;
+
 import ru.log_inil.mc.minedonate.gui.DrawType;
 
 import java.util.ArrayList;
@@ -24,12 +25,14 @@ import org.lwjgl.opengl.GL12;
  */
 public class RegionsCategory extends ShopCategory {
 
-    public RegionsCategory ( ) {
+    public RegionsCategory ( String _name ) {
+		
+		super ( _name ) ;
+		
+		catId = 2 ;
     	 
-		 catId = 2 ;
-    	 
-    	 rowCount = 4 ;
-    	 colCount = 2 ;
+    	rowCount = 4 ;
+    	colCount = 2 ;
     	 
     }
     
@@ -57,15 +60,11 @@ public class RegionsCategory extends ShopCategory {
     int drawn ;
     
     @Override
-    public void draw(ShopGUI relative, int page, int mouseX, int mouseY, float partialTicks, DrawType dt) {
+    public void draw(ShopGUI g, int page, int mouseX, int mouseY, float partialTicks, DrawType dt) {
     	
-		ScaledResolution resolution = new ScaledResolution( relative.mc, relative.mc.displayWidth, relative.mc.displayHeight); // Давайте поможем Даше убрать это дно из всего кода?
-		
-    	if ( dt == DrawType . BG ){
-    		
-    	    relative.drawGradientRectAccess(30, (int) (resolution.getScaledHeight() * 0.1) + 15+24, resolution.getScaledWidth()-30,  (int) ( (resolution.getScaledHeight()) - (resolution.getScaledHeight() * 0.1) ) - 5,  -1072689136, -804253680);
+    	super.draw(g, page, mouseX, mouseY, partialTicks, dt);
 
-    	} else if ( dt == DrawType.POST ) {
+    	if ( dt == DrawType . PRE ) {
         	
     		GL11 . glEnable ( GL12 . GL_RESCALE_NORMAL ) ;
     		RenderHelper . enableGUIStandardItemLighting ( ) ;
@@ -78,7 +77,7 @@ public class RegionsCategory extends ShopCategory {
                 	
                     if ( page * colCount * rowCount + drawn < list . size ( ) ) {
                
-                    	drawRegion ( relative, resolution, page, mouseX, mouseY, partialTicks, list . get ( page * colCount * rowCount + drawn ), i, j ) ;
+                    	drawRegion ( g, g . getScaledResolution ( ), page, mouseX, mouseY, partialTicks, list . get ( page * colCount * rowCount + drawn ), i, j ) ;
                     	
                     	drawn ++ ;
                     	
@@ -91,53 +90,6 @@ public class RegionsCategory extends ShopCategory {
     		RenderHelper . disableStandardItemLighting ( ) ;
     		GL11 . glDisable ( GL12 . GL_RESCALE_NORMAL ) ;
     		
-    	    GL11.glEnable(GL11.GL_BLEND);
-  	        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-  	        GL11.glDisable(GL11.GL_ALPHA_TEST);
-  	        GL11.glShadeModel(GL11.GL_SMOOTH);
-  	        GL11.glDisable(GL11.GL_TEXTURE_2D);
-	        
-	        //
-	        
-	        Tessellator var18 = Tessellator.instance;
-	        byte var20 = 12;
-	        
-	        var18.startDrawingQuads();
-	        
-	        var18.setColorRGBA_I(0, 0);
-	        
-	        var18.addVertexWithUV((double)30, (double)((int) (resolution.getScaledHeight() * 0.1) + 19+20+ var20), 0.0D, 0.0D, 1.0D);
-	        var18.addVertexWithUV((double)(int) resolution.getScaledWidth()-30, (double)( (resolution.getScaledHeight() * 0.1) + 19+20 + var20), 0.0D, 1.0D, 1.0D);
-	        
-	        var18.setColorRGBA_I(0, 105);
-	        
-	        var18.addVertexWithUV((double)resolution.getScaledWidth()-30, (double)(int) (resolution.getScaledHeight() * 0.1) + 19+20, 0.0D, 1.0D, 0.0D);
-	        var18.addVertexWithUV((double)30, (double)(int) (resolution.getScaledHeight() * 0.1) + 19+20, 0.0D, 0.0D, 0.0D);
-	        
-	        var18.draw();
-
-	        
-	        var18.startDrawingQuads();
-	        
-	        var18.setColorRGBA_I(0, 105);
-	        
-	        var18.addVertexWithUV((double)30, (double) ( (resolution.getScaledHeight()) - (resolution.getScaledHeight() * 0.1) ) - 6, 0.0D, 0.0D, 1.0D);
-	        var18.addVertexWithUV((double)resolution.getScaledWidth()-30, (double) ( (resolution.getScaledHeight()) - (resolution.getScaledHeight() * 0.1) ) - 6, 0.0D, 1.0D, 1.0D);
-	        
-	        var18.setColorRGBA_I(0, 0);
-	        
-	        var18.addVertexWithUV((double)resolution.getScaledWidth()-30, (double)( ( (resolution.getScaledHeight()) - (resolution.getScaledHeight() * 0.1) ) - 6 - var20), 0.0D, 1.0D, 0.0D);
-	        var18.addVertexWithUV((double)30, (double)( ( (resolution.getScaledHeight()) - (resolution.getScaledHeight() * 0.1) ) - 6 - var20), 0.0D, 0.0D, 0.0D);
-	        
-	        var18.draw();
-	        
-	        //
-	        
-	        GL11.glEnable(GL11.GL_TEXTURE_2D);
-	        GL11.glShadeModel(GL11.GL_FLAT);
-	        GL11.glEnable(GL11.GL_ALPHA_TEST);
-	        GL11.glDisable(GL11.GL_BLEND);
-	        
         }
  
     }
@@ -222,7 +174,7 @@ public class RegionsCategory extends ShopCategory {
                     bb = new BuyButton ( info . getShopId ( ), info . getCategory ( ), info . merch_id, ShopGUI.getNextButtonId(), x_offset - 22, y_offset + 15, MineDonate.cfgUI.cats.regions.itemBuyButton.width, MineDonate.cfgUI.cats.regions.itemBuyButton.height, MineDonate.cfgUI.cats.regions.itemBuyButton.text);
                     buttonsMap.put(info.merch_id, bb);
 
-                    relative . addBtn ( bb, false ) ;
+                    relative . addButton ( bb, false ) ;
                     
                     ++drawn;
                     

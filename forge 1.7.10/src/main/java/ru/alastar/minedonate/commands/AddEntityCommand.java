@@ -5,8 +5,9 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
-import ru.alastar.minedonate.AdminSession;
-import ru.alastar.minedonate.MineDonate;
+
+import ru.alastar.minedonate.rtnl.Account;
+import ru.alastar.minedonate.rtnl.AdminSessionManager;
 
 /**
  * Created by Alastar on 03.08.2017.
@@ -26,8 +27,8 @@ public class AddEntityCommand extends CommandBase {
     public void processCommand(ICommandSender p_71515_1_, String[] args) {
         if (p_71515_1_ instanceof EntityPlayerMP && args.length == 3) {
             EntityPlayerMP player = (EntityPlayerMP) p_71515_1_;
-            if (MineDonate.checkAdminSession(player)) {
-                final AdminSession session = MineDonate.getAdminSession(player);
+            if (AdminSessionManager.checkAdminSession(player)) {
+                final Account.AdminSession session = AdminSessionManager.getAdminSession(player);
                 session.pending = true;
                 session.params = args;
                 player.addChatMessage(new ChatComponentText(EnumChatFormatting.YELLOW + "Right click on entity to add it"));

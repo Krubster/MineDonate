@@ -11,7 +11,6 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.events.ClientEventHandler;
-import ru.alastar.minedonate.events.KeyInputEvent;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -24,30 +23,19 @@ import java.util.Arrays;
  */
 public class ClientProxy extends CommonProxy {
 
-    public static KeyBinding openHUD = new KeyBinding("minedonate.open.shop", Keyboard.KEY_EQUALS, "key.minedonate.main");
-    public static KeyBinding refreshCfg;
+    public static KeyBinding openShop = new KeyBinding("minedonate.open.shop", Keyboard.KEY_EQUALS, "key.minedonate.main");
 
     public static DynamicTexture[] m_Privelegies_Icons = new DynamicTexture[0];
-    public static KeyBinding openAdmin = new KeyBinding("minedonate.open.admin", Keyboard.KEY_MINUS, "key.minedonate.main");
+        
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
 
-
         FMLCommonHandler.instance().bus().register(new ClientEventHandler());
-        FMLCommonHandler.instance().bus().register(new KeyInputEvent());
 
         MineDonate.loadClientConfig();
 
-        ClientRegistry.registerKeyBinding(openHUD);
-        ClientRegistry.registerKeyBinding(openAdmin);
-
-        if (MineDonate.cfgUI.bindF5RefreshButton) {
-
-            refreshCfg = new KeyBinding("minedonate.refresh", Keyboard.KEY_F5, "key.minedonate.main");
-            ClientRegistry.registerKeyBinding(refreshCfg);
-
-        }
+        ClientRegistry.registerKeyBinding(openShop);
 
     }
 
@@ -62,7 +50,7 @@ public class ClientProxy extends CommonProxy {
         Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.func_147675_a(res, x, y, z));
     }
 
-    public static void loadIcon(String url, int id) {
+    public void loadIcon(String url, int id) {
         BufferedImage image = null;
         System.out.println("Icon url: " + url);
 
@@ -85,4 +73,11 @@ public class ClientProxy extends CommonProxy {
         return m_Privelegies_Icons[id];
     }
 
+    @Override
+	public void clientOpenGui ( int id ) {	
+
+    	Minecraft.getMinecraft().thePlayer.openGui(MineDonate.getInstance(), id, Minecraft.getMinecraft().theWorld, (int)  Minecraft.getMinecraft().thePlayer.posX, (int)  Minecraft.getMinecraft().thePlayer.posY, (int)  Minecraft.getMinecraft().thePlayer.posZ);
+    
+    }
+    
 }

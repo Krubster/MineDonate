@@ -20,7 +20,6 @@ import java.sql.SQLException;
  */
 public class ItemInfo extends Merch {
 
-    @SideOnly(Side.CLIENT)
     public ItemStack m_stack;
 
     public int modified = 1; // multiplied count
@@ -42,7 +41,7 @@ public class ItemInfo extends Merch {
 
     @Override
     public boolean canBuy(EntityPlayerMP serverPlayer, int amount) {
-        if(limit != -1 && limit < amount * stack_data.getInteger("Count"))
+        if(limit != -1 && limit < amount)// amount * stack_data.getInteger("Count"))
             return false;
         return true;
     }
@@ -67,6 +66,8 @@ public class ItemInfo extends Merch {
             e.printStackTrace();
         }
         stack_data = ByteBufUtils.readTag(buf);
+        m_stack = ItemStack.loadItemStackFromNBT(stack_data);
+
     }
     public ItemInfo(int _shopId, int _catId, int mid, int cos, String n, String inf, int lim, ItemStack data) {
     	super(_shopId, _catId, mid);
@@ -77,6 +78,8 @@ public class ItemInfo extends Merch {
         this.limit = lim;
         this.stack_data = new NBTTagCompound ( ) ;
         data.writeToNBT(stack_data);
+        m_stack = data;
+
     }
     @Override
     public String getBoughtMessage() {

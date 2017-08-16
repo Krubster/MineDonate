@@ -6,6 +6,7 @@ import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ru.alastar.minedonate.MineDonate;
+import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.network.packets.SupportedFeaturesPacket;
 
 /**
@@ -31,7 +32,8 @@ public class SupportedFeaturesPacketHandler implements IMessageHandler<Supported
         MineDonate.cfg.userShops = message.userShops;
 
         MineDonate . loadMerchClient ( ) ;
-        
+        ShopGUI . instance . defaultCategory = message . firstCatId ;
+
         return null;
         
     }

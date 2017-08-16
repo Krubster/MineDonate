@@ -21,6 +21,8 @@ import ru.log_inil.mc.minedonate.gui.GuiAbstractItemEntry;
 import ru.log_inil.mc.minedonate.gui.GuiItemsScrollArea;
 import ru.log_inil.mc.minedonate.gui.context.ContextMenu;
 import ru.log_inil.mc.minedonate.gui.context.ContextMenuManager;
+import ru.log_inil.mc.minedonate.gui.frames.GuiFrameDeleteEntity;
+import ru.log_inil.mc.minedonate.gui.frames.GuiFrameEditEntity;
 import ru.log_inil.mc.minedonate.gui.context.ContextElement;
 
 public class GuiItemEntryOfEntityMerch extends GuiAbstractItemEntry {
@@ -34,14 +36,14 @@ public class GuiItemEntryOfEntityMerch extends GuiAbstractItemEntry {
 
 		info = _eim ;
 		sc = _sc ;
-
+		
 		String owner = MineDonate . shops . get ( info . shopId ) . owner ;
 		if ( MineDonate . getAccount ( ) . canEditShop ( owner ) ) {
 			
 			List < ContextElement > cElements = new ArrayList < > ( ) ;
 	
-			cElements . add ( new ContextElement ( 0, "rename", MineDonate.cfgUI.lang.renameEntityMerch, this, 9 ) ) ;
-			cElements . add ( new ContextElement ( 1, "delete", MineDonate.cfgUI.lang.deleteEntityMerch, this, 9 ) ) ;
+			cElements . add ( new ContextElement ( 0, "edit", MineDonate.cfgUI.lang.editEntityMerch, this, 10 ) ) ;
+			cElements . add ( new ContextElement ( 1, "delete", MineDonate.cfgUI.lang.deleteEntityMerch, this, 10 ) ) ;
 	
 			cmm = new ContextMenu ( 1, 1, cElements ) ;
 			
@@ -66,6 +68,9 @@ public class GuiItemEntryOfEntityMerch extends GuiAbstractItemEntry {
 		
 	}
 	
+	float rotate = 20f ;
+	float scale = 13f ;
+	
 	@Override 
 	public void draw ( GuiItemsScrollArea gi, int x_offset, int y_offset, int xRightOffset, int mouseX, int mouseY, Tessellator var5, DrawType dt, int index, int size ) {
 
@@ -86,7 +91,7 @@ public class GuiItemEntryOfEntityMerch extends GuiAbstractItemEntry {
 			
 			if ( updateDataNeed ) {
 				
-				this . updateSize ( xRightOffset - x_offset, 30 ) ;
+				this . updateSize ( xRightOffset - x_offset, 28 ) ;
 
 				updateDataNeed = false ;
 				
@@ -96,8 +101,8 @@ public class GuiItemEntryOfEntityMerch extends GuiAbstractItemEntry {
 			RenderHelper . enableGUIStandardItemLighting ( ) ;
 
 			//
-			renderEntity(55, y_offset + 25, 13 /* scale */, 55 + 55, y_offset - 200, info.entity);
-			gi.parent.drawCenteredString(gi.getFontRenderer(), info.name, 40 + 55, y_offset + 8, 16777215);
+			
+			gi . parent . drawCenteredString(gi.getFontRenderer(), info.name, 40 + 55, y_offset + 8, 16777215);
 			gi . parent . moneyArea . drawPriceArea ( xRightOffset - 70 - 15 - 20, y_offset + 8, info . cost, info . getMoneyType ( ) ) ;
 
 			if (info.limit != -1) {
@@ -106,14 +111,13 @@ public class GuiItemEntryOfEntityMerch extends GuiAbstractItemEntry {
 
 			}
 
-			//gi . parent . drawCenteredString ( gi . getFontRenderer ( ), costLine, x_offset - 70 - 15, y_offset + 8, 16777215 ) ;
-
 			//
 			
 			RenderHelper . disableStandardItemLighting ( ) ;
 			GL11 . glDisable ( GL12 . GL_RESCALE_NORMAL ) ;
 		    
 			//
+			
 			this . drawHorizontalLine ( gi . parent, 40, xRightOffset - 10, y_offset - 3, 520093695 ) ;
 
 	  		if ( index + 1 == size && y_offset + 30 < gi . bottom ) {
@@ -122,15 +126,67 @@ public class GuiItemEntryOfEntityMerch extends GuiAbstractItemEntry {
 
 	  		}
 	  		
+		} else if ( dt == DrawType . OVERLAY ) {
+			
+			if ( info . entity!= null ) {
+				
+				if ( ( mouseX >= 40 && 70 >= mouseX ) && ( mouseY >= y_offset - 2 && y_offset + 25 >= mouseY ) ) {
+
+					rotate -= 0.4f ;
+					
+					if ( scale >= 30f ) {
+						
+						scale = 30f ;
+						
+					} else {
+						
+						scale += 0.9f ;
+						
+					}
+										
+					if ( rotate <= -275f ) {
+						
+						rotate = 20f ;
+						
+					}
+					
+				} else {
+					
+					if ( rotate >= 20f ) {
+						
+						rotate = 20f ;
+						
+					} else {
+						
+						rotate += 2.9f ;
+						
+					}
+					
+					if ( scale <= 13 ) {
+						
+						scale = 13f ;
+						
+					} else {
+						
+						scale -= 0.7f ;
+						
+					}
+					
+				}
+								
+				renderEntity ( 55, y_offset + 25, scale, 55 + 55, -18f, ( index + 1 ) * 50f, rotate, info . entity ) ;
+						    
+			}
+			
 		}
 		
 	}
 
-	private void renderEntity(int p_147046_0_, int p_147046_1_, int p_147046_2_, float p_147046_3_, float p_147046_4_, EntityLivingBase p_147046_5_) {
+	private void renderEntity(int p_147046_0_, int p_147046_1_, float scale, float p_147046_3_, float p_147046_4_, float z, float rotate, EntityLivingBase p_147046_5_) {
 		GL11.glEnable(2903);
 		GL11.glPushMatrix();
-		GL11.glTranslatef((float) p_147046_0_, (float) p_147046_1_, 50.0F);
-		GL11.glScalef((float) (-p_147046_2_), (float) p_147046_2_, (float) p_147046_2_);
+		GL11.glTranslatef((float) p_147046_0_, (float) p_147046_1_, z);//50.0F
+		GL11.glScalef((-scale), scale, scale);
 		GL11.glRotatef(180.0F, 0.0F, 0.0F, 1.0F);
 		float var6 = p_147046_5_.renderYawOffset;
 		float var7 = p_147046_5_.rotationYaw;
@@ -141,7 +197,7 @@ public class GuiItemEntryOfEntityMerch extends GuiAbstractItemEntry {
 		RenderHelper.enableStandardItemLighting();
 		GL11.glRotatef(-135.0F, 0.0F, 1.0F, 0.0F);
 		GL11.glRotatef(-((float) Math.atan((double) (p_147046_4_ / 40.0F))) * 20.0F, 1.0F, 0.0F, 0.0F);
-		p_147046_5_.renderYawOffset = (float) Math.atan((double) (p_147046_3_ / 40.0F)) * 20.0F;
+		p_147046_5_.renderYawOffset = (float) Math.atan((double) (p_147046_3_ / 40.0F)) * rotate;//20F
 		p_147046_5_.rotationYaw = (float) Math.atan((double) (p_147046_3_ / 40.0F)) * 40.0F;
 		p_147046_5_.rotationPitch = -((float) Math.atan((double) (p_147046_4_ / 40.0F))) * 20.0F;
 		p_147046_5_.rotationYawHead = p_147046_5_.rotationYaw;
@@ -157,6 +213,8 @@ public class GuiItemEntryOfEntityMerch extends GuiAbstractItemEntry {
 		GL11.glPopMatrix();
 		RenderHelper.disableStandardItemLighting();
 //		GL11.glDisable('耺');
+		GL11.glDisable(2903);
+
 		OpenGlHelper.setActiveTexture(OpenGlHelper.lightmapTexUnit);
 		GL11.glDisable(3553);
 		OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
@@ -181,7 +239,7 @@ public class GuiItemEntryOfEntityMerch extends GuiAbstractItemEntry {
 
 		buy = new BuyButton ( info . getShopId ( ), info . getCategory ( ), info . merch_id, ShopGUI . getNextButtonId ( ), gui . resolution . getScaledWidth ( ) - 91, -100, MineDonate . cfgUI . cats . itemsAndBlocks . itemBuyButton . width, MineDonate . cfgUI . cats . itemsAndBlocks . itemBuyButton . height, MineDonate . cfgUI . cats . itemsAndBlocks . itemBuyButton . text ) ;
 
-        gui . addBtn ( buy, false ) ;
+        gui . addButton ( buy, false ) ;
 		if (info.limit != -1 && info.limit == 0) {
 
 			buy.enabled = false;
@@ -191,9 +249,53 @@ public class GuiItemEntryOfEntityMerch extends GuiAbstractItemEntry {
 		
 	}
 
-	@Override
-	public void onClickContextMenuElement(ShopGUI g, ContextMenu cmm, ContextElement e) {
-		System.err.println( ">" + e.name);
+	@Override 
+	public void postShow ( GuiItemsScrollArea gui ) { 
+		
+		super . postShow ( gui ) ;
+		
+		updateContextMenu ( ) ;
+		
 	}
 	
+	@Override 
+	public void updateContextMenu ( ) {
+		
+		super . updateContextMenu ( ) ;
+		
+	}
+	
+	@Override
+	public void onClickContextMenuElement(ShopGUI g, ContextMenu cmm, ContextElement e) {
+		
+		if ( e != null && info != null ) {
+			
+			switch ( e . name ) {
+				
+				case "edit" :
+					
+					GuiFrameEditEntity gfre = ( GuiFrameEditEntity ) g . showEntry ( "frame.entity.edit", true ) ;	
+					
+					gfre . setInfo ( info . shopId, info . catId, info . merch_id, info . cost ) ;
+					gfre . setFieldData ( info . name, gfre . fieldHolder ) ;
+					gfre . postShow ( g ) ;
+
+				break ;
+				
+				case "delete" :
+					
+					GuiFrameDeleteEntity gfde = ( GuiFrameDeleteEntity ) g . showEntry ( "frame.entity.delete", true ) ;	
+					
+					gfde . setInfo ( info . shopId, info . catId, info . merch_id ) ;
+					gfde . setConfirmCode ( Integer . toString ( Math . abs ( info . hashCode ( ) ) ) . substring ( 0, 3 ) ) ;
+					gfde . postShow ( g ) ;
+
+				break ;
+				
+			}
+			
+		}
+		
+	}
+
 }

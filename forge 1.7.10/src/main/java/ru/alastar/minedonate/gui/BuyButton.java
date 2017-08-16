@@ -1,13 +1,14 @@
 package ru.alastar.minedonate.gui;
 
-import net.minecraft.client.gui.GuiButton;
 import ru.alastar.minedonate.MineDonate;
-import ru.alastar.minedonate.network.packets.BuyPacket;
+import ru.alastar.minedonate.rtnl.ModNetwork;
+
+import ru.log_inil.mc.minedonate.gui.GuiTexturedButton;
 
 /**
  * Created by Alastar on 19.07.2017.
  */
-public class BuyButton extends GuiButton {
+public class BuyButton extends GuiTexturedButton {
 	
     int merch_id = -1;
     int shopId = 0 ;
@@ -33,11 +34,14 @@ public class BuyButton extends GuiButton {
 
     }
 
-    public void buy( ) {
-        if (merch_id != -1) {
-            BuyPacket packet = new BuyPacket(shopId, merch_id, catId, MineDonate.shops.get(shopId).cats[catId].getMerch(merch_id).getAmountToBuy());
-            MineDonate.networkChannel.sendToServer(packet);
+    public void buy ( ) {
+    	
+        if ( merch_id != -1 ) {
+        	
+        	ModNetwork . sendToServerBuyPacket ( shopId, merch_id, catId, MineDonate . shops . get ( shopId ) . cats [ catId ] . getMerch ( merch_id ) . getAmountToBuy ( ) ) ;
+     
         }
+        
     }
 
 

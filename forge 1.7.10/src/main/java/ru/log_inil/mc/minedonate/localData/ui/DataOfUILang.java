@@ -2,10 +2,10 @@ package ru.log_inil.mc.minedonate.localData.ui;
 
 public class DataOfUILang {
 
-	public String renameEntityMerch ;
+	public String editEntityMerch ;
 	public String deleteEntityMerch ;
 	
-	public String renameItemMerch ;
+	public String editItemMerch ;
 	public String deleteItemMerch ;
 	
 	public String freezeShop ;
@@ -13,15 +13,18 @@ public class DataOfUILang {
 	public String renameShop ;
 	public String deleteShop ;
 	
+	public String freezeAccount ;
+	public String unfreezeAccount ;
+	
 	public String shopFreezer ;
 	public String shopFreezReason ;
 	
 	public DataOfUILang ( ) {
 		
-		renameEntityMerch = "Rename this" ;
+		editEntityMerch = "Edit this" ;
 		deleteEntityMerch = "Delete this" ;
 		
-		renameItemMerch = "Rename this" ;
+		editItemMerch = "Edit this" ;
 		deleteItemMerch = "Delete this" ;
 		
 		freezeShop = "Freeze this shop" ;
@@ -29,8 +32,12 @@ public class DataOfUILang {
 		renameShop = "Rename this shop" ;
 		deleteShop = "Delete this shop";
 		
+		freezeAccount = "Freeze owner account" ;
+		unfreezeAccount = "Unfreeze owner account" ;
+
 		shopFreezer = "Freezer: ";
 		shopFreezReason = "Reason: ";
+		
 		
 	}
 	
