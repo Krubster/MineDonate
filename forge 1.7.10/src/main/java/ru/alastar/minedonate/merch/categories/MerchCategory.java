@@ -34,10 +34,16 @@ public abstract class MerchCategory {
     protected Map < Integer, Merch > m_Merch = new HashMap < > ( ) ;
 
     @SideOnly(Side.SERVER)
-    public abstract boolean canReverse();
+    public boolean canReverse() {
+    	
+    	return false ;
+    	
+    }
 
     @SideOnly(Side.SERVER)
-    public abstract void reverseFor(String log_msg, String player);
+    public void reverseFor ( int merchId, String player, String [ ] data ) {
+    	
+    }
 
     @SideOnly(Side.SERVER)
     public abstract void loadMerchFromDB(ResultSet rs);
@@ -47,9 +53,6 @@ public abstract class MerchCategory {
 
     public void addMerch ( Merch merch ) {
     	
-        //if (merch.getId() >= m_Merch.length)
-         //   m_Merch = Arrays.copyOf(m_Merch, merch.getId() + 1);
-
         m_Merch . put ( merch . getId ( ), merch ) ;
         
     }
@@ -58,7 +61,7 @@ public abstract class MerchCategory {
     public abstract void setEnabled ( boolean _enabled ) ;
     
     @SideOnly(Side.SERVER)
-    public abstract void GiveMerch(EntityPlayerMP player, Merch merch, int amount);
+    public abstract void giveMerch(EntityPlayerMP player, Merch merch, int amount);
 
     public boolean merchExists ( int id ) {
     	
@@ -118,7 +121,6 @@ public abstract class MerchCategory {
     
     @SideOnly(Side.SERVER)
     public void removeMerch ( Merch info ) {
-    	System.err.println( "remove: " + info + "> " + info.getId());
 
     	m_Merch . remove ( info . getId ( ) ) ;
     	

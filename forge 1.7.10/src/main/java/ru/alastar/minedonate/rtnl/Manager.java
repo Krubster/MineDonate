@@ -367,7 +367,7 @@ public class Manager {
 
 			if ( ii . limit > 0 ) {
 					
-				MineDonate . shops . get ( s . sid ) . cats [ catId ] . GiveMerch ( player, m, ii . limit ) ;
+				MineDonate . shops . get ( s . sid ) . cats [ catId ] . giveMerch ( player, m, ii . limit ) ;
 				
 			}
 			

@@ -1,10 +1,11 @@
 package ru.log_inil.mc.minedonate.gui.frames;
 
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.renderer.RenderHelper;
+
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.rtnl.ModNetwork;
+
 import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.gui.GuiGradientButton;
 import ru.log_inil.mc.minedonate.gui.GuiGradientTextField;
@@ -100,9 +101,9 @@ public class GuiFrameAddEntity extends GuiFrameAddItem {
  		limitField . setText ( "" ) ;
  		limitField . setTextHolder ( "" ) ;
  		
- 		if ( MineDonate . getAccount ( ) . canUnlimitedItems ( ) ) {
+ 		if ( MineDonate . getAccount ( ) . canUnlimitedEntities ( ) ) {
  			
- 			height = 60 ;
+ 			height = 40 ;
  			limitField . xPosition = nameField . xPosition ;
  			limitField . yPosition = nameField . yPosition + nameField . height ;
  			

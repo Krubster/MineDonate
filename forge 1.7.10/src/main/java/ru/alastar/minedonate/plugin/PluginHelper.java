@@ -28,13 +28,17 @@ public class PluginHelper {
 	
 	public static void loadPlugins ( ) {
 		
+		ClassLoader cl ;
+		
 		if ( MineDonate . cfg . sellPrivelegies && hasExists ( "PermissionsEx" ) ) {
 			
 			try {
 				
-				loadClassToBukkit ( Bukkit . getPluginManager ( ) . getPlugin ( "PermissionsEx" ) . getClass ( ) . getClassLoader ( ), PermissionsPlugin . class . getName ( ), false ) ;
+				cl = Bukkit . getPluginManager ( ) . getPlugin ( "PermissionsEx" ) . getClass ( ) . getClassLoader ( ) ;
 				
-				pexMgr = new PermissionsPluginReflection ( loadClassToBukkit ( Bukkit . getPluginManager ( ) . getPlugin ( "PermissionsEx" ) . getClass ( ) . getClassLoader ( ), PermissionsBukkitPlugin . class . getName ( ), true ) . newInstance ( ) ) ;
+				defineClassInClassLoader ( cl, PermissionsPlugin . class . getName ( ), false ) ;
+				
+				pexMgr = new PermissionsPluginReflection ( defineClassInClassLoader ( cl , MineDonate . cfg . permissionsPluginClassName, true ) . newInstance ( ) ) ;
 				pexMgr . load ( ) ;
 
 				System . out . println ( "[MineDonate] Pex loaded!" ) ;
@@ -54,9 +58,10 @@ public class PluginHelper {
 			
 			try {
 								
-				loadClassToBukkit ( Bukkit . getPluginManager ( ) . getPlugin ( "WorldGuard" ) . getClass ( ) . getClassLoader ( ), WorldGuardPlugin . class . getName ( ), false ) ;
+				cl = Bukkit . getPluginManager ( ) . getPlugin ( "WorldGuard" ) . getClass ( ) . getClassLoader ( ) ;
+				defineClassInClassLoader ( cl, WorldGuardPlugin . class . getName ( ), false ) ;
 			
-				wgMgr = new WorldGuardPluginReflection ( loadClassToBukkit ( Bukkit . getPluginManager ( ) . getPlugin ( "WorldGuard" ) . getClass ( ) . getClassLoader ( ), WorldGuardBukkitPlugin . class . getName ( ), true ) . newInstance ( ) ) ;
+				wgMgr = new WorldGuardPluginReflection ( defineClassInClassLoader ( cl, MineDonate . cfg . worldGuardPluginClassName, true ) . newInstance ( ) ) ;
 				wgMgr . load ( ) ;
 				
 				System . out . println ( "[MineDonate] WG loaded!" ) ;
@@ -88,7 +93,7 @@ public class PluginHelper {
 		
 	}
         
-	private static Class<?> loadClassToBukkit ( ClassLoader classLoader, String cl, boolean returnClass ) {
+	private static Class<?> defineClassInClassLoader ( ClassLoader classLoader, String cl, boolean loadClass ) {
 		
 		try {
 			
@@ -100,7 +105,7 @@ public class PluginHelper {
 			m . setAccessible ( true ) ;
 			m . invoke(classLoader, null, b, 0, b . length ) ;
 						
-			if ( returnClass ) {
+			if ( loadClass ) {
 				
 				return classLoader . loadClass ( cl ) ;
 				

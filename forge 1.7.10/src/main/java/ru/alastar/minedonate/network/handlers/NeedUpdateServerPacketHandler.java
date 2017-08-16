@@ -16,7 +16,7 @@ import ru.alastar.minedonate.rtnl.ModNetwork;
 
 public class NeedUpdateServerPacketHandler implements IMessageHandler<NeedUpdatePacket, IMessage> {
     
-	public NeedUpdateServerPacketHandler(){
+	public NeedUpdateServerPacketHandler ( ) {
 
     }
     
@@ -26,7 +26,7 @@ public class NeedUpdateServerPacketHandler implements IMessageHandler<NeedUpdate
     	if ( message . r == 0 ) {
 
     		if ( MineDonate . m_Enabled ) {
-    			
+		
                 EntityPlayerMP serverPlayer = ctx . getServerHandler ( ) . playerEntity ;
                 String userName = serverPlayer . getDisplayName ( ) . toLowerCase ( ) ;
                 

@@ -36,8 +36,8 @@ public class ShopGUI extends MCGuiAccessible {
 
     public boolean needNetUpdate = true ;
     public boolean loading = false ;
-    public boolean dbgFlag = false ;
-    public boolean confirmFlag = false ;
+    public static boolean dbgFlag = false ;
+    public static boolean confirmFlag = false ;
 
     private static int buttonLastId = 3 ;
     

@@ -33,9 +33,9 @@ public class Privelegies extends MerchCategory {
     }
 
     @Override
-    public void reverseFor(String log_msg, String player) {
+    public void reverseFor ( int merchId, String player, String [ ] data ) {
         
-    	PluginHelper.pexMgr.removeGroup ( player, log_msg.split(":")[2].split("-")[1] ) ;
+    	PluginHelper.pexMgr.removeGroup ( player, data[9].split("-")[1] ) ;
 
     }
 
@@ -82,7 +82,7 @@ public class Privelegies extends MerchCategory {
     }
 
     @Override
-    public void GiveMerch(EntityPlayerMP serverPlayer, Merch merch, int amount) {
+    public void giveMerch(EntityPlayerMP serverPlayer, Merch merch, int amount) {
     	
         try {
             
@@ -91,16 +91,15 @@ public class Privelegies extends MerchCategory {
             if (info.worlds.length > 0) {
             	
                 for (String world : info.worlds) {
+                	
                 	PluginHelper.pexMgr.addGroup(serverPlayer.getDisplayName(), info.name, world, info.getTimeInSeconds());
-                   // Object obj = Bukkit.getPluginManager().getPlugin("PermissionsEx").getClass().getMethod("getUser", String.class).invoke(null, serverPlayer.getDisplayName());
-                   // obj.getClass().getMethod("addGroup", String.class, String.class, long.class).invoke(obj, info.name, world, info.getTimeInSeconds());
+                	
                 }
                 
             } else {
             	
             	PluginHelper.pexMgr.addGroup(serverPlayer.getDisplayName(), info.name, null, info.getTimeInSeconds());
-              //  Object obj = Bukkit.getPluginManager().getPlugin("PermissionsEx").getClass().getMethod("getUser", String.class).invoke(null, serverPlayer.getDisplayName());
-              // obj.getClass().getMethod("addGroup", String.class, String.class, long.class).invoke(obj, info.name, "*", info.getTimeInSeconds());
+
             }
             
         } catch ( Exception ex ) {

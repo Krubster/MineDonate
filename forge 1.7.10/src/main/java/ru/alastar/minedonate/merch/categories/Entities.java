@@ -24,16 +24,6 @@ public class Entities extends MerchCategory {
     	super ( _shopId, _catId, _moneyType ) ;
 		
 	}
-	
-    @Override
-    public boolean canReverse() {
-        return false;
-    }
-
-    @Override
-    public void reverseFor(String log_msg, String player) {
-
-    }
 
     @Override
     public void loadMerchFromDB(ResultSet rs) {
@@ -66,7 +56,7 @@ public class Entities extends MerchCategory {
     }
 
     @Override
-    public void GiveMerch(EntityPlayerMP serverPlayer, Merch merch, int amount) {
+    public void giveMerch(EntityPlayerMP serverPlayer, Merch merch, int amount) {
         try {
             EntityInfo info = (EntityInfo)merch;
             Entity entity = (Entity) Class.forName(info.classpath).getDeclaredConstructor(net.minecraft.world.World.class).newInstance(serverPlayer.getEntityWorld());

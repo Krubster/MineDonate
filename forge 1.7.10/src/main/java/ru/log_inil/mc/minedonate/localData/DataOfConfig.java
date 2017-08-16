@@ -1,9 +1,13 @@
 package ru.log_inil.mc.minedonate.localData;
 
 import ru.alastar.minedonate.mproc.StandartMoneyProcessor;
+import ru.alastar.minedonate.plugin.bukkit.PermissionsBukkitPlugin;
+import ru.alastar.minedonate.plugin.bukkit.WorldGuardBukkitPlugin;
 
 public class DataOfConfig {
 
+	public boolean enable = false ;
+	
 	public String dbHost = "localhost";
 	public int dbPort = 3306 ;
 	public String dbName = "shop";
@@ -40,16 +44,16 @@ public class DataOfConfig {
 	public boolean sendLogToDB = true;
 	public String dbLogs = "md_logs";
 	
-	public boolean enableInternalServerPermissions = false ;
-	public DataOfPermissionLine [ ] permissionsTriggerList ;
+	public boolean enablePermissionsMode = false ;
+	public DataOfPermissionEntry [ ] permissionsTriggerList ;
 	
 	public String dbModPermissionsTable = "md_perms" ;
 	
-	// public String dbShopsCategories = "md_subCats" ;
-
-	public String sessionPassword = "1234";
 	public int maxShopsCount = 3 ;
 	public boolean defaultUserAllowShopCreate = true ;
+
+	public String permissionsPluginClassName ;
+	public String worldGuardPluginClassName ;
 
 	public DataOfConfig ( ) {
 		
@@ -57,7 +61,11 @@ public class DataOfConfig {
 			new DataOfMoneyProcessor ( "rub", StandartMoneyProcessor . class . getName ( ), "md_accounts", "name", "money", false ),
 		} ;
 		
-		permissionsTriggerList = new DataOfPermissionLine [ ] { new DataOfPermissionLine ( "minedonate.default", "default" ), new DataOfPermissionLine ( "minedonate.moderation", "default,moder" ) } ;
+		permissionsTriggerList = new DataOfPermissionEntry [ ] { new DataOfPermissionEntry ( "minedonate.default", "default" ), new DataOfPermissionEntry ( "minedonate.moderation", "default,moder" ) } ;
+	
+		permissionsPluginClassName = PermissionsBukkitPlugin . class . getName ( ) ;
+		worldGuardPluginClassName = WorldGuardBukkitPlugin . class . getName ( ) ;
+		
 	}
 	
 }

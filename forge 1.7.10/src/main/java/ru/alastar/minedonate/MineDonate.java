@@ -5,24 +5,16 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.gui.merge.ShopInventoryContainer;
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.merch.categories.*;
-import ru.alastar.minedonate.merch.info.*;
 import ru.alastar.minedonate.mproc.AbstractMoneyProcessor;
 import ru.alastar.minedonate.plugin.PluginHelper;
 import ru.alastar.minedonate.proxies.CommonProxy;
@@ -36,7 +28,7 @@ import java.io.*;
 import java.sql.*;
 import java.util.*;
 
-@Mod(modid = MineDonate.MODID, version = MineDonate.VERSION, bukkitPlugin = "Vault")
+@Mod(modid = MineDonate.MODID, version = MineDonate.VERSION)
 public class MineDonate {
 
     public static final String MODID = "MineDonate";
@@ -46,28 +38,23 @@ public class MineDonate {
     public static Connection m_DB_Connection;
 
     public static boolean m_Enabled = false;
-    public static int m_Client_Money = 0;
 
     public static Map < Integer, Shop > shops = new HashMap < > ( ) ;
-    public static Map < String, AbstractMoneyProcessor > moneyProcessors = new HashMap < > ( ) ;
     public static Map < String, ShopInventoryContainer > mergeContainers = new HashMap < > ( ) ;
-    static Map < String, List < String > > permissions = new HashMap < > ( ) ;
-
-    public static Map < String, Integer > clientMoney = new HashMap < > ( ) ;
-
+    public static Map < String, List < String > > permissions = new HashMap < > ( ) ;
+    public static Map < String, AbstractMoneyProcessor > moneyProcessors = new HashMap < > ( ) ;
 
     public static DataOfConfig cfg;
 
     @SideOnly(Side.CLIENT)
     public static DataOfUIConfig cfgUI;
+    public static Map < String, Integer > clientMoney = new HashMap < > ( ) ;
 
     @Mod.Instance("MineDonate")
     private static MineDonate instance;
 
-    @SidedProxy(clientSide = "ru.alastar.minedonate.proxies.ClientProxy",
-            serverSide = "ru.alastar.minedonate.proxies.ServerProxy")
+    @SidedProxy(clientSide = "ru.alastar.minedonate.proxies.ClientProxy", serverSide = "ru.alastar.minedonate.proxies.ServerProxy")
     public static CommonProxy proxy;
-    public static boolean m_Admin_mode = false;
 
     public static MineDonate getInstance() {
         return instance;
@@ -136,7 +123,7 @@ public class MineDonate {
 
             MinecraftServer.getServer().logInfo("Connected!");
 
-            loadMerchServer ( ) ;
+            loadServerMerch ( ) ;
             m_Enabled = true;
 
         } catch ( Exception ex ) {
@@ -151,7 +138,7 @@ public class MineDonate {
     }
 
     @SideOnly(Side.SERVER)
-    private static void loadMerchServer ( ) {
+    private static void loadServerMerch ( ) {
     	
         try {
         	
@@ -394,80 +381,6 @@ public class MineDonate {
     	return moneyProcessors . get ( moneyType ) ;
 		
 	}
-	
-    public static void AddItemToStock(ItemStack heldItem, String name, String cost, String limit) {
-       
-    	ItemInfo info = new ItemInfo(0, 0, shops.get(0).cats[0].getMerch().length, Integer.valueOf(cost), name, Integer.valueOf(limit), heldItem);
-       
-        shops.get(0).cats[0].addMerch(info);
-       
-        try {
-          
-        	ByteBuf buf = Unpooled.buffer();
-         
-            NBTTagCompound nbt = new NBTTagCompound();
-            
-            heldItem.writeToNBT(nbt);
-          
-            ByteBufUtils.writeTag(buf, nbt);
-
-            InputStream stream = new ByteArrayInputStream(buf.array());
-           
-            PreparedStatement statement = m_DB_Connection.prepareStatement("INSERT INTO " + cfg.dbItems + " (name, info, cost, lim, stack_data) VALUES(?,?,?,?,?)");
-         
-            statement.setString(1, name);
-            statement.setString(2, "new merch");
-            statement.setInt(3, Integer.valueOf(cost));
-            statement.setInt(4, Integer.valueOf(limit));
-            statement.setBlob(5, stream);
-            statement.execute();
-            statement.close();
-            
-        } catch (SQLException e) {
-            
-        	e.printStackTrace();
-            
-        }
-    }
-
-    public static void AddEntityBy(Account.AdminSession session, Entity target) {
-    	
-        session.pending = false;
-        
-        String name = session.params[0];
-        
-        int cost = Integer.parseInt(session.params[1]);
-        int limit = Integer.parseInt(session.params[2]);
-
-        EntityInfo info = new EntityInfo(0, 3, shops.get(0).cats[3].getMerch().length, Integer.valueOf(cost), target, name, limit);
-       
-        shops.get(0).cats[3].addMerch(info);
-      
-        try {
-        	
-            ByteBuf buf = Unpooled.buffer();
-            
-            ByteBufUtils.writeTag(buf, info.entity_data);
-            
-            InputStream stream = new ByteArrayInputStream(buf.array());
-        
-            PreparedStatement statement = m_DB_Connection.prepareStatement("INSERT INTO " + cfg.dbEntities + " (name, data, cost, lim) VALUES(?,?,?,?)");
-            
-            statement.setString(1, name);
-            statement.setBlob(2, stream);
-            statement.setInt(3, cost);
-            statement.setInt(4, limit);
-
-            statement.execute();
-            statement.close();
-            
-        } catch (SQLException e) {
-            
-        	e.printStackTrace();
-            
-        }
-        
-    }
     
     static List < String > getPermissionsByGroup ( String groupName ) {
     	
@@ -523,9 +436,9 @@ public class MineDonate {
 		
 		List < String > l = new ArrayList < > ( ) ;
 
-		if ( cfg . enableInternalServerPermissions ) {
+		if ( cfg . enablePermissionsMode ) {
 			
-			for ( DataOfPermissionLine dopl : cfg . permissionsTriggerList ) {
+			for ( DataOfPermissionEntry dopl : cfg . permissionsTriggerList ) {
 
 				if ( PluginHelper . pexMgr . hasPermission ( userName, dopl . key ) ) {
 					
@@ -635,7 +548,7 @@ public class MineDonate {
     }
     
     @SideOnly(Side.CLIENT)
-    public static void loadMerchClient() {
+    public static void loadClientMerch ( ) {
 
     	shops . put ( 0, new Shop ( 0, new MerchCategory[]{new ItemNBlocks(0, 0,  cfg.itemsMoneyType), new Privelegies(0, 1, cfg.privelegiesMoneyType), new Regions(0, 2, cfg.regionMoneyType), new Entities(0, 3, cfg.entitiesMoneyType), new UsersShops()}, "SERVER", "Server shop", false, null, null, false ) ) ;
 

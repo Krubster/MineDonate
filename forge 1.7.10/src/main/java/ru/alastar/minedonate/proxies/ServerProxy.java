@@ -1,18 +1,14 @@
 package ru.alastar.minedonate.proxies;
 
 import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+
 import net.minecraftforge.common.MinecraftForge;
+
 import ru.alastar.minedonate.MineDonate;
-import ru.alastar.minedonate.commands.AddEntityCommand;
-import ru.alastar.minedonate.commands.AddItemCommand;
-import ru.alastar.minedonate.commands.AdminCommand;
 import ru.alastar.minedonate.events.EntitySelectEventHandler;
-import ru.alastar.minedonate.events.MouseEventHandler;
 import ru.alastar.minedonate.plugin.PluginHelper;
-import ru.alastar.minedonate.rtnl.ModNetwork;
 import ru.alastar.minedonate.rtnl.ShopLogger;
 
 /**
@@ -25,12 +21,18 @@ public class ServerProxy extends CommonProxy {
 
         super.preInit(event);
 
-        ShopLogger.init();
-        MineDonate.loadServerConfig();
-        MineDonate.initDataBase();
+        ShopLogger . init ( ) ;
+        MineDonate . loadServerConfig ( ) ;
+        
+        if ( ! MineDonate . cfg . enable ) { 
+        	 
+        	return ;
+        	
+        }
 
-        MinecraftForge.EVENT_BUS.register(new MouseEventHandler());
-        MinecraftForge.EVENT_BUS.register(new EntitySelectEventHandler());
+        MineDonate . initDataBase ( ) ;
+
+        MinecraftForge . EVENT_BUS . register ( new EntitySelectEventHandler ( ) ) ;
 
     }
     
@@ -40,12 +42,16 @@ public class ServerProxy extends CommonProxy {
     	
     	super . serverStarting ( event ) ;
     	
+        if ( ! MineDonate . cfg . enable ) { 
+       	 
+        	return ;
+        	
+        }
+        
     	PluginHelper . loadPlugins ( ) ;
     	
-        event.registerServerCommand(new AddEntityCommand());
-        event.registerServerCommand(new AddItemCommand());
-        event.registerServerCommand(new AdminCommand());
         
     }
    
+	
 }

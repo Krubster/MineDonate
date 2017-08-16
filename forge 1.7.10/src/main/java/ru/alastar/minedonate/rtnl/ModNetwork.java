@@ -74,10 +74,14 @@ public class ModNetwork {
         //
         
         networkChannel . registerMessage ( AddNewEntryServerPacketHandler . class, AddNewEntryPacket . class, i ++, Side . SERVER ) ;
-        
-        networkChannel . registerMessage ( MobSelectServerPacketHandler . class, MobSelectPacket . class, i ++, Side . SERVER ) ;
-        networkChannel . registerMessage ( MobSelectClientPacketHandler . class, MobSelectPacket . class, i ++, Side . CLIENT ) ;
 
+        i ++ ;
+        
+        networkChannel . registerMessage ( MobSelectServerPacketHandler . class, MobSelectPacket . class, i, Side . SERVER ) ;
+        networkChannel . registerMessage ( MobSelectClientPacketHandler . class, MobSelectPacket . class, i, Side . CLIENT ) ;
+
+        i ++ ;
+        
         //
         
         networkChannel . registerMessage ( DeleteShopMerchServerPacketHandler . class, DeleteShopMerchPacket . class, i ++, Side . SERVER ) ;
