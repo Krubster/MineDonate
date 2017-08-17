@@ -2,8 +2,7 @@ package ru.alastar.minedonate.rtnl;
 
 import java.util.List;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import ru.alastar.minedonate.MineDonate;
 
@@ -17,9 +16,6 @@ public class Account {
 	public String freezShopCreateFreezer ;
 	public String freezShopCreateReason ;
 	public int shopsCount ;
-
-	@SideOnly(Side.SERVER)
-	public AdminSession adminSesson ;
 	
 	public Account ( String _name, List < String > _permissions, boolean _freezShopCreate, String _freezShopCreateFreezer, String _freezShopCreateReason, int _shopsCount ) {
 		
@@ -35,7 +31,7 @@ public class Account {
 	
 	public boolean hasPermission ( String name ) {
 
-		return true;//permissions . contains ( name . toLowerCase ( ) ) ;
+		return permissions . contains ( name . toLowerCase ( ) ) ;
 		
 	}
 	
@@ -75,6 +71,12 @@ public class Account {
 
 	}
 	
+	public boolean canUnlimitedEntities ( ) {
+		
+		return hasPermission ( "unlimitedEntities" ) || hasPermission ( "*" ) ;
+
+	}
+	
 	public boolean canCreateShop ( ) {
 		
 		return hasPermission ( "createShop" ) || hasPermission ( "*" ) ;
@@ -110,28 +112,13 @@ public class Account {
 		return hasPermission ( "canViewOtherFreezText" ) || hasPermission ( "*" ) ;
 		
 	}
-	
-	public void createAdminSession ( ) {
-		
-		this . adminSesson = new AdminSession ( ) ;
-		
-	}
-	
-	public class AdminSession {
-		
-	    public boolean pending = false ;
-	    public String [ ] params ;
-
-	    public AdminSession ( ) {
-
-	    }
-	    
-	}
 
 	public class ManageSession {
 	
 		public ItemStack currentItemStack ;
-		
+	    public boolean mobSelect = false ;
+		public Entity currentMob ;
+
 		public void setItemStack ( ItemStack _currentItemStack ) {
 			
 			currentItemStack = _currentItemStack ;

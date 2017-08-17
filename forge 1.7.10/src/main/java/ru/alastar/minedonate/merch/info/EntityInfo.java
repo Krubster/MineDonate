@@ -11,6 +11,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import ru.alastar.minedonate.merch.Merch;
+import ru.alastar.minedonate.rtnl.Utils;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -77,20 +78,22 @@ public class EntityInfo extends Merch {
     public void read(ByteBuf buf) {
         super.read(buf);
         cost = buf.readInt();
-        int info_length = buf.readInt();
+        
         try {
-            this.name = new String(buf.readBytes(info_length).array(), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        entity_data = ByteBufUtils.readTag(buf);
-        limit = buf.readInt();
-        int class_length = buf.readInt();
-        try {
-            this.classpath = new String(buf.readBytes(class_length).array(), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+			
+        	name = Utils . netReadString ( buf ) ;
+	        
+	        entity_data = ByteBufUtils.readTag(buf);
+	        limit = buf.readInt();
+					
+        	classpath = Utils . netReadString ( buf ) ;
+			
+		} catch ( Exception ex ) {
+			
+			ex . printStackTrace ( ) ;
+			
+		}
+        
         try {
             entity = (EntityLivingBase) Class.forName(classpath).getDeclaredConstructor(net.minecraft.world.World.class).newInstance(Minecraft.getMinecraft().theWorld);
             entity.readFromNBT(entity_data);
@@ -111,14 +114,26 @@ public class EntityInfo extends Merch {
 
     @Override
     public void write(ByteBuf buf) {
+    	
         super.write(buf);
-        buf.writeInt(cost);
-        buf.writeInt(name.getBytes().length);
-        buf.writeBytes(name.getBytes());
-        ByteBufUtils.writeTag(buf, entity_data);
-        buf.writeInt(limit);
-        buf.writeInt(classpath.getBytes().length);
-        buf.writeBytes(classpath.getBytes());
+                
+        try {
+			
+            buf.writeInt(cost);
+
+        	Utils . netWriteString ( buf, name ) ;
+	        
+	        ByteBufUtils.writeTag(buf, entity_data);
+	        buf.writeInt(limit);
+		
+        	Utils . netWriteString ( buf, classpath ) ;
+			
+		} catch ( Exception ex ) {
+			
+			ex . printStackTrace ( ) ;
+			
+		}
+        
     }
 
     @Override

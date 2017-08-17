@@ -1,13 +1,21 @@
 package ru.log_inil.mc.minedonate.gui.items;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.ResourceLocation;
+import paulscode.sound.SoundSystem;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -132,10 +140,10 @@ public class GuiItemEntryOfEntityMerch extends GuiAbstractItemEntry {
 				
 				if ( ( mouseX >= 40 && 70 >= mouseX ) && ( mouseY >= y_offset - 2 && y_offset + 25 >= mouseY ) ) {
 
-					rotate -= 0.4f ;
+					rotate -= 2.4f ;
 					
 					if ( scale >= 30f ) {
-						
+
 						scale = 30f ;
 						
 					} else {

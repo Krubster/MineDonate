@@ -9,6 +9,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.plugin.PluginHelper;
+import ru.alastar.minedonate.rtnl.Utils;
 
 import java.io.UnsupportedEncodingException;
 
@@ -63,20 +64,36 @@ public class RegionInfo extends Merch {
     public void read(ByteBuf buf) {
     	super.read(buf);
         cost = buf.readInt();
-        int info_length = buf.readInt();
+        
         try {
-            this.name = new String(buf.readBytes(info_length).array(), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+			
+        	name = Utils . netReadString ( buf ) ;
+        	world_name = Utils . netReadString ( buf ) ;
+			
+		} catch ( Exception ex ) {
+			
+			ex . printStackTrace ( ) ;
+			
+		}
+        
     }
 
     @Override
     public void write(ByteBuf buf) {
     	super.write(buf);
         buf.writeInt(cost);
-        buf.writeInt(name.getBytes().length);
-        buf.writeBytes(name.getBytes());
+        
+        try {
+			
+        	Utils . netWriteString ( buf, name ) ;
+        	Utils . netWriteString ( buf, world_name ) ;
+
+		} catch ( Exception ex ) {
+			
+			ex . printStackTrace ( ) ;
+			
+		}
+        
     }
 
     @Override

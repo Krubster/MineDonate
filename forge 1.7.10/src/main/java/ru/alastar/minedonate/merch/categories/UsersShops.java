@@ -22,15 +22,6 @@ public class UsersShops extends MerchCategory {
 		super ( 0, 4, null ) ;
 		
 	}
-	
-    @Override
-    public boolean canReverse() {
-        return false;
-    }
-
-    @Override
-    public void reverseFor(String log_msg, String player) {
-    }
 
     public ShopInfo getShop ( int sid ) {
     
@@ -82,7 +73,7 @@ public class UsersShops extends MerchCategory {
     }
     
     @Override
-    public void GiveMerch(EntityPlayerMP player, Merch merch, int amount) {
+    public void giveMerch(EntityPlayerMP player, Merch merch, int amount) {
 
     }
     

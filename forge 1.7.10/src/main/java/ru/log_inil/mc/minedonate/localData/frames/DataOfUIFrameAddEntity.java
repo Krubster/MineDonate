@@ -11,7 +11,6 @@ public class DataOfUIFrameAddEntity extends DataOfUIFrameAddItem {
 		title = "Add entity to shop" ;
 
 		nameField = new DataOfUITextHolderElement ( "", "Entity name", 120, 20 ) ;
-		limitField = null ;
 		
 	}
 	

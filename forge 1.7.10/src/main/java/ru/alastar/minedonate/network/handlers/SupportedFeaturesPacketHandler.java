@@ -31,7 +31,7 @@ public class SupportedFeaturesPacketHandler implements IMessageHandler<Supported
         MineDonate.cfg.entitiesMoneyType = message.entitiesMoneyType;
         MineDonate.cfg.userShops = message.userShops;
 
-        MineDonate . loadMerchClient ( ) ;
+        MineDonate . loadClientMerch ( ) ;
         ShopGUI . instance . defaultCategory = message . firstCatId ;
 
         return null;

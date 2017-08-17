@@ -9,6 +9,7 @@ import java.sql.Statement;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import ru.alastar.minedonate.MineDonate;
@@ -243,15 +244,56 @@ public class Manager {
 		
 	}
 
+
+	public static void addEntityToShop ( Account acc, Shop s, int catId, int limit, int cost,  String name ) {
+		
+		if ( ! acc . canUnlimitedEntities ( ) ) {
+			
+			limit = 1 ;
+			
+		}
+
+		EntityInfo info = new EntityInfo(s.sid, catId, s.cats[catId].getNextMerchId(), Integer.valueOf(cost), acc.ms.currentMob, name, limit);
+        
+        s.cats[catId].addMerch(info);
+       
+        ModNetwork . sendToAllAddMerchPacket ( info ) ;
+
+        try {
+          
+            ByteBuf buf = Unpooled.buffer();
+            
+            ByteBufUtils.writeTag(buf, info.entity_data);
+            
+            InputStream stream = new ByteArrayInputStream(buf.array());
+        
+            PreparedStatement statement = MineDonate.getDBConnection().prepareStatement("INSERT INTO " + s.cats[catId].getDatabaseTable() + " (name, data, cost, lim) VALUES(?,?,?,?)");
+            
+            statement.setString(1, name);
+            statement.setBlob(2, stream);
+            statement.setInt(3, cost);
+            statement.setInt(4, limit);
+
+            statement.execute();
+            statement.close();
+            
+        } catch (SQLException e) {
+            
+        	e.printStackTrace();
+            
+        }
+        
+	}
+	
 	public static void addItemToShop ( Account acc, Shop s, int catId, int limit, int cost, String name ) {
 		
 		if ( ! acc . canUnlimitedItems ( ) ) {
 			
-			limit = 1 ; // acc . ms . currentItemStack . stackSize ;
+			limit = 1 ;
 			
 		}
 		
-    	ItemInfo info = new ItemInfo(s.sid, catId, s.cats[catId].getMerch().length, Integer.valueOf(cost), name, "new merch", Integer.valueOf(limit), acc.ms.currentItemStack);
+    	ItemInfo info = new ItemInfo(s.sid, catId, s.cats[catId].getNextMerchId(), Integer.valueOf(cost), name, Integer.valueOf(limit), acc.ms.currentItemStack);
         
         s.cats[catId].addMerch(info);
        
@@ -269,13 +311,23 @@ public class Manager {
 
             InputStream stream = new ByteArrayInputStream(buf.array());
            
-            PreparedStatement statement = MineDonate.getDBConnection().prepareStatement("INSERT INTO " + s.cats[catId].getDatabaseTable() + " (name, info, cost, lim, stack_data) VALUES(?,?,?,?,?)");
+            PreparedStatement statement ; 
+            
+            if ( s . sid == 0 ) {
+            
+            	statement = MineDonate.getDBConnection().prepareStatement("INSERT INTO " + s.cats[catId].getDatabaseTable() + " (name, cost, lim, stack_data) VALUES(?,?,?,?)");
+            
+            } else {
          
+            	statement = MineDonate.getDBConnection().prepareStatement("INSERT INTO " + s.cats[catId].getDatabaseTable() + " (name, cost, lim, stack_data, shopId) VALUES(?,?,?,?,?)");
+                statement.setInt(5, s.sid);
+
+            }
+            
             statement.setString(1, name);
-            statement.setString(2, "new merch");
-            statement.setInt(3, Integer.valueOf(cost));
-            statement.setInt(4, Integer.valueOf(limit));
-            statement.setBlob(5, stream);
+            statement.setInt(2, Integer.valueOf(cost));
+            statement.setInt(3, Integer.valueOf(limit));
+            statement.setBlob(4, stream);
             statement.execute();
             statement.close();
             
@@ -315,7 +367,7 @@ public class Manager {
 
 			if ( ii . limit > 0 ) {
 					
-				MineDonate . shops . get ( s . sid ) . cats [ catId ] . GiveMerch ( player, m, ii . limit ) ;
+				MineDonate . shops . get ( s . sid ) . cats [ catId ] . giveMerch ( player, m, ii . limit ) ;
 				
 			}
 			

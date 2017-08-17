@@ -4,11 +4,12 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import net.minecraft.entity.player.EntityPlayerMP;
-
+import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.rtnl.ModNetwork;
 
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,10 +34,16 @@ public abstract class MerchCategory {
     protected Map < Integer, Merch > m_Merch = new HashMap < > ( ) ;
 
     @SideOnly(Side.SERVER)
-    public abstract boolean canReverse();
+    public boolean canReverse() {
+    	
+    	return false ;
+    	
+    }
 
     @SideOnly(Side.SERVER)
-    public abstract void reverseFor(String log_msg, String player);
+    public void reverseFor ( int merchId, String player, String [ ] data ) {
+    	
+    }
 
     @SideOnly(Side.SERVER)
     public abstract void loadMerchFromDB(ResultSet rs);
@@ -46,9 +53,6 @@ public abstract class MerchCategory {
 
     public void addMerch ( Merch merch ) {
     	
-        //if (merch.getId() >= m_Merch.length)
-         //   m_Merch = Arrays.copyOf(m_Merch, merch.getId() + 1);
-
         m_Merch . put ( merch . getId ( ), merch ) ;
         
     }
@@ -57,7 +61,7 @@ public abstract class MerchCategory {
     public abstract void setEnabled ( boolean _enabled ) ;
     
     @SideOnly(Side.SERVER)
-    public abstract void GiveMerch(EntityPlayerMP player, Merch merch, int amount);
+    public abstract void giveMerch(EntityPlayerMP player, Merch merch, int amount);
 
     public boolean merchExists ( int id ) {
     	
@@ -71,6 +75,35 @@ public abstract class MerchCategory {
         
     }
 
+	public int getNextMerchId ( ) {
+		
+        try {
+        	
+        	Statement stmt = MineDonate . getNewStatement ( ) ;
+            ResultSet rs = stmt . executeQuery ( "SHOW TABLE STATUS LIKE '" + getDatabaseTable ( ) + "';" ) ;
+
+            int r = -1 ;
+            while ( rs . next ( ) ) {
+
+                r = rs . getInt ( "Auto_increment" ) ;
+
+            }
+            
+            rs . close ( ) ;
+            stmt . close ( ) ;
+
+            return r ;
+            
+        } catch ( Exception ex ) {
+            
+        	ex . printStackTrace ( ) ;
+            
+        }
+
+        return -1 ;
+        
+	}
+    
     public Merch [ ] getMerch() {
     	
     	Merch [ ] m = new Merch [ m_Merch . size ( ) ] ;
@@ -88,7 +121,6 @@ public abstract class MerchCategory {
     
     @SideOnly(Side.SERVER)
     public void removeMerch ( Merch info ) {
-    	System.err.println( "remove: " + info + "> " + info.getId());
 
     	m_Merch . remove ( info . getId ( ) ) ;
     	
@@ -113,5 +145,5 @@ public abstract class MerchCategory {
     	ITEMS, PRIVELEGIES, REGIONS, ENTITIES, SHOPS
     	
     }
-    
+
 }

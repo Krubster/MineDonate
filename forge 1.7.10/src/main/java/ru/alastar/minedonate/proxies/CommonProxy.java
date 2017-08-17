@@ -8,6 +8,7 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.events.MineDonateGUIHandler;
+import ru.alastar.minedonate.network.manage.packets.ManageResponsePacket;
 import ru.alastar.minedonate.rtnl.ModNetwork;
 
 /**
@@ -40,5 +41,5 @@ public class CommonProxy {
 	public void clientOpenGui ( int id ) {	
 		
 	}
-     
+	
 }

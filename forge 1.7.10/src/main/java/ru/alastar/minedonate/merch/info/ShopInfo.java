@@ -8,6 +8,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.EnumChatFormatting;
 import ru.alastar.minedonate.merch.Merch;
+import ru.alastar.minedonate.rtnl.Utils;
 
 public class ShopInfo extends Merch {
 	
@@ -65,20 +66,20 @@ public class ShopInfo extends Merch {
         	merch_id = buf . readInt ( ) ;
             shopId = buf . readInt ( ) ;
             
-            owner = readString ( buf ) ;          
-            name = readString ( buf ) ;
+            owner = Utils . netReadString ( buf ) ;          
+            name = Utils . netReadString ( buf ) ;
 
             isFreezed = buf.readBoolean();
             canVisibleFreezedText = buf . readBoolean ( ) ;
 
             if ( isFreezed && canVisibleFreezedText ) {
                 
-            	freezer = readString ( buf ) ;          
-            	freezReason = readString ( buf ) ;
+            	freezer = Utils . netReadString ( buf ) ;          
+            	freezReason = Utils . netReadString ( buf ) ;
                 
             }
                         
-            moneyType = readString ( buf ) ;
+            moneyType = Utils . netReadString ( buf ) ;
             
         } catch ( Exception ex ) {
         	
@@ -92,24 +93,32 @@ public class ShopInfo extends Merch {
     @Override
     public void write ( ByteBuf buf ) {
     	
-        buf . writeInt ( merch_id ) ;
-        buf . writeInt ( shopId ) ;
-        
-        writeString ( buf, owner ) ;
-        writeString ( buf, name ) ;
-
-        buf . writeBoolean ( isFreezed ) ;
-        buf . writeBoolean ( canVisibleFreezedText ) ;
-
-        if ( isFreezed && canVisibleFreezedText ) {
+        try {
         	
-            writeString ( buf, freezer ) ;
-            writeString ( buf, freezReason ) ;
-
-        }
-                
-        writeString ( buf, moneyType ) ;
+	        buf . writeInt ( merch_id ) ;
+	        buf . writeInt ( shopId ) ;
+	        
+	        Utils . netWriteString ( buf, owner ) ;
+	        Utils . netWriteString ( buf, name ) ;
+	
+	        buf . writeBoolean ( isFreezed ) ;
+	        buf . writeBoolean ( canVisibleFreezedText ) ;
+	
+	        if ( isFreezed && canVisibleFreezedText ) {
+	        	
+	        	Utils . netWriteString ( buf, freezer ) ;
+	        	Utils . netWriteString ( buf, freezReason ) ;
+	
+	        }
+	                
+	        Utils . netWriteString ( buf, moneyType ) ;
         
+		} catch ( Exception ex ) {
+			
+			ex . printStackTrace ( ) ;
+			
+		}
+	
     }
 
     @Override
@@ -119,20 +128,6 @@ public class ShopInfo extends Merch {
     	
     }
     
-    String readString ( ByteBuf buf ) throws UnsupportedEncodingException {
-    	
-        return new String ( buf . readBytes ( buf . readInt ( ) ) . array ( ), "UTF-8" ) ;
-        
-    }
-     
-    
-    void writeString ( ByteBuf buf, String str ) {
-    	
-        buf.writeInt(str.getBytes().length);
-        buf.writeBytes(str.getBytes());
-        
-    }
-     
     @Override
     public String getBoughtMessage() {
         return "WTF?" ;

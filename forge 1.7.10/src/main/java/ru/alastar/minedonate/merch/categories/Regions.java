@@ -33,26 +33,31 @@ public class Regions extends MerchCategory {
     }
 
     @Override
-    public void reverseFor(String log_msg, String player) {
-        String msg = log_msg.split(":")[2];
+    public void reverseFor ( int merchId, String player, String [ ] data ) {
+    	
+        String msg = data[9];
         msg.replace(" bought region ", "");
         String world_name = msg.split("=")[1];
         String name = msg.split("=")[0];
         
         PluginHelper.wgMgr.removePlayerFromRegion(world_name, name, player);
 
-        returnToStock(new RegionInfo(shopId, catId, m_Merch.size(), Integer.valueOf(log_msg.split(":")[4]), name, world_name));
+        returnToStock(new RegionInfo(shopId, catId, merchId, Integer.valueOf(data[6]), name, world_name));
+        
     }
 
     private void returnToStock(RegionInfo regionInfo) {
-        addMerch(regionInfo);
-        Statement stmt = null;
+        
+    	addMerch(regionInfo);
+                
         try {
-            stmt = MineDonate.m_DB_Connection.createStatement();
+        	
+        	Statement stmt = MineDonate.m_DB_Connection.createStatement();
             String sql;
             sql = "INSERT INTO " + MineDonate.cfg.dbRegions + " (world, name, cost) VALUES('" + regionInfo.name + "', '" + regionInfo.world_name + "', " + regionInfo.getCost() + ")";
             stmt.execute(sql);
             stmt.close();
+            
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -97,7 +102,7 @@ public class Regions extends MerchCategory {
     }
     
     @Override
-    public void GiveMerch(EntityPlayerMP player, Merch merch, int amount) {
+    public void giveMerch(EntityPlayerMP player, Merch merch, int amount) {
 
     	final RegionInfo info = (RegionInfo) merch;
         PluginHelper.wgMgr.addPlayerToRegion(info.world_name, info.name, player.getDisplayName());

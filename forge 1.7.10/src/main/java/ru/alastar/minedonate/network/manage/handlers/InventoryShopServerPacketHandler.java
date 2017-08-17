@@ -1,4 +1,4 @@
-package ru.alastar.minedonate.network.handlers;
+package ru.alastar.minedonate.network.manage.handlers;
 
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
@@ -8,8 +8,8 @@ import net.minecraft.item.ItemStack;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.events.MineDonateGUIHandler;
 import ru.alastar.minedonate.gui.merge.ShopInventoryContainer;
+import ru.alastar.minedonate.network.manage.packets.InventoryShopPacket;
 import ru.alastar.minedonate.network.manage.packets.ItemMergedPacket;
-import ru.alastar.minedonate.network.packets.InventoryShopPacket;
 
 public class InventoryShopServerPacketHandler implements IMessageHandler<InventoryShopPacket, IMessage> {
 
