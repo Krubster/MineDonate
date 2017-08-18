@@ -2,7 +2,6 @@ package ru.log_inil.mc.minedonate.localData.cats;
 
 import ru.log_inil.mc.minedonate.localData.ui.DataOfUICategoryAbstract;
 import ru.log_inil.mc.minedonate.localData.ui.DataOfUIElement;
-import ru.log_inil.mc.minedonate.localData.ui.DataOfUITextHolderElement;
 
 public class DataOfUICategoryUsersShops extends DataOfUICategoryAbstract {
 
@@ -11,14 +10,13 @@ public class DataOfUICategoryUsersShops extends DataOfUICategoryAbstract {
 	public DataOfUIElement lockedGoButton ;
 	public DataOfUIElement viewMyShopsButton ;
 	public DataOfUIElement createNewShopButton ;
-	public DataOfUITextHolderElement createNewShopNameField ;
 
 	public DataOfUICategoryUsersShops ( ) {
 		
 		super ( ) ;
 
 		categoryButtonText = "Users shops" ;
-		categoryButtonWidth = 95 ;
+		categoryButtonWidth = 85 ;
 		itemBuyButton = new DataOfUIElement ( "Open", 44, 20 ) ;
 		
 		dontShowFreezed = false ;
@@ -26,9 +24,8 @@ public class DataOfUICategoryUsersShops extends DataOfUICategoryAbstract {
 		
 		lockedGoButton = new DataOfUIElement ( "Locked", 54, 20 ) ;
 
-		viewMyShopsButton = new DataOfUIElement ( "My shops", 54, 20 ) ;
-		createNewShopButton = new DataOfUIElement ( "Create shop", 64, 20 ) ;
-		createNewShopNameField = new DataOfUITextHolderElement ( "", "Entry name", 160, 20 ) ;
+		viewMyShopsButton = new DataOfUIElement ( "My shops", 64, 20 ) ;
+		createNewShopButton = new DataOfUIElement ( "Create shop", 74, 20 ) ;
 		
 	}
 	

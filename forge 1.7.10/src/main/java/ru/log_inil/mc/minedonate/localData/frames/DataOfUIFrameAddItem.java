@@ -14,7 +14,7 @@ public class DataOfUIFrameAddItem {
 		
 		title = "Add item to shop" ;
 		createButton = new DataOfUIElement ( "Add", 35, 20 ) ;
-		cancelButton = new DataOfUIElement ( "Cancel", 40, 20 ) ;
+		cancelButton = new DataOfUIElement ( "Cancel", 50, 20 ) ;
 		nameField = new DataOfUITextHolderElement ( "", "Item name", 120, 20 ) ;
 		limitField = new DataOfUITextHolderElement ( "", "Limit", 40, 20 ) ;
 		costField = new DataOfUITextHolderElement ( "", "Cost", 40, 20 ) ;

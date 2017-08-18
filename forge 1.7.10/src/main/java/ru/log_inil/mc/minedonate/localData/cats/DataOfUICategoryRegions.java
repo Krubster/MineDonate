@@ -9,7 +9,7 @@ public class DataOfUICategoryRegions extends DataOfUICategoryAbstract {
 		super ( ) ;
 
 		categoryButtonText = "Regions" ;
-		categoryButtonWidth = 75 ;
+		categoryButtonWidth = 60 ;
 		
 	}
 	

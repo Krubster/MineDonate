@@ -13,8 +13,8 @@ public class DataOfUIFrameDelete {
 	public DataOfUIFrameDelete ( ) {
 		
 		title = "Delete" ;
-		deleteButton = new DataOfUIElement ( "Delete", 40, 20 ) ;
-		cancelButton = new DataOfUIElement ( "Cancel", 40, 20 ) ;
+		deleteButton = new DataOfUIElement ( "Delete", 50, 20 ) ;
+		cancelButton = new DataOfUIElement ( "Cancel", 50, 20 ) ;
 		codeField = new DataOfUITextHolderElement ( "", "Entry code", 160, 20 ) ;
 		
 	}

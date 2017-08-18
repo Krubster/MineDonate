@@ -20,7 +20,7 @@ public class DeleteShopMerchServerPacketHandler implements IMessageHandler < Del
     @Override
     public IMessage onMessage ( DeleteShopMerchPacket message, MessageContext ctx ) {
     
-    	if ( ! MineDonate . checkShopAndLoad ( message . shopId ) ) {
+    	if ( ! MineDonate . checkShopExists ( message . shopId ) ) {
     		
 			return new ManageResponsePacket ( ManageResponsePacket.ResponseType.OBJ, ManageResponsePacket.ResponseCode.REMOVE, ManageResponsePacket.ResponseStatus.ERROR_SHOP_NOTFOUND ) ;
 

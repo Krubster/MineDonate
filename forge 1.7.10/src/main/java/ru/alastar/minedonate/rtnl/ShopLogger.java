@@ -87,7 +87,7 @@ public class ShopLogger {
 
     	if ( fromDB ) {
     		
-    		String query = "SELECT * FROM " + MineDonate . cfg . dbLogs + " WHERE " + ( forOncePlayer ? "boughtBy='" + _playerName + "' AND " : "" ) + " date BETWEEN '" + dateFormat.format(from) + " 00:00:00' AND '" + dateFormat.format(to) + " 23:59:59'" ;
+    		String query = "SELECT * FROM " + MineDonate . cfg . dbLogs + " WHERE " + ( forOncePlayer ? "playerName='" + _playerName + "' AND " : "" ) + " date BETWEEN '" + dateFormat.format(from) + " 00:00:00' AND '" + dateFormat.format(to) + " 23:59:59'" ;
       
     		if ( printFullInfo ) {
 
@@ -244,13 +244,13 @@ public class ShopLogger {
         		
         	} else {
         		
-            	System . err . println ( "[MineDonate] [Reverse] Error load cat[" + catId + "] in shop[" + shopId + "], row[" + lineNumber + "]" ) ;
+            	System . err . println ( "[MineDonate] [Reverse] Error cat[" + catId + "] not found in shop[" + shopId + "], row[" + lineNumber + "]" ) ;
 
         	}
         	
         } else {
         	
-        	System . err . println ( "[MineDonate] [Reverse] Error load shop[" + shopId + "], row[" + lineNumber + "]"  ) ;
+        	System . err . println ( "[MineDonate] [Reverse] Error shop[" + shopId + "] not found, row[" + lineNumber + "]"  ) ;
 
         }
         

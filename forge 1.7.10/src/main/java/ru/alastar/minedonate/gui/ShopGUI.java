@@ -12,6 +12,7 @@ import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.gui.categories.*;
 import ru.alastar.minedonate.proxies.ClientProxy;
 import ru.alastar.minedonate.rtnl.ModNetwork;
+import ru.alastar.minedonate.merch.info.ShopInfo;
 
 import ru.log_inil.mc.minedonate.gui.*;
 import ru.log_inil.mc.minedonate.gui.context.ContextMenuManager;
@@ -78,7 +79,6 @@ public class ShopGUI extends MCGuiAccessible {
     		
     	}
     	
-    	//gEntries . put ( "itemRename", new GuiFrameItemRename ( MineDonate . cfgUI . frames . rename ) ) ;
     	gEntries . put ( "frame.shop.create", new GuiFrameCreateShop ( "frame.shop.create", MineDonate . cfgUI . frames . createShop ) ) ;
     	gEntries . put ( "frame.shop.rename", new GuiFrameRenameShop ( "frame.shop.rename", MineDonate . cfgUI . frames . renameShop ) ) ;
     	gEntries . put ( "frame.shop.delete", new GuiFrameDeleteShop ( "frame.shop.delete", MineDonate . cfgUI . frames . deleteShop ) ) ;
@@ -389,7 +389,7 @@ public class ShopGUI extends MCGuiAccessible {
             
                     if ( cats [ m_Selected_Category ] instanceof UsersShopsCategory ) {
                     	
-                    	( ( UsersShopsCategory ) cats [ m_Selected_Category ] ) . selectedShop = 0 ;
+                    	( ( UsersShopsCategory ) cats [ m_Selected_Category ] ) . selectedShop = null ;
                     	( ( UsersShopsCategory ) cats [ m_Selected_Category ] ) . updateUserShopCategory ( this, null, false ) ;
                    
                     }
@@ -424,7 +424,7 @@ public class ShopGUI extends MCGuiAccessible {
             } else if ( button instanceof GoButton ) {
             	
             	// currentShop = ( ( GoButton ) button ) . shopId ;
-            	( ( UsersShopsCategory ) getCurrentCategory ( ) ) . selectedShop = ( ( GoButton ) button ) . shopId ;
+            	( ( UsersShopsCategory ) getCurrentCategory ( ) ) . selectedShop = ( ShopInfo ) MineDonate . shops . get ( 0 ) . cats [ ( getCurrentCategory ( ) ).getCatId ( ) ] . getMerch (  ( ( GoButton ) button ) . shopId ) ;
                 ModNetwork . sendToServerNeedShopCategoryPacket ( ( ( GoButton ) button ) . shopId, 0 ) ;
 
                 loading = true ;
@@ -436,6 +436,8 @@ public class ShopGUI extends MCGuiAccessible {
             	if ( button . id == searchButton . id ) {
 
             		if ( searchField != null ) {
+            			
+            			searchButton . pressed = ! searchField . getVisible ( ) ;
             			
                     	if ( searchField . getVisible ( ) ) { 
                     		
@@ -669,8 +671,8 @@ public class ShopGUI extends MCGuiAccessible {
 
         if ( MineDonate . cfgUI . addSearchButton ){
         
-        	buttonList . add ( searchButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), 30, ( int ) ( ( resolution . getScaledHeight ( ) ) - ( resolution . getScaledHeight ( ) * 0.1 ) ) - 5, MineDonate . cfgUI . searchButton . width, MineDonate . cfgUI . searchButton . height, MineDonate . cfgUI . searchButton . text, false ) ) ;
-
+        	buttonList . add ( searchButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), 30, ( int ) ( ( resolution . getScaledHeight ( ) ) - ( resolution . getScaledHeight ( ) * 0.1 ) ) - 5, MineDonate . cfgUI . searchButton . width, MineDonate . cfgUI . searchButton . height, MineDonate . cfgUI . searchButton . text, false, true ) ) ;
+        	
         	if ( searchField == null ) {
         		
         		listTextFields . add ( searchField = new GuiGradientTextField ( this . fontRendererObj, 30 + MineDonate.cfgUI.searchButton.width, (int) ( (resolution.getScaledHeight()) - (resolution.getScaledHeight() * 0.1) )-5, MineDonate . cfgUI . searchField . width, MineDonate . cfgUI . searchField . height, true ) ) ;
@@ -680,12 +682,13 @@ public class ShopGUI extends MCGuiAccessible {
         		
         		searchField . setVisible ( false ) ;
             	searchField . setEnabled ( false ) ;
-            	
+
         	}
 
         	searchField . xPosition = 30 + MineDonate.cfgUI.searchButton.width ;
     		searchField . yPosition = (int) ( (resolution.getScaledHeight()) - (resolution.getScaledHeight() * 0.1) ) - 5 ;
-        	
+        	searchButton . pressed = searchField . getVisible ( ) ;
+
         }
         
         buttonList . add ( rightButton = exitButton = new GuiGradientButton ( 0, ( int ) ( resolution . getScaledWidth ( ) - 30 ) - MineDonate . cfgUI . exitButton . width, ( int ) ( ( resolution . getScaledHeight ( ) ) - ( resolution . getScaledHeight ( ) * 0.1 ) - 5 ), MineDonate . cfgUI . exitButton . width, MineDonate . cfgUI . exitButton . height, MineDonate . cfgUI . exitButton . text, false ) ) ;

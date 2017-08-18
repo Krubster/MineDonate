@@ -13,8 +13,8 @@ public class DataOfUIFrameCreateShop {
 	public DataOfUIFrameCreateShop ( ) {
 		
 		title = "Create new shop" ;
-		createButton = new DataOfUIElement ( "Create", 40, 20 ) ;
-		cancelButton = new DataOfUIElement ( "Cancel", 40, 20 ) ;
+		createButton = new DataOfUIElement ( "Create", 50, 20 ) ;
+		cancelButton = new DataOfUIElement ( "Cancel", 50, 20 ) ;
 		nameField = new DataOfUITextHolderElement ( "", "Shop name", 160, 20 ) ;
 		
 	}

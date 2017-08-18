@@ -20,7 +20,7 @@ public class AddNewEntryServerPacketHandler implements IMessageHandler < AddNewE
     @Override
     public IMessage onMessage ( AddNewEntryPacket message, MessageContext ctx ) {
     	
-    	if ( ! MineDonate . checkShopAndLoad ( message . shopId ) ) {
+    	if ( ! MineDonate . checkShopExists ( message . shopId ) ) {
     		
 			return new ManageResponsePacket ( ManageResponsePacket.ResponseType.OBJ, ManageResponsePacket.ResponseCode.ADD, ManageResponsePacket.ResponseStatus.ERROR_SHOP_NOTFOUND ) ;
 
@@ -31,7 +31,7 @@ public class AddNewEntryServerPacketHandler implements IMessageHandler < AddNewE
 		Shop s = MineDonate . shops . get ( message . shopId ) ;
 		
 		Account acc = MineDonate . getAccount ( serverPlayer . getDisplayName ( ) . toLowerCase ( ) ) ;
-		
+
 		if ( acc . canEditShop ( s . owner ) ) {
 			
 			if ( s . isFreezed ) {

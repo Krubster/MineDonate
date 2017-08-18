@@ -10,6 +10,18 @@ public class GuiFrame extends GuiEntry {
 		
 	}
 
+    public void draw ( ShopGUI g, int page, int mouseX, int mouseY, float partialTicks, DrawType dt ) {
+
+    	super.draw(g, page, mouseX, mouseY, partialTicks, dt);
+    	
+    	if ( g . dbgFlag ) {
+    	
+    		g . drawString ( g . getFontRenderer ( ), name, 0, 0, 14737632 ) ;
+    	
+    	}
+    	
+    }
+    
 	public void hideFrame ( ShopGUI g ) {
 		
 	    g . showEntry ( name, false ) ; 

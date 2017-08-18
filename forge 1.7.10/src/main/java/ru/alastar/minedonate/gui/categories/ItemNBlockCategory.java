@@ -87,9 +87,9 @@ public class ItemNBlockCategory extends ShopCategory {
 	GuiButton rightButton ;
 
     @Override
-    public void updateButtons(ShopGUI relative, int page ) {
+    public void updateButtons(ShopGUI g, int page ) {
 
-    	rightButton = relative.rightButton;
+    	rightButton = g.rightButton;
     	/*
     	if ( ! ( relative.getCurrentCategory() instanceof ItemNBlockCategory ) ) {
     		
@@ -111,7 +111,7 @@ public class ItemNBlockCategory extends ShopCategory {
 
     	if ( addButton != null ) {
     		
-    		relative . removeButton ( addButton ) ;
+    		g . removeButton ( addButton ) ;
     		
     	}
 
@@ -119,15 +119,15 @@ public class ItemNBlockCategory extends ShopCategory {
     		
     		if ( addButton == null ) {
 	    	
-    			relative . getButtonList ( ) . add ( addButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), 
+    			g . getButtonList ( ) . add ( addButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), 
 	        			rightButton . xPosition -  MineDonate . cfgUI . cats . itemsAndBlocks . addButton . width,
 	        			rightButton . yPosition, MineDonate . cfgUI . cats . itemsAndBlocks . addButton . width, MineDonate . cfgUI . cats . itemsAndBlocks . addButton . height, MineDonate . cfgUI . cats . itemsAndBlocks . addButton . text, false ) ) ;
     		
     		} else {
     			
-    			if ( ! relative . getButtonList ( ) . contains ( addButton ) ) {
+    			if ( ! g . getButtonList ( ) . contains ( addButton ) ) {
     				
-    				relative . getButtonList ( ) . add ( addButton ) ;
+    				g . getButtonList ( ) . add ( addButton ) ;
     				
     			}
     			
@@ -136,9 +136,11 @@ public class ItemNBlockCategory extends ShopCategory {
     			
     		}
 
+        	addButton . visible = addButton . enabled = MineDonate . canAdd ( g . getCurrentShopId ( ), catId ) && ( shopOwner == null ? true : MineDonate . getAccount ( ) . canEditShop ( shopOwner ) ) ;
+
     	}
     	
-    	super.updateButtons(relative, page);
+    	super.updateButtons(g, page);
     	
     }
     

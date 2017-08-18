@@ -1,21 +1,13 @@
 package ru.log_inil.mc.minedonate.gui.items;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.ResourceLocation;
-import paulscode.sound.SoundSystem;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.imageio.ImageIO;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -110,7 +102,7 @@ public class GuiItemEntryOfEntityMerch extends GuiAbstractItemEntry {
 
 			//
 			
-			gi . parent . drawCenteredString(gi.getFontRenderer(), info.name, 40 + 55, y_offset + 8, 16777215);
+			gi . parent . drawString(gi.getFontRenderer(), info.name, 75, y_offset + 8, 16777215);
 			gi . parent . moneyArea . drawPriceArea ( xRightOffset - 70 - 15 - 20, y_offset + 8, info . cost, info . getMoneyType ( ) ) ;
 
 			if (info.limit != -1) {
@@ -140,7 +132,7 @@ public class GuiItemEntryOfEntityMerch extends GuiAbstractItemEntry {
 				
 				if ( ( mouseX >= 40 && 70 >= mouseX ) && ( mouseY >= y_offset - 2 && y_offset + 25 >= mouseY ) ) {
 
-					rotate -= 2.4f ;
+					rotate -= 0.4f ;
 					
 					if ( scale >= 30f ) {
 

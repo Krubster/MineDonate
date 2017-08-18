@@ -32,7 +32,7 @@ import java.util.*;
 public class MineDonate {
 
     public static final String MODID = "MineDonate";
-    public static final String VERSION = "0.7.1";
+    public static final String VERSION = "0.7.1.13";
 
     @SideOnly(Side.SERVER)
     public static Connection m_DB_Connection;
@@ -41,7 +41,7 @@ public class MineDonate {
 
     public static Map < Integer, Shop > shops = new HashMap < > ( ) ;
     public static Map < String, ShopInventoryContainer > mergeContainers = new HashMap < > ( ) ;
-    public static Map < String, List < String > > permissions = new HashMap < > ( ) ;
+    public static Map < Object, List < String > > permissions = new HashMap < > ( ) ;
     public static Map < String, AbstractMoneyProcessor > moneyProcessors = new HashMap < > ( ) ;
 
     public static DataOfConfig cfg;
@@ -88,7 +88,7 @@ public class MineDonate {
 
         try {
 
-            cfg = (DataOfConfig) LocalDataInterchange.read(DataOfConfig.class, new File("."), "config");
+            cfg = (DataOfConfig) LocalDataInterchange.read(DataOfConfig.class, new File("."), "server");
 
         } catch (Exception ex) {
 
@@ -382,6 +382,28 @@ public class MineDonate {
 		
 	}
     
+	public static List < String > getPermissionsByUser ( String userName ) {
+		
+		List < String > l = new ArrayList < > ( ) ;
+
+		if ( cfg . enablePermissionsMode ) {
+			
+			for ( DataOfPermissionEntry dopl : cfg . permissionsTriggerList ) {
+
+				if ( PluginHelper . pexMgr . hasPermission ( userName, dopl . key ) ) {
+					
+					l . addAll ( getPermissionsByGroups ( dopl . groups ) ) ;
+					
+				}
+				
+			}
+			
+		}
+
+		return l ;
+		
+	}
+	
     static List < String > getPermissionsByGroup ( String groupName ) {
     	
     	if ( permissions . containsKey ( groupName ) ) {
@@ -389,23 +411,9 @@ public class MineDonate {
     		return permissions . get ( groupName ) ;
     		
     	}
-    	
+		
 		List < String > l = new ArrayList < > ( ) ;
 
-		if ( groupName . contains ( "," ) ) {
-			
-			for ( String s : groupName . split ( "," ) ) {
-				
-				l . addAll ( getPermissionsByGroup ( s ) ) ;
-				
-			}
-			
-	        permissions . put ( groupName, l ) ;
-
-			return l ;
-			
-		}
-		
         try {
         	
         	Statement stmt = m_DB_Connection.createStatement();
@@ -413,7 +421,7 @@ public class MineDonate {
             
             while ( rs . next ( ) ) {
 
-                 l . add ( rs . getString ( "permission" ) ) ;
+                 l . add ( rs . getString ( "permission" ) . toLowerCase ( ) ) ;
 
             }
 
@@ -425,34 +433,34 @@ public class MineDonate {
         	ex . printStackTrace ( ) ;
         	
         }
-        
+
         permissions . put ( groupName, l ) ;
         
     	return l ;
     	
     }
     
-	public static List < String > getPermissionsByUser ( String userName ) {
-		
+    static List < String > getPermissionsByGroups ( String [ ] groups ) {
+
+    	if ( permissions . containsKey ( groups ) ) {
+    		
+    		return permissions . get ( groups ) ;
+    		
+    	}
+    	
 		List < String > l = new ArrayList < > ( ) ;
 
-		if ( cfg . enablePermissionsMode ) {
-			
-			for ( DataOfPermissionEntry dopl : cfg . permissionsTriggerList ) {
+		for ( String s : groups ) {
 
-				if ( PluginHelper . pexMgr . hasPermission ( userName, dopl . key ) ) {
-					
-					l . addAll ( getPermissionsByGroup ( dopl . groupName ) ) ;
-					
-				}
-				
-			}
-			
+			l . addAll ( getPermissionsByGroup ( s ) ) ;
+
 		}
+		
+        permissions . put ( groups, l ) ;
 
 		return l ;
 		
-	}
+    }
 	
 	public static Map < String, Account > users = new HashMap < > ( ) ;
 	
@@ -536,7 +544,7 @@ public class MineDonate {
 
         try {
 
-            cfgUI = (DataOfUIConfig) LocalDataInterchange.read(DataOfUIConfig.class, Minecraft.getMinecraft().mcDataDir, "ui");
+            cfgUI = (DataOfUIConfig) LocalDataInterchange.read(DataOfUIConfig.class, Minecraft.getMinecraft().mcDataDir, "client");
 
         } catch (Exception ex) {
 
@@ -594,4 +602,10 @@ public class MineDonate {
     	
     }
 	
+    public static boolean canAdd ( int shopId, int catId ) {
+    
+    	return acc == null ? false : ( shopId == 0 ? acc . canEditShop ( "SERVER" ) : true ) ;
+    	
+    }
+    
 }

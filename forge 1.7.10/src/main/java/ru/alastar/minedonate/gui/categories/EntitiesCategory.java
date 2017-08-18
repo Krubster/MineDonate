@@ -73,19 +73,21 @@ public class EntitiesCategory extends ShopCategory {
     GuiButton rightButton;
     
     @Override
-    public void updateButtons(ShopGUI relative, int page ) {	    	    	    	
+    public void updateButtons(ShopGUI g, int page ) {	    	    	    	
 
-    	rightButton = relative.exitButton;
+    	rightButton = g.exitButton;
     
     	if ( addButton != null ) {
     		
-    		relative . removeButton ( addButton ) ;
+    		g . removeButton ( addButton ) ;
     		
     	}
     	
-    	relative . getButtonList ( ) . add ( addButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), rightButton . xPosition -  MineDonate . cfgUI . cats . entities . addButton . width, rightButton . yPosition, MineDonate . cfgUI . cats . entities . addButton . width, MineDonate . cfgUI . cats . entities . addButton . height, MineDonate . cfgUI . cats . entities . addButton . text, false ) ) ;
+    	g . getButtonList ( ) . add ( addButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), rightButton . xPosition -  MineDonate . cfgUI . cats . entities . addButton . width, rightButton . yPosition, MineDonate . cfgUI . cats . entities . addButton . width, MineDonate . cfgUI . cats . entities . addButton . height, MineDonate . cfgUI . cats . entities . addButton . text, false ) ) ;
     	
-    	super.updateButtons(relative, page);
+    	addButton . visible = addButton . enabled = MineDonate . canAdd ( g . getCurrentShopId ( ), catId ) ;
+    	
+    	super.updateButtons(g, page);
     	
     }
         

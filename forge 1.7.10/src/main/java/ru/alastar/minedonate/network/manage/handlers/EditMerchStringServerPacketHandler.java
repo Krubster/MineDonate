@@ -24,7 +24,7 @@ public class EditMerchStringServerPacketHandler implements IMessageHandler < Edi
     @Override
     public IMessage onMessage ( EditMerchStringPacket message, MessageContext ctx ) {
     
-    	if ( ! MineDonate . checkShopAndLoad ( message . shopId ) ) {
+    	if ( ! MineDonate . checkShopExists ( message . shopId ) ) {
     		
 			return new ManageResponsePacket ( ManageResponsePacket.ResponseType.OBJ, ManageResponsePacket.ResponseCode.EDIT, ManageResponsePacket.ResponseStatus.ERROR_SHOP_NOTFOUND ) ;
 
