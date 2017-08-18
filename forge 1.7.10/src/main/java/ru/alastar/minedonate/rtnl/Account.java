@@ -37,13 +37,13 @@ public class Account {
 	
 	public boolean canFreezeShop ( String owner ) {
 
-		return ( hasPermission ( "freezeOtherShop" ) && ! owner . equalsIgnoreCase ( "SERVER" ) ) || hasPermission ( "*" ) ;
+		return ( name . equalsIgnoreCase ( owner ) && hasPermission ( "freezeOwnedShop" ) ) || ( hasPermission ( "freezeOtherShop" ) && ! owner . equalsIgnoreCase ( "SERVER" ) ) || hasPermission ( "*" ) ;
 		
 	}
 	
 	public boolean canUnFreezeShop ( String owner ) {
 
-		return ( hasPermission ( "unFreezeOtherShop" ) && ! owner . equalsIgnoreCase ( "SERVER" ) ) || hasPermission ( "*" ) ;
+		return ( name . equalsIgnoreCase ( owner ) && hasPermission ( "unFreezeOwnedShop" ) ) || ( hasPermission ( "unFreezeOtherShop" ) && ! owner . equalsIgnoreCase ( "SERVER" ) ) || hasPermission ( "*" ) ;
 		
 	}
 	
@@ -60,7 +60,7 @@ public class Account {
 	}
 	
 	public boolean canEditShop ( String owner ) {
-		
+
 		return ( name . equalsIgnoreCase ( owner ) && hasPermission ( "editOwnedShop" ) ) || ( hasPermission ( "editOtherShop" ) && ! owner . equalsIgnoreCase ( "SERVER" ) ) || hasPermission ( "*" ) ;
 
 	}
@@ -103,7 +103,7 @@ public class Account {
 	
 	public boolean limitShopCreate ( ) {
 		
-		return MineDonate . cfg . maxShopsCount <= this . shopsCount ;
+		return MineDonate . cfg . maxUsersShopsCount <= this . shopsCount ;
 		
 	}
 	

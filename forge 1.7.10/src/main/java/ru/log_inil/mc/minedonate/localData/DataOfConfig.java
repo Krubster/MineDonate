@@ -37,7 +37,9 @@ public class DataOfConfig {
 	public String dbUserItems = "md_userItems" ;
 	public String dbShops = "md_shops" ;
 	public String defaultUserShopMoneyType = "coin" ;
-
+	public int maxUsersShopsCount = 3 ;
+	public boolean defaultUserAllowShopCreate = true ;
+	
 	public boolean autoFixMoneyProcessorsTableCollisions = true ;
 	public DataOfMoneyProcessor [ ] moneyProcessors ;
 
@@ -45,12 +47,8 @@ public class DataOfConfig {
 	public String dbLogs = "md_logs";
 	
 	public boolean enablePermissionsMode = false ;
-	public DataOfPermissionEntry [ ] permissionsTriggerList ;
-	
 	public String dbModPermissionsTable = "md_perms" ;
-	
-	public int maxShopsCount = 3 ;
-	public boolean defaultUserAllowShopCreate = true ;
+	public DataOfPermissionEntry [ ] permissionsTriggerList ;
 
 	public String permissionsPluginClassName ;
 	public String worldGuardPluginClassName ;
@@ -58,10 +56,11 @@ public class DataOfConfig {
 	public DataOfConfig ( ) {
 		
 		moneyProcessors = new DataOfMoneyProcessor [ ] { 
-			new DataOfMoneyProcessor ( "rub", StandartMoneyProcessor . class . getName ( ), "md_accounts", "name", "money", false ),
+				new DataOfMoneyProcessor ( "rub", StandartMoneyProcessor . class . getName ( ), "md_accounts", "name", "money", false ),
+				new DataOfMoneyProcessor ( "coin", StandartMoneyProcessor . class . getName ( ), "md_accounts", "name", "coins", false ),
 		} ;
 		
-		permissionsTriggerList = new DataOfPermissionEntry [ ] { new DataOfPermissionEntry ( "minedonate.default", "default" ), new DataOfPermissionEntry ( "minedonate.moderation", "default,moder" ) } ;
+		permissionsTriggerList = new DataOfPermissionEntry [ ] { new DataOfPermissionEntry ( "minedonate.default", new String [ ] { "default" } ), new DataOfPermissionEntry ( "minedonate.moderation", new String [ ] { "default", "moder" } ) } ;
 	
 		permissionsPluginClassName = PermissionsBukkitPlugin . class . getName ( ) ;
 		worldGuardPluginClassName = WorldGuardBukkitPlugin . class . getName ( ) ;

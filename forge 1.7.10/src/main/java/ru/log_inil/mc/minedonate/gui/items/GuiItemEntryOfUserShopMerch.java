@@ -52,21 +52,17 @@ public class GuiItemEntryOfUserShopMerch extends GuiAbstractItemEntry {
 	public List<ContextElement> getContextElements() {
 		
 		List < ContextElement > cElements = new ArrayList < > ( ) ;
-
-		if ( MineDonate . getAccount ( ) . canFreezeShop ( info . owner ) ) {
 			
-			if ( info . isFreezed ) {
-			
-				cElements . add ( new ContextElement ( 1, "unfreeze", MineDonate.cfgUI.lang.unfreezeShop, this, 10 ) ) ;
-
-			} else {
-			
-				cElements . add ( new ContextElement ( 0, "freeze", MineDonate.cfgUI.lang.freezeShop, this, 10 ) ) ;
-			
-			}
-			
-		}
+		if ( info . isFreezed && MineDonate . getAccount ( ) . canUnFreezeShop ( info . owner ) ) {
 		
+			cElements . add ( new ContextElement ( 1, "unfreeze", MineDonate.cfgUI.lang.unfreezeShop, this, 10 ) ) ;
+
+		} else if ( ! info . isFreezed && MineDonate . getAccount ( ) . canFreezeShop ( info . owner ) ) {
+		
+			cElements . add ( new ContextElement ( 0, "freeze", MineDonate.cfgUI.lang.freezeShop, this, 10 ) ) ;
+		
+		}
+	
 		if ( MineDonate . getAccount ( ) . canRenameShop ( info . owner ) ) {
 			
 			cElements . add ( new ContextElement ( 2, "rename", MineDonate.cfgUI.lang.renameShop, this, 10 ) ) ;
@@ -104,7 +100,7 @@ public class GuiItemEntryOfUserShopMerch extends GuiAbstractItemEntry {
 			
 		shopTitle = info . owner + ( info . name != null && ! info . name . isEmpty ( ) ? " — " + info . name : "" ) ;
 		
-		if ( info . isFreezed && info . canVisibleFreezedText ) {
+		if ( info . isFreezed && info . canVisibleFreezedText && MineDonate . acc . canViewOtherFreezText ( ) ) {
 			
 			freezText = new ArrayList < > ( ) ;
 			
@@ -112,9 +108,7 @@ public class GuiItemEntryOfUserShopMerch extends GuiAbstractItemEntry {
 			freezText . add ( MineDonate.cfgUI.lang.shopFreezReason + info . freezReason ) ;
 
 		}
-			
-		System.err.println(freezText);
-		
+					
 		updateDataNeed = true ;
 		
 		return this ;

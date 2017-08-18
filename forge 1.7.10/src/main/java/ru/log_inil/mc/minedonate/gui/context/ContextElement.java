@@ -1,5 +1,6 @@
 package ru.log_inil.mc.minedonate.gui.context;
 
+import net.minecraft.util.EnumChatFormatting;
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.log_inil.mc.minedonate.gui.MCGuiAccessible;
 
@@ -35,7 +36,7 @@ public class ContextElement  {
 			
 		} else {
 			
-			g . drawString ( g . getFontRenderer ( ), "§n" + line, xOffset + 4, yOffset + ( ind * lineHeight ), 14737632 ) ;
+			g . drawString ( g . getFontRenderer ( ), EnumChatFormatting . UNDERLINE + line, xOffset + 4, yOffset + ( ind * lineHeight ), 14737632 ) ;
 			
 		}
 		

@@ -26,7 +26,8 @@ public class Manager {
 
 	public static void createShop ( String owner, String name ) {
 		
-        ShopInfo info = new ShopInfo ( MineDonate . shops . get ( 0 ) . cats [ 4 ] . getMerch ( ) . length, MineDonate.getNextShopId(), owner, name, false, null, null, false, MineDonate.cfg.defaultUserShopMoneyType ) ;
+        ShopInfo info = new ShopInfo ( 0, MineDonate . getNextShopId ( ), owner, name, false, null, null, false, MineDonate.cfg.defaultUserShopMoneyType ) ;
+        info . setId ( info . shopId ) ;
        
         MineDonate . shops . get ( 0 ) . cats [ 4 ] . addMerch ( info ) ;
       

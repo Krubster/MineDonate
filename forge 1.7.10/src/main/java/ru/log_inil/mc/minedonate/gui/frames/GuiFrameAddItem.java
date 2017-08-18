@@ -51,7 +51,7 @@ public class GuiFrameAddItem extends GuiFrame {
 
     	g . drawRect ( posX, posY, posX + width, posY + height, backgroundColor ) ;
     	
-    	super . draw( g, page, mouseX, mouseY, partialTicks, dt ) ;
+    	super . draw ( g, page, mouseX, mouseY, partialTicks, dt ) ;
     	
     	g . drawString ( g . getFontRenderer ( ), douifcs . title, posX + 5, posY + 3, titleColor ) ;
     	

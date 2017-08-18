@@ -13,8 +13,8 @@ public class DataOfUIFramEditItem {
 	public DataOfUIFramEditItem ( ) {
 		
 		title = "Edit item" ;
-		editButton = new DataOfUIElement ( "Edit", 35, 20 ) ;
-		cancelButton = new DataOfUIElement ( "Cancel", 40, 20 ) ;
+		editButton = new DataOfUIElement ( "Edit", 40, 20 ) ;
+		cancelButton = new DataOfUIElement ( "Cancel", 50, 20 ) ;
 		nameField = new DataOfUITextHolderElement ( "", "Item name", 120, 20 ) ;
 		limitField = new DataOfUITextHolderElement ( "", "Limit", 40, 20 ) ;
 		costField = new DataOfUITextHolderElement ( "", "Cost", 40, 20 ) ;

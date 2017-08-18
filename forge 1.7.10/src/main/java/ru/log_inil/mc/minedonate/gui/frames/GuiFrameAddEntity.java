@@ -182,16 +182,12 @@ public class GuiFrameAddEntity extends GuiFrameAddItem {
     			} catch ( Exception ex ) {
     				        			
     				limit = 1 ;
-    				/*
-    				limitField . fieldBorderColor = fieldBorderRedColor ;
-        			
-        			return false ;*/
-        			
+	
     			}
     			
     		} else {
     			
-    			limit = MineDonate . getAccount ( ) . ms . currentItemStack . stackSize ;
+    			limit = -1 ;
     			
     		}
     		

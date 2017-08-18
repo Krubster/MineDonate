@@ -3,6 +3,7 @@ package ru.alastar.minedonate.network.handlers;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.gui.categories.ItemNBlockCategory;
 import ru.alastar.minedonate.gui.categories.UsersShopsCategory;
@@ -39,16 +40,17 @@ public class NeedUpdateClientPacketHandler implements IMessageHandler<NeedUpdate
 					
 					UsersShopsCategory usc = ( UsersShopsCategory ) ShopGUI . instance . getCurrentCategory ( )  ;
 
-					if ( usc . selectedShop != 0 ) {
+					if ( usc . getSelectedShop ( ) != null ) {
 
-						ShopGUI . instance . currentShop = usc . selectedShop ;
+						ShopGUI . instance . currentShop = usc . getSelectedShop ( ) . shopId ;
 
 						ItemNBlockCategory cat = new ItemNBlockCategory ( "cat.items.custom" ) ;
+						cat . shopOwner = usc . getSelectedShop ( ) . owner ;
 						cat . setDisableCatCheck ( ) ;
 						
 						cat . preShow ( ShopGUI . instance ) ;
 						
-						cat . setShopId ( usc . selectedShop ) ;
+						cat . setShopId ( usc . getSelectedShop ( ) . shopId ) ;
 						
 						usc . updateUserShopCategory ( ShopGUI . instance, cat, true ) ;
 						usc . postShow ( ShopGUI . instance ) ; 

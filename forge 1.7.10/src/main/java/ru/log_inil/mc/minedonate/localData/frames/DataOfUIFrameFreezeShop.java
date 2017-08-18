@@ -13,8 +13,8 @@ public class DataOfUIFrameFreezeShop {
 	public DataOfUIFrameFreezeShop ( ) {
 		
 		title = "Freeze shop" ;
-		freezeButton = new DataOfUIElement ( "Freeze", 40, 20 ) ;
-		cancelButton = new DataOfUIElement ( "Cancel", 40, 20 ) ;
+		freezeButton = new DataOfUIElement ( "Freeze", 50, 20 ) ;
+		cancelButton = new DataOfUIElement ( "Cancel", 50, 20 ) ;
 		reasonField = new DataOfUITextHolderElement ( "", "Reason", 160, 20 ) ;
 		
 	}

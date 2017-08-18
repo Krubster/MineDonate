@@ -23,6 +23,7 @@ import ru.log_inil.mc.minedonate.gui.GuiScrollingList;
  */
 public abstract class ShopCategory extends GuiEntry {
 
+	public String shopOwner ;
 	protected int shopId = 0 ;
 	protected int catId ;
 	protected int subCatId = -1 ;
@@ -216,13 +217,13 @@ public abstract class ShopCategory extends GuiEntry {
 
             var18.setColorRGBA_I(0, 105);
 
-            var18.addVertexWithUV((double) 30, (double) ((g . getScaledResolution ( ).getScaledHeight()) - (g . getScaledResolution ( ).getScaledHeight() * 0.1)) - 6, 0.0D, 0.0D, 1.0D);
-            var18.addVertexWithUV((double) g . getScaledResolution ( ).getScaledWidth() - 30, (double) ((g . getScaledResolution ( ).getScaledHeight()) - (g . getScaledResolution ( ).getScaledHeight() * 0.1)) - 6, 0.0D, 1.0D, 1.0D);
+            var18.addVertexWithUV((double) 30, (double) ((g . getScaledResolution ( ).getScaledHeight()) - (g . getScaledResolution ( ).getScaledHeight() * 0.1)) - 5, 0.0D, 0.0D, 1.0D);
+            var18.addVertexWithUV((double) g . getScaledResolution ( ).getScaledWidth() - 30, (double) ((g . getScaledResolution ( ).getScaledHeight()) - (g . getScaledResolution ( ).getScaledHeight() * 0.1)) - 5, 0.0D, 1.0D, 1.0D);
 
             var18.setColorRGBA_I(0, 0);
 
-            var18.addVertexWithUV((double) g . getScaledResolution ( ).getScaledWidth() - 30, (double) (((g . getScaledResolution ( ).getScaledHeight()) - (g . getScaledResolution ( ).getScaledHeight() * 0.1)) - 6 - var20), 0.0D, 1.0D, 0.0D);
-            var18.addVertexWithUV((double) 30, (double) (((g . getScaledResolution ( ).getScaledHeight()) - (g . getScaledResolution ( ).getScaledHeight() * 0.1)) - 6 - var20), 0.0D, 0.0D, 0.0D);
+            var18.addVertexWithUV((double) g . getScaledResolution ( ).getScaledWidth() - 30, (double) (((g . getScaledResolution ( ).getScaledHeight()) - (g . getScaledResolution ( ).getScaledHeight() * 0.1)) - 5 - var20), 0.0D, 1.0D, 0.0D);
+            var18.addVertexWithUV((double) 30, (double) (((g . getScaledResolution ( ).getScaledHeight()) - (g . getScaledResolution ( ).getScaledHeight() * 0.1)) - 5 - var20), 0.0D, 0.0D, 0.0D);
 
             var18.draw();
 

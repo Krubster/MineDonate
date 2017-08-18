@@ -5,39 +5,46 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.util.EnumChatFormatting;
 
 public class GuiGradientButton extends GuiTexturedButton {
 
 	public boolean gradientVector = false ;
 	public boolean pressed = false ;
-	public boolean gradient = true ;
-
-    public GuiGradientButton(int p_i1020_1_, int p_i1020_2_, int p_i1020_3_, String p_i1020_4_, boolean _gv)
+	public boolean gradientFlag = true ;
+	public boolean stuckFlag = false ;
+	public boolean underlineFlag = true ;
+	
+    public GuiGradientButton(int _id, int _x, int _y, String _text, boolean _gv)
     {
-        this(p_i1020_1_, p_i1020_2_, p_i1020_3_, 200, 20, p_i1020_4_, _gv);
+        this(_id, _x, _y, 200, 20, _text, _gv, false );
     }
 
-    public GuiGradientButton(int p_i1021_1_, int p_i1021_2_, int p_i1021_3_, int p_i1021_4_, int p_i1021_5_, String p_i1021_6_, boolean _gv)
+    public GuiGradientButton(int _id, int _x, int _y, int _w, int _h, String _text, boolean _gv)
     {
-    	super(p_i1021_1_, p_i1021_2_, p_i1021_3_, p_i1021_4_, p_i1021_5_, p_i1021_6_);
-        this.width = 200;
-        this.height = 20;
+       this(_id, _x, _y, _w, _h, _text, _gv, false );
+    }
+
+    public GuiGradientButton(int _id, int _x, int _y, int _w, int _h, String _text, boolean _gv, boolean _stuckFlag ) {
+    	
+    	super(_id, _x, _y, _w, _h, _text);
         this.enabled = true;
         this.visible = true;
-        this.id = p_i1021_1_;
-        this.xPosition = p_i1021_2_;
-        this.yPosition = p_i1021_3_;
-        this.width = p_i1021_4_;
-        this.height = p_i1021_5_;
-        this.displayString = p_i1021_6_;
+        this.id = _id;
+        this.xPosition = _x;
+        this.yPosition = _y;
+        this.width = _w;
+        this.height = _h;
+        this.displayString = _text;
         gradientVector = _gv ;
+        stuckFlag = _stuckFlag ;
         
     }
 
     @Override
     public void drawButton(Minecraft p_146112_1_, int p_146112_2_, int p_146112_3_)
     {
-    	if ( ! gradient ) {
+    	if ( ! gradientFlag ) {
     		
     		super.drawButton(p_146112_1_, p_146112_2_, p_146112_3_);
     		return ;
@@ -54,28 +61,19 @@ public class GuiGradientButton extends GuiTexturedButton {
             OpenGlHelper.glBlendFunc(770, 771, 1, 0);
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-            /*
-        	int r0 = 0 & 0xFF;
-			int g0 = 0 & 0xFF;
-			int b0 = 0 & 0xFF;
-			int a0 = 0 & 0xFF;
-
-			int rgba0 = (r0 << 16) + (g0 << 8) + (b0) + (a0<<24);
-			//System.err.println(rgba0);
-			 * */
         	if ( pressed ) {
 				
         		k = 0 ;
 				
 			}
         	
-			int rgba = ( k == 0 ? -939458303 : k == 1 ? 1761673473 : -1694433023 ) ;
+			int rgba = ( k == 0 ? -939458303 : k == 1 ? 1761673473 : -1694433023);// -1694433023 ) ;
 		
 			this.drawGradientRect ( xPosition, yPosition, xPosition + width, yPosition+height, gradientVector ? 0 : rgba, gradientVector ? rgba : 0);
 
             this.mouseDragged(p_146112_1_, p_146112_2_, p_146112_3_);
             int l = 14737632;
-
+           
             if (packedFGColour != 0)
             {
                 l = packedFGColour;
@@ -89,7 +87,7 @@ public class GuiGradientButton extends GuiTexturedButton {
                 l = -587202561;
             }
 
-            this.drawCenteredString(fontrenderer, this.displayString, this.xPosition + this.width / 2, this.yPosition + (this.height - 8) / 2, l);
+            this.drawCenteredString(fontrenderer, ( ( underlineFlag ? ( k > 1 || ( field_146123_n && stuckFlag ) ) : false ) ? EnumChatFormatting.UNDERLINE : "" ) + this.displayString, this.xPosition + this.width / 2, this.yPosition + (this.height - 8) / 2, l);
         }
     }
 

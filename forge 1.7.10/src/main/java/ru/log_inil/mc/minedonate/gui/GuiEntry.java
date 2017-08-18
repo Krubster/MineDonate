@@ -16,7 +16,7 @@ public abstract class GuiEntry {
 		
 	}
 	
-    public void draw(ShopGUI relative, int page, int mouseX, int mouseY, float partialTicks, DrawType dt ) {
+    public void draw(ShopGUI g, int page, int mouseX, int mouseY, float partialTicks, DrawType dt ) {
     	
     }
     

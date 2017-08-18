@@ -51,7 +51,7 @@ public class CreateNewShopServerPacketHandler implements IMessageHandler < Creat
 
 			}
 			
-			Manager . createShop ( serverPlayer . getDisplayName ( ), message . name ) ;
+			Manager . createShop ( acc . name, message . name ) ;
 			
 	        return new ManageResponsePacket ( ManageResponsePacket.ResponseType.SHOP, ManageResponsePacket.ResponseCode.CREATE, ManageResponsePacket.ResponseStatus.OK ) ;
 
