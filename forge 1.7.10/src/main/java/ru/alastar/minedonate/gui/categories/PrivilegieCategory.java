@@ -75,7 +75,7 @@ public class PrivilegieCategory extends ShopCategory {
 	public int x_offset ;
 	int y_offset ;
 	 
-	ArrayList listDescription = new ArrayList();
+	List < String > listDescription = new ArrayList < > ( ) ;
 	
 	int maxStringLength = 0 ;
 	int maxStringWidth = 0 ;
@@ -114,7 +114,7 @@ public class PrivilegieCategory extends ShopCategory {
            
        }
        
-       relative.drawHoveringText(listDescription, x_offset + 75, y_offset+15, relative.getFontRenderer());
+       relative.drawHoveringTextAccess(listDescription, x_offset + 75, y_offset+15, relative.getFontRenderer());
 
        RenderHelper.disableStandardItemLighting();
 

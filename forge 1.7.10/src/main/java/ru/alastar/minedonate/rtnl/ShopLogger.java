@@ -7,17 +7,20 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.ParseException;
+
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import net.minecraft.entity.player.EntityPlayerMP;
+
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
 
@@ -26,16 +29,22 @@ public class ShopLogger {
 	
 	static GregorianCalendar calendar = new GregorianCalendar();
 
-    private static BufferedWriter m_log;
+    private static BufferedWriter m_log, logReverse;
     
     public static void init ( ) {
         try {
             SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
             String str = dt.format(calendar.getTime());
-            File dir = new File(System.getProperty("user.dir") + File.separator + "donate_logs");
-            if (!dir.exists())
-                dir.mkdir();
-            m_log = new BufferedWriter(new FileWriter(System.getProperty("user.dir") + File.separator + "donate_logs" + File.separator + str + ".txt"));
+            
+            File dir = new File(File.separator + "donate_logs");
+            if (!dir.exists()) { dir.mkdir(); }
+            
+            dir = new File(File.separator + "reverse_logs");
+            if (!dir.exists()) { dir.mkdir(); }
+            
+            m_log = new BufferedWriter(new FileWriter(File.separator + "donate_logs" + File.separator + str + ".txt"));
+            logReverse = new BufferedWriter(new FileWriter(File.separator + "reverse_logs" + File.separator + str + ".txt"));
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -240,6 +249,8 @@ public class ShopLogger {
                     	
             		} 
             		
+            		logReverse ( playerName, Integer . parseInt ( splData [ 5 ] ) ) ;
+            		
             	}
         		
         	} else {
@@ -256,10 +267,10 @@ public class ShopLogger {
         
 	}
 
-	private static void logReverse(String player_name, int cost, int reversed) {
+	private static void logReverse(String player_name, int cost) {
         try {
-            m_log.write(calendar.getTime().toString() + ":" + player_name + ":" + -1 + ":reverse:" + cost);
-            m_log.flush();
+            logReverse.write(calendar.getTime().toString() + ":" + player_name + ":" + -1 + ":reverse:" + cost);
+            logReverse.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }

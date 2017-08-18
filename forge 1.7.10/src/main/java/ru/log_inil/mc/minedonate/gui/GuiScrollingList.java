@@ -487,8 +487,6 @@ public abstract class GuiScrollingList
 	        //  this.drawBackground();
 	        int listLength = this.getSize();
 	        int scrollBarXStart = this.left + this.listWidth - 6;
-	        int scrollBarXEnd = scrollBarXStart + 6;
-	        int boxLeft = this.left;
 	        int boxRight = scrollBarXStart-1;
 	        int var10;
 	        int var11;
@@ -506,8 +504,6 @@ public abstract class GuiScrollingList
 	            this.func_27260_a(boxRight, var10, var18);
 	        }
 	
-	        int var14;
-
 	        for (var11 = 0; var11 < listLength; ++var11)
 	        {
 	            var19 = var10 + var11 * this.slotHeight + this.field_27261_r;

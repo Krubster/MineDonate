@@ -23,9 +23,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
-
 /**
  * Created by Alastar on 18.07.2017.
  */
@@ -560,7 +557,7 @@ public class ShopGUI extends MCGuiAccessible {
           
     }
 
-    public void drawHoveringText(ArrayList list, int mouseX, int mouseY, FontRenderer fontRenderer) {
+    public void drawHoveringText(ArrayList<?> list, int mouseX, int mouseY, FontRenderer fontRenderer) {
         super.drawHoveringText(list, mouseX, mouseY, fontRenderer);
     }
 
@@ -778,7 +775,7 @@ public class ShopGUI extends MCGuiAccessible {
 	     
 	}
 
-	public List getButtonList ( ) {
+	public List < GuiButton > getButtonList ( ) {
 		
 		return this . buttonList ;
 		
