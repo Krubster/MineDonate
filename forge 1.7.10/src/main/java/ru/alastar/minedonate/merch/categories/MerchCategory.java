@@ -52,8 +52,8 @@ public abstract class MerchCategory {
     public abstract String getDatabaseTable();
 
     public void addMerch ( Merch merch ) {
-    	
-        m_Merch . put ( merch . getId ( ), merch ) ;
+
+    	m_Merch . put ( merch . getId ( ), merch ) ;
         
     }
 

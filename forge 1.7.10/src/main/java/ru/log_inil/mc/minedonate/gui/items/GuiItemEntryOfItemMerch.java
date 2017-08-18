@@ -54,14 +54,12 @@ public class GuiItemEntryOfItemMerch extends GuiAbstractItemEntry {
 		
 	}
 	
-	String costLine, limitLine, stackCountLine ;
-	int costLineWidth ;
+	String limitLine, stackCountLine ;
 	boolean updateDataNeed = false ;
 	
 	@Override
 	public GuiAbstractItemEntry updateDrawData ( ) {
 		
-		costLine = MineDonate . cfgUI . cats . itemsAndBlocks . pricePrefix + ( info . cost * info . modified ) + MineDonate . cfgUI . cats . itemsAndBlocks . priceSuffix ;
 		limitLine = MineDonate . cfgUI . cats . itemsAndBlocks . itemLeft + info . limit ;
 		stackCountLine = Integer . toString ( info . modified * info.stack_data.getInteger("Count") ) ;
 		
@@ -86,7 +84,6 @@ public class GuiItemEntryOfItemMerch extends GuiAbstractItemEntry {
 		
 		if ( updateDataNeed ) {
 			
-			costLineWidth = gi . getFontRenderer ( ) . getStringWidth ( costLine ) ;
 			this . updateSize ( xRightOffset - x_offset, 28 ) ;
 
 			updateDataNeed = false ;

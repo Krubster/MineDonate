@@ -16,7 +16,6 @@ public class RemoveMerchPacketHandler  implements IMessageHandler<RemoveMerchPac
     }
     @Override 
     public IMessage onMessage(RemoveMerchPacket message, MessageContext ctx) {
-    	System.err.println(message.category_id + ">> " + message.merch_id);
         MineDonate.removeMerch(message.shopId, message.category_id, message.merch_id);
         if(ShopGUI.instance != null){
             ShopGUI.instance.updateButtons(true);
