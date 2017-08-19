@@ -62,7 +62,7 @@ public class AddNewEntryServerPacketHandler implements IMessageHandler < AddNewE
 
 					}
 					
-					if ( message . limit == -1 && ! acc . canUnlimitedItems ( ) ) {
+					if ( message . limit < 0 && ! acc . canUnlimitedItems ( ) ) {
 						
 				        return new ManageResponsePacket ( ManageResponsePacket.ResponseType.OBJ, ManageResponsePacket.ResponseCode.ADD, ManageResponsePacket.ResponseStatus.ERROR_ACCESS_DENIED ) ;
 		
@@ -80,7 +80,7 @@ public class AddNewEntryServerPacketHandler implements IMessageHandler < AddNewE
 
 					}
 					
-					if ( message . limit == -1 && ! acc . canUnlimitedEntities ( ) ) {
+					if ( message . limit < 0 && ! acc . canUnlimitedEntities ( ) ) {
 						
 				        return new ManageResponsePacket ( ManageResponsePacket.ResponseType.OBJ, ManageResponsePacket.ResponseCode.ADD, ManageResponsePacket.ResponseStatus.ERROR_ACCESS_DENIED ) ;
 		

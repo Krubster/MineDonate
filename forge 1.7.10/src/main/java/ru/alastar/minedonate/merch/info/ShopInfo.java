@@ -1,12 +1,13 @@
 package ru.alastar.minedonate.merch.info;
 
-import java.io.UnsupportedEncodingException;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import io.netty.buffer.ByteBuf;
+
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.EnumChatFormatting;
+
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.rtnl.Utils;
 
@@ -24,12 +25,13 @@ public class ShopInfo extends Merch {
     
     public String moneyType ;
     
-    public ShopInfo ( int _merch_id, int _shopId, String _owner, String _name, boolean _isFreezed, String _freezer, String _freezReason, boolean _canVisibleFreezedText, String _moneyType ) {
+    public ShopInfo ( int _merch_id, int _shopId, int _rating, String _owner, String _name, boolean _isFreezed, String _freezer, String _freezReason, boolean _canVisibleFreezedText, String _moneyType ) {
     	
-       	super();
+       	super ( ) ;
        	
         this.merch_id = _merch_id;
     	this.catId = 4;
+    	this.rating = _rating ;
     	
        	shopId = _shopId;
        	
@@ -124,7 +126,7 @@ public class ShopInfo extends Merch {
     @Override
     public Merch copy ( ) {
     	
-    	return new ShopInfo ( merch_id, shopId, owner, name, isFreezed, freezer, freezReason, canVisibleFreezedText, moneyType )  ;
+    	return new ShopInfo ( merch_id, shopId, rating, owner, name, isFreezed, freezer, freezReason, canVisibleFreezedText, moneyType )  ;
     	
     }
     

@@ -61,9 +61,9 @@ public class GuiItemsScrollArea extends GuiScrollingList {
     }
 
     @Override
-    protected void drawSlot(int listIndex, int var2, int var3, int var4, int mouseX, int mouseY, Tessellator var5, DrawType dt) {
+    protected void drawSlot(int listIndex, int var2, int var3, int var4, float partialTicks, int mouseX, int mouseY, Tessellator var5, DrawType dt) {
 
-    	entrs . get ( listIndex ) . draw ( this, var4, var3, var2, mouseX, mouseY, var5, dt, listIndex, entrs . size ( ) ) ;
+    	entrs . get ( listIndex ) . draw ( this, var4, var3, var2, partialTicks, mouseX, mouseY, var5, dt, listIndex, entrs . size ( ) ) ;
   
     }
     

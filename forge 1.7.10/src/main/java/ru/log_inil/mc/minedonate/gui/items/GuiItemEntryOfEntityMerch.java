@@ -72,9 +72,9 @@ public class GuiItemEntryOfEntityMerch extends GuiAbstractItemEntry {
 	float scale = 13f ;
 	
 	@Override 
-	public void draw ( GuiItemsScrollArea gi, int x_offset, int y_offset, int xRightOffset, int mouseX, int mouseY, Tessellator var5, DrawType dt, int index, int size ) {
-
-		super.draw(gi, x_offset, y_offset, xRightOffset, mouseX, mouseY, var5, dt, index, size);
+	public void draw ( GuiItemsScrollArea gi, int x_offset, int y_offset, int xRightOffset, float partialTicks, int mouseX, int mouseY, Tessellator var5, DrawType dt, int index, int size ) {
+//System.err.println( partialTicks);
+		super.draw(gi, x_offset, y_offset, xRightOffset, partialTicks, mouseX, mouseY, var5, dt, index, size);
 		
 		xOffset = x_offset ;
 		yOffset = y_offset ;
@@ -126,7 +126,35 @@ public class GuiItemEntryOfEntityMerch extends GuiAbstractItemEntry {
 
 	  		}
 	  		
-		} else if ( dt == DrawType . OVERLAY ) {
+		} else if ( dt == DrawType . OVERLAY_PRE ) {
+			
+			if ( ! ( ( mouseX >= 40 && 70 >= mouseX ) && ( mouseY >= y_offset - 2 && y_offset + 25 >= mouseY ) ) ) {
+
+				if ( rotate >= 20f ) {
+					
+					rotate = 20f ;
+					
+				} else {
+					
+					rotate += 2.9f ;
+					
+				}
+				
+				if ( scale <= 13 ) {
+					
+					scale = 13f ;
+					
+				} else {
+					
+					scale -= 0.7f ;
+					
+				}
+				
+				renderEntity ( 55, y_offset + 25, scale, 55 + 55, -18f, ( index + 1 ) * 40f, rotate, info . entity ) ;
+
+			}
+			
+		} else if ( dt == DrawType . OVERLAY_POST ) {
 			
 			if ( info . entity!= null ) {
 				
@@ -144,38 +172,16 @@ public class GuiItemEntryOfEntityMerch extends GuiAbstractItemEntry {
 						
 					}
 										
-					if ( rotate <= -275f ) {
+					if ( rotate <= -274.2f ) {
 						
 						rotate = 20f ;
 						
 					}
-					
-				} else {
-					
-					if ( rotate >= 20f ) {
 						
-						rotate = 20f ;
-						
-					} else {
-						
-						rotate += 2.9f ;
-						
-					}
-					
-					if ( scale <= 13 ) {
-						
-						scale = 13f ;
-						
-					} else {
-						
-						scale -= 0.7f ;
-						
-					}
-					
+					renderEntity ( 55, y_offset + 25, scale, 55 + 55, -18f, 900, rotate, info . entity ) ;
+
 				}
-								
-				renderEntity ( 55, y_offset + 25, scale, 55 + 55, -18f, ( index + 1 ) * 50f, rotate, info . entity ) ;
-						    
+														    
 			}
 			
 		}
@@ -183,40 +189,50 @@ public class GuiItemEntryOfEntityMerch extends GuiAbstractItemEntry {
 	}
 
 	private void renderEntity(int p_147046_0_, int p_147046_1_, float scale, float p_147046_3_, float p_147046_4_, float z, float rotate, EntityLivingBase p_147046_5_) {
+		
 		GL11.glEnable(2903);
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float) p_147046_0_, (float) p_147046_1_, z);//50.0F
 		GL11.glScalef((-scale), scale, scale);
 		GL11.glRotatef(180.0F, 0.0F, 0.0F, 1.0F);
+		
 		float var6 = p_147046_5_.renderYawOffset;
 		float var7 = p_147046_5_.rotationYaw;
 		float var8 = p_147046_5_.rotationPitch;
 		float var9 = p_147046_5_.prevRotationYawHead;
 		float var10 = p_147046_5_.rotationYawHead;
-		GL11.glRotatef(135.0F, 0.0F, 1.0F, 0.0F);
+		
 		RenderHelper.enableStandardItemLighting();
-		GL11.glRotatef(-135.0F, 0.0F, 1.0F, 0.0F);
+
 		GL11.glRotatef(-((float) Math.atan((double) (p_147046_4_ / 40.0F))) * 20.0F, 1.0F, 0.0F, 0.0F);
-		p_147046_5_.renderYawOffset = (float) Math.atan((double) (p_147046_3_ / 40.0F)) * rotate;//20F
+		
+		p_147046_5_.posX = p_147046_5_.posY = p_147046_5_.posZ = 0;
+		p_147046_5_.renderYawOffset = (float) Math.atan((double) (p_147046_3_ / 40.0F)) * rotate;
 		p_147046_5_.rotationYaw = (float) Math.atan((double) (p_147046_3_ / 40.0F)) * 40.0F;
 		p_147046_5_.rotationPitch = -((float) Math.atan((double) (p_147046_4_ / 40.0F))) * 20.0F;
-		p_147046_5_.rotationYawHead = p_147046_5_.rotationYaw;
-		p_147046_5_.prevRotationYawHead = p_147046_5_.rotationYaw;
-		GL11.glTranslatef(0.0F, p_147046_5_.yOffset, 0.0F);
+		p_147046_5_.rotationYawHead = (float) Math.atan((double) (p_147046_3_ / 40.0F)) * rotate;
+		p_147046_5_.prevRotationYawHead = 360f ;
+		
 		RenderManager.instance.playerViewY = 180.0F;
+		
 		RenderManager.instance.renderEntityWithPosYaw(p_147046_5_, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F);
+		
 		p_147046_5_.renderYawOffset = var6;
 		p_147046_5_.rotationYaw = var7;
 		p_147046_5_.rotationPitch = var8;
 		p_147046_5_.prevRotationYawHead = var9;
 		p_147046_5_.rotationYawHead = var10;
+		
 		GL11.glPopMatrix();
+		
 		RenderHelper.disableStandardItemLighting();
-//		GL11.glDisable('耺');
+		
 		GL11.glDisable(2903);
 
 		OpenGlHelper.setActiveTexture(OpenGlHelper.lightmapTexUnit);
+		
 		GL11.glDisable(3553);
+		
 		OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
 	}
 
@@ -237,7 +253,7 @@ public class GuiItemEntryOfEntityMerch extends GuiAbstractItemEntry {
 	@Override
 	public GuiAbstractItemEntry addButtons ( ShopGUI gui ) {
 
-		buy = new BuyButton ( info . getShopId ( ), info . getCategory ( ), info . merch_id, ShopGUI . getNextButtonId ( ), gui . resolution . getScaledWidth ( ) - 91, -100, MineDonate . cfgUI . cats . itemsAndBlocks . itemBuyButton . width, MineDonate . cfgUI . cats . itemsAndBlocks . itemBuyButton . height, MineDonate . cfgUI . cats . itemsAndBlocks . itemBuyButton . text ) ;
+		buy = new BuyButton ( info . getShopId ( ), info . getCategory ( ), info . getId ( ), ShopGUI . getNextButtonId ( ), gui . resolution . getScaledWidth ( ) - 91, -100, MineDonate . cfgUI . cats . itemsAndBlocks . itemBuyButton . width, MineDonate . cfgUI . cats . itemsAndBlocks . itemBuyButton . height, MineDonate . cfgUI . cats . itemsAndBlocks . itemBuyButton . text ) ;
 
         gui . addButton ( buy, false ) ;
 		if (info.limit != -1 && info.limit == 0) {
@@ -276,7 +292,8 @@ public class GuiItemEntryOfEntityMerch extends GuiAbstractItemEntry {
 					
 					GuiFrameEditEntity gfre = ( GuiFrameEditEntity ) g . showEntry ( "frame.entity.edit", true ) ;	
 					
-					gfre . setInfo ( info . shopId, info . catId, info . merch_id, info . cost ) ;
+					gfre . setInfo ( info . shopId, info . catId, info . getId ( ), info . limit, info . cost ) ;
+
 					gfre . setFieldData ( info . name, gfre . fieldHolder ) ;
 					gfre . postShow ( g ) ;
 
@@ -286,7 +303,7 @@ public class GuiItemEntryOfEntityMerch extends GuiAbstractItemEntry {
 					
 					GuiFrameDeleteEntity gfde = ( GuiFrameDeleteEntity ) g . showEntry ( "frame.entity.delete", true ) ;	
 					
-					gfde . setInfo ( info . shopId, info . catId, info . merch_id ) ;
+					gfde . setInfo ( info . shopId, info . catId, info . getId ( ) ) ;
 					gfde . setConfirmCode ( Integer . toString ( Math . abs ( info . hashCode ( ) ) ) . substring ( 0, 3 ) ) ;
 					gfde . postShow ( g ) ;
 

@@ -116,9 +116,9 @@ public class GuiItemEntryOfUserShopMerch extends GuiAbstractItemEntry {
 	}
 	
 	@Override 
-	public void draw ( GuiItemsScrollArea gi, int x_offset, int y_offset, int xRightOffset, int mouseX, int mouseY, Tessellator var5,  DrawType dt, int index, int size ) {
+	public void draw ( GuiItemsScrollArea gi, int x_offset, int y_offset, int xRightOffset, float partialTicks, int mouseX, int mouseY, Tessellator var5,  DrawType dt, int index, int size ) {
 
-		super.draw(gi, x_offset, y_offset, xRightOffset, mouseX, mouseY, var5, dt, index, size);
+		super.draw(gi, x_offset, y_offset, xRightOffset, partialTicks, mouseX, mouseY, var5, dt, index, size);
 
 		if ( go != null ) {
 			
@@ -158,7 +158,7 @@ public class GuiItemEntryOfUserShopMerch extends GuiAbstractItemEntry {
 		
 			}
 			
-		} else if ( dt == DrawType . OVERLAY ) {
+		} else if ( dt == DrawType . OVERLAY_PRE ) {
 			
 			if ( info . isFreezed && freezText != null ) {
 				
@@ -273,7 +273,7 @@ public class GuiItemEntryOfUserShopMerch extends GuiAbstractItemEntry {
 					
 					GuiFrameFreezeAccount gffa = ( GuiFrameFreezeAccount ) g . showEntry ( "frame.acc.freeze", true ) ;	
 					
-					gffa . setName ( info . owner ) ;
+					gffa . setAccountName ( info . owner ) ;
 					gffa . postShow ( g ) ;
 
 				break ;

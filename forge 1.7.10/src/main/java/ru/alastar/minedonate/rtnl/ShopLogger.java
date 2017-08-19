@@ -3,14 +3,11 @@ package ru.alastar.minedonate.rtnl;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.IOException;
 
 import java.sql.Date;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 
 import java.text.SimpleDateFormat;
@@ -27,57 +24,103 @@ import ru.alastar.minedonate.merch.Merch;
 @SideOnly(Side.SERVER)
 public class ShopLogger {
 	
-	static GregorianCalendar calendar = new GregorianCalendar();
+	static GregorianCalendar calendar = new GregorianCalendar ( ) ;
 
-    private static BufferedWriter m_log, logReverse;
+    private static BufferedWriter m_log, logReverse, logMoney ;
     
+    static SimpleDateFormat dateFormat = new SimpleDateFormat ( "yyyy-MM-dd" ) ;
+
     public static void init ( ) {
+    	
         try {
-            SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
-            String str = dt.format(calendar.getTime());
+        	
+            String fileName = dateFormat . format ( calendar . getTime ( ) ) ;
             
-            File dir = new File(File.separator + "donate_logs");
-            if (!dir.exists()) { dir.mkdir(); }
+            File dir = new File ( ( new File ( ".") ) . getAbsolutePath ( ) + File . separator + "minedonate" + File . separator + "donate" ) ;
+            if ( ! dir . exists ( ) ) { dir . mkdirs ( ) ; }
             
-            dir = new File(File.separator + "reverse_logs");
-            if (!dir.exists()) { dir.mkdir(); }
-            
-            m_log = new BufferedWriter(new FileWriter(File.separator + "donate_logs" + File.separator + str + ".txt"));
-            logReverse = new BufferedWriter(new FileWriter(File.separator + "reverse_logs" + File.separator + str + ".txt"));
+            m_log = new BufferedWriter ( new FileWriter ( dir . getAbsolutePath ( ) + File . separator + fileName + ".txt" ) ) ;
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+            dir = new File ( ( new File ( ".") ) . getAbsolutePath ( ) + File . separator + "minedonate" + File . separator + "reverse" ) ;
+            if ( ! dir . exists ( ) ) { dir . mkdir ( ) ; }
+            
+            logReverse = new BufferedWriter ( new FileWriter ( dir . getAbsolutePath ( ) + File . separator + fileName + ".txt" ) ) ;
+
+            dir = new File ( ( new File ( ".") ) . getAbsolutePath ( ) + File . separator + "minedonate" + File . separator + "money");
+            if ( ! dir . exists ( ) ) { dir . mkdir ( ) ; }
+            
+            logMoney = new BufferedWriter ( new FileWriter ( dir . getAbsolutePath ( ) + File . separator + fileName + ".txt" ) ) ;
+
+        } catch ( Exception ex ) {
+            
+        	ex . printStackTrace ( ) ;
+            
         }
+        
     }
 
-	static SimpleDateFormat dateFormatLog = new SimpleDateFormat ( "yyyy-MM-dd" ) ;
-
-    public static void logBuy(Merch m, EntityPlayerMP by, int amount, String moneyType) {
-        if (!MineDonate.cfg.sendLogToDB) {
+    public static void logBuy ( Merch m, EntityPlayerMP by, int amount, String moneyType ) {
+    	
+        if ( ! MineDonate . cfg . sendLogToDB ) {
+        	
             try {
-                m_log.write(dateFormatLog.format(calendar.getTime()) + ":" + m.shopId + ":" + m.catId + ":" + m.merch_id + ":" + by.getDisplayName() + ":" + m.getCategory() + ":" + ( m.getCost() * amount ) + ":" + moneyType +  ":x" + amount + ":" + m.getBoughtMessage() + "\r\n");
-                m_log.flush();
-            } catch (IOException e) {
-                e.printStackTrace();
+                
+            	m_log . write ( dateFormat.format(calendar.getTime()) + ":" + m.shopId + ":" + m.catId + ":" + m . getId ( ) + ":" + by.getDisplayName() + ":" + m.getCategory() + ":" + ( m.getCost() * amount ) + ":" + moneyType +  ":x" + amount + ":" + m.getBoughtMessage() + "\r\n");
+                m_log . flush ( ) ;
+                
+            } catch ( Exception ex ) {
+                
+            	ex . printStackTrace ( ) ;
+                
             }
+            
         } else {
-            Statement stmt;
+            
             try {
-                stmt = MineDonate.getNewStatement();
-                String sql;
-                sql = "INSERT INTO " + MineDonate.cfg.dbLogs + " (date, shopId, catId, merchId, playerName, money, moneyType, message, amount) VALUES('" + dateFormatLog.format(calendar.getTime()) + "'," + m .shopId + "," + m.catId + "," + m.merch_id + ", '" + by.getDisplayName() + "', " + m.getCost() * amount + ", '" + moneyType + "', '" + m.getBoughtMessage() + "', " + amount + " )";
-                stmt.execute(sql);
+            	
+            	Statement stmt = MineDonate.getNewStatement();
+                stmt.execute( "INSERT INTO " + MineDonate.cfg.dbLogs + " (date, shopId, catId, merchId, playerName, money, moneyType, message, amount) VALUES('" + dateFormat.format(calendar.getTime()) + "'," + m .shopId + "," + m.catId + "," + m . getId ( ) + ", '" + by.getDisplayName() + "', " + m.getCost() * amount + ", '" + moneyType + "', '" + m.getBoughtMessage() + "', " + amount + " )" );
                 stmt.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
+                
+            } catch ( Exception ex ) {
+                
+            	ex . printStackTrace ( ) ;
+                
             }
+            
        }
+        
     }
-
-    //Reverse section
-    //WARNIGN! REVERSE ONLY MONEY, PRIVILEGIES, REGIONS! I CANT CARE OF BOUGHT ITEMS
+    
+	private static void logReverse ( String playerName, int cost ) {
+        
+		try {
+            
+        	logReverse . write ( calendar . getTime ( ) . toString ( ) + ";" + playerName + ";" + cost ) ;
+            logReverse . flush ( ) ;
+            
+        } catch ( Exception ex ) {
+            
+        	ex . printStackTrace ( ) ;
+            
+        }
+        
+    }
+	
+	public static void logMoney ( String playerName, int last, int next, String factorData ) {
+        
+		try {
+            
+        	logMoney . write ( calendar . getTime ( ) . toString ( ) + ";" + playerName + ";" + last + ";" + next + ";" + factorData ) ;
+        	logMoney . flush ( ) ;
+            
+        } catch ( Exception ex ) {
+            
+        	ex . printStackTrace ( ) ;
+            
+        }
+        
+    }
     
     public static void reverseBoughtsFor ( boolean printFullInfo, boolean fromDB, String playerName, Date from, Date to ) {
     	
@@ -89,9 +132,7 @@ public class ShopLogger {
     	
     	long fromTime = from . getTime ( ) ;
     	long toTime = to . getTime ( )  ;
-    	
-    	SimpleDateFormat dateFormat = new SimpleDateFormat ( "yyyy-MM-dd" ) ;
-    	
+    	    	
     	int lineNumber ;
 
     	if ( fromDB ) {
@@ -128,7 +169,7 @@ public class ShopLogger {
     		
     	} else {
     		
-	    	File [ ] logs = ( new File ( File . separator + "donate_logs" ) ) . listFiles ( ) ;
+	    	File [ ] logs = ( new File ( File . separator + "minedonate" + File.separator + "donate") ) . listFiles ( ) ;
 	
 	    	java.util.Date logDate ;
 	    	BufferedReader reader ;
@@ -174,24 +215,24 @@ public class ShopLogger {
     }
 
     static String [ ] tmpSplit ;
-    static String playerName, moneyType ;
-    static int shopId, catId, merchId, cost ;
+    static String tmpPlayerName, tmpMoneyType ;
+    static int tmpShopId, tmpCatId, tmpMerchId, tmpCost ;
 	
     private static void processLine ( String line, boolean printFullInfo, int lineNumber, boolean forOncePlayer, String _playerName ) {
 
     	tmpSplit = line . split ( ":" ) ;
     	     	
-    	shopId = Integer . valueOf ( tmpSplit [ 1 ] ) ;
-    	catId = Integer . valueOf ( tmpSplit [ 2 ] ) ;
-    	merchId = Integer . valueOf ( tmpSplit [ 3 ] ) ;
+    	tmpShopId = Integer . valueOf ( tmpSplit [ 1 ] ) ;
+    	tmpCatId = Integer . valueOf ( tmpSplit [ 2 ] ) ;
+    	tmpMerchId = Integer . valueOf ( tmpSplit [ 3 ] ) ;
     	
-    	playerName = tmpSplit [ 4 ] ;
-    	cost = Integer . valueOf ( tmpSplit [ 5 ] ) ;
-    	moneyType = tmpSplit [ 6 ] ;
+    	tmpPlayerName = tmpSplit [ 4 ] ;
+    	tmpCost = Integer . valueOf ( tmpSplit [ 5 ] ) ;
+    	tmpMoneyType = tmpSplit [ 6 ] ;
 
     	if ( forOncePlayer ) {
     		
-    		if ( ! playerName . equals ( _playerName ) ) {
+    		if ( ! tmpPlayerName . equals ( _playerName ) ) {
     			
     			return ;
     			
@@ -201,15 +242,15 @@ public class ShopLogger {
     	
     	if ( printFullInfo ) {
     		
-    		System . out . println ( "[MineDonate] [Reverse] [P] [date=" + tmpSplit [ 0 ] + ", shopId=" + shopId + ", catId=" + catId + ", merchId=" + merchId + ", playerName=" + playerName + ", cost=" + cost + ", moneyType=" + moneyType + "], row[" + lineNumber + "]"  ) ;
+    		System . out . println ( "[MineDonate] [Reverse] [P] [date=" + tmpSplit [ 0 ] + ", shopId=" + tmpShopId + ", catId=" + tmpCatId + ", merchId=" + tmpMerchId + ", playerName=" + tmpPlayerName + ", cost=" + tmpCost + ", moneyType=" + tmpMoneyType + "], row[" + lineNumber + "]"  ) ;
 
     	}
     	
         try {
         	
-        	reverseMoney ( playerName, cost, moneyType ) ;
+        	reverseMoney ( tmpPlayerName, tmpCost, tmpMoneyType ) ;
 
-        	reverseMerch ( printFullInfo, lineNumber, shopId, catId, merchId, tmpSplit, playerName ) ;
+        	reverseMerch ( printFullInfo, lineNumber, tmpShopId, tmpCatId, tmpMerchId, tmpSplit, tmpPlayerName ) ;
         	
         } catch ( Exception ex ) {
         	
@@ -266,53 +307,5 @@ public class ShopLogger {
         }
         
 	}
-
-	private static void logReverse(String player_name, int cost) {
-        try {
-            logReverse.write(calendar.getTime().toString() + ":" + player_name + ":" + -1 + ":reverse:" + cost);
-            logReverse.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-	/*
-    public static void reverseBoughtsFor ( boolean printFullInfo, String playerName, Date from, Date to ) {
-    	    	
-    	
-        SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
-        File log_dir = new File(System.getProperty("user.dir") + File.separator + "donate_logs"); // #LOG
-        for (File log_file : log_dir.listFiles()) {
-            try {
-                final java.util.Date log_date = dt.parse(log_file.getName());
-                if (log_date.getTime() > from.getTime() && log_date.getTime() < to.getTime()) {
-                    final BufferedReader reader = new BufferedReader(new FileReader(log_file));
-                    String line = "";
-                    while ((line = reader.readLine()) != null) {
-                        final String player_name = line.split(":")[1];
-                        final int cost = Integer.valueOf(line.split(":")[4]);
-                        final int category = Integer.valueOf(line.split(":")[2]);
-                        final String bought_msg = line.split(":")[3];
-
-                        if (player_name == by.getDisplayName()) {
-                            //returnMoney(player_name, cost);
-                            //if (shops.get(0).cats[category].canReverse()) {
-                            //   shops.get(0).cats[category].reverseFor(line, player_name);
-                            //}
-                        }
-                    }
-                    reader.close();
-                }
-            } catch (ParseException e) {
-                e.printStackTrace();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }*/
-
-    ///End reverse section
-
+	
 }

@@ -1,6 +1,8 @@
 package ru.alastar.minedonate.gui;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -80,19 +82,6 @@ public abstract class ShopCategory extends GuiEntry {
     	
     }
 
-    /*
-    public void actionPerformed ( ShopGUI g, GuiButton button ) {
-    
-    	if ( subButtonsMap . containsKey ( button . id ) ) {
-    		
-    	//	setSubCategory ( subCatIdMap . get ( button . id ) ) ;
-    		
-    	}
-
-    	// postShow ( ) ;
-    	
-    }*/
-    
     public int getButtonWidth ( ) {
     	
     	return 0 ;
@@ -144,17 +133,8 @@ public abstract class ShopCategory extends GuiEntry {
 
 
 	public int calcMaxCatStringLineWidth ( ) {
-		
-		/*
-		int max = 0 ;
-		
-		for ( SubCategory sc : MineDonate . shops . get (  gui . getCurrentShopId ( )  ) . cats [ catId ] . subCategories ) {
-			
-			max = Math . max ( max, gui . getFontRenderer ( ) . getStringWidth ( sc . displayName ) ) ;
-
-		}*/
 				
-		return 75 ;// max ;
+		return 75 ;
 		
 	}
 	
@@ -170,8 +150,6 @@ public abstract class ShopCategory extends GuiEntry {
     		tmpW = gui . getScaledResolution ( ) . getScaledWidth ( ) - 40 - 40 ;
 
     		buttonsColCount = (tmpW) / tmpMW;
-
-    		//buttonsRowCount = tmpH / MineDonate.cfgUI.subCategoryButtonHeight;
 		
     	}
 		
@@ -262,8 +240,41 @@ public abstract class ShopCategory extends GuiEntry {
 
 		drawn = 0 ;
 
-		setSubCategory ( -1 ) ;
+		filterProcess ( ) ;
 		
+	}
+	
+	public void filterProcess ( ) {
+
+		if ( catCheck && ! MineDonate . checkCatExists ( gui . getCurrentShopId ( ) , catId ) ) {
+
+			return ;
+			
+		}
+		
+		noSearchedEntries . clear ( ) ;
+
+		for ( Merch m : MineDonate . shops . get ( gui . getCurrentShopId ( )  ) . cats [ catId ] . getMerch ( ) ) {
+
+			if ( m != null ) {
+
+				noSearchedEntries . add ( m ) ;
+				
+			}
+			
+		}	
+
+		Collections . sort ( noSearchedEntries, new Comparator < Merch > ( ) {
+			
+             @Override
+             public int compare ( Merch l, Merch r ) {
+                 
+            	 return l . getRating ( ) > r . getRating ( ) ? -1 : ( l . getRating ( ) < r . getRating ( ) ) ? 1 : 0 ;
+                 
+             }
+             
+        } ) ;
+		 
 	}
 	
 	protected List < GuiAbstractItemEntry > entrs = new ArrayList < > ( ) ;
@@ -293,30 +304,6 @@ public abstract class ShopCategory extends GuiEntry {
 		
 		catCheck = false ;
 		
-	}
-	
-	public void setSubCategory ( int _subCatId ) {
-
-		if ( catCheck && ! MineDonate . checkCatExists ( gui . getCurrentShopId ( ) , catId ) ) {
-
-			return ;
-			
-		}
-
-		subCatId = _subCatId ;
-		
-		noSearchedEntries . clear ( ) ;
-
-		for ( Merch m : MineDonate . shops . get ( gui . getCurrentShopId ( )  ) . cats [ catId ] . getMerch ( ) ) {
-
-			if ( m != null && ( m . subCatId == _subCatId || _subCatId == -1 ) ) {
-
-				noSearchedEntries . add ( m ) ;
-				
-			}
-			
-		}	
-
 	}
 	
 	protected boolean search ;

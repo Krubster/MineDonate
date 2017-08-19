@@ -3,19 +3,22 @@ package ru.alastar.minedonate.merch.info;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
+
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.rtnl.Utils;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
+
 import java.sql.Blob;
 import java.sql.SQLException;
 
@@ -30,9 +33,9 @@ public class EntityInfo extends Merch {
     public int limit;
     public EntityLivingBase entity;
 
-    public EntityInfo(int _shopId, int _catId, int merch_id, int cost, Blob data, String name, int lim) {
+    public EntityInfo(int _shopId, int _catId, int _rating, int merch_id, int cost, Blob data, String name, int lim) {
 
-        super(_shopId, _catId, merch_id);
+        super(_shopId, _catId, merch_id, _rating);
 
         this.cost = cost;
 
@@ -52,9 +55,9 @@ public class EntityInfo extends Merch {
 
     }
 
-    public EntityInfo(int _shopId, int _catId, int merch_id, int cost, Entity entity, String name, int limit) {
+    public EntityInfo(int _shopId, int _catId, int merch_id, int _rating, int cost, Entity entity, String name, int limit) {
 
-        super(_shopId, _catId, merch_id);
+        super(_shopId, _catId, merch_id, _rating);
 
         this.cost = cost;
         this.entity_data = new NBTTagCompound();

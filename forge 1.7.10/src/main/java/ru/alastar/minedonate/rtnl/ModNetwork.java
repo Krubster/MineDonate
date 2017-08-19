@@ -58,14 +58,6 @@ public class ModNetwork {
         networkChannel . registerMessage ( DeleteShopServerPacketHandler . class, DeleteShopPacket . class, i ++, Side . SERVER ) ;
         networkChannel . registerMessage ( RenameShopServerPacketHandler . class, RenameShopPacket . class, i ++, Side . SERVER ) ;
      
-        networkChannel . registerMessage ( FreezeShopServerPacketHandler . class, FreezeShopPacket . class, i ++, Side . SERVER ) ;
-        networkChannel . registerMessage ( UnfreezeShopServerPacketHandler . class, UnfreezeShopPacket . class, i ++, Side . SERVER ) ;
-
-        //
-        
-        networkChannel . registerMessage ( FreezeAccountServerPacketHandler . class, FreezeAccountPacket . class, i ++, Side . SERVER ) ;
-        networkChannel . registerMessage ( UnfreezeAccountServerPacketHandler . class, UnfreezeAccountPacket . class, i ++, Side . SERVER ) ;
-        
         //
         
         networkChannel . registerMessage ( InventoryShopServerPacketHandler . class, InventoryShopPacket . class, i ++, Side . SERVER ) ;
@@ -89,7 +81,8 @@ public class ModNetwork {
         networkChannel . registerMessage ( EditMerchStringServerPacketHandler . class, EditMerchStringPacket . class, i ++, Side . SERVER ) ;
         
         //
-        
+        networkChannel . registerMessage ( FreezeObjectServerPacketHandler . class, FreezeObjectPacket . class, i ++, Side . SERVER ) ;
+
         networkChannel . registerMessage ( ManageResponseClientPacketHandler . class, ManageResponsePacket . class, i ++, Side . CLIENT ) ;
 
     }
@@ -192,13 +185,13 @@ public class ModNetwork {
 	
 	public static void sendToServerFreezeShopPacket ( int shopId, String reason ) {
 
-		networkChannel . sendToServer ( new FreezeShopPacket ( shopId, reason ) ) ;
+		networkChannel . sendToServer ( new FreezeObjectPacket ( shopId, reason, true ) ) ;
 		
 	}
 	
 	public static void sendToServerUnfreezeShopPacket ( int shopId ) {
 
-		networkChannel . sendToServer ( new UnfreezeShopPacket ( shopId ) ) ;
+		networkChannel . sendToServer ( new FreezeObjectPacket ( shopId, null, false ) ) ;
 		
 	}
 
@@ -222,13 +215,13 @@ public class ModNetwork {
 	
 	public static void sendToServerFreezeAccountPacket ( String player, String reason ) {
 		
-		networkChannel . sendToServer ( new FreezeAccountPacket ( player, reason ) ) ;
+		networkChannel . sendToServer ( new FreezeObjectPacket ( player, reason, true ) ) ;
 		
 	}
 	
 	public static void sendToServerUnfreezeAccountPacket ( String player ) {
 		
-		networkChannel . sendToServer ( new UnfreezeAccountPacket ( player ) ) ;
+		networkChannel . sendToServer ( new FreezeObjectPacket ( player, null, false ) ) ;
 		
 	}
 	

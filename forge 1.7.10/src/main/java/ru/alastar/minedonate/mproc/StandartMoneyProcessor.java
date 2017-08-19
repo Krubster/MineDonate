@@ -5,6 +5,7 @@ import java.sql.Statement;
 
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
+import ru.alastar.minedonate.rtnl.ShopLogger;
 
 import ru.log_inil.mc.minedonate.localData.DataOfMoneyProcessor;
 
@@ -73,7 +74,13 @@ public class StandartMoneyProcessor extends AbstractMoneyProcessor {
 					
 					if ( domp . dbTable . equals ( amp . domp . dbTable ) ) {
 						
-						amp . setMoney ( name, domp . regMoney ) ;
+						if ( amp . domp . regMoney > 0 ) {
+						
+							ShopLogger . logMoney ( name, 0, domp . regMoney, "register>" + amp . domp . moneyType ) ;
+						
+						}
+
+						amp . setMoney ( name, amp . domp . regMoney ) ;
 
 					}
 					
@@ -126,8 +133,12 @@ public class StandartMoneyProcessor extends AbstractMoneyProcessor {
 
 	@Override
 	public void returnMoney ( String name, int money ) {
+
+		int last = getMoneyFor ( name ) ;
 		
-		setMoney ( name, getMoneyFor ( name ) + money ) ;
+		ShopLogger . logMoney ( name, last, last + money, "returnMoney>" + domp . moneyType ) ;
+
+		setMoney ( name, last + money ) ;
 			
 	}
 	

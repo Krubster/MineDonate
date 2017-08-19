@@ -31,7 +31,7 @@ public class ItemNBlocks extends MerchCategory {
     public void loadMerchFromDB(ResultSet rs) {
         try {
             while (rs.next()) {
-                final ItemInfo info = new ItemInfo(shopId, catId, rs.getInt("id"),
+                final ItemInfo info = new ItemInfo(shopId, catId, rs.getInt("id"), rs.getInt("rating"),
                         rs.getInt("cost"),
                         rs.getString("name"),
                         rs.getInt("lim"),
@@ -164,7 +164,7 @@ public class ItemNBlocks extends MerchCategory {
             
         	stmt = MineDonate.m_DB_Connection.createStatement();
             String sql;
-            sql = "UPDATE " + getDatabaseTable ( ) + " SET lim=" + info.limit + " WHERE id=" + info . merch_id + ( info . shopId > 0 ? " AND shopId=" + info . shopId : "" ) + ";";
+            sql = "UPDATE " + getDatabaseTable ( ) + " SET lim=" + info.limit + " WHERE id=" + info . getId ( ) + ( info . shopId > 0 ? " AND shopId=" + info . shopId : "" ) + ";";
             stmt.executeUpdate(sql);
             stmt.close();
             

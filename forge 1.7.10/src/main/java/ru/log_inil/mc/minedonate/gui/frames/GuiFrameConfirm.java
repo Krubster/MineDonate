@@ -5,19 +5,18 @@ import java.awt.Color;
 import net.minecraft.client.gui.GuiButton;
 
 import ru.alastar.minedonate.gui.ShopGUI;
-import ru.alastar.minedonate.rtnl.ModNetwork;
 import ru.alastar.minedonate.rtnl.Utils;
 
 import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.gui.GuiFrame;
 import ru.log_inil.mc.minedonate.gui.GuiGradientButton;
 import ru.log_inil.mc.minedonate.gui.GuiGradientTextField;
-import ru.log_inil.mc.minedonate.localData.frames.DataOfUIFrameField;
+import ru.log_inil.mc.minedonate.localData.frames.DataOfUIFrameConfirm;
 
-public class GuiFrameFreezeShop extends GuiFrame {
+public class GuiFrameConfirm extends GuiFrame {
 
 	int width = 200 ;
-	int height = 40 ;
+	int height = 50 ;
 	
 	int posX ;
 	int posY ;
@@ -30,22 +29,18 @@ public class GuiFrameFreezeShop extends GuiFrame {
 	int widthCenter = width / 2 ;
 	int heightCenter = height / 2 ;
 	
-	DataOfUIFrameField douiffs ;
+	DataOfUIFrameConfirm douifdi ;
 
-	int shopId = -1 ;
+	int shopId = -1, catId = -1, merchId = -1 ;
 
-	public String fieldText, fieldHolder ;
-
-	public static String lastReason ;
-	
-	public GuiFrameFreezeShop ( String _name, DataOfUIFrameField _douiffs ) {
+	public GuiFrameConfirm ( String _name, DataOfUIFrameConfirm _douifdi ) {
 		
 		super ( _name ) ;
 
-		douiffs = _douiffs ;
+		douifdi = _douifdi ;
 		
-		fieldText = douiffs . textField . text ;
-		fieldHolder = douiffs . textField . textHolder ;
+		fieldText = douifdi . codeField . text ;
+		fieldHolder = douifdi . codeField . textHolder ;
 		
 	}
 	
@@ -53,19 +48,22 @@ public class GuiFrameFreezeShop extends GuiFrame {
 
     	g . drawRect ( posX, posY, posX + width, posY + height, backgroundColor ) ;
     	
-    	super . draw( g, page, mouseX, mouseY, partialTicks, dt ) ;
+    	super . draw ( g, page, mouseX, mouseY, partialTicks, dt ) ;
     	
-    	g . drawString ( g . getFontRenderer ( ), douiffs . title, posX + 5, posY + 3, titleColor ) ;
-    	
-    	reasonField . drawTextBox ( ) ;
+    	g . drawString ( g . getFontRenderer ( ), douifdi . title, posX + 5, posY + 3, titleColor ) ;
+    	g . drawString ( g . getFontRenderer ( ), codeText, posX + 5, posY + 13, titleColor ) ;
+
+    	codeField . drawTextBox ( ) ;
     	
     	
     }
     
-    GuiButton freezeChangesButton ;
+    GuiButton deleteButton ;
     GuiButton cancelChangesButton ;
-    GuiGradientTextField reasonField ; 
-        
+    GuiGradientTextField codeField ; 
+    
+    String fieldText, fieldHolder, code, codeText ;
+    
     @Override
 	public void postShow ( ShopGUI g ) {
 		
@@ -80,23 +78,23 @@ public class GuiFrameFreezeShop extends GuiFrame {
     	posX = (g.getScaledResolution().getScaledWidth()/2) - widthCenter;
     	posY = (g.getScaledResolution().getScaledHeight()/2) - heightCenter;
 
-    	if ( freezeChangesButton == null ) {
+    	if ( deleteButton == null ) {
         	
-    		freezeChangesButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), posX, posY + height, 
-    				douiffs.okButton.width, douiffs.okButton.height, douiffs.okButton.text, false ) ;
+    		deleteButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), posX, posY + height, 
+    				douifdi.deleteButton.width, douifdi.deleteButton.height, douifdi.deleteButton.text, false ) ;
     	
     	}
     	
     	if ( this . isVisible ( ) ) {
 
-    		g . addButton ( freezeChangesButton, false ) ;
+    		g . addButton ( deleteButton, false ) ;
     		
     	}
     	
     	if ( cancelChangesButton == null ) {
         	
     		cancelChangesButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), posX, posY + height, 
-    				douiffs.cancelButton.width, douiffs.cancelButton.height, douiffs.cancelButton.text, false ) ;
+    				douifdi.cancelButton.width, douifdi.cancelButton.height, douifdi.cancelButton.text, false ) ;
     	
     	}
     	
@@ -106,26 +104,24 @@ public class GuiFrameFreezeShop extends GuiFrame {
     		
     	}
 
-		if ( reasonField == null ) {
+		if ( codeField == null ) {
 		
-			reasonField = new GuiGradientTextField ( g.getFontRenderer(), 30, 10, douiffs . textField . width - 1, douiffs . textField . height, true ) ;
-			reasonField . setMaxStringLength ( 140 ) ;
-			reasonField . setEnableBorderDrawing ( true, fieldBorderColor ) ;
+			codeField = new GuiGradientTextField ( g.getFontRenderer(), 30, 10, douifdi . codeField . width - 1, douifdi . codeField . height, true ) ;
+			codeField . setMaxStringLength ( 143 ) ;
+			codeField . setEnableBorderDrawing ( true, fieldBorderColor ) ;
 			
 		}
 		
-		reasonField . setText ( fieldText != null ? fieldText : "" ) ;
-		reasonField . setTextHolder ( fieldHolder ) ;
+		codeField . setText ( fieldText != null ? fieldText : "" ) ;
+		codeField . setTextHolder ( fieldHolder ) ;
 		
-		reasonField . xPosition = posX + 20 ;
-		reasonField . yPosition = posY + 15 ;
+		codeField . xPosition = posX + 20 ;
+		codeField . yPosition = posY + 25 ;
 
-    	cancelChangesButton . yPosition = freezeChangesButton . yPosition = posY + height ;
+    	cancelChangesButton . yPosition = deleteButton . yPosition = posY + height ;
     	cancelChangesButton . xPosition = posX + width - cancelChangesButton . width ;
-    	freezeChangesButton . xPosition = cancelChangesButton . xPosition - freezeChangesButton . width ;
+    	deleteButton . xPosition = cancelChangesButton . xPosition - deleteButton . width ;
 
-    	
-    	
     }
     
     @Override
@@ -134,31 +130,13 @@ public class GuiFrameFreezeShop extends GuiFrame {
     	super . unShow ( g ) ;
     	
     	g . removeButton ( cancelChangesButton ) ;
-    	g . removeButton ( freezeChangesButton ) ;
+    	g . removeButton ( deleteButton ) ;
 
 	}
 	
     @Override
 	public boolean actionPerformed ( ShopGUI g, GuiButton b ) {
 		
-    	if ( b . id == freezeChangesButton . id ) {
-    	
-    		if ( reasonField . getText ( ) . trim ( ) . isEmpty ( ) ) {
-    			
-    			reasonField . fieldBorderColor = fieldBorderRedColor ;
-    			
-    			return false ;
-    			
-    		}
-    		
-    		g . setLoading ( true ) ;
-    		
-    		ModNetwork . sendToServerFreezeShopPacket ( this . shopId, ( lastReason = reasonField . getText ( ) ) ) ;
-    		
-			hideFrame ( g ) ;
-
-    	}
-    	
     	if ( b . id == cancelChangesButton . id ) {
     	
 			hideFrame ( g ) ;
@@ -172,11 +150,11 @@ public class GuiFrameFreezeShop extends GuiFrame {
     @Override
 	public boolean onClick ( int x, int y, int i ) {
 		
-    	if ( reasonField != null ) {
+    	if ( codeField != null ) {
 
-    		reasonField . mouseClicked ( x, y, i ) ;
+    		codeField . mouseClicked ( x, y, i ) ;
     		    		
-    		reasonField . fieldBorderColor = fieldBorderColor ;
+    		codeField . fieldBorderColor = fieldBorderColor ;
 
     	}
     	
@@ -187,11 +165,11 @@ public class GuiFrameFreezeShop extends GuiFrame {
     @Override
 	public boolean onKey ( char c, int k ) {
 		
-    	if ( reasonField != null && reasonField . isFocused ( ) ) {
+    	if ( codeField != null && codeField . isFocused ( ) ) {
     		
-    		reasonField . textboxKeyTyped ( c, k ) ;
+    		codeField . textboxKeyTyped ( c, k ) ;
     		
-    		reasonField . fieldBorderColor = fieldBorderColor ;
+    		codeField . fieldBorderColor = fieldBorderColor ;
 
     		return true ;
     		
@@ -203,7 +181,7 @@ public class GuiFrameFreezeShop extends GuiFrame {
 	
 	public boolean isOwnerButton ( GuiButton gb ) {
 		
-		return ( gb == cancelChangesButton || gb == freezeChangesButton ) ;
+		return ( gb == cancelChangesButton || gb == deleteButton ) ;
 		
 	}
 	
@@ -235,10 +213,19 @@ public class GuiFrameFreezeShop extends GuiFrame {
 
     }
 
-	public void setShopId ( int _shopId ) {
-
+	public void setInfo ( int _shopId, int _catId, int _merchId ) {
+		
 		shopId = _shopId ;
+		catId = _catId ;
+		merchId = _merchId ;
 		
 	}
-    
+	
+	public void setConfirmCode ( String _code ) {
+
+		code = _code ;
+		codeText = this . douifdi . text . replace ( "%code%", code ) ;
+		
+	}
+	
 }

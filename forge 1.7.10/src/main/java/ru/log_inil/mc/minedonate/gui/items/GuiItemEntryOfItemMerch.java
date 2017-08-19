@@ -70,9 +70,9 @@ public class GuiItemEntryOfItemMerch extends GuiAbstractItemEntry {
 	}
 	
 	@Override 
-	public void draw ( GuiItemsScrollArea gi, int x_offset, int y_offset, int xRightOffset, int mouseX, int mouseY, Tessellator var5, DrawType dt, int index, int size ) {
+	public void draw ( GuiItemsScrollArea gi, int x_offset, int y_offset, int xRightOffset, float partialTicks, int mouseX, int mouseY, Tessellator var5, DrawType dt, int index, int size ) {
 	
-		super.draw(gi, x_offset, y_offset, xRightOffset, mouseX, mouseY, var5, dt, index, size);
+		super.draw(gi, x_offset, y_offset, xRightOffset, partialTicks, mouseX, mouseY, var5, dt, index, size);
 
 		if ( pl != null ) {
 			
@@ -112,7 +112,7 @@ public class GuiItemEntryOfItemMerch extends GuiAbstractItemEntry {
 			
 			GL11 . glPushMatrix ( ) ; 
 			
-			GL11 . glTranslatef ( 40, y_offset + 2, 10 ) ;
+			GL11 . glTranslatef ( 40, y_offset + 2, 0 ) ;
 			GL11 . glScalef ( 1.2f, 1.2f, 1f ) ;  
 			
 			gi . parent . getItemRender ( ) . renderItemAndEffectIntoGUI ( gi . getFontRenderer ( ), gi . parent . mc . getTextureManager ( ), info . m_stack, 0, 0 ) ;
@@ -137,7 +137,7 @@ public class GuiItemEntryOfItemMerch extends GuiAbstractItemEntry {
 
 			RenderHelper . disableStandardItemLighting ( ) ;
 			
-		} else if ( dt == DrawType . OVERLAY ) {
+		} else if ( dt == DrawType . OVERLAY_PRE ) {
 			
 			if ( mouseX >= 40 && 60 >= mouseX ) {
 				
@@ -172,7 +172,7 @@ public class GuiItemEntryOfItemMerch extends GuiAbstractItemEntry {
 	@Override
 	public GuiAbstractItemEntry addButtons ( ShopGUI gui ) {
 				
-		buy = new BuyButton ( info . getShopId ( ), info . getCategory ( ), info . merch_id, ShopGUI . getNextButtonId ( ), gui . resolution . getScaledWidth ( ) - 91, -100, MineDonate . cfgUI . cats.itemsAndBlocks . itemBuyButton . width, MineDonate . cfgUI . cats . itemsAndBlocks . itemBuyButton . height, MineDonate . cfgUI . cats . itemsAndBlocks . itemBuyButton . text ) ;
+		buy = new BuyButton ( info . getShopId ( ), info . getCategory ( ), info . getId ( ), ShopGUI . getNextButtonId ( ), gui . resolution . getScaledWidth ( ) - 91, -100, MineDonate . cfgUI . cats.itemsAndBlocks . itemBuyButton . width, MineDonate . cfgUI . cats . itemsAndBlocks . itemBuyButton . height, MineDonate . cfgUI . cats . itemsAndBlocks . itemBuyButton . text ) ;
         gui . addButton ( buy, false ) ;
         
         min = new CountButton ( -1, info, ShopGUI . getNextButtonId ( ), buy . xPosition - 1 - 16, - 100, 16, 20, "-" ) ;
@@ -231,7 +231,7 @@ public class GuiItemEntryOfItemMerch extends GuiAbstractItemEntry {
 					
 					GuiFrameEditItem gfrs = ( GuiFrameEditItem ) g . showEntry ( "frame.item.edit", true ) ;	
 
-					gfrs . setInfo ( info . shopId, info . catId, info . merch_id, info . limit, info . cost ) ;
+					gfrs . setInfo ( info . shopId, info . catId, info . getId ( ), info . limit, info . cost ) ;
 					gfrs . setFieldData ( info . m_stack . getDisplayName ( ) . equals ( info . name ) ? "" :  info . name, info . m_stack . getDisplayName ( ) ) ;
 					gfrs . postShow ( g ) ;
 
@@ -241,7 +241,7 @@ public class GuiItemEntryOfItemMerch extends GuiAbstractItemEntry {
 					
 					GuiFrameDeleteItem gfdi = ( GuiFrameDeleteItem ) g . showEntry ( "frame.item.delete", true ) ;	
 					
-					gfdi . setInfo ( info . shopId, info . catId, info . merch_id ) ;
+					gfdi . setInfo ( info . shopId, info . catId, info . getId ( ) ) ;
 					gfdi . setConfirmCode ( Integer . toString ( Math . abs ( info . hashCode ( ) ) ) . substring ( 0, 3 ) ) ;
 					gfdi . postShow ( g ) ;
 					

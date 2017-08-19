@@ -32,11 +32,11 @@ public class ContextElement  {
 		
 		if ( cdt == ContextDrawType . NORMAL ) {
 			
-			g . drawString ( g . getFontRenderer ( ), line, xOffset + 4, yOffset + ( ind * lineHeight ), 14737632 ) ;
+			g . drawString ( g . getFontRenderer ( ), line, xOffset + 5, yOffset + ( ind * lineHeight ), 14737632 ) ;
 			
 		} else {
 			
-			g . drawString ( g . getFontRenderer ( ), EnumChatFormatting . UNDERLINE + line, xOffset + 4, yOffset + ( ind * lineHeight ), 14737632 ) ;
+			g . drawString ( g . getFontRenderer ( ), EnumChatFormatting . UNDERLINE + line, xOffset + 5, yOffset + ( ind * lineHeight ), 14737632 ) ;
 			
 		}
 		

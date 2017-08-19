@@ -90,7 +90,7 @@ public class PrivilegieCategory extends ShopCategory {
  	   RenderHelper.enableGUIStandardItemLighting();
  	  
        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-       GL11.glBindTexture(GL11.GL_TEXTURE_2D, ClientProxy.getImage(_info.merch_id).getGlTextureId());
+       GL11.glBindTexture(GL11.GL_TEXTURE_2D, ClientProxy.getImage(_info.getId()).getGlTextureId());
        relative.drawTexturedModalRectNormal(x_offset, y_offset, 75, 75);
        
        relative.drawString(relative.getFontRenderer(), _info.name, x_offset + (75/2)- relative.getFontRenderer().getStringWidth(_info.name)/2, y_offset + 80, 0xFFFFFF);
@@ -132,7 +132,7 @@ public class PrivilegieCategory extends ShopCategory {
     	
 		for ( PrivilegieInfo ri : list ) {
 			
-			if ( buttonsMap . containsKey ( ri . merch_id ) ) relative . removeButton ( buttonsMap . get ( ri . merch_id ) ) ;
+			if ( buttonsMap . containsKey ( ri . getId ( ) ) ) relative . removeButton ( buttonsMap . get ( ri . getId ( ) ) ) ;
 
     	}
 		
@@ -175,8 +175,8 @@ public class PrivilegieCategory extends ShopCategory {
 
             int y_offset = (int) (resolution.getScaledHeight() * 0.30);
                        
-            buyButton = new BuyButton( info . getShopId ( ), info . getCategory ( ), info . merch_id, ShopGUI.getNextButtonId(), (buyButton!=null?buyButton.xPosition: resolution . getScaledWidth ( ) / 2 - MineDonate.cfgUI.cats.privelegies.itemBuyButton.width / 2), y_offset +  93, MineDonate.cfgUI.cats.privelegies.itemBuyButton.width, MineDonate.cfgUI.cats.privelegies.itemBuyButton.height, MineDonate.cfgUI.cats.privelegies.itemBuyButton.text);
-            buttonsMap.put(info.merch_id, buyButton);
+            buyButton = new BuyButton( info . getShopId ( ), info . getCategory ( ), info . getId ( ), ShopGUI.getNextButtonId(), (buyButton!=null?buyButton.xPosition: resolution . getScaledWidth ( ) / 2 - MineDonate.cfgUI.cats.privelegies.itemBuyButton.width / 2), y_offset +  93, MineDonate.cfgUI.cats.privelegies.itemBuyButton.width, MineDonate.cfgUI.cats.privelegies.itemBuyButton.height, MineDonate.cfgUI.cats.privelegies.itemBuyButton.text);
+            buttonsMap.put(info.getId ( ), buyButton);
 
             relative . addButton ( buyButton, false ) ;
             
@@ -184,7 +184,7 @@ public class PrivilegieCategory extends ShopCategory {
     }
     
     @Override 
-	public void setSubCategory ( int _subCatId ) { }
+	public void filterProcess ( ) { }
     
 	@Override
 	public int getButtonWidth ( ) {

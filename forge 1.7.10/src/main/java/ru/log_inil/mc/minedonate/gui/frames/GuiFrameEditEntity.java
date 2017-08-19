@@ -1,35 +1,23 @@
 package ru.log_inil.mc.minedonate.gui.frames;
 
 import net.minecraft.client.gui.GuiButton;
+
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.network.manage.packets.EditMerchNumberPacket;
 import ru.alastar.minedonate.network.manage.packets.EditMerchStringPacket;
 import ru.alastar.minedonate.rtnl.ModNetwork;
 
-import ru.log_inil.mc.minedonate.localData.frames.DataOfUIFramEditItem;
+import ru.log_inil.mc.minedonate.localData.frames.DataOfUIFramEditObject;
 
 public class GuiFrameEditEntity extends GuiFrameEditItem {
 
-    public GuiFrameEditEntity ( String _name, DataOfUIFramEditItem _douifcs ) {
+    public GuiFrameEditEntity ( String _name, DataOfUIFramEditObject _douifcs ) {
 		
     	super ( _name, _douifcs ) ;
 		
 	}
 
-	@Override
-	public void postShow ( ShopGUI g ) {
-	
-		if ( ! isVisible ( ) ) {
-			
-			return ;
-			
-		}
-		
-    	super . postShow ( g ) ;
-
-    }
-	
     @Override
 	public boolean actionPerformed ( ShopGUI g, GuiButton b ) {
 
@@ -94,15 +82,6 @@ public class GuiFrameEditEntity extends GuiFrameEditItem {
     	}
     	
 		return false ;
-		
-	}
-
-	public void setInfo ( int _shopId, int _catId, int _merch_id, int _cost ) {
-		
-		shopId = _shopId ;
-		catId = _catId ;
-		merch_id = _merch_id ;
-		cost = _cost ;
 		
 	}
 	

@@ -35,7 +35,8 @@ public class GuiFrameAddItem extends GuiFrame {
 	DataOfUIFrameAddItem douifcs ;
 	
 	int shopId = -1, catId = -1 ;
-
+	public boolean drawItemStack = true ;
+	
 	public GuiFrameAddItem ( String _name, DataOfUIFrameAddItem _douifcs ) {
 		
 		super ( _name ) ;
@@ -49,7 +50,7 @@ public class GuiFrameAddItem extends GuiFrame {
 	
     public void draw ( ShopGUI g, int page, int mouseX, int mouseY, float partialTicks, DrawType dt ) {
 
-    	g . drawRect ( posX, posY, posX + width, posY + height, backgroundColor ) ;
+		g . drawRect ( posX, posY, posX + width, posY + height, backgroundColor ) ;
     	
     	super . draw ( g, page, mouseX, mouseY, partialTicks, dt ) ;
     	
@@ -59,7 +60,7 @@ public class GuiFrameAddItem extends GuiFrame {
     	costField . drawTextBox ( ) ;
     	limitField . drawTextBox ( ) ;
     	
-    	if ( MineDonate . getAccount ( ) . ms . currentItemStack != null ) {
+    	if ( drawItemStack && MineDonate . getAccount ( ) . ms . currentItemStack != null ) {
     		
 			RenderHelper . enableGUIStandardItemLighting ( ) ;
 
@@ -69,7 +70,7 @@ public class GuiFrameAddItem extends GuiFrame {
 			RenderHelper . disableStandardItemLighting ( ) ;
 
     	}
-    	
+        	
     }
     
     GuiButton saveChangesButton ;
@@ -89,6 +90,118 @@ public class GuiFrameAddItem extends GuiFrame {
 		
     	super . postShow ( g ) ;
 
+
+    	width = 5 ;
+    			
+		width += douifcs . nameField . width ;
+		
+		if ( MineDonate . getAccount ( ) . canUnlimitedItems ( ) && douifcs . limitField != null ) {
+			
+			width += douifcs . limitField . width ;
+			width += 6 ;
+			
+		}
+		
+		width += douifcs . costField . width ;
+		width += 19 ;
+
+		widthCenter = width / 2 ;
+
+    	posX = (g.getScaledResolution().getScaledWidth()/2) - widthCenter;
+    	posY = (g.getScaledResolution().getScaledHeight()/2) - heightCenter;
+
+    	if ( saveChangesButton == null ) {
+        	
+    		saveChangesButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), posX, posY + height, 
+    				douifcs.createButton.width, douifcs.createButton.height, douifcs.createButton.text, false ) ;
+    	
+    	}
+    	
+    	if ( this . isVisible ( ) ) {
+
+    		g . addButton ( saveChangesButton, false ) ;
+    		
+    	}
+    	
+    	if ( cancelChangesButton == null ) {
+        	
+    		cancelChangesButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), posX, posY + height, 
+    				douifcs.cancelButton.width, douifcs.cancelButton.height, douifcs.cancelButton.text, false ) ;
+    	
+    	}
+    	
+    	if ( this . isVisible ( ) ) {
+
+    		g . addButton ( cancelChangesButton, false ) ;
+    		
+    	}
+
+		if ( nameField == null ) {
+						
+			nameField = new GuiGradientTextField ( g.getFontRenderer(), 30, 10, douifcs . nameField . width - 1, douifcs . nameField . height, true ) ;
+			nameField . setMaxStringLength ( 140 ) ;
+			nameField . setEnableBorderDrawing ( true, fieldBorderColor ) ;
+			
+		}
+		
+		nameField . setText ( fieldText != null ? fieldText : "" ) ;
+		nameField . setTextHolder ( MineDonate.getAccount().ms.currentItemStack != null ? MineDonate.getAccount().ms.currentItemStack.getDisplayName() : fieldHolder ) ;
+		
+		nameField . xPosition = posX + 10 ;
+		nameField . yPosition = posY + 15 ;
+
+		if ( limitField == null && douifcs . limitField != null ) {
+			
+			limitField = new GuiGradientTextField ( g.getFontRenderer(), 30, 10, douifcs . limitField . width - 1, douifcs . limitField . height, true ) ;
+			limitField . setMaxStringLength ( 10 ) ;
+			limitField . setEnableBorderDrawing ( true, fieldBorderColor ) ;
+			
+		}
+
+		if ( limitField != null ) {
+			
+			limitField . setText ( "" ) ;
+			limitField . setTextHolder ( "" ) ;
+			
+		}
+		
+		if ( costField == null ) {
+			
+			costField = new GuiGradientTextField ( g.getFontRenderer(), 30, 10, douifcs . costField . width - 1, douifcs . costField . height, true ) ;
+			costField . setMaxStringLength ( 10 ) ;
+			costField . setEnableBorderDrawing ( true, fieldBorderColor ) ;
+						
+		}
+	
+		costField . setText ( douifcs . costField . text ) ;
+		costField . setTextHolder ( douifcs . costField . textHolder ) ;
+		
+		costField . xPosition = nameField . xPosition + nameField . width + 6 ;
+		costField . yPosition = nameField . yPosition ;
+
+		if ( limitField != null ) {
+
+			if ( MineDonate . getAccount ( ) . canUnlimitedItems ( ) ) {
+
+				limitField . xPosition = costField . xPosition + costField . width + 6 ;
+				limitField . yPosition = nameField . yPosition ;
+				
+				limitField . setText ( douifcs . limitField . text ) ;
+				limitField . setTextHolder ( douifcs . limitField . textHolder ) ;
+				
+			}
+		
+			limitField . setEnabled ( MineDonate . getAccount ( ) . canUnlimitedItems ( ) ) ;
+			limitField . setVisible ( MineDonate . getAccount ( ) . canUnlimitedItems ( ) ) ;
+			
+		}
+
+    	cancelChangesButton . yPosition = saveChangesButton . yPosition = posY + height ;
+    	cancelChangesButton . xPosition = posX + width - cancelChangesButton . width ;
+    	saveChangesButton . xPosition = cancelChangesButton . xPosition - saveChangesButton . width ;
+    	
+    	
+    	/*
     	posX = (g.getScaledResolution().getScaledWidth()/2) - widthCenter;
     	posY = (g.getScaledResolution().getScaledHeight()/2) - heightCenter;
 
@@ -174,7 +287,7 @@ public class GuiFrameAddItem extends GuiFrame {
     	cancelChangesButton . yPosition = saveChangesButton . yPosition = posY + height ;
     	cancelChangesButton . xPosition = posX + width - cancelChangesButton . width ;
     	saveChangesButton . xPosition = cancelChangesButton . xPosition - saveChangesButton . width ;
-    	
+    	*/
     }
     
     @Override

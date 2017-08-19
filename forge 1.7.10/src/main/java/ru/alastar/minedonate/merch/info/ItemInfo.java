@@ -3,17 +3,19 @@ package ru.alastar.minedonate.merch.info;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
+
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.rtnl.Utils;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 
 /**
@@ -51,8 +53,8 @@ public class ItemInfo extends Merch {
         return modified;
     }
 
-    public ItemInfo(int _shopId, int _catId, int mid, int cos, String n, int lim, java.sql.Blob data) {
-    	super(_shopId, _catId, mid);
+    public ItemInfo(int _shopId, int _catId, int mid, int _rating, int cos, String n, int lim, java.sql.Blob data) {
+    	super(_shopId, _catId, mid, _rating);
         this.cost = cos;
         this.name = n;
         this.limit = lim;
@@ -68,8 +70,8 @@ public class ItemInfo extends Merch {
         m_stack = ItemStack.loadItemStackFromNBT(stack_data);
 
     }
-    public ItemInfo(int _shopId, int _catId, int mid, int cos, String n, int lim, ItemStack data) {
-    	super(_shopId, _catId, mid);
+    public ItemInfo(int _shopId, int _catId, int mid, int _rating, int cos, String n, int lim, ItemStack data) {
+    	super(_shopId, _catId, mid, _rating);
     	
         this.cost = cos;
         this.name = n;

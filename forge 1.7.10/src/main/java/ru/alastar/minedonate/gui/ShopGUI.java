@@ -23,6 +23,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.lwjgl.opengl.GL11;
+
 /**
  * Created by Alastar on 18.07.2017.
  */
@@ -92,6 +94,7 @@ public class ShopGUI extends MCGuiAccessible {
     	gEntries . put ( "frame.acc.freeze", new GuiFrameFreezeAccount ( "frame.acc.freeze", MineDonate . cfgUI . frames . freezeAccount ) ) ;
 
     	gEntries . put ( "frame.loading", ( gfl = new GuiFrameLoading ( "frame.loading" ) ) ) ;
+    	
     	gfl . setText ( MineDonate . cfgUI . loadingText ) ;
     	
     }
@@ -420,13 +423,11 @@ public class ShopGUI extends MCGuiAccessible {
                 
             } else if ( button instanceof GoButton ) {
             	
-            	// currentShop = ( ( GoButton ) button ) . shopId ;
             	( ( UsersShopsCategory ) getCurrentCategory ( ) ) . selectedShop = ( ShopInfo ) MineDonate . shops . get ( 0 ) . cats [ ( getCurrentCategory ( ) ).getCatId ( ) ] . getMerch (  ( ( GoButton ) button ) . shopId ) ;
                 ModNetwork . sendToServerNeedShopCategoryPacket ( ( ( GoButton ) button ) . shopId, 0 ) ;
 
                 loading = true ;
                 
-              //  returnButton . enabled = returnButton . visible = displayReturnButton = true ;
 
             } else if ( button instanceof GuiGradientButton ) {
             	
@@ -448,9 +449,7 @@ public class ShopGUI extends MCGuiAccessible {
                 			getCurrentCategory ( ) . postShow ( this ) ;
                 			
                             updateGrid ( ) ;       
-                			
-                     //       updateBtns ( ) ;
-                            
+                			                            
                     	} else {
                     		
                     		searchField . setVisible ( true ) ;
@@ -464,7 +463,6 @@ public class ShopGUI extends MCGuiAccessible {
                 			getCurrentCategory ( ) . postShow ( this ) ;
                 			
                             updateGrid ( ) ;
-                     //       updateBtns ( ) ;
                             
                     	}
                     	       
@@ -495,13 +493,12 @@ public class ShopGUI extends MCGuiAccessible {
 	        if ( ! loading ) { 
 	        	
 	        	can_process = true; 
-	        	
+
 	        	getCurrentCategory ( ) . draw ( this, m_Page, mouseX, mouseY, partialTicks, DrawType . BG ) ;   
-  
-		        super . drawScreen ( mouseX, mouseY, partialTicks ) ;  
-		        
 	            getCurrentCategory ( ) . draw ( this, m_Page, mouseX, mouseY, partialTicks, DrawType . PRE ) ;    		
 
+		        super . drawScreen ( mouseX, mouseY, partialTicks ) ;  
+		        
 		  		for ( GuiGradientTextField ggtf: listTextFields ) {
 					
 		  			ggtf . drawTextBox ( ) ;		
@@ -509,9 +506,9 @@ public class ShopGUI extends MCGuiAccessible {
 				}
 		  		
 		        getCurrentCategory ( ) . draw ( this, m_Page, mouseX, mouseY, partialTicks, DrawType . POST ) ;   
+		    
 		        getCurrentCategory ( ) . draw ( this, m_Page, mouseX, mouseY, partialTicks, DrawType . OVERLAY ) ;   
 
-		        //
 	    	
 	        } else { 
 	        	
@@ -522,7 +519,6 @@ public class ShopGUI extends MCGuiAccessible {
 		        super . drawScreen ( mouseX, mouseY, partialTicks ) ;  
 		      
 		    	getCurrentCategory ( ) . draw ( this, m_Page, mouseX, mouseY, partialTicks, DrawType . POST ) ;   
-		        // getCurrentCategory ( ) . draw ( this, m_Page, mouseX, mouseY, partialTicks, DrawType . OVERLAY ) ;   
 
 	        }
 	        
@@ -536,6 +532,8 @@ public class ShopGUI extends MCGuiAccessible {
 	    	}
 	    	
 	    }
+        
+		GL11 . glTranslatef ( 0, 0, 1000f ) ;
 
         ContextMenuManager . draw ( this, mouseX, mouseY ) ;
         
@@ -544,6 +542,7 @@ public class ShopGUI extends MCGuiAccessible {
         	ContextMenuManager . drawDebug ( this, mouseX, mouseY ) ;
         	
         }
+		GL11 . glTranslatef ( 0, 0, -1000f ) ;
 
         for ( ru.log_inil.mc.minedonate.gui.GuiEntry ge : gEntries . values ( ) ) {
 

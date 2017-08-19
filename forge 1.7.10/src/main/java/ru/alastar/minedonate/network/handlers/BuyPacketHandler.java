@@ -22,67 +22,63 @@ public class BuyPacketHandler implements IMessageHandler<BuyPacket, IMessage> {
 
     @Override
     public IMessage onMessage(BuyPacket message, MessageContext ctx) {
-
-        byte resp = 0;
         
         if ( MineDonate . m_Enabled ) {
         	
             try {
             	
             	EntityPlayerMP serverPlayer = ctx . getServerHandler ( ) . playerEntity ;
-                //sender          ^^^^
-                int category = message . category ;
-                int merchId = message . merchId ;
 
-                if ( category < MineDonate . shops . get ( message . shopId ) . cats . length ) {
+                if ( message . category < MineDonate . shops . get ( message . shopId ) . cats . length ) {
                 	
-                    Merch info = MineDonate. shops . get ( message . shopId ) . cats [ category ] . getMerch ( merchId ) ;
+                    Merch info = MineDonate. shops . get ( message . shopId ) . cats [ message . category ] . getMerch ( message . merchId ) ;
                     
                     if ( info != null ) {
                     	
-                        //int playerMoney = MineDonate.getMoneyFor(serverPlayer.getDisplayName());
                     	if ( ! MineDonate . checkShopExists ( info . shopId ) ) {
                     		
-                    		resp = 2 ;
+                            return new BuyResponsePacket ( BuyResponsePacket . Status . ERROR_UNKNOWN ) ;
                     		
-                    	} else if ( MineDonate . shops . get ( info . shopId ) . isFreezed  ) {
+                    	} else if ( MineDonate . shops . get ( info . shopId ) . isFreezed ) {
                     	
-                    		resp = 3 ;
+                            return new BuyResponsePacket ( BuyResponsePacket . Status . ERROR_SHOP_FREEZED ) ;
 
                     	} else {
                     		
-	                        if ( info . canBuy ( serverPlayer, message . amount ) ) { // info . getCost ( ) * message.amount <= playerMoney && 
+	                        if ( info . canBuy ( serverPlayer, message . amount ) ) {
 	                        	
 	                        	int procMoney = -1 ;
 	                        	
 	                        	if ( ( procMoney = MineDonate . getMoneyProcessor ( info . getMoneyType ( ) ) . canBuy ( info, serverPlayer . getDisplayName ( ), message . amount ) ) != -1 ) {
 	                        		
 		                            ShopLogger . logBuy ( info, serverPlayer, message . amount, info . getMoneyType ( ) ) ;
+		                            
 		                            int currentMoney = info . withdrawMoney ( serverPlayer . getDisplayName ( ), procMoney ) ;
 		                               
 		                            ModNetwork . sendToMoneyChangedPacket ( ( EntityPlayerMP ) serverPlayer, currentMoney, info . getMoneyType ( ) ) ;
 	
-		                            MineDonate . shops . get ( message . shopId ) . cats [ category ] . giveMerch ( serverPlayer, info, message . amount ) ;
+		                            MineDonate . shops . get ( message . shopId ) . cats [ message . category ] . giveMerch ( serverPlayer, info, message . amount ) ;
 		                            
-		                            resp = 0;
+		                            return new BuyResponsePacket ( BuyResponsePacket . Status . SUCCESSFUL ) ;
 		                            
 	                        	} else {
 	                        		
-	                        		resp = 1 ;
+		                            return new BuyResponsePacket ( BuyResponsePacket . Status . ERROR_NOT_ENOUGH_MONEY ) ;
 	                        		
 	                        	}
 	                        	
 	                        } else {
 	                        	
-	                            resp = 1;
+	                            return new BuyResponsePacket ( BuyResponsePacket . Status . ERROR_CANT_BUY ) ;
 	                            
 	                        }
 	                        
                     	}
+                    	
                     }
+                    
                 }
-            
-            
+      
             } catch ( Exception ex ) {
             	
             	ex . printStackTrace ( ) ;
@@ -91,7 +87,7 @@ public class BuyPacketHandler implements IMessageHandler<BuyPacket, IMessage> {
             
         }
         
-        return new BuyResponsePacket ( ( byte ) resp ) ;
+        return null ;
         
     }
 }
