@@ -26,7 +26,7 @@ public class DataOfUIFramEditObject {
 		this ( ) ;
 
 		title = _title ;
-		nameField . text = _nameFieldHolder ;
+		nameField . textHolder = _nameFieldHolder ;
 		
 	}
 	
