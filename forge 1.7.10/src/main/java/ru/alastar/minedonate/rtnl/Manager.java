@@ -9,9 +9,10 @@ import java.sql.Statement;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import net.minecraft.entity.Entity;
+
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
+
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.merch.categories.MerchCategory;
@@ -26,7 +27,7 @@ public class Manager {
 
 	public static void createShop ( String owner, String name ) {
 		
-        ShopInfo info = new ShopInfo ( 0, MineDonate . getNextShopId ( ), owner, name, false, null, null, false, MineDonate.cfg.defaultUserShopMoneyType ) ;
+        ShopInfo info = new ShopInfo ( 0, MineDonate . getNextShopId ( ), 0, owner, name, false, null, null, false, MineDonate.cfg.defaultUserShopMoneyType ) ;
         info . setId ( info . shopId ) ;
        
         MineDonate . shops . get ( 0 ) . cats [ 4 ] . addMerch ( info ) ;
@@ -246,7 +247,7 @@ public class Manager {
 	}
 
 
-	public static void addEntityToShop ( Account acc, Shop s, int catId, int limit, int cost,  String name ) {
+	public static void addEntityToShop ( Account acc, Shop s, int catId, int limit, int cost, String name ) {
 		
 		if ( ! acc . canUnlimitedEntities ( ) ) {
 			
@@ -254,7 +255,7 @@ public class Manager {
 			
 		}
 
-		EntityInfo info = new EntityInfo(s.sid, catId, s.cats[catId].getNextMerchId(), Integer.valueOf(cost), acc.ms.currentMob, name, limit);
+		EntityInfo info = new EntityInfo(s.sid, catId, s.cats[catId].getNextMerchId(), 0, Integer.valueOf(cost), acc.ms.currentMob, name, limit);
         
         s.cats[catId].addMerch(info);
        
@@ -294,7 +295,7 @@ public class Manager {
 			
 		}
 		
-    	ItemInfo info = new ItemInfo(s.sid, catId, s.cats[catId].getNextMerchId(), Integer.valueOf(cost), name, Integer.valueOf(limit), acc.ms.currentItemStack);
+    	ItemInfo info = new ItemInfo(s.sid, catId, s.cats[catId].getNextMerchId(), 0, Integer.valueOf(cost), name, Integer.valueOf(limit), acc.ms.currentItemStack);
         
         s.cats[catId].addMerch(info);
        

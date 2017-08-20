@@ -55,7 +55,7 @@ public abstract class GuiAbstractItemEntry extends MCGuiAccessible implements Co
 	GuiItemsScrollArea gi ;
 	boolean showFlag = true ;
 	
-	public void draw ( GuiItemsScrollArea _gi, int var2, int var3, int var4, int mouseX, int mouseY, Tessellator var5, DrawType dt, int index, int size ) {
+	public void draw ( GuiItemsScrollArea _gi, int var2, int var3, int var4, float partialTicks, int mouseX, int mouseY, Tessellator var5, DrawType dt, int index, int size ) {
 
 		gi = _gi ;
 			

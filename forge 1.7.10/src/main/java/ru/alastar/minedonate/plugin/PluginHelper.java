@@ -8,8 +8,6 @@ import org.bukkit.Bukkit;
 import com.google.common.io.ByteStreams;
 
 import ru.alastar.minedonate.MineDonate;
-import ru.alastar.minedonate.plugin.bukkit.PermissionsBukkitPlugin;
-import ru.alastar.minedonate.plugin.bukkit.WorldGuardBukkitPlugin;
 import ru.alastar.minedonate.plugin.clean.PermissionsPlugin;
 import ru.alastar.minedonate.plugin.clean.WorldGuardPlugin;
 import ru.alastar.minedonate.plugin.reflection.PermissionsPluginReflection;

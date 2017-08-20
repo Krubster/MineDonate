@@ -4,38 +4,38 @@ import ru.log_inil.mc.minedonate.localData.frames.*;
 
 public class DataOfUIFrames {
 
-	//public DataOfUIFrameRenameItem rename ;
-	public DataOfUIFrameCreateShop createShop ;
-	public DataOfUIFrameRenameShop renameShop ;
-	public DataOfUIFrameDeleteShop deleteShop ;
-	public DataOfUIFrameFreezeShop freezeShop ;
+	public DataOfUIFrameField createShop ;
+	public DataOfUIFrameField renameShop ;
+	public DataOfUIFrameConfirm deleteShop ;
+	public DataOfUIFrameField freezeShop ;
 	
 	public DataOfUIFrameAddItem addItem ;
-	public DataOfUIFramEditItem editItem ;
-	public DataOfUIFrameDeleteItem deleteItem ;
+	public DataOfUIFramEditObject editItem ;
+	public DataOfUIFrameConfirm deleteItem ;
 	
 	public DataOfUIFrameAddEntity addEntity ;
-	public DataOfUIFrameEditEntity editEntity ;
-	public DataOfUIFrameDeleteEntity deleteEntity ;
+	public DataOfUIFramEditObject editEntity ;
+	public DataOfUIFrameConfirm deleteEntity ;
 	
-	public DataOfUIFrameFreezeAccount freezeAccount;
+	public DataOfUIFrameField freezeAccount;
 
 	public DataOfUIFrames ( ) {
 	
-		createShop = new DataOfUIFrameCreateShop ( ) ;
-		renameShop = new DataOfUIFrameRenameShop ( ) ;	
-		deleteShop = new DataOfUIFrameDeleteShop ( ) ;
-		freezeShop = new DataOfUIFrameFreezeShop ( ) ;
+		createShop = new DataOfUIFrameField ( "Create shop", new DataOfUIElement ( "Create", 50, 20 ),  new DataOfUITextHolderElement ( "", "Shop name", 160, 20 ) ) ;
+		renameShop = new DataOfUIFrameField ( "Rename shop", new DataOfUIElement ( "Rename", 40, 20 ),  new DataOfUITextHolderElement ( "", "Shop name", 160, 20 ) ) ;	
+		deleteShop = new DataOfUIFrameConfirm ( "Delete entity", "Entry confirm code[%code%] to field", "Delete" ) ;
+		freezeShop = new DataOfUIFrameField ( "Freeze shop", new DataOfUIElement ( "Freeze", 50, 20 ),  new DataOfUITextHolderElement ( "", "Reason", 160, 20 ) ) ;
 		
 		addItem = new DataOfUIFrameAddItem ( ) ;
-		editItem = new DataOfUIFramEditItem ( ) ;
-		deleteItem = new DataOfUIFrameDeleteItem ( ) ;
+		editItem = new DataOfUIFramEditObject ( "Edit item", "Item name" ) ;
+		deleteItem = new DataOfUIFrameConfirm ( "Delete item", "Entry confirm code[%code%] to field", "Delete" ) ;
 		
 		addEntity = new DataOfUIFrameAddEntity ( ) ;
-		editEntity = new DataOfUIFrameEditEntity ( ) ;
-		deleteEntity = new DataOfUIFrameDeleteEntity ( ) ;
+		editEntity = new DataOfUIFramEditObject ( "Edit entity", "Entity name" ) ;
+		deleteEntity = new DataOfUIFrameConfirm ( "Delete entity", "Entry confirm code[%code%] to field", "Delete" ) ;
 		
-		freezeAccount = new DataOfUIFrameFreezeAccount ( ) ;
+		freezeAccount = new DataOfUIFrameField ( "Freeze account", new DataOfUIElement ( "Freeze", 50, 20 ),  new DataOfUITextHolderElement ( "", "Reason", 160, 20 ) ) ;
+		//= new DataOfUIFrameFreezeAccount ( ) ;
 				
 	}
 	

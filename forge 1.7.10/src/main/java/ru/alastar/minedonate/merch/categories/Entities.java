@@ -3,12 +3,13 @@ package ru.alastar.minedonate.merch.categories;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
-import ru.alastar.minedonate.merch.categories.MerchCategory.Type;
 import ru.alastar.minedonate.merch.info.EntityInfo;
 
 import java.lang.reflect.InvocationTargetException;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -29,7 +30,7 @@ public class Entities extends MerchCategory {
     public void loadMerchFromDB(ResultSet rs) {
         try {
             while (rs.next()) {
-                final EntityInfo info = new EntityInfo(shopId, catId, rs.getInt("id"), rs.getInt("cost"), rs.getBlob("data"), rs.getString("name"), rs.getInt("lim"));
+                final EntityInfo info = new EntityInfo(shopId, catId, rs.getInt("id"), rs.getInt("rating"), rs.getInt("cost"), rs.getBlob("data"), rs.getString("name"), rs.getInt("lim"));
                 this.addMerch(info);
             }
         } catch (SQLException e) {

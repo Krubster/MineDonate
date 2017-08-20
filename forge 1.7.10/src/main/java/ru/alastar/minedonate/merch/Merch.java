@@ -14,38 +14,45 @@ import ru.alastar.minedonate.MineDonate;
  */
 public abstract class Merch {
 
-    public int cost;
-    public int merch_id;
-    public int shopId;
-    public int catId;
-	public int subCatId ;
-
+    public int cost ;
+    public int merchId ;
+    public int shopId ;
+    public int catId ;
+	public int rating ;
+	
 	public Merch ( ) { }
 
-	public Merch ( int _shopId, int _catId, int _merch_id ) {
+	public Merch ( int _shopId, int _catId, int _merchId, int _rating ) {
 		
-		this.shopId = _shopId;
-    	this.catId = _catId;
-        this.merch_id = _merch_id;
+		shopId = _shopId ;
+    	catId = _catId ;
+        merchId = _merchId ;
+        rating = _rating ;
         
 	}
 	
-    public int getCategory() {
-        return -1;
+    public int getCategory ( ) {
+        
+    	return -1 ;
+        
     }
 
-    public void read(ByteBuf buf) {
-    	shopId = buf.readInt();
-    	catId = buf.readInt();
-    	subCatId = buf.readInt();
-        merch_id = buf.readInt();
+    public void read ( ByteBuf buf ) {
+    	
+    	shopId = buf . readInt ( ) ;
+    	catId = buf . readInt ( ) ;
+    	rating = buf . readInt ( ) ;
+    	merchId = buf . readInt ( ) ;
+    	
     }
 
-    public void write(ByteBuf buf) {
-    	buf.writeInt(shopId);
-        buf.writeInt(catId);
-        buf.writeInt(subCatId);
-        buf.writeInt(merch_id);
+    public void write ( ByteBuf buf ) {
+    	
+    	buf . writeInt ( shopId ) ;
+        buf . writeInt ( catId ) ;
+        buf . writeInt ( rating ) ;
+        buf . writeInt ( merchId ) ;
+        
     }
 
     public Merch copy ( ) {
@@ -54,37 +61,57 @@ public abstract class Merch {
     	
     }
     
-    public String getBoughtMessage() {
-        return "";
+    public String getBoughtMessage ( ) {
+    	
+        return "" ;
+        
     }
 
     public int getCost() {
         return cost;
     }
 
-    public int getId() {
-        return merch_id;
+    public int getId ( ) {
+        
+    	return merchId ;
+        
     }
 
     public boolean canBuy(EntityPlayerMP serverPlayer, int amount) {
-        return true;
+        
+    	return true;
+        
     }
 
-    public int getAmountToBuy() {
-        return 1;
+    public int getAmountToBuy ( ) {
+        
+    	return 1 ;
+        
     }
 
-    public void setId(int i) {
-        merch_id = i;
+    public void setId ( int _merchId ) {
+    	
+    	merchId = _merchId;
+    	
     }
 
 
-    public int getShopId() {
-        return shopId;
+    public int getShopId ( ) {
+        
+    	return shopId;
+        
     }
 
-    public void setShopId(int i) {
-    	shopId = i;
+    public void setShopId ( int _shopId ) {
+    	
+    	shopId = _shopId ;
+    	
+    }
+    
+    public int getRating ( ) {
+    	
+    	return rating ;
+    	
     }
     
 	public String getMoneyType ( ) {

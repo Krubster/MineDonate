@@ -5,14 +5,11 @@ import net.minecraft.server.MinecraftServer;
 
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
-import ru.alastar.minedonate.merch.categories.MerchCategory.Type;
 import ru.alastar.minedonate.merch.info.PrivilegieInfo;
 import ru.alastar.minedonate.plugin.PluginHelper;
-import ru.alastar.minedonate.proxies.ClientProxy;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
 
 /**
  * Created by Alastar on 21.07.2017.
@@ -45,10 +42,12 @@ public class Privelegies extends MerchCategory {
     }
 
     @Override
-    public void addMerch(Merch merch) {
-        super.addMerch(merch);
-        final PrivilegieInfo info = (PrivilegieInfo) merch;
-        MineDonate.proxy.loadIcon(info.picture_url, info.merch_id);
+    public void addMerch ( Merch merch ) {
+        
+    	super . addMerch ( merch ) ;
+        
+        MineDonate . proxy . loadIcon ( ( ( PrivilegieInfo ) merch ) . picture_url, merch . getId ( ) ) ;
+        
     }
 
     @Override

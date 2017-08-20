@@ -131,12 +131,14 @@ public class EntitiesCategory extends ShopCategory {
 
 	GuiItemsScrollArea gi ;
 		
+	EntityInfo eim ;
+
 	@Override
 	public void postShow ( ShopGUI g ) {
 
 		if ( subCatId == -1 ) {
 			
-			setSubCategory ( subCatId ) ;
+			filterProcess ( ) ;
 			
 		}
 
@@ -163,12 +165,6 @@ public class EntitiesCategory extends ShopCategory {
 			return ;
 			
 		}
-		
-        if ( subCats != null && subCats . length > 0 && subCatId == -1 ) {
-        	
-        	return ;
-        	
-        }
         
 		if ( MineDonate . shops . containsKey ( gui . getCurrentShopId ( ) ) ) {
 	
@@ -187,7 +183,7 @@ public class EntitiesCategory extends ShopCategory {
 	        	} 
 	        		
 	    	} else {
-	    		
+
 	    		for ( Merch m : noSearchedEntries ) {
 	        		
 	        		eim = ( EntityInfo ) m ; 
@@ -203,30 +199,6 @@ public class EntitiesCategory extends ShopCategory {
     	gi . applyScrollLimits ( ) ;
     			
 		super . postShow ( g ) ;
-		
-	}
-	
-	EntityInfo eim ;
-
-	List < Merch > noSearchedEntries = new ArrayList < > ( ) ;
-	
-	public void setSubCategory ( int _subCatId ) {
-		
-		noSearchedEntries . clear ( ) ;
-		
-		if ( MineDonate . shops . containsKey ( gui . getCurrentShopId ( ) ) ) {
-	
-			for ( Merch m : MineDonate . shops . get ( 0 ) . cats [ catId ] . getMerch ( ) ) {
-				
-				if ( m . subCatId == _subCatId || _subCatId == -1 ) {
-					
-					noSearchedEntries . add ( m ) ;
-					
-				}
-				
-			}
-			
-		}
 		
 	}
 	

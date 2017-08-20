@@ -2,6 +2,9 @@ package ru.log_inil.mc.minedonate.gui.frames;
 
 import java.awt.Color;
 
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.RenderHelper;
 
@@ -35,7 +38,8 @@ public class GuiFrameAddItem extends GuiFrame {
 	DataOfUIFrameAddItem douifcs ;
 	
 	int shopId = -1, catId = -1 ;
-
+	public boolean drawItemStack = true ;
+	
 	public GuiFrameAddItem ( String _name, DataOfUIFrameAddItem _douifcs ) {
 		
 		super ( _name ) ;
@@ -49,7 +53,7 @@ public class GuiFrameAddItem extends GuiFrame {
 	
     public void draw ( ShopGUI g, int page, int mouseX, int mouseY, float partialTicks, DrawType dt ) {
 
-    	g . drawRect ( posX, posY, posX + width, posY + height, backgroundColor ) ;
+		g . drawRect ( posX, posY, posX + width, posY + height, backgroundColor ) ;
     	
     	super . draw ( g, page, mouseX, mouseY, partialTicks, dt ) ;
     	
@@ -59,17 +63,17 @@ public class GuiFrameAddItem extends GuiFrame {
     	costField . drawTextBox ( ) ;
     	limitField . drawTextBox ( ) ;
     	
-    	if ( MineDonate . getAccount ( ) . ms . currentItemStack != null ) {
+    	if ( drawItemStack && MineDonate . getAccount ( ) . ms . currentItemStack != null ) {
     		
 			RenderHelper . enableGUIStandardItemLighting ( ) ;
-
-    		g . getItemRender ( ) . renderItemAndEffectIntoGUI ( g . getFontRenderer ( ), g . mc . getTextureManager ( ), MineDonate.getAccount().ms.currentItemStack, posX + 12, posY + 16 ) ;
-			g . getItemRender ( ) . renderItemOverlayIntoGUI ( g . getFontRenderer ( ), g . mc . getTextureManager ( ), MineDonate.getAccount().ms.currentItemStack, posX + 12, posY + 16 , Integer.toString(MineDonate.getAccount().ms.currentItemStack.stackSize) ) ;
+			
+    		g . getItemRender ( ) . renderItemAndEffectIntoGUI ( g . getFontRenderer ( ), g . mc . getTextureManager ( ), MineDonate.getAccount().ms.currentItemStack, posX + 8, posY + 16 ) ;
+			g . getItemRender ( ) . renderItemOverlayIntoGUI ( g . getFontRenderer ( ), g . mc . getTextureManager ( ), MineDonate.getAccount().ms.currentItemStack, posX + 8, posY + 16 , Integer.toString(MineDonate.getAccount().ms.currentItemStack.stackSize) ) ;
 
 			RenderHelper . disableStandardItemLighting ( ) ;
 
     	}
-    	
+        	
     }
     
     GuiButton saveChangesButton ;
@@ -88,6 +92,29 @@ public class GuiFrameAddItem extends GuiFrame {
 		}
 		
     	super . postShow ( g ) ;
+
+
+    	width = 5 ;
+
+    	if ( drawItemStack ) {
+    		
+    		width += 20 ;
+    		
+    	}
+    	
+		width += douifcs . nameField . width ;
+		
+		if ( MineDonate . getAccount ( ) . canUnlimitedItems ( ) && douifcs . limitField != null ) {
+			
+			width += douifcs . limitField . width ;
+			width += 6 ;
+			
+		}
+		
+		width += douifcs . costField . width ;
+		width += 19 ;
+
+		widthCenter = width / 2 ;
 
     	posX = (g.getScaledResolution().getScaledWidth()/2) - widthCenter;
     	posY = (g.getScaledResolution().getScaledHeight()/2) - heightCenter;
@@ -119,7 +146,7 @@ public class GuiFrameAddItem extends GuiFrame {
     	}
 
 		if ( nameField == null ) {
-			
+						
 			nameField = new GuiGradientTextField ( g.getFontRenderer(), 30, 10, douifcs . nameField . width - 1, douifcs . nameField . height, true ) ;
 			nameField . setMaxStringLength ( 140 ) ;
 			nameField . setEnableBorderDrawing ( true, fieldBorderColor ) ;
@@ -129,10 +156,10 @@ public class GuiFrameAddItem extends GuiFrame {
 		nameField . setText ( fieldText != null ? fieldText : "" ) ;
 		nameField . setTextHolder ( MineDonate.getAccount().ms.currentItemStack != null ? MineDonate.getAccount().ms.currentItemStack.getDisplayName() : fieldHolder ) ;
 		
-		nameField . xPosition = posX + 40 ;
+		nameField . xPosition = posX + 10 + ( drawItemStack ? 22 : 0 ) ;
 		nameField . yPosition = posY + 15 ;
 
-		if ( limitField == null ) {
+		if ( limitField == null && douifcs . limitField != null ) {
 			
 			limitField = new GuiGradientTextField ( g.getFontRenderer(), 30, 10, douifcs . limitField . width - 1, douifcs . limitField . height, true ) ;
 			limitField . setMaxStringLength ( 10 ) ;
@@ -140,20 +167,10 @@ public class GuiFrameAddItem extends GuiFrame {
 			
 		}
 
-		limitField . setEnabled ( MineDonate . getAccount ( ) . canUnlimitedItems ( ) ) ;
-		limitField . setVisible ( MineDonate . getAccount ( ) . canUnlimitedItems ( ) ) ;
-		
-		limitField . setText ( "" ) ;
-		limitField . setTextHolder ( "" ) ;
-		
-		if ( MineDonate . getAccount ( ) . canUnlimitedItems ( ) ) {
+		if ( limitField != null ) {
 			
-			height = 60 ;
-			limitField . xPosition = nameField . xPosition ;
-			limitField . yPosition = nameField . yPosition + nameField . height ;
-			
-			limitField . setText ( douifcs . limitField . text ) ;
-			limitField . setTextHolder ( douifcs . limitField . textHolder ) ;
+			limitField . setText ( "" ) ;
+			limitField . setTextHolder ( "" ) ;
 			
 		}
 		
@@ -162,14 +179,31 @@ public class GuiFrameAddItem extends GuiFrame {
 			costField = new GuiGradientTextField ( g.getFontRenderer(), 30, 10, douifcs . costField . width - 1, douifcs . costField . height, true ) ;
 			costField . setMaxStringLength ( 10 ) ;
 			costField . setEnableBorderDrawing ( true, fieldBorderColor ) ;
-			
-			costField . setText ( douifcs . costField . text ) ;
-			costField . setTextHolder ( douifcs . costField . textHolder ) ;
 						
 		}
 	
-		costField . xPosition = nameField . xPosition + nameField . width + 5 ;
+		costField . setText ( douifcs . costField . text ) ;
+		costField . setTextHolder ( douifcs . costField . textHolder ) ;
+		
+		costField . xPosition = nameField . xPosition + nameField . width + 6 ;
 		costField . yPosition = nameField . yPosition ;
+
+		if ( limitField != null ) {
+
+			if ( MineDonate . getAccount ( ) . canUnlimitedItems ( ) ) {
+
+				limitField . xPosition = costField . xPosition + costField . width + 6 ;
+				limitField . yPosition = nameField . yPosition ;
+				
+				limitField . setText ( douifcs . limitField . text ) ;
+				limitField . setTextHolder ( douifcs . limitField . textHolder ) ;
+				
+			}
+		
+			limitField . setEnabled ( MineDonate . getAccount ( ) . canUnlimitedItems ( ) ) ;
+			limitField . setVisible ( MineDonate . getAccount ( ) . canUnlimitedItems ( ) ) ;
+			
+		}
 
     	cancelChangesButton . yPosition = saveChangesButton . yPosition = posY + height ;
     	cancelChangesButton . xPosition = posX + width - cancelChangesButton . width ;

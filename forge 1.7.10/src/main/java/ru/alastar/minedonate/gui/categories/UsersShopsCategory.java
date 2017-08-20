@@ -239,7 +239,7 @@ public class UsersShopsCategory extends ShopCategory {
 			
 			if ( subCatId == -1 ) {
 				
-				userSC . setSubCategory ( subCatId ) ;
+				userSC . filterProcess ( ) ;
 				
 			}
 			
@@ -250,7 +250,7 @@ public class UsersShopsCategory extends ShopCategory {
 		
 		if ( subCatId == -1 ) {
 			
-			setSubCategory ( subCatId ) ;
+			filterProcess ( ) ;
 			
 		}
 		

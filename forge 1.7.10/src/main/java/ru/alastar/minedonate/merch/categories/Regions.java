@@ -5,7 +5,6 @@ import net.minecraft.server.MinecraftServer;
 
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
-import ru.alastar.minedonate.merch.categories.MerchCategory.Type;
 import ru.alastar.minedonate.merch.info.RegionInfo;
 import ru.alastar.minedonate.plugin.PluginHelper;
 import ru.alastar.minedonate.rtnl.ModNetwork;

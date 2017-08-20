@@ -36,7 +36,6 @@ public class GuiGradientTextField extends Gui
     private int disabledColor = 7368816;
     /** True if this textbox is visible */
     private boolean visible = true;
-    private static final String __OBFID = "CL_00000670";
     
     public boolean bgIsGradient = false ;
     

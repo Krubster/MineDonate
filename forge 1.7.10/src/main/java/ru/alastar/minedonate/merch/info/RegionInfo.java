@@ -1,17 +1,17 @@
 package ru.alastar.minedonate.merch.info;
 
 import io.netty.buffer.ByteBuf;
+
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.plugin.PluginHelper;
 import ru.alastar.minedonate.rtnl.Utils;
-
-import java.io.UnsupportedEncodingException;
 
 /**
  * Created by Alastar on 20.07.2017.
@@ -22,7 +22,7 @@ public class RegionInfo extends Merch {
     public String name;
 
     public RegionInfo(int _shopId, int _catId, int mid, int cost, String name, String world_name) {
-    	super(_shopId, _catId, mid);
+    	super(_shopId, _catId, mid, 0);
         this.cost = cost;
         this.name = name;
         this.world_name = world_name;

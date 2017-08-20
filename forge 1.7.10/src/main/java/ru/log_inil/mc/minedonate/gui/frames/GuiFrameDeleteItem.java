@@ -12,7 +12,7 @@ import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.gui.GuiFrame;
 import ru.log_inil.mc.minedonate.gui.GuiGradientButton;
 import ru.log_inil.mc.minedonate.gui.GuiGradientTextField;
-import ru.log_inil.mc.minedonate.localData.frames.DataOfUIFrameDeleteItem;
+import ru.log_inil.mc.minedonate.localData.frames.DataOfUIFrameConfirm;
 
 public class GuiFrameDeleteItem extends GuiFrame {
 
@@ -30,11 +30,11 @@ public class GuiFrameDeleteItem extends GuiFrame {
 	int widthCenter = width / 2 ;
 	int heightCenter = height / 2 ;
 	
-	DataOfUIFrameDeleteItem douifdi ;
+	DataOfUIFrameConfirm douifdi ;
 
 	int shopId = -1, catId = -1, merchId = -1 ;
 
-	public GuiFrameDeleteItem ( String _name, DataOfUIFrameDeleteItem _douifdi ) {
+	public GuiFrameDeleteItem ( String _name, DataOfUIFrameConfirm _douifdi ) {
 		
 		super ( _name ) ;
 

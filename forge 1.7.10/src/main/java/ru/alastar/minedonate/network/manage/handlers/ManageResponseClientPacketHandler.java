@@ -21,7 +21,7 @@ public class ManageResponseClientPacketHandler implements IMessageHandler < Mana
     	ShopGUI . instance . setLoading ( false ) ;
     	ShopGUI . instance . initGui ( ) ;
     	
-    	Minecraft . getMinecraft ( ) . thePlayer . addChatMessage ( new ChatComponentText ( EnumChatFormatting.AQUA + " [MineDonate] " + EnumChatFormatting.RESET + message.type + "> " + message.code + "> " + message.status ) ) ;
+    	Minecraft . getMinecraft ( ) . thePlayer . addChatMessage ( new ChatComponentText ( EnumChatFormatting . AQUA + " [MineDonate] " + EnumChatFormatting.RESET + message.type + "> " + message.code + "> " + message.status ) ) ;
     	
     	//System.err.println(message.type + "> " + message.code + "> " + message.status );
     	

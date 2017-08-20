@@ -8,19 +8,35 @@ import io.netty.buffer.ByteBuf;
  */
 public class BuyResponsePacket implements IMessage {
 
-    public BuyResponsePacket(){}
+    public BuyResponsePacket ( ) { }
 
-    public byte response;  // 0 - success, 1 - no money
+    public Status status ;
 
-    public BuyResponsePacket(byte response) {
-        this.response = response;
+    public BuyResponsePacket ( Status _status ) {
+
+    	status = _status ;
+    	
     }
 
-    @Override public void toBytes(ByteBuf buf) {
-        buf.writeByte(response);
+    @Override 
+    public void toBytes ( ByteBuf buf ) {
+
+		buf . writeInt ( status . ordinal ( ) ) ;
+
     }
 
-    @Override public void fromBytes(ByteBuf buf) {
-        response = buf.readByte();
+    @Override 
+    public void fromBytes ( ByteBuf buf ) {
+
+    	status = Status . values ( ) [ buf . readInt ( ) ] ;
+
     }
+    
+    public enum Status {
+    	
+    	SUCCESSFUL, ERROR_UNKNOWN, ERROR_SHOP_FREEZED, ERROR_NOT_ENOUGH_MONEY, ERROR_CANT_BUY
+    	
+    }
+    
+    
 }

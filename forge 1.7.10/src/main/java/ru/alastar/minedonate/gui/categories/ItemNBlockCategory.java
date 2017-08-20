@@ -195,7 +195,7 @@ public class ItemNBlockCategory extends ShopCategory {
 
 		if ( subCatId == -1 ) {
 
-			setSubCategory ( subCatId ) ;
+			filterProcess ( ) ;
 			
 		}
 

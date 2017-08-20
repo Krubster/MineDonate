@@ -119,7 +119,7 @@ public class RegionsCategory extends ShopCategory {
         
 		for ( RegionInfo ri : list ) {
 			
-			if ( buttonsMap . containsKey ( ri . merch_id ) ) relative . removeButton ( buttonsMap . get ( ri . merch_id ) ) ;
+			if ( buttonsMap . containsKey ( ri . getId ( ) ) ) relative . removeButton ( buttonsMap . get ( ri . getId ( ) ) ) ;
 
     	}
 		
@@ -171,8 +171,8 @@ public class RegionsCategory extends ShopCategory {
                 
                     info = list.get(m_Page * colCount * rowCount + drawn);
                   
-                    bb = new BuyButton ( info . getShopId ( ), info . getCategory ( ), info . merch_id, ShopGUI.getNextButtonId(), x_offset - 22, y_offset + 15, MineDonate.cfgUI.cats.regions.itemBuyButton.width, MineDonate.cfgUI.cats.regions.itemBuyButton.height, MineDonate.cfgUI.cats.regions.itemBuyButton.text);
-                    buttonsMap.put(info.merch_id, bb);
+                    bb = new BuyButton ( info . getShopId ( ), info . getCategory ( ), info . getId ( ), ShopGUI . getNextButtonId ( ), x_offset - 22, y_offset + 15, MineDonate.cfgUI.cats.regions.itemBuyButton.width, MineDonate.cfgUI.cats.regions.itemBuyButton.height, MineDonate.cfgUI.cats.regions.itemBuyButton.text);
+                    buttonsMap . put ( info . getId ( ), bb ) ;
 
                     relative . addButton ( bb, false ) ;
                     
@@ -184,7 +184,7 @@ public class RegionsCategory extends ShopCategory {
     }
       
     @Override 
-	public void setSubCategory ( int _subCatId ) { }
+	public void filterProcess ( ) { }
     
 	@Override
 	public int getButtonWidth ( ) {

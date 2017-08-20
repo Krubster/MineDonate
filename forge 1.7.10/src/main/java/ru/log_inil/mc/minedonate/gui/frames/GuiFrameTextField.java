@@ -3,18 +3,16 @@ package ru.log_inil.mc.minedonate.gui.frames;
 import java.awt.Color;
 
 import net.minecraft.client.gui.GuiButton;
-
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.rtnl.ModNetwork;
 import ru.alastar.minedonate.rtnl.Utils;
-
 import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.gui.GuiFrame;
 import ru.log_inil.mc.minedonate.gui.GuiGradientButton;
 import ru.log_inil.mc.minedonate.gui.GuiGradientTextField;
 import ru.log_inil.mc.minedonate.localData.frames.DataOfUIFrameField;
 
-public class GuiFrameFreezeShop extends GuiFrame {
+public class GuiFrameTextField extends GuiFrame {
 
 	int width = 200 ;
 	int height = 40 ;
@@ -30,22 +28,15 @@ public class GuiFrameFreezeShop extends GuiFrame {
 	int widthCenter = width / 2 ;
 	int heightCenter = height / 2 ;
 	
-	DataOfUIFrameField douiffs ;
-
-	int shopId = -1 ;
-
-	public String fieldText, fieldHolder ;
-
-	public static String lastReason ;
-	
-	public GuiFrameFreezeShop ( String _name, DataOfUIFrameField _douiffs ) {
+	DataOfUIFrameField douifcs ;
+	public GuiFrameTextField ( String _name, DataOfUIFrameField _douifcs ) {
 		
 		super ( _name ) ;
-
-		douiffs = _douiffs ;
 		
-		fieldText = douiffs . textField . text ;
-		fieldHolder = douiffs . textField . textHolder ;
+		douifcs = _douifcs ;
+		
+		fieldText = douifcs . textField . text ;
+		fieldHolder = douifcs . textField . textHolder ;
 		
 	}
 	
@@ -55,17 +46,20 @@ public class GuiFrameFreezeShop extends GuiFrame {
     	
     	super . draw( g, page, mouseX, mouseY, partialTicks, dt ) ;
     	
-    	g . drawString ( g . getFontRenderer ( ), douiffs . title, posX + 5, posY + 3, titleColor ) ;
+    	g . drawString ( g . getFontRenderer ( ), douifcs . title, posX + 5, posY + 3, titleColor ) ;
     	
-    	reasonField . drawTextBox ( ) ;
+    	nameField . drawTextBox ( ) ;
     	
     	
     }
     
-    GuiButton freezeChangesButton ;
+    GuiButton saveChangesButton ;
     GuiButton cancelChangesButton ;
-    GuiGradientTextField reasonField ; 
-        
+    GuiGradientTextField nameField ; 
+    
+    String fieldText ;
+	public String fieldHolder;
+    
     @Override
 	public void postShow ( ShopGUI g ) {
 		
@@ -75,28 +69,28 @@ public class GuiFrameFreezeShop extends GuiFrame {
 			
 		}
 		
-    	super . postShow ( g ) ;
+    	super.postShow(g);
 
     	posX = (g.getScaledResolution().getScaledWidth()/2) - widthCenter;
     	posY = (g.getScaledResolution().getScaledHeight()/2) - heightCenter;
 
-    	if ( freezeChangesButton == null ) {
+    	if ( saveChangesButton == null ) {
         	
-    		freezeChangesButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), posX, posY + height, 
-    				douiffs.okButton.width, douiffs.okButton.height, douiffs.okButton.text, false ) ;
+    		saveChangesButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), posX, posY + height, 
+    				douifcs.okButton.width, douifcs.okButton.height, douifcs.okButton.text, false ) ;
     	
     	}
     	
     	if ( this . isVisible ( ) ) {
 
-    		g . addButton ( freezeChangesButton, false ) ;
+    		g . addButton ( saveChangesButton, false ) ;
     		
     	}
     	
     	if ( cancelChangesButton == null ) {
         	
     		cancelChangesButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), posX, posY + height, 
-    				douiffs.cancelButton.width, douiffs.cancelButton.height, douiffs.cancelButton.text, false ) ;
+    				douifcs.cancelButton.width, douifcs.cancelButton.height, douifcs.cancelButton.text, false ) ;
     	
     	}
     	
@@ -106,23 +100,23 @@ public class GuiFrameFreezeShop extends GuiFrame {
     		
     	}
 
-		if ( reasonField == null ) {
+		if ( nameField == null ) {
 		
-			reasonField = new GuiGradientTextField ( g.getFontRenderer(), 30, 10, douiffs . textField . width - 1, douiffs . textField . height, true ) ;
-			reasonField . setMaxStringLength ( 140 ) ;
-			reasonField . setEnableBorderDrawing ( true, fieldBorderColor ) ;
+			nameField = new GuiGradientTextField ( g.getFontRenderer(), 30, 10, douifcs . textField . width - 1, douifcs . textField . height, true ) ;
+			nameField . setMaxStringLength ( 140 ) ;
+			nameField . setEnableBorderDrawing ( true, fieldBorderColor ) ;
 			
 		}
 		
-		reasonField . setText ( fieldText != null ? fieldText : "" ) ;
-		reasonField . setTextHolder ( fieldHolder ) ;
+		nameField . setText ( fieldText != null ? fieldText : "" ) ;
+		nameField . setTextHolder ( fieldHolder ) ;
 		
-		reasonField . xPosition = posX + 20 ;
-		reasonField . yPosition = posY + 15 ;
+		nameField . xPosition = posX + 20 ;
+		nameField . yPosition = posY + 15 ;
 
-    	cancelChangesButton . yPosition = freezeChangesButton . yPosition = posY + height ;
+    	cancelChangesButton . yPosition = saveChangesButton . yPosition = posY + height ;
     	cancelChangesButton . xPosition = posX + width - cancelChangesButton . width ;
-    	freezeChangesButton . xPosition = cancelChangesButton . xPosition - freezeChangesButton . width ;
+    	saveChangesButton . xPosition = cancelChangesButton . xPosition - saveChangesButton . width ;
 
     	
     	
@@ -134,18 +128,18 @@ public class GuiFrameFreezeShop extends GuiFrame {
     	super . unShow ( g ) ;
     	
     	g . removeButton ( cancelChangesButton ) ;
-    	g . removeButton ( freezeChangesButton ) ;
+    	g . removeButton ( saveChangesButton ) ;
 
 	}
 	
     @Override
 	public boolean actionPerformed ( ShopGUI g, GuiButton b ) {
 		
-    	if ( b . id == freezeChangesButton . id ) {
+    	if ( b . id == saveChangesButton . id ) {
     	
-    		if ( reasonField . getText ( ) . trim ( ) . isEmpty ( ) ) {
+    		if ( nameField . getText ( ) . trim ( ) . isEmpty ( ) ) {
     			
-    			reasonField . fieldBorderColor = fieldBorderRedColor ;
+    			nameField . fieldBorderColor = fieldBorderRedColor ;
     			
     			return false ;
     			
@@ -153,8 +147,8 @@ public class GuiFrameFreezeShop extends GuiFrame {
     		
     		g . setLoading ( true ) ;
     		
-    		ModNetwork . sendToServerFreezeShopPacket ( this . shopId, ( lastReason = reasonField . getText ( ) ) ) ;
-    		
+            ModNetwork . sendToServerCreateNewShopPacket ( this . nameField . getText ( ) ) ;
+            
 			hideFrame ( g ) ;
 
     	}
@@ -172,11 +166,11 @@ public class GuiFrameFreezeShop extends GuiFrame {
     @Override
 	public boolean onClick ( int x, int y, int i ) {
 		
-    	if ( reasonField != null ) {
+    	if ( nameField != null ) {
 
-    		reasonField . mouseClicked ( x, y, i ) ;
+    		nameField . mouseClicked ( x, y, i ) ;
     		    		
-    		reasonField . fieldBorderColor = fieldBorderColor ;
+			nameField . fieldBorderColor = fieldBorderColor ;
 
     	}
     	
@@ -187,11 +181,11 @@ public class GuiFrameFreezeShop extends GuiFrame {
     @Override
 	public boolean onKey ( char c, int k ) {
 		
-    	if ( reasonField != null && reasonField . isFocused ( ) ) {
+    	if ( nameField != null && nameField . isFocused ( ) ) {
     		
-    		reasonField . textboxKeyTyped ( c, k ) ;
+    		nameField . textboxKeyTyped ( c, k ) ;
     		
-    		reasonField . fieldBorderColor = fieldBorderColor ;
+			nameField . fieldBorderColor = fieldBorderColor ;
 
     		return true ;
     		
@@ -203,7 +197,7 @@ public class GuiFrameFreezeShop extends GuiFrame {
 	
 	public boolean isOwnerButton ( GuiButton gb ) {
 		
-		return ( gb == cancelChangesButton || gb == freezeChangesButton ) ;
+		return ( gb == cancelChangesButton || gb == saveChangesButton ) ;
 		
 	}
 	
@@ -233,12 +227,6 @@ public class GuiFrameFreezeShop extends GuiFrame {
     	fieldText = _text ;
     	fieldHolder = _holder ;
 
-    }
-
-	public void setShopId ( int _shopId ) {
-
-		shopId = _shopId ;
-		
-	}
+    }  
     
 }

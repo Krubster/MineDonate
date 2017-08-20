@@ -14,7 +14,7 @@ import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.gui.GuiFrame;
 import ru.log_inil.mc.minedonate.gui.GuiGradientButton;
 import ru.log_inil.mc.minedonate.gui.GuiGradientTextField;
-import ru.log_inil.mc.minedonate.localData.frames.DataOfUIFramEditItem;
+import ru.log_inil.mc.minedonate.localData.frames.DataOfUIFramEditObject;
 
 public class GuiFrameEditItem extends GuiFrame {
 
@@ -32,11 +32,11 @@ public class GuiFrameEditItem extends GuiFrame {
 	int widthCenter = width / 2 ;
 	int heightCenter = height / 2 ;
 	
-	public DataOfUIFramEditItem douifcs ;
+	public DataOfUIFramEditObject douifcs ;
 
 	int shopId = -1, catId = -1, merch_id = -1, limit = -1, cost = -1 ;
 	
-	public GuiFrameEditItem ( String _name, DataOfUIFramEditItem _douifcs ) {
+	public GuiFrameEditItem ( String _name, DataOfUIFramEditObject _douifcs ) {
 		
 		super ( _name ) ;
 

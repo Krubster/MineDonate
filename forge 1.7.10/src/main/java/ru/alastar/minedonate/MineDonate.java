@@ -32,7 +32,7 @@ import java.util.*;
 public class MineDonate {
 
     public static final String MODID = "MineDonate";
-    public static final String VERSION = "0.7.1.13";
+    public static final String VERSION = "0.7.1.16";
 
     @SideOnly(Side.SERVER)
     public static Connection m_DB_Connection;

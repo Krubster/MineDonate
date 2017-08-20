@@ -1,12 +1,9 @@
 package ru.alastar.minedonate.merch.info;
 
 import io.netty.buffer.ByteBuf;
+
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.rtnl.Utils;
-
-import java.io.UnsupportedEncodingException;
-
-import cpw.mods.fml.common.network.ByteBufUtils;
 
 /**
  * Created by Alastar on 19.07.2017.
@@ -19,7 +16,7 @@ public class PrivilegieInfo extends Merch {
     public long seconds;     //length = 0 - all worlds, otherwise 
 
     public PrivilegieInfo(int _shopId, int _catId, int merch_id, String n, String desc, String picture_url, int cost, long seconds, String worlds) {
-        super(_shopId, _catId, merch_id);
+        super(_shopId, _catId, merch_id, 0);
         this.name = n;
         this.description = desc;
         this.cost = cost;

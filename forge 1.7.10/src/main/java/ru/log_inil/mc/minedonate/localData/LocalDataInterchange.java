@@ -31,7 +31,7 @@ public class LocalDataInterchange {
 		
 	}
 	
-	public static Object read ( Class _where, File root, String _path ) throws Exception {
+	public static Object read ( Class < ? > _where, File root, String _path ) throws Exception {
 		
 		Object r = null ;
 		
@@ -70,7 +70,7 @@ public class LocalDataInterchange {
 		
 	}
 	
-	public static Object readerToObject ( Class _where, Reader rr ) {
+	public static Object readerToObject ( Class < ? > _where, Reader rr ) {
 		
 		Object r = null ;
 		
