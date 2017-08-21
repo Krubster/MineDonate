@@ -57,7 +57,7 @@ CREATE TABLE `md_entities` (
   `cost` int(11) NOT NULL,
   `lim` int(11) NOT NULL,
   `id` int(11) NOT NULL,
-  `rating` int(11) NOT NULL
+  `rating` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -79,7 +79,7 @@ CREATE TABLE `md_items` (
   `lim` int(11) NOT NULL,
   `stack_data` blob NOT NULL,
   `id` int(11) NOT NULL,
-  `rating` int(11) NOT NULL
+  `rating` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -189,7 +189,7 @@ CREATE TABLE `md_shops` (
   `freezer` text NOT NULL,
   `freezReason` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `moneyType` text NOT NULL,
-  `rating` int(11) NOT NULL
+  `rating` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -213,7 +213,7 @@ CREATE TABLE `md_userItems` (
   `lim` int(11) NOT NULL,
   `shopId` int(11) NOT NULL,
   `stack_data` blob NOT NULL,
-  `rating` int(11) NOT NULL
+  `rating` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
