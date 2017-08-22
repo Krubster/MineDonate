@@ -1,23 +1,19 @@
 package ru.log_inil.mc.minedonate.gui;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
+import ru.alastar.minedonate.MineDonate;
+import ru.alastar.minedonate.gui.ShopGUI;
+import ru.log_inil.mc.minedonate.localData.ui.DataOfUIMoneyGroup;
+
+import javax.imageio.ImageIO;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.imageio.ImageIO;
-
-import org.lwjgl.opengl.GL11;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.DynamicTexture;
-import net.minecraft.util.ResourceLocation;
-
-import ru.alastar.minedonate.MineDonate;
-import ru.alastar.minedonate.gui.ShopGUI;
-
-import ru.log_inil.mc.minedonate.localData.ui.DataOfUIMoneyGroup;
 
 public class GuiMoneyArea {
 

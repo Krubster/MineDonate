@@ -1,8 +1,8 @@
 package ru.alastar.minedonate.plugin.reflection;
 
-import java.lang.reflect.Method;
-
 import ru.alastar.minedonate.plugin.clean.WorldGuardPlugin;
+
+import java.lang.reflect.Method;
 
 public class WorldGuardPluginReflection extends WorldGuardPlugin {
 

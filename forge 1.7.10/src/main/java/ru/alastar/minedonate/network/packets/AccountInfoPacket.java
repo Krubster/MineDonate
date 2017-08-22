@@ -1,15 +1,15 @@
 package ru.alastar.minedonate.network.packets;
 
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
-
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import io.netty.buffer.ByteBuf;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.mproc.AbstractMoneyProcessor;
 import ru.alastar.minedonate.rtnl.Account;
 import ru.alastar.minedonate.rtnl.Utils;
+
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Alastar on 18.07.2017.
@@ -43,9 +43,9 @@ public class AccountInfoPacket implements IMessage {
             buf . writeInt ( MineDonate . moneyProcessors . size ( ) ) ;
 
             for ( AbstractMoneyProcessor amp : MineDonate . moneyProcessors . values ( ) ) {
-            	
-            	buf . writeInt ( amp . getMoneyFor ( userName ) ) ;
-            	Utils . netWriteString ( buf, amp . getMoneyType ( ) ) ;
+
+                buf.writeInt(amp.getMoneyFor(MineDonate.getUUIDFromName(userName)));
+                Utils . netWriteString ( buf, amp . getMoneyType ( ) ) ;
               
             	buf . writeBoolean ( amp . isCustomMoneyType ( ) ) ;
             	

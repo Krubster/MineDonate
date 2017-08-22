@@ -1,7 +1,5 @@
 package ru.log_inil.mc.minedonate.gui.frames;
 
-import java.awt.Color;
-
 import net.minecraft.client.gui.GuiButton;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.gui.ShopGUI;
@@ -9,12 +7,13 @@ import ru.alastar.minedonate.network.manage.packets.EditMerchNumberPacket;
 import ru.alastar.minedonate.network.manage.packets.EditMerchStringPacket;
 import ru.alastar.minedonate.rtnl.ModNetwork;
 import ru.alastar.minedonate.rtnl.Utils;
-
 import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.gui.GuiFrame;
 import ru.log_inil.mc.minedonate.gui.GuiGradientButton;
 import ru.log_inil.mc.minedonate.gui.GuiGradientTextField;
 import ru.log_inil.mc.minedonate.localData.frames.DataOfUIFramEditObject;
+
+import java.awt.*;
 
 public class GuiFrameEditItem extends GuiFrame {
 

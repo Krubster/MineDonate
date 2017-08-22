@@ -1,10 +1,8 @@
 package ru.log_inil.mc.minedonate.gui.frames;
 
 import net.minecraft.client.gui.GuiButton;
-
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.rtnl.ModNetwork;
-
 import ru.log_inil.mc.minedonate.localData.frames.DataOfUIFrameField;
 
 public class GuiFrameCreateShop extends GuiFrameTextField {

@@ -1,17 +1,15 @@
 package ru.alastar.minedonate.plugin;
 
-import java.io.InputStream;
-import java.lang.reflect.Method;
-
-import org.bukkit.Bukkit;
-
 import com.google.common.io.ByteStreams;
-
+import org.bukkit.Bukkit;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.plugin.clean.PermissionsPlugin;
 import ru.alastar.minedonate.plugin.clean.WorldGuardPlugin;
 import ru.alastar.minedonate.plugin.reflection.PermissionsPluginReflection;
 import ru.alastar.minedonate.plugin.reflection.WorldGuardPluginReflection;
+
+import java.io.InputStream;
+import java.lang.reflect.Method;
 
 public class PluginHelper {
 

@@ -1,9 +1,12 @@
 package ru.alastar.minedonate.rtnl;
 
-import java.awt.Color;
-import java.io.UnsupportedEncodingException;
-
 import io.netty.buffer.ByteBuf;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumChatFormatting;
+
+import java.awt.*;
+import java.io.UnsupportedEncodingException;
 
 public class Utils {
 
@@ -11,6 +14,10 @@ public class Utils {
     	
         return new String ( buf . readBytes ( buf . readInt ( ) ) . array ( ), "UTF-8" ) ;
         
+    }
+
+    public static void sendModMessage(EntityPlayerMP player, String msg) {
+        player.addChatMessage(new ChatComponentText(EnumChatFormatting.AQUA + " [MineDonate] " + EnumChatFormatting.RESET + msg));
     }
      
     

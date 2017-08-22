@@ -1,14 +1,11 @@
 package ru.alastar.minedonate.merch.info;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
-
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.plugin.PluginHelper;
 import ru.alastar.minedonate.rtnl.Utils;

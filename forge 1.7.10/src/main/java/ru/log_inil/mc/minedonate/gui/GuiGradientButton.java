@@ -1,11 +1,10 @@
 package ru.log_inil.mc.minedonate.gui;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.util.EnumChatFormatting;
+import org.lwjgl.opengl.GL11;
 
 public class GuiGradientButton extends GuiTexturedButton {
 

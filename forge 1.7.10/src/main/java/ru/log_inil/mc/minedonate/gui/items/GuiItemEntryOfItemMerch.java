@@ -1,29 +1,26 @@
 package ru.log_inil.mc.minedonate.gui.items;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
-
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.gui.BuyButton;
 import ru.alastar.minedonate.gui.CountButton;
 import ru.alastar.minedonate.gui.ShopCategory;
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.merch.info.ItemInfo;
-
 import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.gui.GuiAbstractItemEntry;
 import ru.log_inil.mc.minedonate.gui.GuiItemsScrollArea;
+import ru.log_inil.mc.minedonate.gui.context.ContextElement;
 import ru.log_inil.mc.minedonate.gui.context.ContextMenu;
 import ru.log_inil.mc.minedonate.gui.context.ContextMenuManager;
 import ru.log_inil.mc.minedonate.gui.frames.GuiFrameDeleteItem;
 import ru.log_inil.mc.minedonate.gui.frames.GuiFrameEditItem;
-import ru.log_inil.mc.minedonate.gui.context.ContextElement;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GuiItemEntryOfItemMerch extends GuiAbstractItemEntry {
 

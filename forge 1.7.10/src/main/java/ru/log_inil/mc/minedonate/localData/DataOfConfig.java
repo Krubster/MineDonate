@@ -15,7 +15,7 @@ public class DataOfConfig {
 	public String dbPassword = "password" ;
 
 	public String dbUsers = "md_accounts" ;
-	public String dbUsersNameColumn = "name" ;
+	public String dbUsersIdColumn = "UUID";
 	
 	public boolean sellItems = true ;
 	public String dbItems = "md_items" ;
@@ -55,9 +55,9 @@ public class DataOfConfig {
 
 	public DataOfConfig ( ) {
 		
-		moneyProcessors = new DataOfMoneyProcessor [ ] { 
-				new DataOfMoneyProcessor ( "rub", StandartMoneyProcessor . class . getName ( ), "md_accounts", "name", "money", false ),
-				new DataOfMoneyProcessor ( "coin", StandartMoneyProcessor . class . getName ( ), "md_accounts", "name", "coins", false ),
+		moneyProcessors = new DataOfMoneyProcessor [ ] {
+				new DataOfMoneyProcessor("rub", StandartMoneyProcessor.class.getName(), "md_accounts", "UUID", "money", false),
+				new DataOfMoneyProcessor("coin", StandartMoneyProcessor.class.getName(), "md_accounts", "UUID", "coins", false),
 		} ;
 		
 		permissionsTriggerList = new DataOfPermissionEntry [ ] { new DataOfPermissionEntry ( "minedonate.default", new String [ ] { "default" } ), new DataOfPermissionEntry ( "minedonate.moderation", new String [ ] { "default", "moder" } ) } ;

@@ -2,9 +2,7 @@ package ru.alastar.minedonate.merch.categories;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import net.minecraft.entity.player.EntityPlayerMP;
-
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
 
