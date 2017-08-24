@@ -1,30 +1,46 @@
 {
   "enable": true,
-  "dbHost": "localhost",
-  "dbPort": 3306,
-  "dbName": "minecraft",
-  "dbUser": "root",
-  "dbPassword": "",
+  "dataBases": {
+    "main": {
+      "host": "localhost",
+      "name": "mcshop",
+      "user": "mcshop",
+      "password": "123",
+      "port": 3306,
+      "hasCustomLink": false,
+      "customLink": "",
+      "preLoadClassName": "com.mysql.jdbc.Driver"
+    }
+  },
+  
   "dbUsers": "md_accounts",
   "dbUsersIdColumn": "UUID",
+  "dbUsersNameColumn": "name",
+  "dbUsersLinkName": "main",
+  
   "sellItems": true,
   "dbItems": "md_items",
   "itemsMoneyType": "coin",
+  
   "sellPrivelegies": true,
   "dbPrivelegies": "md_privelegies",
   "privelegiesMoneyType": "rub",
-  "sellRegions": true,
+  
+  "sellRegions": false,
   "dbRegions": "md_regions",
   "regionMoneyType": "rub",
+  
   "sellEntities": true,
   "dbEntities": "md_entities",
   "entitiesMoneyType": "coin",
+  
   "userShops": true,
   "dbUserItems": "md_userItems",
   "dbShops": "md_shops",
   "defaultUserShopMoneyType": "coin",
   "maxUsersShopsCount": 3,
   "defaultUserAllowShopCreate": true,
+  
   "autoFixMoneyProcessorsTableCollisions": true,
   "moneyProcessors": [
     {
@@ -32,45 +48,46 @@
       "className": "ru.alastar.minedonate.mproc.StandartMoneyProcessor",
       "dbTable": "md_accounts",
       "dbIdColumn": "UUID",
+      "dbNameColumn": "name",
       "dbMoneyColumn": "money",
+      "dbLinkName": "main",
       "isTwoSideProcessor": false,
-      "regMoney": 0
+      "regMoney": 10
     },
     {
       "moneyType": "coin",
       "className": "ru.alastar.minedonate.mproc.StandartMoneyProcessor",
       "dbTable": "md_accounts",
       "dbIdColumn": "UUID",
+      "dbNameColumn": "name",
       "dbMoneyColumn": "coins",
-      "isTwoSideProcessor": false,
-      "regMoney": 0
+      "dbLinkName": "main",
+      "isTwoSideProcessor": true,
+      "regMoney": 1000
     }
   ],
+  
   "sendLogToDB": true,
   "dbLogs": "md_logs",
+  
   "enablePermissionsMode": true,
   "dbModPermissionsTable": "md_perms",
   "permissionsTriggerList": [
     {
-      "key": "minedonate.default",
+      "permission": "minedonate.default",
       "groups": [
         "default"
       ]
     },
     {
-      "key": "minedonate.moderation",
+      "permission": "minedonate.moderation",
       "groups": [
         "default",
         "moder"
       ]
-    },
-    {
-      "key": "minedonate.admin",
-      "groups": [
-        "admin"
-      ]
     }
   ],
+  
   "permissionsPluginClassName": "ru.alastar.minedonate.plugin.bukkit.PermissionsBukkitPlugin",
   "worldGuardPluginClassName": "ru.alastar.minedonate.plugin.bukkit.WorldGuardBukkitPlugin"
 }

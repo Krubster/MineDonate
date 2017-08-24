@@ -26,7 +26,11 @@ public class StandartMoneyProcessor extends AbstractMoneyProcessor {
 				
 				String owner = MineDonate . shops . get ( m . getShopId ( ) ) . owner ;
 
-				returnMoney(UUID.fromString(owner), procMoney);
+				if ( ! owner . equals ( "SERVER" ) ) {
+					
+					returnMoney ( UUID . fromString ( owner ), procMoney ) ;
+					
+				}
 				
 				owner = null ;
 				
