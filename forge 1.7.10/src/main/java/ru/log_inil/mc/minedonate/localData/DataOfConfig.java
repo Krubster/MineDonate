@@ -1,5 +1,8 @@
 package ru.log_inil.mc.minedonate.localData;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import ru.alastar.minedonate.mproc.StandartMoneyProcessor;
 import ru.alastar.minedonate.plugin.bukkit.PermissionsBukkitPlugin;
 import ru.alastar.minedonate.plugin.bukkit.WorldGuardBukkitPlugin;
@@ -8,15 +11,13 @@ public class DataOfConfig {
 
 	public boolean enable = false ;
 	
-	public String dbHost = "localhost";
-	public int dbPort = 3306 ;
-	public String dbName = "shop";
-	public String dbUser = "username" ;
-	public String dbPassword = "password" ;
+	public Map < String, DataOfDataBaseLink > dataBases ;
 
 	public String dbUsers = "md_accounts" ;
 	public String dbUsersIdColumn = "UUID";
-	
+	public String dbUsersNameColumn = "name" ;
+	public String dbUsersLinkName = "main" ;
+
 	public boolean sellItems = true ;
 	public String dbItems = "md_items" ;
 	public String itemsMoneyType = "coin" ;
@@ -55,9 +56,13 @@ public class DataOfConfig {
 
 	public DataOfConfig ( ) {
 		
+		dataBases = new HashMap < > ( ) ;
+		
+		dataBases . put ( "main", new DataOfDataBaseLink ( "localhost", 3306, "shop", "username", "password", "com.mysql.jdbc.Driver" ) ) ;
+		
 		moneyProcessors = new DataOfMoneyProcessor [ ] {
-				new DataOfMoneyProcessor("rub", StandartMoneyProcessor.class.getName(), "md_accounts", "UUID", "money", false),
-				new DataOfMoneyProcessor("coin", StandartMoneyProcessor.class.getName(), "md_accounts", "UUID", "coins", false),
+				new DataOfMoneyProcessor("rub", StandartMoneyProcessor.class.getName(), "md_accounts", "UUID", "name", "money", "main", false),
+				new DataOfMoneyProcessor("coin", StandartMoneyProcessor.class.getName(), "md_accounts", "UUID", "name", "coins", "main", true),
 		} ;
 		
 		permissionsTriggerList = new DataOfPermissionEntry [ ] { new DataOfPermissionEntry ( "minedonate.default", new String [ ] { "default" } ), new DataOfPermissionEntry ( "minedonate.moderation", new String [ ] { "default", "moder" } ) } ;

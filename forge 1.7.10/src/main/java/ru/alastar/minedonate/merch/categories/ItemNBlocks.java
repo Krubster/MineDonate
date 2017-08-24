@@ -160,14 +160,14 @@ public class ItemNBlocks extends MerchCategory {
         
         try {
             
-        	stmt = MineDonate.m_DB_Connection.createStatement();
-            String sql;
-            sql = "UPDATE " + getDatabaseTable ( ) + " SET lim=" + info.limit + " WHERE id=" + info . getId ( ) + ( info . shopId > 0 ? " AND shopId=" + info . shopId : "" ) + ";";
-            stmt.executeUpdate(sql);
+        	stmt = MineDonate . getNewStatement ( "main" ) ;
+            stmt.executeUpdate("UPDATE " + getDatabaseTable ( ) + " SET lim=" + info.limit + " WHERE id=" + info . getId ( ) + ( info . shopId > 0 ? " AND shopId=" + info . shopId : "" ) + ";");
             stmt.close();
             
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch ( Exception ex ) {
+            
+        	ex . printStackTrace ( ) ;
+            
         }
         
         ModNetwork . sendToAllMerchInfoPacket ( info ) ;

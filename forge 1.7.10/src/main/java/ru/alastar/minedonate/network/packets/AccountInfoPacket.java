@@ -57,7 +57,7 @@ public class AccountInfoPacket implements IMessage {
             	
             }
 				
-            Account acc = MineDonate . getAccount ( userName . toLowerCase ( ) ) ;
+            Account acc = MineDonate . getAccount ( MineDonate.getUUIDFromName(userName . toLowerCase ( )) ) ;
     		
             buf . writeInt ( acc . permissions . size ( ) ) ;
             

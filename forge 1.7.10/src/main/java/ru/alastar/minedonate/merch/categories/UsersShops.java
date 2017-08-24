@@ -41,7 +41,7 @@ public class UsersShops extends MerchCategory {
     public void loadMerchFromDB(ResultSet rs) {
         try {        	
             while (rs.next()) {
-                final ShopInfo info = new ShopInfo(rs.getInt("id"), rs.getInt("id"), rs.getInt("rating"), MineDonate.getNameFromUUID(UUID.fromString(rs.getString("UUID"))), rs.getString("name"), rs.getBoolean("isFreezed"), rs.getString("freezer"), rs.getString("freezReason"), true, rs.getString("moneyType"));
+                final ShopInfo info = new ShopInfo(rs.getInt("id"), rs.getInt("id"), rs.getInt("rating"), rs.getString("UUID"), rs.getString("ownerName"), rs.getString("name"), rs.getBoolean("isFreezed"), rs.getString("freezer"), rs.getString("freezReason"), true, rs.getString("moneyType"));
                 this.addMerch(info);
             }
         } catch (SQLException e) {

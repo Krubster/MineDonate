@@ -19,7 +19,7 @@ public abstract class AbstractMoneyProcessor {
 
     public abstract int process(Merch m, UUID buyer, int money);
 
-    public abstract void registerPlayer(UUID name, java.util.Collection<AbstractMoneyProcessor> pl);
+    public abstract void registerPlayer(UUID id, String name, java.util.Collection<AbstractMoneyProcessor> pl);
 
     public abstract int getMoneyFor(UUID name);
 

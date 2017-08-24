@@ -38,7 +38,7 @@ public class InventoryShopServerPacketHandler implements IMessageHandler<Invento
     				
     				sic . mdInv . setInventorySlotContents ( 0, null ) ;
 
-    				MineDonate . getAccount ( serverPlayer . getDisplayName ( )  . toLowerCase ( ) ) . ms . setItemStack ( is ) ;
+    				MineDonate . getAccount ( serverPlayer ) . ms . setItemStack ( is ) ;
     				   				
     				return new ItemMergedPacket ( is ) ;
     				
@@ -62,9 +62,9 @@ public class InventoryShopServerPacketHandler implements IMessageHandler<Invento
 
     			sic = null ;
     			
-				is = MineDonate . getAccount ( serverPlayer . getDisplayName ( ) . toLowerCase ( ) ) . ms . currentItemStack ;
+				is = MineDonate . getAccount ( serverPlayer ) . ms . currentItemStack ;
 
-				MineDonate . getAccount ( serverPlayer . getDisplayName ( ) . toLowerCase ( ) ) . ms . setItemStack ( null ) ;
+				MineDonate . getAccount ( serverPlayer ) . ms . setItemStack ( null ) ;
 
     			if ( is != null ) {
     				

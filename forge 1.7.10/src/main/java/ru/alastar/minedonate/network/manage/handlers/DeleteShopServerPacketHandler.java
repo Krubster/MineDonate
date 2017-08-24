@@ -29,7 +29,7 @@ public class DeleteShopServerPacketHandler implements IMessageHandler < DeleteSh
 		
 		Shop s = MineDonate . shops . get ( message . shopId ) ;
 		
-		if ( MineDonate . getAccount ( serverPlayer . getDisplayName ( ) . toLowerCase ( ) ) . canDeleteShop ( s . owner ) ) {
+		if ( MineDonate . getAccount ( serverPlayer ) . canDeleteShop ( s . owner ) ) {
 			
 			if ( s . isFreezed ) {
 

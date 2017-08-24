@@ -1,5 +1,7 @@
 package ru.alastar.minedonate.plugin.bukkit;
 
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 
 public class WorldGuardBukkitPlugin extends ru.alastar.minedonate.plugin.clean.WorldGuardPlugin {
@@ -21,11 +23,11 @@ public class WorldGuardBukkitPlugin extends ru.alastar.minedonate.plugin.clean.W
 	}
 	
     @Override
-	public void addPlayerToRegion ( String world, String rgName, String player ) {
+	public void addPlayerToRegion ( String world, String rgName, UUID player ) {
 		
 		try {
 			
-			wgMgr . getRegionManager ( Bukkit . getWorld ( world ) ) . getRegion ( rgName ) . getOwners ( ) . addPlayer ( player ) ;
+			wgMgr . getRegionManager ( Bukkit . getWorld ( world ) ) . getRegion ( rgName ) . getOwners ( ) . addPlayer (  wgMgr . wrapPlayer ( Bukkit . getPlayer ( player ) ) ) ;
 			
 		} catch ( Exception ex ) {
 			
@@ -36,11 +38,11 @@ public class WorldGuardBukkitPlugin extends ru.alastar.minedonate.plugin.clean.W
 	}
     
     @Override
-	public void removePlayerFromRegion ( String world, String rgName, String player ) {
+	public void removePlayerFromRegion ( String world, String rgName, UUID player ) {
 		
 		try {
 
-			wgMgr . getRegionManager ( Bukkit . getWorld ( world ) ) . getRegion ( rgName ) . getOwners ( ) . removePlayer ( player ) ;
+			wgMgr . getRegionManager ( Bukkit . getWorld ( world ) ) . getRegion ( rgName ) . getOwners ( ) . removePlayer ( wgMgr . wrapPlayer ( Bukkit . getPlayer ( player ) ) ) ;
 
 		} catch ( Exception ex ) {
 			
@@ -51,7 +53,7 @@ public class WorldGuardBukkitPlugin extends ru.alastar.minedonate.plugin.clean.W
 	}
 	
     @Override
-	public boolean checkRegionMaxOut ( String world, String name ) {
+	public boolean checkRegionMaxOut ( String world, UUID player ) {
 
     	if ( Bukkit . getWorld ( world ) == null ) {
     		
@@ -61,7 +63,7 @@ public class WorldGuardBukkitPlugin extends ru.alastar.minedonate.plugin.clean.W
     		
     	}
 
-    	return wgMgr . getGlobalStateManager ( ) . get ( Bukkit . getWorld ( world ) ) . getMaxRegionCount ( Bukkit . getPlayer ( name ) ) <= wgMgr . getGlobalRegionManager ( ) . get ( Bukkit . getWorld ( world ) ) . getRegionCountOfPlayer ( wgMgr . wrapPlayer ( Bukkit . getPlayer ( name ) ) ) ;
+    	return wgMgr . getGlobalStateManager ( ) . get ( Bukkit . getWorld ( world ) ) . getMaxRegionCount ( Bukkit . getPlayer ( player ) ) <= wgMgr . getGlobalRegionManager ( ) . get ( Bukkit . getWorld ( world ) ) . getRegionCountOfPlayer ( wgMgr . wrapPlayer ( Bukkit . getPlayer ( player ) ) ) ;
 		
 	}
 	

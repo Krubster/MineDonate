@@ -9,6 +9,7 @@ import ru.alastar.minedonate.plugin.PluginHelper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.UUID;
 
 /**
  * Created by Alastar on 21.07.2017.
@@ -29,7 +30,7 @@ public class Privelegies extends MerchCategory {
     }
 
     @Override
-    public void reverseFor ( int merchId, String player, String [ ] data ) {
+    public void reverseFor ( int merchId, UUID player, String [ ] data ) {
         
     	PluginHelper.pexMgr.removeGroup ( player, data[9].split("-")[1] ) ;
 
@@ -90,13 +91,13 @@ public class Privelegies extends MerchCategory {
             	
                 for (String world : info.worlds) {
                 	
-                	PluginHelper.pexMgr.addGroup(serverPlayer.getDisplayName(), info.name, world, info.getTimeInSeconds());
+                	PluginHelper.pexMgr.addGroup(serverPlayer .getGameProfile().getId(), info.name, world, info.getTimeInSeconds());
                 	
                 }
                 
             } else {
             	
-            	PluginHelper.pexMgr.addGroup(serverPlayer.getDisplayName(), info.name, null, info.getTimeInSeconds());
+            	PluginHelper.pexMgr.addGroup(serverPlayer .getGameProfile().getId(), info.name, null, info.getTimeInSeconds());
 
             }
             

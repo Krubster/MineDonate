@@ -9,6 +9,7 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import ru.alastar.minedonate.commands.AddMoneyCommand;
@@ -22,6 +23,7 @@ import ru.alastar.minedonate.proxies.CommonProxy;
 import ru.alastar.minedonate.rtnl.Account;
 import ru.alastar.minedonate.rtnl.Shop;
 import ru.log_inil.mc.minedonate.localData.DataOfConfig;
+import ru.log_inil.mc.minedonate.localData.DataOfDataBaseLink;
 import ru.log_inil.mc.minedonate.localData.DataOfMoneyProcessor;
 import ru.log_inil.mc.minedonate.localData.DataOfPermissionEntry;
 import ru.log_inil.mc.minedonate.localData.LocalDataInterchange;
@@ -35,13 +37,11 @@ import java.util.*;
 public class MineDonate {
 
     public static final String MODID = "MineDonate";
-    public static final String VERSION = "0.7.1.16";
-
-    @SideOnly(Side.SERVER)
-    public static Connection m_DB_Connection;
+    public static final String VERSION = "0.7.1.18";
 
     public static boolean m_Enabled = false;
 
+    public static Map < String, Connection > dataBaseConnections = new HashMap < > ( ) ;
     public static Map < Integer, Shop > shops = new HashMap < > ( ) ;
     public static Map < String, ShopInventoryContainer > mergeContainers = new HashMap < > ( ) ;
     public static Map < Object, List < String > > permissions = new HashMap < > ( ) ;
@@ -101,15 +101,59 @@ public class MineDonate {
 
     }
 
-    public static Statement getNewStatement ( ) throws SQLException {
+    public static Statement getNewStatement ( String dbLinkName ) throws Exception {
     	
-    	return m_DB_Connection . createStatement ( ) ;
+    	return getDataBaseConnection ( dbLinkName ) . createStatement ( ) ;
     	
     }
     
-    public static Connection getDBConnection ( ) {
+    public static PreparedStatement getPreparedStatement ( String dbLinkName, String sql ) throws Exception {
+        
+    	return getDataBaseConnection ( dbLinkName ) . prepareStatement(sql);
+        
+    }
+    
+    public static Connection getDataBaseConnection ( String dbLinkName ) throws Exception {
     	
-    	return m_DB_Connection ;
+    	return checkAndReconnectDataBase ( dbLinkName, dataBaseConnections . get ( dbLinkName ) ) ;
+    	
+    }
+    
+    public static Connection getDataBaseConnection ( String linkName, DataOfDataBaseLink link, boolean doPreLoadClass ) throws Exception {
+    	
+    	if ( doPreLoadClass && ! "" . equals ( link . preLoadClassName ) ) {
+    		
+    		 Class . forName ( link . preLoadClassName ) . newInstance ( ) ;
+    		 
+    	}
+    
+    	Connection c ;
+    	if ( link . hasCustomLink ) {
+    		
+    		c = DriverManager . getConnection ( link . customLink . replace ( "%host%", link . host ) . replace ( "%port%", Integer . toString ( link . port ) ) . replace ( "%name%", link . name ) . replace ( "%user%", link . user ) . replace ( "%password%", link . password ) ) ;
+        	
+    		dataBaseConnections . put ( linkName, c ) ;
+    		
+    	} else {
+    		
+    		c = DriverManager . getConnection ( "jdbc:mysql://" + link . host + ":" + link . port + "/" + link . name, link . user, link . password ) ;
+    		dataBaseConnections . put ( linkName, c ) ;
+    		
+    	}
+    	
+    	return c ;
+    	
+    }
+    
+    public static Connection checkAndReconnectDataBase ( String linkName, Connection c ) throws Exception {
+    	
+    	if ( c . isClosed ( ) ) {
+    		
+    		return getDataBaseConnection ( linkName, cfg . dataBases . get ( linkName ), false ) ;
+ 
+    	}
+    	
+    	return c ;
     	
     }
     
@@ -118,19 +162,31 @@ public class MineDonate {
 
         try {
 
-            MinecraftServer.getServer().logInfo("Try connect to database...");
+            logInfo("Init connections to database's...");
 
-            Class . forName ( "com.mysql.jdbc.Driver" ) . newInstance ( ) ;
-            m_DB_Connection = DriverManager . getConnection("jdbc:mysql://" + cfg.dbHost + ":" + cfg.dbPort + "/" + cfg.dbName, cfg.dbUser, cfg.dbPassword ) ;
+            DataOfDataBaseLink tmpDBLink ;
+            
+            for ( String linkName : cfg . dataBases . keySet ( ) ) {
+            	
+                logInfo("Load and try connect db[" + linkName+"]");
 
-            MinecraftServer.getServer().logInfo("Connected!");
+            	tmpDBLink = cfg . dataBases . get ( linkName ) ;
+            	
+            	getDataBaseConnection ( linkName, tmpDBLink, true ) ;
+            	
+                logInfo("Connected db[" + linkName + "]!");
+
+            }
+            
+            //  Class . forName ( "com.mysql.jdbc.Driver" ) . newInstance ( ) ;
+            // m_DB_Connection = DriverManager . getConnection("jdbc:mysql://" + cfg.dbHost + ":" + cfg.dbPort + "/" + cfg.dbName, cfg.dbUser, cfg.dbPassword ) ;
 
             loadServerMerch ( ) ;
             m_Enabled = true;
 
         } catch ( Exception ex ) {
             
-            MinecraftServer.getServer().logInfo("An error occured! Disabling feature!");
+            logError("An error occured! Disabling feature!");
             m_Enabled = false;
 
         	ex . printStackTrace ( ) ;
@@ -146,7 +202,7 @@ public class MineDonate {
         	
         	if ( shops . isEmpty ( ) ) {
         	
-        		Shop s = new Shop ( 0, new MerchCategory [ ] { new ItemNBlocks ( 0, 0, cfg . itemsMoneyType ), new Privelegies ( 0, 1, cfg . privelegiesMoneyType ), new Regions ( 0, 2, cfg . regionMoneyType ), new Entities ( 0, 3, cfg . entitiesMoneyType ), new UsersShops ( ) }, "SERVER", "Server shop", false, null, null, false ) ;
+        		Shop s = new Shop ( 0, new MerchCategory [ ] { new ItemNBlocks ( 0, 0, cfg . itemsMoneyType ), new Privelegies ( 0, 1, cfg . privelegiesMoneyType ), new Regions ( 0, 2, cfg . regionMoneyType ), new Entities ( 0, 3, cfg . entitiesMoneyType ), new UsersShops ( ) }, "SERVER", "SERVER","Server shop", false, null, null, false ) ;
         		shops . put ( 0, s ) ;
     			
         	}
@@ -158,7 +214,7 @@ public class MineDonate {
             	
                 if ( shops . get ( 0 ) . cats [ i ] . isEnabled ( ) ) {
                 	
-                    stmt = m_DB_Connection . createStatement ( ) ;
+                    stmt = getNewStatement ( "main" ) ;
                     
                     rs = stmt . executeQuery ( "SELECT * FROM " + shops . get ( 0 ) . cats [ i ] . getDatabaseTable ( ) + ";" ) ;
                     
@@ -235,7 +291,7 @@ public class MineDonate {
 
         try {
             
-        	Statement stmt = getNewStatement ( ) ;
+        	Statement stmt = getNewStatement ( "main" ) ;
             ResultSet rs = stmt . executeQuery ( "SELECT " + "id" + " FROM " + cfg.dbShops + " WHERE id=" + shopId + ";" ) ;
             
             while ( rs . next ( ) ) {
@@ -250,7 +306,7 @@ public class MineDonate {
             rs . close ( ) ;
             stmt . close ( ) ;
             
-        } catch ( SQLException ex ) {
+        } catch ( Exception ex ) {
             
         	ex . printStackTrace ( ) ;
             
@@ -264,7 +320,7 @@ public class MineDonate {
     	
         try {
         	
-        	Statement stmt = getNewStatement ( ) ;
+        	Statement stmt = getNewStatement ( "main" ) ;
             ResultSet rs = stmt . executeQuery ( "SHOW TABLE STATUS LIKE '" + cfg.dbShops + "';" ) ;
 
             while ( rs . next ( ) ) {
@@ -290,7 +346,7 @@ public class MineDonate {
         
         try {
         	
-        	Statement stmt = getNewStatement ( ) ;
+        	Statement stmt = getNewStatement ( "main" ) ;
             ResultSet rs = stmt . executeQuery ( "SELECT * FROM " + cfg.dbShops + " WHERE id=" + shopId + ";" ) ;
 
             while ( rs . next ( ) ) {
@@ -330,7 +386,7 @@ public class MineDonate {
 			inb . setCustomDBTable ( cfg . dbUserItems ) ;
 			inb . setEnabled ( cfg . userShops ) ;
 
-            s = new Shop(shopId, new MerchCategory[]{inb}, sdata.getString("UUID"), sdata.getString("name"), sdata.getBoolean("isFreezed"), sdata.getString("freezer"), sdata.getString("freezReason"), false);
+            s = new Shop(shopId, new MerchCategory[]{inb}, sdata.getString("UUID"), sdata.getString("ownerName"), sdata.getString("name"), sdata.getBoolean("isFreezed"), sdata.getString("freezer"), sdata.getString("freezReason"), false);
             sdata . close ( ) ;
 			
 		} catch (SQLException e1) {
@@ -351,7 +407,7 @@ public class MineDonate {
             	
                 if ( shops . get ( shopId ) . cats [ i ] . isEnabled ( ) ) {
                 	
-                    Statement stmt = getNewStatement ( ) ;
+                    Statement stmt = getNewStatement ( "main" ) ;
                     
                     ResultSet rs = stmt . executeQuery ( "SELECT * FROM " + shops . get ( shopId ) . cats [ i ] . getDatabaseTable ( ) + " WHERE shopId = " + shopId + ";" ) ;
                     
@@ -364,8 +420,10 @@ public class MineDonate {
                 
             }
             
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch ( Exception ex ) {
+            
+        	ex . printStackTrace ( ) ;
+            
         }
         
 	}
@@ -384,7 +442,7 @@ public class MineDonate {
 		
 	}
     
-	public static List < String > getPermissionsByUser ( String userName ) {
+	public static List < String > getPermissionsByUser ( UUID userName ) {
 		
 		List < String > l = new ArrayList < > ( ) ;
 
@@ -392,7 +450,7 @@ public class MineDonate {
 			
 			for ( DataOfPermissionEntry dopl : cfg . permissionsTriggerList ) {
 
-				if ( PluginHelper . pexMgr . hasPermission ( userName, dopl . key ) ) {
+				if ( PluginHelper . pexMgr . hasPermission ( userName, dopl . permission ) ) {
 					
 					l . addAll ( getPermissionsByGroups ( dopl . groups ) ) ;
 					
@@ -418,7 +476,7 @@ public class MineDonate {
 
         try {
         	
-        	Statement stmt = m_DB_Connection.createStatement();
+        	Statement stmt = getNewStatement ( "main" ) ;
             ResultSet rs = stmt.executeQuery("SELECT * FROM " + cfg.dbModPermissionsTable+ " WHERE groupName = '" + groupName + "';");
             
             while ( rs . next ( ) ) {
@@ -464,14 +522,14 @@ public class MineDonate {
 		
     }
 	
-	public static Map < String, Account > users = new HashMap < > ( ) ;
+	public static Map < UUID, Account > users = new HashMap < > ( ) ;
 	
-    public static ResultSet getAccountData ( String name ) {
+    public static ResultSet getAccountData ( UUID user ) {
         
         try {
         	
-        	Statement stmt = getNewStatement ( ) ;
-            ResultSet rs = stmt.executeQuery("SELECT * FROM " + cfg.dbUsers + " WHERE " + cfg.dbUsersIdColumn + "='" + MineDonate.getUUIDFromName(name) + "';");
+        	Statement stmt = getNewStatement ( "main" ) ;
+            ResultSet rs = stmt.executeQuery("SELECT * FROM " + cfg.dbUsers + " WHERE " + cfg.dbUsersIdColumn + "='" + user.toString() + "';");
 
             while ( rs . next ( ) ) {
 
@@ -490,24 +548,12 @@ public class MineDonate {
         return null;
 
     }
-    
-	public static Account getAccountFromCache ( String name ) {
-
-		if ( users . containsKey ( name ) ) {
-			
-			return users . get ( name ) ;
-			
-		}
-		
-		return null ;
 	
-	}
-	
-	public static Account getAccount ( String name ) {
+	public static Account getAccount ( UUID user ) {
 
-		if ( users . containsKey ( name ) ) {
+		if ( users . containsKey ( user ) ) {
 			
-			return users . get ( name ) ;
+			return users . get ( user ) ;
 			
 		}
 		
@@ -515,19 +561,19 @@ public class MineDonate {
 		
 		try {
 			
-			ResultSet rs = getAccountData ( name ) ;
+			ResultSet rs = getAccountData ( user ) ;
 
 			if ( rs != null ) {
 				
-				acc = new Account ( name, getPermissionsByUser ( name ), rs . getBoolean ( "freezShopCreate" ), rs . getString ( "freezShopCreateFreezer" ), rs . getString ( "freezShopCreateReason" ), rs . getInt ( "shopsCount" ) );
+				acc = new Account ( rs . getString ( cfg . dbUsersIdColumn ), rs . getString ( cfg . dbUsersNameColumn ), getPermissionsByUser ( user ), rs . getBoolean ( "freezShopCreate" ), rs . getString ( "freezShopCreateFreezer" ), rs . getString ( "freezShopCreateReason" ), rs . getInt ( "shopsCount" ) );
 				
 			} else {
 				
-				acc = new Account ( name, getPermissionsByUser ( name ), ! cfg . defaultUserAllowShopCreate, cfg.defaultUserAllowShopCreate ? "SERVER" : null, cfg.defaultUserAllowShopCreate ? "Properties policy" : null, 0 ) ;
+				acc = new Account ( rs . getString ( cfg . dbUsersIdColumn ), rs . getString ( cfg . dbUsersNameColumn ), getPermissionsByUser ( user ), ! cfg . defaultUserAllowShopCreate, cfg.defaultUserAllowShopCreate ? "SERVER" : null, cfg.defaultUserAllowShopCreate ? "Properties policy" : null, 0 ) ;
 				
 			}
 			
-			users . put ( name, acc ) ;
+			users . put ( user, acc ) ;
 
 		} catch ( SQLException ex ) {
 			
@@ -539,6 +585,86 @@ public class MineDonate {
 		
 	}
 	
+    @SideOnly(Side.SERVER)
+	public static Account getAccount ( EntityPlayer epmp ) {
+		
+    	return getAccount ( epmp . getGameProfile ( ) . getId ( ) ) ;
+		
+	}
+	
+    /*
+	public static Account getAccountFromCache ( UUID user ) {
+
+		if ( users . containsKey ( user ) ) {
+			
+			return users . get ( user ) ;
+			
+		}
+		
+		return null ;
+	
+	}
+	*/
+    @SideOnly(Side.SERVER)
+	public static Account getAccountFromCache ( EntityPlayer user ) { 
+		
+		if ( users . containsKey ( user . getGameProfile ( ) . getId ( ) ) ) {
+			
+			return users . get ( user . getGameProfile ( ) . getId ( ) ) ;
+			
+		}
+		
+		return null ;
+	
+	}
+		
+    @SideOnly(Side.SERVER)
+    public static String getNameFromUUID(UUID id) {
+        GameProfile profile = MinecraftServer.getServer().func_152358_ax().func_152652_a(id);
+        if (profile != null) {
+            return profile.getName();
+        } else {
+            logError("Null profile, for id[" + id + "]!");
+        }
+        return "";
+    }
+
+    @SideOnly(Side.SERVER)
+    public static UUID getUUIDFromName(String name) {
+        GameProfile profile = MinecraftServer.getServer().func_152358_ax().func_152655_a(name);
+        if (profile != null) {
+            return profile.getId();
+        } else {
+            logError("Null profile for name[" + name + "]!");
+        }
+        return null;
+    }
+    
+    @SideOnly(Side.SERVER)
+    public static UUID getUUIDFromPlayer(EntityPlayerMP serverPlayer) {
+        GameProfile profile = MinecraftServer.getServer().func_152358_ax().func_152655_a(serverPlayer.getDisplayName());
+        if (profile != null) {
+            return profile.getId();
+        } else {
+            logError("Null profile, for player[" + serverPlayer + "]!");
+        }
+        return null;
+    }
+
+    @SideOnly(Side.SERVER)
+    private static void logError ( Object s ) {
+        
+    	System . err . println ( "[MineDonate] [ERROR]: " + s ) ;
+        
+    }
+    
+    @SideOnly(Side.SERVER)
+    private static void logInfo ( Object s ) {
+        
+    	System . err . println ( "[MineDonate] [INFO]: " + s) ;
+        
+    }
+    
     @SideOnly(Side.CLIENT)
     public static void loadClientConfig ( ) {
 
@@ -560,7 +686,7 @@ public class MineDonate {
     @SideOnly(Side.CLIENT)
     public static void loadClientMerch ( ) {
 
-    	shops . put ( 0, new Shop ( 0, new MerchCategory[]{new ItemNBlocks(0, 0,  cfg.itemsMoneyType), new Privelegies(0, 1, cfg.privelegiesMoneyType), new Regions(0, 2, cfg.regionMoneyType), new Entities(0, 3, cfg.entitiesMoneyType), new UsersShops()}, "SERVER", "Server shop", false, null, null, false ) ) ;
+    	shops . put ( 0, new Shop ( 0, new MerchCategory[]{new ItemNBlocks(0, 0,  cfg.itemsMoneyType), new Privelegies(0, 1, cfg.privelegiesMoneyType), new Regions(0, 2, cfg.regionMoneyType), new Entities(0, 3, cfg.entitiesMoneyType), new UsersShops()}, "SERVER", "SERVER", "Server shop", false, null, null, false ) ) ;
 
     }
 
@@ -609,46 +735,5 @@ public class MineDonate {
     	return acc == null ? false : ( shopId == 0 ? acc . canEditShop ( "SERVER" ) : true ) ;
     	
     }
-
-    @SideOnly(Side.SERVER)
-    public static String getNameFromUUID(UUID id) {
-        GameProfile profile = MinecraftServer.getServer().func_152358_ax().func_152652_a(id);
-        if (profile != null) {
-            return profile.getName();
-        } else {
-            logError("Null profile!");
-        }
-        return "";
-    }
-
-    @SideOnly(Side.SERVER)
-    private static void logError(String s) {
-        System.out.println("[MineDonate][ERROR]: " + s);
-    }
-
-    @SideOnly(Side.SERVER)
-    public static PreparedStatement getPreparedStatement(String sql) throws SQLException {
-        return m_DB_Connection.prepareStatement(sql);
-    }
-
-    @SideOnly(Side.SERVER)
-    public static UUID getUUIDFromName(String owner) {
-        GameProfile profile = MinecraftServer.getServer().func_152358_ax().func_152655_a(owner);
-        if (profile != null) {
-            return profile.getId();
-        } else {
-            logError("Null profile!");
-        }
-        return null;
-    }
-
-    public static UUID getUUIDFromPlayer(EntityPlayerMP serverPlayer) {
-        GameProfile profile = MinecraftServer.getServer().func_152358_ax().func_152655_a(serverPlayer.getDisplayName());
-        if (profile != null) {
-            return profile.getId();
-        } else {
-            logError("Null profile!");
-        }
-        return null;
-    }
+    
 }

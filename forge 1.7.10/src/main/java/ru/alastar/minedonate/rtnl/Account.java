@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Account {
 
-	public String name ;
+	public String id, name ;
 	public List < String > permissions ;
 	public ManageSession ms = new ManageSession ( ) ;
 	
@@ -17,8 +17,9 @@ public class Account {
 	public String freezShopCreateReason ;
 	public int shopsCount ;
 	
-	public Account ( String _name, List < String > _permissions, boolean _freezShopCreate, String _freezShopCreateFreezer, String _freezShopCreateReason, int _shopsCount ) {
+	public Account ( String _id, String _name, List < String > _permissions, boolean _freezShopCreate, String _freezShopCreateFreezer, String _freezShopCreateReason, int _shopsCount ) {
 		
+		id = _id ;
 		name = _name ;
 		permissions = _permissions ;
 		

@@ -3,11 +3,7 @@ package ru.log_inil.mc.minedonate.localData;
 
 public class DataOfMoneyProcessor {
 
-	public String moneyType ;
-	public String className ;
-	public String dbTable ;
-    public String dbIdColumn;
-    public String dbMoneyColumn ;
+	public String moneyType, className, dbTable, dbIdColumn, dbNameColumn, dbMoneyColumn, dbLinkName ;
 	public boolean isTwoSideProcessor ;
 	public int regMoney ;
 	
@@ -19,14 +15,16 @@ public class DataOfMoneyProcessor {
 		
 	}
 
-    public DataOfMoneyProcessor(String _mt, String _className, String _dbTable, String _dbIdColumn, String _dbMoneyColumn, boolean _isTwoSideProcessor) {
+    public DataOfMoneyProcessor(String _mt, String _className, String _dbTable, String _dbIdColumn, String _dbNameColumn, String _dbMoneyColumn, String _dbLinkName, boolean _isTwoSideProcessor) {
 
         moneyType = _mt ;
 		className = _className ;
 		dbTable = _dbTable ;
         dbIdColumn = _dbIdColumn;
+        dbNameColumn = _dbNameColumn ;
         dbMoneyColumn = _dbMoneyColumn ;
 		isTwoSideProcessor = _isTwoSideProcessor; ;
+		dbLinkName = _dbLinkName ;
 		regMoney = 0 ;
 		
 	}

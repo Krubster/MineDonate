@@ -25,7 +25,7 @@ public class MobSelectServerPacketHandler implements IMessageHandler < MobSelect
            
         	EntityPlayerMP serverPlayer = ctx . getServerHandler ( ) . playerEntity ;
         	
-        	Account acc = MineDonate . getAccount ( serverPlayer . getDisplayName ( ) . toLowerCase ( ) ) ;
+        	Account acc = MineDonate . getAccount ( serverPlayer ) ;
         	acc . ms . mobSelect = ! acc . ms . mobSelect ;
         	
         	return new ManageResponsePacket ( ResponseType . ENTITY, ResponseCode . ADD, ( acc . ms . mobSelect ? ResponseStatus . ENTITY_SELECT_START : ResponseStatus . ENTITY_SELECT_STOP ) ) ;

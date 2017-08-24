@@ -3,6 +3,7 @@ package ru.alastar.minedonate.plugin.reflection;
 import ru.alastar.minedonate.plugin.clean.PermissionsPlugin;
 
 import java.lang.reflect.Method;
+import java.util.UUID;
 
 public class PermissionsPluginReflection extends PermissionsPlugin {
 
@@ -17,9 +18,9 @@ public class PermissionsPluginReflection extends PermissionsPlugin {
 			o = _o ;
 
 			mLoad = o.getClass().getMethod("load");
-			mHasPermission = o.getClass().getMethod("hasPermission", new Class[]{String.class, String.class});
-			mAddGroup = o.getClass().getMethod("addGroup", new Class[]{String.class, String.class, String.class, Long.class});
-			mRemoveGroup  = o.getClass().getMethod("removeGroup", new Class[]{String.class, String.class});
+			mHasPermission = o.getClass().getMethod("hasPermission", new Class[]{UUID.class, String.class});
+			mAddGroup = o.getClass().getMethod("addGroup", new Class[]{UUID.class, String.class, String.class, Long.class});
+			mRemoveGroup  = o.getClass().getMethod("removeGroup", new Class[]{UUID.class, String.class});
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -39,7 +40,7 @@ public class PermissionsPluginReflection extends PermissionsPlugin {
 	}
 
 	@Override
-	public boolean hasPermission(String user, String name) {
+	public boolean hasPermission(UUID user, String name) {
 		
 		try {
 			return (boolean) mHasPermission.invoke(o, new Object[]{user, name});
@@ -52,7 +53,7 @@ public class PermissionsPluginReflection extends PermissionsPlugin {
 	}
 
 	@Override
-	public void addGroup(String user, String name, String world, Long time) {
+	public void addGroup(UUID user, String name, String world, Long time) {
 		
 		try {
 			mAddGroup.invoke(o, new Object[]{user, name, world, time});
@@ -63,7 +64,7 @@ public class PermissionsPluginReflection extends PermissionsPlugin {
 	}
 	
 	@Override
-	public void removeGroup(String user, String name ) {
+	public void removeGroup(UUID user, String name ) {
 		
 		try {
 			mRemoveGroup.invoke(o, new Object[]{user, name});

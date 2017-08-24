@@ -11,6 +11,7 @@ import ru.alastar.minedonate.rtnl.ModNetwork;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.UUID;
 
 /**
  * Created by Alastar on 21.07.2017.
@@ -31,7 +32,7 @@ public class Regions extends MerchCategory {
     }
 
     @Override
-    public void reverseFor ( int merchId, String player, String [ ] data ) {
+    public void reverseFor ( int merchId, UUID player, String [ ] data ) {
     	
         String msg = data[9];
         msg.replace(" bought region ", "");
@@ -50,14 +51,16 @@ public class Regions extends MerchCategory {
                 
         try {
         	
-        	Statement stmt = MineDonate.m_DB_Connection.createStatement();
+        	Statement stmt = MineDonate . getNewStatement ( "main" ) ;
             String sql;
             sql = "INSERT INTO " + MineDonate.cfg.dbRegions + " (world, name, cost) VALUES('" + regionInfo.name + "', '" + regionInfo.world_name + "', " + regionInfo.getCost() + ")";
             stmt.execute(sql);
             stmt.close();
             
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch ( Exception ex ) {
+            
+        	ex . printStackTrace ( ) ;
+            
         }
 
         ModNetwork . sendToAllAddMerchPacket ( regionInfo ) ;
@@ -103,20 +106,27 @@ public class Regions extends MerchCategory {
     public void giveMerch(EntityPlayerMP player, Merch merch, int amount) {
 
     	final RegionInfo info = (RegionInfo) merch;
-        PluginHelper.wgMgr.addPlayerToRegion(info.world_name, info.name, player.getDisplayName());
-
+        PluginHelper.wgMgr.addPlayerToRegion(info.world_name, info.name, player.getGameProfile().getId());
+        
+        removeRegion ( info.world_name, info.name ) ;
+        
     }
 
-    private void removeRegion(String name, String world_name) {
+    private void removeRegion(String world_name, String name) {
+    	
         try {
-            Statement stmt = MineDonate.m_DB_Connection.createStatement();
-            String sql;
-            sql = "DELETE FROM " + MineDonate.cfg.dbRegions + " WHERE name='" + name + "' AND world='" + world_name + "';";
-            stmt.execute(sql);
+        	
+            Statement stmt = MineDonate . getNewStatement ( "main" ) ;
+            
+            stmt.execute("DELETE FROM " + MineDonate.cfg.dbRegions + " WHERE name='" + name + "' AND world='" + world_name + "';");
             stmt.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
+            
+        } catch ( Exception ex ) {
+            
+        	ex . printStackTrace ( ) ;
+            
         }
+        
     }
     
 	@Override

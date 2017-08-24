@@ -21,7 +21,7 @@ public class CreateNewShopServerPacketHandler implements IMessageHandler < Creat
     	
 		EntityPlayerMP serverPlayer = ctx . getServerHandler ( ) . playerEntity ;
 		
-		Account acc = MineDonate . getAccount ( serverPlayer . getDisplayName ( ) . toLowerCase ( ) ) ;
+		Account acc = MineDonate . getAccount ( serverPlayer ) ;
 		
 		if ( acc == null ) {
 			
@@ -49,7 +49,7 @@ public class CreateNewShopServerPacketHandler implements IMessageHandler < Creat
 
 			}
 			
-			Manager . createShop ( acc . name, message . name ) ;
+			Manager . createShop ( serverPlayer.getGameProfile().getId(), acc . name, message . name ) ;
 			
 	        return new ManageResponsePacket ( ManageResponsePacket.ResponseType.SHOP, ManageResponsePacket.ResponseCode.CREATE, ManageResponsePacket.ResponseStatus.OK ) ;
 

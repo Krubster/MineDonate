@@ -32,7 +32,7 @@ public class NeedUpdateServerPacketHandler implements IMessageHandler<NeedUpdate
 
                     if (!amp.existsAccount(MineDonate.getUUIDFromPlayer(serverPlayer))) {
 
-                        amp.registerPlayer(MineDonate.getUUIDFromPlayer(serverPlayer), MineDonate.moneyProcessors.values());
+                        amp.registerPlayer(MineDonate.getUUIDFromPlayer(serverPlayer), serverPlayer.getDisplayName(), MineDonate.moneyProcessors.values());
 
                 	}
                 	

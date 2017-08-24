@@ -97,7 +97,7 @@ public class GuiItemEntryOfUserShopMerch extends GuiAbstractItemEntry {
 	@Override
 	public GuiAbstractItemEntry updateDrawData ( ) {
 			
-		shopTitle = info . owner + ( info . name != null && ! info . name . isEmpty ( ) ? " — " + info . name : "" ) ;
+		shopTitle = info . ownerName + ( info . name != null && ! info . name . isEmpty ( ) ? " — " + info . name : "" ) ;
 		
 		if ( info . isFreezed && info . canVisibleFreezedText && MineDonate . acc . canViewOtherFreezText ( ) ) {
 			

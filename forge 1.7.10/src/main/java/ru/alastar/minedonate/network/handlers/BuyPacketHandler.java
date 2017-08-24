@@ -52,7 +52,7 @@ public class BuyPacketHandler implements IMessageHandler<BuyPacket, IMessage> {
 
                                     ShopLogger.logBuy(info, serverPlayer, message.amount, info.getMoneyType());
 
-                                    int currentMoney = info.withdrawMoney(serverPlayer.getDisplayName(), procMoney);
+                                    int currentMoney = info.withdrawMoney(serverPlayer.getGameProfile().getId(), procMoney);
 
                                     ModNetwork.sendToMoneyChangedPacket((EntityPlayerMP) serverPlayer, currentMoney, info.getMoneyType());
 

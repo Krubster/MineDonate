@@ -30,7 +30,7 @@ public class EditMerchNumberServerPacketHandler implements IMessageHandler < Edi
 		
 		Shop s = MineDonate . shops . get ( message . shopId ) ;
 		
-		Account acc = MineDonate . getAccount ( serverPlayer . getDisplayName ( ) . toLowerCase ( ) ) ;
+		Account acc = MineDonate . getAccount ( serverPlayer ) ;
 		
 		if ( acc . canEditShop ( s . owner ) ) {
 			

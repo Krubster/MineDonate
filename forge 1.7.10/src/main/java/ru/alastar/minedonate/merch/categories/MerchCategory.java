@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Created by Alastar on 21.07.2017.
@@ -38,7 +39,7 @@ public abstract class MerchCategory {
     }
 
     @SideOnly(Side.SERVER)
-    public void reverseFor ( int merchId, String player, String [ ] data ) {
+    public void reverseFor ( int merchId, UUID player, String [ ] data ) {
     	
     }
 
@@ -76,7 +77,7 @@ public abstract class MerchCategory {
 		
         try {
         	
-        	Statement stmt = MineDonate . getNewStatement ( ) ;
+        	Statement stmt = MineDonate . getNewStatement ( "main" ) ;
             ResultSet rs = stmt . executeQuery ( "SHOW TABLE STATUS LIKE '" + getDatabaseTable ( ) + "';" ) ;
 
             int r = -1 ;

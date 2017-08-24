@@ -3,6 +3,7 @@ package ru.alastar.minedonate.plugin.reflection;
 import ru.alastar.minedonate.plugin.clean.WorldGuardPlugin;
 
 import java.lang.reflect.Method;
+import java.util.UUID;
 
 public class WorldGuardPluginReflection extends WorldGuardPlugin {
 
@@ -17,9 +18,9 @@ public class WorldGuardPluginReflection extends WorldGuardPlugin {
 			o = _o ;
 			
 			mLoad = o.getClass().getMethod("load");
-			mAddPlayerToRegion = o.getClass().getMethod("addPlayerToRegion", new Class[]{String.class, String.class, String.class});
-			mRemovePlayerFromRegion = o.getClass().getMethod("removePlayerFromRegion", new Class[]{String.class, String.class, String.class});
-			mCheckRegionMaxOut = o.getClass().getMethod("checkRegionMaxOut", new Class[]{String.class, String.class});
+			mAddPlayerToRegion = o.getClass().getMethod("addPlayerToRegion", new Class[]{String.class, String.class, UUID.class});
+			mRemovePlayerFromRegion = o.getClass().getMethod("removePlayerFromRegion", new Class[]{String.class, String.class, UUID.class});
+			mCheckRegionMaxOut = o.getClass().getMethod("checkRegionMaxOut", new Class[]{String.class, UUID.class});
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -38,7 +39,7 @@ public class WorldGuardPluginReflection extends WorldGuardPlugin {
 		
 	}
 
-	public void addPlayerToRegion ( String world, String rgName, String player ) {
+	public void addPlayerToRegion ( String world, String rgName, UUID player ) {
 		
 		try {
 			mAddPlayerToRegion.invoke(o, new Object[]{world, rgName, player});
@@ -48,7 +49,7 @@ public class WorldGuardPluginReflection extends WorldGuardPlugin {
 		
 	}
 	
-	public void removePlayerFromRegion ( String world, String rgName, String player ) {
+	public void removePlayerFromRegion ( String world, String rgName, UUID player ) {
 		
 		try {
 			mRemovePlayerFromRegion.invoke(o, new Object[]{world, rgName, player});
@@ -58,10 +59,10 @@ public class WorldGuardPluginReflection extends WorldGuardPlugin {
 		
 	}
 
-	public boolean checkRegionMaxOut ( String world, String name ) {
+	public boolean checkRegionMaxOut ( String world, UUID player ) {
 		
 		try {
-			return (boolean) mCheckRegionMaxOut.invoke(o, new Object[]{world, name});
+			return (boolean) mCheckRegionMaxOut.invoke(o, new Object[]{world, player});
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

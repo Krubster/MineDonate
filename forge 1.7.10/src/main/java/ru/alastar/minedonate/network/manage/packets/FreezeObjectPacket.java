@@ -8,7 +8,7 @@ public class FreezeObjectPacket implements IMessage {
 
 	public int shopId ;
 	public String reason ;
-	public String accountName ;
+	public String account ;
 	public boolean bool ;
 	public Type type ;
 	
@@ -23,9 +23,9 @@ public class FreezeObjectPacket implements IMessage {
     	
     }
  
-    public FreezeObjectPacket ( String _accountName, String _reason, boolean _bool ) {
+    public FreezeObjectPacket ( String _account, String _reason, boolean _bool ) {
     	
-    	accountName = _accountName ;
+    	account = _account ;
     	reason = _reason ;
     	bool = _bool ;
     	
@@ -46,7 +46,7 @@ public class FreezeObjectPacket implements IMessage {
     			
     		} else {
     			
-    			Utils . netWriteString ( buf, accountName ) ;
+    			Utils . netWriteString ( buf, account ) ;
 
     		}
     		
@@ -81,7 +81,7 @@ public class FreezeObjectPacket implements IMessage {
 
 	   		} else if ( type == Type . ACCOUNT ) {
 	   			
-	   			accountName = Utils . netReadString ( buf ) ;
+	   			account = Utils . netReadString ( buf ) ;
 	   		 
 	   		}
 	   		

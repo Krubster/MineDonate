@@ -29,7 +29,7 @@ public class RenameShopServerPacketHandler implements IMessageHandler < RenameSh
 		
 		Shop s = MineDonate . shops . get ( message . shopId ) ;
 		
-		if ( MineDonate . getAccount ( serverPlayer . getDisplayName ( ) . toLowerCase ( ) ) . canRenameShop ( s . owner ) ) {
+		if ( MineDonate . getAccount ( serverPlayer ) . canRenameShop ( s . owner ) ) {
 			
 			if ( message . name == null || message . name . isEmpty ( ) || message . name . length ( ) > 140 ) {
 

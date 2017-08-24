@@ -24,7 +24,7 @@ public class EntitySelectEventHandler {
        
     	if ( e . entityPlayer instanceof EntityPlayerMP ) {
          
-    		Account acc = MineDonate . getAccountFromCache ( e . entityPlayer . getDisplayName ( ) . toLowerCase ( ) ) ;
+    		Account acc = MineDonate . getAccountFromCache ( e . entityPlayer ) ;
     		
     		if ( acc != null ) {
     			

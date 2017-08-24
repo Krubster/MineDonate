@@ -29,7 +29,7 @@ public class RegionInfo extends Merch {
     @Override
     public boolean canBuy(EntityPlayerMP serverPlayer, int amount) {
     	
-    	if ( PluginHelper . wgMgr . checkRegionMaxOut ( this . world_name, serverPlayer . getDisplayName ( ) ) ) {
+    	if ( PluginHelper . wgMgr . checkRegionMaxOut ( this . world_name, serverPlayer.getGameProfile().getId() ) ) {
  		 
     		serverPlayer . addChatMessage ( new ChatComponentText ( "You can't have more regions!" ) ) ;
 

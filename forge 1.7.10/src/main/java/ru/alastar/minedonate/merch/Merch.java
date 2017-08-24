@@ -1,5 +1,7 @@
 package ru.alastar.minedonate.merch;
 
+import java.util.UUID;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
@@ -117,9 +119,9 @@ public abstract class Merch {
 
 	}
 
-	public int withdrawMoney ( String buyer, int amount ) {
+	public int withdrawMoney ( UUID buyer, int amount ) {
 
-        return MineDonate.getMoneyProcessor(getMoneyType()).process(this, MineDonate.getUUIDFromName(buyer), amount);
+        return MineDonate.getMoneyProcessor(getMoneyType()).process(this, buyer, amount);
 
     }
 	

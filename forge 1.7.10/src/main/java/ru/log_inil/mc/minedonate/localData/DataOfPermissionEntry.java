@@ -2,12 +2,12 @@ package ru.log_inil.mc.minedonate.localData;
 
 public class DataOfPermissionEntry {
 
-	public String key ;
+	public String permission ;
 	public String [ ] groups ;
 	
-	public DataOfPermissionEntry ( String _key, String [ ] _groups ) {
+	public DataOfPermissionEntry ( String _permission, String [ ] _groups ) {
 		
-		key = _key ;
+		permission = _permission ;
 		groups = _groups ;
 		
 	}

@@ -26,7 +26,7 @@ public class StandartMoneyProcessor extends AbstractMoneyProcessor {
 				
 				String owner = MineDonate . shops . get ( m . getShopId ( ) ) . owner ;
 
-				returnMoney(MineDonate.getUUIDFromName(owner), procMoney);
+				returnMoney(UUID.fromString(owner), procMoney);
 				
 				owner = null ;
 				
@@ -58,13 +58,13 @@ public class StandartMoneyProcessor extends AbstractMoneyProcessor {
 	}
 	
 	@Override
-	public void registerPlayer(UUID id, java.util.Collection<AbstractMoneyProcessor> pl) {
+	public void registerPlayer(UUID id, String name, java.util.Collection<AbstractMoneyProcessor> pl) {
 		
 		try {
 			
-			Statement stat = MineDonate . getNewStatement ( ) ;
+			Statement stat = MineDonate . getNewStatement ( domp . dbLinkName ) ;
 
-			stat.execute("INSERT INTO " + domp.dbTable + " (" + domp.dbIdColumn + "," + domp.dbMoneyColumn + ") VALUES ( '" + id.toString() + "', " + domp.regMoney + " )");
+			stat.execute("INSERT INTO " + domp.dbTable + " (" + domp.dbIdColumn + "," + domp . dbNameColumn + "," + domp.dbMoneyColumn + ") VALUES ( '" + id.toString() + "', '" + name + "', " + domp.regMoney + " )");
 
 			stat . close ( ) ;
             
@@ -76,7 +76,7 @@ public class StandartMoneyProcessor extends AbstractMoneyProcessor {
 						
 						if ( amp . domp . regMoney > 0 ) {
 
-							ShopLogger.logMoney(MineDonate.getNameFromUUID(id), 0, domp.regMoney, "register>" + amp.domp.moneyType);
+							ShopLogger.logMoney(id.toString(), 0, domp.regMoney, "register>" + amp.domp.moneyType);
 						
 						}
 
@@ -101,7 +101,7 @@ public class StandartMoneyProcessor extends AbstractMoneyProcessor {
 
 		try {
 			
-			Statement stat = MineDonate . getNewStatement ( ) ;
+			Statement stat = MineDonate . getNewStatement ( domp . dbLinkName ) ;
 
 			ResultSet rs = stat.executeQuery("SELECT " + domp.dbMoneyColumn + " FROM " + domp.dbTable + " WHERE " + domp.dbIdColumn + "='" + id + "';");
 
@@ -136,7 +136,7 @@ public class StandartMoneyProcessor extends AbstractMoneyProcessor {
 
 		int last = getMoneyFor(id);
 
-		ShopLogger.logMoney(MineDonate.getNameFromUUID(id), last, last + money, "returnMoney>" + domp.moneyType);
+		ShopLogger.logMoney(id.toString(), last, last + money, "returnMoney>" + domp.moneyType);
 
 		setMoney(id, last + money);
 			
@@ -147,7 +147,7 @@ public class StandartMoneyProcessor extends AbstractMoneyProcessor {
 		
 		try {
 			
-			Statement stat = MineDonate . getNewStatement ( ) ;
+			Statement stat = MineDonate . getNewStatement ( domp . dbLinkName ) ;
 
 			stat.executeUpdate("UPDATE " + domp.dbTable + " SET " + domp.dbMoneyColumn + "=" + money + " WHERE " + domp.dbIdColumn + "='" + id + "';");
 
@@ -166,7 +166,7 @@ public class StandartMoneyProcessor extends AbstractMoneyProcessor {
 
 		try {
 		
-			Statement stat = MineDonate . getNewStatement ( ) ;
+			Statement stat = MineDonate . getNewStatement ( domp . dbLinkName ) ;
 			ResultSet rs = stat.executeQuery("SELECT id FROM " + domp.dbTable + " WHERE " + domp.dbIdColumn + "='" + id + "';");
 
 			while ( rs . next ( ) ) {
