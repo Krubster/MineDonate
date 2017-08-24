@@ -6,3 +6,4 @@ Alastar and log_inil
 + (HOT! HOT! HOT!) Async db workers
 + Merch editing
 + More region info
++ Hibernate or just sqlite?
