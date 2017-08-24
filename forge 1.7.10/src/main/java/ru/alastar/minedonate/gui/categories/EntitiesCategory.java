@@ -2,7 +2,6 @@ package ru.alastar.minedonate.gui.categories;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
-
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.events.MineDonateGUIHandler;
 import ru.alastar.minedonate.gui.ShopCategory;
@@ -10,17 +9,9 @@ import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.merch.info.EntityInfo;
 import ru.alastar.minedonate.rtnl.ModNetwork;
-
-import ru.log_inil.mc.minedonate.gui.DrawType;
-import ru.log_inil.mc.minedonate.gui.GuiAbstractItemEntry;
-import ru.log_inil.mc.minedonate.gui.GuiGradientButton;
-import ru.log_inil.mc.minedonate.gui.GuiItemsScrollArea;
-import ru.log_inil.mc.minedonate.gui.GuiScrollingList;
+import ru.log_inil.mc.minedonate.gui.*;
 import ru.log_inil.mc.minedonate.gui.frames.GuiFrameAddEntity;
 import ru.log_inil.mc.minedonate.gui.items.GuiItemEntryOfEntityMerch;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Alastar on 20.07.2017.

@@ -1,10 +1,10 @@
 package ru.log_inil.mc.minedonate.gui.context;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.log_inil.mc.minedonate.gui.MCGuiAccessible;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ContextMenuManager {
 

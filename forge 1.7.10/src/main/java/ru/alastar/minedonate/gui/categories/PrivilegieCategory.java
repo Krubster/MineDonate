@@ -2,9 +2,7 @@ package ru.alastar.minedonate.gui.categories;
 
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.RenderHelper;
-
 import org.lwjgl.opengl.GL11;
-
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.gui.BuyButton;
 import ru.alastar.minedonate.gui.ShopCategory;
@@ -12,7 +10,6 @@ import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.merch.info.PrivilegieInfo;
 import ru.alastar.minedonate.proxies.ClientProxy;
-
 import ru.log_inil.mc.minedonate.gui.DrawType;
 
 import java.util.ArrayList;

@@ -1,7 +1,6 @@
 package ru.alastar.minedonate.gui.categories;
 
 import net.minecraft.client.gui.GuiButton;
-
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.events.MineDonateGUIHandler;
 import ru.alastar.minedonate.gui.CountButton;
@@ -10,11 +9,7 @@ import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.merch.info.ItemInfo;
 import ru.alastar.minedonate.rtnl.ModNetwork;
-import ru.log_inil.mc.minedonate.gui.DrawType;
-import ru.log_inil.mc.minedonate.gui.GuiAbstractItemEntry;
-import ru.log_inil.mc.minedonate.gui.GuiGradientButton;
-import ru.log_inil.mc.minedonate.gui.GuiItemsScrollArea;
-import ru.log_inil.mc.minedonate.gui.GuiScrollingList;
+import ru.log_inil.mc.minedonate.gui.*;
 import ru.log_inil.mc.minedonate.gui.frames.GuiFrameAddItem;
 import ru.log_inil.mc.minedonate.gui.items.GuiItemEntryOfItemMerch;
 

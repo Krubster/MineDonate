@@ -2,11 +2,8 @@ package ru.alastar.minedonate.merch;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import io.netty.buffer.ByteBuf;
-
 import net.minecraft.entity.player.EntityPlayerMP;
-
 import ru.alastar.minedonate.MineDonate;
 
 /**
@@ -121,10 +118,10 @@ public abstract class Merch {
 	}
 
 	public int withdrawMoney ( String buyer, int amount ) {
-		
-		return MineDonate . getMoneyProcessor ( getMoneyType ( ) ) . process ( this, buyer, amount ) ;
-		
-	}
+
+        return MineDonate.getMoneyProcessor(getMoneyType()).process(this, MineDonate.getUUIDFromName(buyer), amount);
+
+    }
 	
 	@SideOnly(Side.CLIENT)
 	public String getSearchValue ( ) {

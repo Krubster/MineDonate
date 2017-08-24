@@ -1,17 +1,15 @@
 package ru.log_inil.mc.minedonate.gui.frames;
 
-import java.awt.Color;
-
 import net.minecraft.client.gui.GuiButton;
-
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.rtnl.Utils;
-
 import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.gui.GuiFrame;
 import ru.log_inil.mc.minedonate.gui.GuiGradientButton;
 import ru.log_inil.mc.minedonate.gui.GuiGradientTextField;
 import ru.log_inil.mc.minedonate.localData.frames.DataOfUIFrameConfirm;
+
+import java.awt.*;
 
 public class GuiFrameConfirm extends GuiFrame {
 

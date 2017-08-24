@@ -1,13 +1,11 @@
 package ru.log_inil.mc.minedonate.gui.frames;
 
 import net.minecraft.client.gui.GuiButton;
-
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.network.manage.packets.EditMerchNumberPacket;
 import ru.alastar.minedonate.network.manage.packets.EditMerchStringPacket;
 import ru.alastar.minedonate.rtnl.ModNetwork;
-
 import ru.log_inil.mc.minedonate.localData.frames.DataOfUIFramEditObject;
 
 public class GuiFrameEditEntity extends GuiFrameEditItem {

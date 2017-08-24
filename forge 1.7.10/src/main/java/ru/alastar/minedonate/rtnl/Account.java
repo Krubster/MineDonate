@@ -1,10 +1,10 @@
 package ru.alastar.minedonate.rtnl;
 
-import java.util.List;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import ru.alastar.minedonate.MineDonate;
+
+import java.util.List;
 
 public class Account {
 
@@ -111,6 +111,10 @@ public class Account {
 
 		return hasPermission ( "canViewOtherFreezText" ) || hasPermission ( "*" ) ;
 		
+	}
+
+	public boolean canAddMoney() {
+		return hasPermission("canAddMoney") || hasPermission("*");
 	}
 
 	public class ManageSession {

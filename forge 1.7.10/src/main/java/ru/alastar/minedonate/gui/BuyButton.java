@@ -2,7 +2,6 @@ package ru.alastar.minedonate.gui;
 
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.rtnl.ModNetwork;
-
 import ru.log_inil.mc.minedonate.gui.GuiTexturedButton;
 
 /**

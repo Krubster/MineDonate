@@ -7,12 +7,7 @@ import ru.alastar.minedonate.gui.ShopCategory;
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.merch.info.ShopInfo;
-
-import ru.log_inil.mc.minedonate.gui.DrawType;
-import ru.log_inil.mc.minedonate.gui.GuiAbstractItemEntry;
-import ru.log_inil.mc.minedonate.gui.GuiGradientButton;
-import ru.log_inil.mc.minedonate.gui.GuiItemsScrollArea;
-import ru.log_inil.mc.minedonate.gui.GuiScrollingList;
+import ru.log_inil.mc.minedonate.gui.*;
 import ru.log_inil.mc.minedonate.gui.items.GuiItemEntryOfUserShopMerch;
 
 public class UsersShopsCategory extends ShopCategory {

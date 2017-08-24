@@ -1,13 +1,9 @@
 package ru.log_inil.mc.minedonate.gui.items;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.gui.GoButton;
 import ru.alastar.minedonate.gui.ShopCategory;
@@ -24,6 +20,9 @@ import ru.log_inil.mc.minedonate.gui.frames.GuiFrameDeleteShop;
 import ru.log_inil.mc.minedonate.gui.frames.GuiFrameFreezeAccount;
 import ru.log_inil.mc.minedonate.gui.frames.GuiFrameFreezeShop;
 import ru.log_inil.mc.minedonate.gui.frames.GuiFrameRenameShop;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GuiItemEntryOfUserShopMerch extends GuiAbstractItemEntry {
 

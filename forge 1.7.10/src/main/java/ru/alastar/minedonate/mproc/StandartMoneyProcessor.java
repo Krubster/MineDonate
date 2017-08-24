@@ -1,13 +1,13 @@
 package ru.alastar.minedonate.mproc;
 
-import java.sql.ResultSet;
-import java.sql.Statement;
-
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.rtnl.ShopLogger;
-
 import ru.log_inil.mc.minedonate.localData.DataOfMoneyProcessor;
+
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.UUID;
 
 public class StandartMoneyProcessor extends AbstractMoneyProcessor {
 
@@ -18,15 +18,15 @@ public class StandartMoneyProcessor extends AbstractMoneyProcessor {
 	}
 
 	@Override
-	public int process ( Merch m, String buyer, int procMoney ) {
+	public int process(Merch m, UUID buyer, int procMoney) {
 				
 		if ( domp . isTwoSideProcessor ) {
 			
 			if ( MineDonate . checkCatExists ( m . getShopId ( ), m.getCategory ( ) ) ) {
 				
 				String owner = MineDonate . shops . get ( m . getShopId ( ) ) . owner ;
-				
-				returnMoney ( owner, procMoney ) ;
+
+				returnMoney(MineDonate.getUUIDFromName(owner), procMoney);
 				
 				owner = null ;
 				
@@ -43,7 +43,7 @@ public class StandartMoneyProcessor extends AbstractMoneyProcessor {
 	}
 
 	@Override
-	public int canBuy ( Merch m, String buyer, int amount ) {
+	public int canBuy(Merch m, UUID buyer, int amount) {
 		
 		int procMoney = m . getCost ( ) * amount ;
 		
@@ -58,15 +58,15 @@ public class StandartMoneyProcessor extends AbstractMoneyProcessor {
 	}
 	
 	@Override
-	public void registerPlayer ( String name, java . util . Collection < AbstractMoneyProcessor > pl ) {
+	public void registerPlayer(UUID id, java.util.Collection<AbstractMoneyProcessor> pl) {
 		
 		try {
 			
 			Statement stat = MineDonate . getNewStatement ( ) ;
-						
-			stat . execute ( "INSERT INTO " + domp . dbTable + " (" + domp . dbNameColumn + "," + domp . dbMoneyColumn + ") VALUES ( '" + name . toLowerCase ( ) + "', " + domp . regMoney + " )" ) ;
-            
-            stat . close ( ) ;
+
+			stat.execute("INSERT INTO " + domp.dbTable + " (" + domp.dbIdColumn + "," + domp.dbMoneyColumn + ") VALUES ( '" + id.toString() + "', " + domp.regMoney + " )");
+
+			stat . close ( ) ;
             
 			if ( MineDonate . cfg . autoFixMoneyProcessorsTableCollisions ) {
 				
@@ -75,12 +75,12 @@ public class StandartMoneyProcessor extends AbstractMoneyProcessor {
 					if ( domp . dbTable . equals ( amp . domp . dbTable ) ) {
 						
 						if ( amp . domp . regMoney > 0 ) {
-						
-							ShopLogger . logMoney ( name, 0, domp . regMoney, "register>" + amp . domp . moneyType ) ;
+
+							ShopLogger.logMoney(MineDonate.getNameFromUUID(id), 0, domp.regMoney, "register>" + amp.domp.moneyType);
 						
 						}
 
-						amp . setMoney ( name, amp . domp . regMoney ) ;
+						amp.setMoney(id, amp.domp.regMoney);
 
 					}
 					
@@ -97,14 +97,14 @@ public class StandartMoneyProcessor extends AbstractMoneyProcessor {
 	}
 
 	@Override
-	public int getMoneyFor ( String name ) {
+	public int getMoneyFor(UUID id) {
 
 		try {
 			
 			Statement stat = MineDonate . getNewStatement ( ) ;
 
-			ResultSet rs = stat . executeQuery ( "SELECT " + domp . dbMoneyColumn + " FROM " + domp . dbTable + " WHERE " + domp . dbNameColumn + "='" + name . toLowerCase ( ) + "';" ) ;
-            
+			ResultSet rs = stat.executeQuery("SELECT " + domp.dbMoneyColumn + " FROM " + domp.dbTable + " WHERE " + domp.dbIdColumn + "='" + id + "';");
+
 			boolean w = true ;
             int money = -1 ;
             
@@ -132,26 +132,26 @@ public class StandartMoneyProcessor extends AbstractMoneyProcessor {
 	}
 
 	@Override
-	public void returnMoney ( String name, int money ) {
+	public void returnMoney(UUID id, int money) {
 
-		int last = getMoneyFor ( name ) ;
-		
-		ShopLogger . logMoney ( name, last, last + money, "returnMoney>" + domp . moneyType ) ;
+		int last = getMoneyFor(id);
 
-		setMoney ( name, last + money ) ;
+		ShopLogger.logMoney(MineDonate.getNameFromUUID(id), last, last + money, "returnMoney>" + domp.moneyType);
+
+		setMoney(id, last + money);
 			
 	}
 	
 	@Override
-	public void setMoney ( String name, int money ) {
+	public void setMoney(UUID id, int money) {
 		
 		try {
 			
 			Statement stat = MineDonate . getNewStatement ( ) ;
-						
-			stat . executeUpdate ( "UPDATE " + domp . dbTable + " SET " + domp . dbMoneyColumn + "=" + money + " WHERE " + domp . dbNameColumn + "='" + name . toLowerCase ( ) + "';" ) ;
-            
-            stat . close ( ) ;
+
+			stat.executeUpdate("UPDATE " + domp.dbTable + " SET " + domp.dbMoneyColumn + "=" + money + " WHERE " + domp.dbIdColumn + "='" + id + "';");
+
+			stat . close ( ) ;
             
 		} catch ( Exception ex ) {
 			
@@ -162,15 +162,14 @@ public class StandartMoneyProcessor extends AbstractMoneyProcessor {
 	}
 
 	@Override
-	public boolean existsAccount ( String name ) {
+	public boolean existsAccount(UUID id) {
 
 		try {
 		
 			Statement stat = MineDonate . getNewStatement ( ) ;
+			ResultSet rs = stat.executeQuery("SELECT id FROM " + domp.dbTable + " WHERE " + domp.dbIdColumn + "='" + id + "';");
 
-			ResultSet rs = stat . executeQuery ( "SELECT id FROM " + domp . dbTable + " WHERE " + domp . dbNameColumn + "='" + name . toLowerCase ( ) + "';" ) ;
-            
-            while ( rs . next ( ) ) {
+			while ( rs . next ( ) ) {
             	
                 rs . close ( ) ;
                 stat . close ( ) ;

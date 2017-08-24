@@ -1,5 +1,6 @@
 package ru.alastar.minedonate;
 
+import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -7,10 +8,10 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-
+import ru.alastar.minedonate.commands.AddMoneyCommand;
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.gui.merge.ShopInventoryContainer;
 import ru.alastar.minedonate.merch.Merch;
@@ -20,11 +21,13 @@ import ru.alastar.minedonate.plugin.PluginHelper;
 import ru.alastar.minedonate.proxies.CommonProxy;
 import ru.alastar.minedonate.rtnl.Account;
 import ru.alastar.minedonate.rtnl.Shop;
-
-import ru.log_inil.mc.minedonate.localData.*;
+import ru.log_inil.mc.minedonate.localData.DataOfConfig;
+import ru.log_inil.mc.minedonate.localData.DataOfMoneyProcessor;
+import ru.log_inil.mc.minedonate.localData.DataOfPermissionEntry;
+import ru.log_inil.mc.minedonate.localData.LocalDataInterchange;
 import ru.log_inil.mc.minedonate.localData.ui.DataOfUIConfig;
 
-import java.io.*;
+import java.io.File;
 import java.sql.*;
 import java.util.*;
 
@@ -78,9 +81,8 @@ public class MineDonate {
    
     @Mod.EventHandler
     public void serverStarting ( FMLServerStartingEvent event ) {
-        
     	proxy . serverStarting ( event ) ;
-        
+        event.registerServerCommand(new AddMoneyCommand());
     }
     
     @SideOnly(Side.SERVER)
@@ -327,9 +329,9 @@ public class MineDonate {
 			
 			inb . setCustomDBTable ( cfg . dbUserItems ) ;
 			inb . setEnabled ( cfg . userShops ) ;
-			
-			s = new Shop ( shopId, new MerchCategory [ ] { inb }, sdata . getString ( "owner" ), sdata . getString ( "name" ), sdata . getBoolean ( "isFreezed" ), sdata . getString ( "freezer" ), sdata . getString ( "freezReason" ), false ) ;
-			sdata . close ( ) ;
+
+            s = new Shop(shopId, new MerchCategory[]{inb}, sdata.getString("UUID"), sdata.getString("name"), sdata.getBoolean("isFreezed"), sdata.getString("freezer"), sdata.getString("freezReason"), false);
+            sdata . close ( ) ;
 			
 		} catch (SQLException e1) {
 			e1.printStackTrace();
@@ -469,7 +471,7 @@ public class MineDonate {
         try {
         	
         	Statement stmt = getNewStatement ( ) ;
-            ResultSet rs = stmt . executeQuery ( "SELECT * FROM " + cfg.dbUsers + " WHERE " + cfg.dbUsersNameColumn + "='" + name + "';" ) ;
+            ResultSet rs = stmt.executeQuery("SELECT * FROM " + cfg.dbUsers + " WHERE " + cfg.dbUsersIdColumn + "='" + MineDonate.getUUIDFromName(name) + "';");
 
             while ( rs . next ( ) ) {
 
@@ -607,5 +609,46 @@ public class MineDonate {
     	return acc == null ? false : ( shopId == 0 ? acc . canEditShop ( "SERVER" ) : true ) ;
     	
     }
-    
+
+    @SideOnly(Side.SERVER)
+    public static String getNameFromUUID(UUID id) {
+        GameProfile profile = MinecraftServer.getServer().func_152358_ax().func_152652_a(id);
+        if (profile != null) {
+            return profile.getName();
+        } else {
+            logError("Null profile!");
+        }
+        return "";
+    }
+
+    @SideOnly(Side.SERVER)
+    private static void logError(String s) {
+        System.out.println("[MineDonate][ERROR]: " + s);
+    }
+
+    @SideOnly(Side.SERVER)
+    public static PreparedStatement getPreparedStatement(String sql) throws SQLException {
+        return m_DB_Connection.prepareStatement(sql);
+    }
+
+    @SideOnly(Side.SERVER)
+    public static UUID getUUIDFromName(String owner) {
+        GameProfile profile = MinecraftServer.getServer().func_152358_ax().func_152655_a(owner);
+        if (profile != null) {
+            return profile.getId();
+        } else {
+            logError("Null profile!");
+        }
+        return null;
+    }
+
+    public static UUID getUUIDFromPlayer(EntityPlayerMP serverPlayer) {
+        GameProfile profile = MinecraftServer.getServer().func_152358_ax().func_152655_a(serverPlayer.getDisplayName());
+        if (profile != null) {
+            return profile.getId();
+        } else {
+            logError("Null profile!");
+        }
+        return null;
+    }
 }

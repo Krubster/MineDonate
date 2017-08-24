@@ -1,46 +1,37 @@
 {
-
   "enable": true,
-  
   "dbHost": "localhost",
   "dbPort": 3306,
-  "dbName": "dbname",
-  "dbUser": "user",
-  "dbPassword": "password",
-  
+  "dbName": "minecraft",
+  "dbUser": "root",
+  "dbPassword": "",
   "dbUsers": "md_accounts",
-  "dbUsersNameColumn": "name",
-  
+  "dbUsersIdColumn": "UUID",
   "sellItems": true,
   "dbItems": "md_items",
   "itemsMoneyType": "coin",
-  
   "sellPrivelegies": true,
   "dbPrivelegies": "md_privelegies",
   "privelegiesMoneyType": "rub",
-  
   "sellRegions": true,
   "dbRegions": "md_regions",
   "regionMoneyType": "rub",
-  
   "sellEntities": true,
   "dbEntities": "md_entities",
   "entitiesMoneyType": "coin",
-  
   "userShops": true,
   "dbUserItems": "md_userItems",
   "dbShops": "md_shops",
   "defaultUserShopMoneyType": "coin",
-  "defaultUserAllowShopCreate": true,
   "maxUsersShopsCount": 3,
-
+  "defaultUserAllowShopCreate": true,
   "autoFixMoneyProcessorsTableCollisions": true,
   "moneyProcessors": [
     {
       "moneyType": "rub",
       "className": "ru.alastar.minedonate.mproc.StandartMoneyProcessor",
       "dbTable": "md_accounts",
-      "dbNameColumn": "name",
+      "dbIdColumn": "UUID",
       "dbMoneyColumn": "money",
       "isTwoSideProcessor": false,
       "regMoney": 0
@@ -49,16 +40,14 @@
       "moneyType": "coin",
       "className": "ru.alastar.minedonate.mproc.StandartMoneyProcessor",
       "dbTable": "md_accounts",
-      "dbNameColumn": "name",
+      "dbIdColumn": "UUID",
       "dbMoneyColumn": "coins",
       "isTwoSideProcessor": false,
       "regMoney": 0
     }
   ],
-  
   "sendLogToDB": true,
   "dbLogs": "md_logs",
-  
   "enablePermissionsMode": true,
   "dbModPermissionsTable": "md_perms",
   "permissionsTriggerList": [
@@ -74,9 +63,14 @@
         "default",
         "moder"
       ]
+    },
+    {
+      "key": "minedonate.admin",
+      "groups": [
+        "admin"
+      ]
     }
   ],
-  
   "permissionsPluginClassName": "ru.alastar.minedonate.plugin.bukkit.PermissionsBukkitPlugin",
   "worldGuardPluginClassName": "ru.alastar.minedonate.plugin.bukkit.WorldGuardBukkitPlugin"
 }

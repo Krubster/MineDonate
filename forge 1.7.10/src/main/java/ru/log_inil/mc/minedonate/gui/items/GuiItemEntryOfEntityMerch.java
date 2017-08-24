@@ -5,10 +5,6 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.EntityLivingBase;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 import ru.alastar.minedonate.MineDonate;
@@ -19,11 +15,14 @@ import ru.alastar.minedonate.merch.info.EntityInfo;
 import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.gui.GuiAbstractItemEntry;
 import ru.log_inil.mc.minedonate.gui.GuiItemsScrollArea;
+import ru.log_inil.mc.minedonate.gui.context.ContextElement;
 import ru.log_inil.mc.minedonate.gui.context.ContextMenu;
 import ru.log_inil.mc.minedonate.gui.context.ContextMenuManager;
 import ru.log_inil.mc.minedonate.gui.frames.GuiFrameDeleteEntity;
 import ru.log_inil.mc.minedonate.gui.frames.GuiFrameEditEntity;
-import ru.log_inil.mc.minedonate.gui.context.ContextElement;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GuiItemEntryOfEntityMerch extends GuiAbstractItemEntry {
 

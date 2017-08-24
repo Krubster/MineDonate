@@ -1,18 +1,10 @@
 package ru.alastar.minedonate.rtnl;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
-
 import cpw.mods.fml.common.network.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
-
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.merch.categories.MerchCategory;
@@ -22,6 +14,12 @@ import ru.alastar.minedonate.merch.info.ItemInfo;
 import ru.alastar.minedonate.merch.info.ShopInfo;
 import ru.alastar.minedonate.network.manage.packets.EditMerchNumberPacket;
 import ru.alastar.minedonate.network.manage.packets.EditMerchStringPacket;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class Manager {
 
@@ -33,10 +31,10 @@ public class Manager {
         MineDonate . shops . get ( 0 ) . cats [ 4 ] . addMerch ( info ) ;
       
         try {
-        	
-            PreparedStatement statement = MineDonate.getDBConnection().prepareStatement("INSERT INTO " + MineDonate.cfg.dbShops + " (owner, name, lastUpdate, isFreezed, freezer, freezReason, moneyType) VALUES(?,?,?,?,?,?,?)");
-            
-            statement.setString(1, owner);
+
+            PreparedStatement statement = MineDonate.getDBConnection().prepareStatement("INSERT INTO " + MineDonate.cfg.dbShops + " (UUID, name, lastUpdate, isFreezed, freezer, freezReason, moneyType) VALUES(?,?,?,?,?,?,?)");
+
+            statement.setString(1, MineDonate.getUUIDFromName(owner).toString());
             statement.setString(2, name);
             statement.setInt(3, 0);
             statement.setBoolean(4, info.isFreezed);
@@ -58,10 +56,10 @@ public class Manager {
 		try {
 			
 			Statement st = MineDonate . getNewStatement ( ) ;
-			
-			st . executeUpdate ( "UPDATE " + MineDonate.cfg.dbUsers + " SET shopsCount = " + MineDonate . getAccount ( owner ) . shopsCount + " WHERE " + MineDonate.cfg.dbUsersNameColumn + "= '" + owner+ "';" ) ;
-			
-			st . close ( ) ;
+
+            st.executeUpdate("UPDATE " + MineDonate.cfg.dbUsers + " SET shopsCount = " + MineDonate.getAccount(owner).shopsCount + " WHERE " + MineDonate.cfg.dbUsersIdColumn + "= '" + MineDonate.getUUIDFromName(owner) + "';");
+
+            st . close ( ) ;
 			
 		} catch ( Exception ex ) {
 			
@@ -100,10 +98,10 @@ public class Manager {
 		try {
 			
 			Statement st = MineDonate . getNewStatement ( ) ;
-			
-			st . executeUpdate ( "UPDATE " + MineDonate.cfg.dbUsers + " SET shopsCount = " + MineDonate . getAccount ( s . owner ) . shopsCount + " WHERE " + MineDonate.cfg.dbUsersNameColumn + "= '" + s . owner + "';" ) ;
-			
-			st . close ( ) ;
+
+            st.executeUpdate("UPDATE " + MineDonate.cfg.dbUsers + " SET shopsCount = " + MineDonate.getAccount(s.owner).shopsCount + " WHERE " + MineDonate.cfg.dbUsersIdColumn + "= '" + MineDonate.getUUIDFromName(s.owner) + "';");
+
+            st . close ( ) ;
 			
 		} catch ( Exception ex ) {
 			
@@ -203,12 +201,12 @@ public class Manager {
 		acc . freezShopCreateReason = reason ;
 		
         try {
-        	
-            PreparedStatement statement = MineDonate.getDBConnection().prepareStatement("UPDATE " + MineDonate.cfg.dbUsers + " SET freezShopCreate = 1, freezShopCreateFreezer = ?, freezShopCreateReason = ? WHERE " + MineDonate.cfg.dbUsersNameColumn + " = ?");
+
+            PreparedStatement statement = MineDonate.getDBConnection().prepareStatement("UPDATE " + MineDonate.cfg.dbUsers + " SET freezShopCreate = 1, freezShopCreateFreezer = ?, freezShopCreateReason = ? WHERE " + MineDonate.cfg.dbUsersIdColumn + " = ?");
             
             statement.setString(1, freezer);
             statement.setString(2, reason);
-            statement.setString(3, acc.name);
+            statement.setString(3, MineDonate.getUUIDFromName(acc.name).toString());
             
             statement.execute();
             statement.close();
@@ -228,12 +226,12 @@ public class Manager {
 		acc . freezShopCreateReason = "" ;
 		
 		try {
-			
-            PreparedStatement statement = MineDonate.getDBConnection().prepareStatement("UPDATE " + MineDonate.cfg.dbUsers + " SET freezShopCreate = 0, freezShopCreateFreezer = ?, freezShopCreateReason = ? WHERE " + MineDonate.cfg.dbUsersNameColumn + " = ?");
+
+            PreparedStatement statement = MineDonate.getDBConnection().prepareStatement("UPDATE " + MineDonate.cfg.dbUsers + " SET freezShopCreate = 0, freezShopCreateFreezer = ?, freezShopCreateReason = ? WHERE " + MineDonate.cfg.dbUsersIdColumn + " = ?");
             
             statement.setString(1, unFreezer);
             statement.setString(2, "");
-            statement.setString(3, acc.name);
+            statement.setString(3, MineDonate.getUUIDFromName(acc.name).toString());
             
             statement.execute();
             statement.close();

@@ -6,8 +6,8 @@ public class DataOfMoneyProcessor {
 	public String moneyType ;
 	public String className ;
 	public String dbTable ;
-	public String dbNameColumn ;
-	public String dbMoneyColumn ;
+    public String dbIdColumn;
+    public String dbMoneyColumn ;
 	public boolean isTwoSideProcessor ;
 	public int regMoney ;
 	
@@ -18,14 +18,14 @@ public class DataOfMoneyProcessor {
 		regMoney = 0 ;
 		
 	}
-	
-	public DataOfMoneyProcessor ( String _mt, String _className, String _dbTable,  String _dbNameColumn, String _dbMoneyColumn, boolean _isTwoSideProcessor ) {
-		
-		moneyType = _mt ;
+
+    public DataOfMoneyProcessor(String _mt, String _className, String _dbTable, String _dbIdColumn, String _dbMoneyColumn, boolean _isTwoSideProcessor) {
+
+        moneyType = _mt ;
 		className = _className ;
 		dbTable = _dbTable ;
-		dbNameColumn = _dbNameColumn ;
-		dbMoneyColumn = _dbMoneyColumn ;
+        dbIdColumn = _dbIdColumn;
+        dbMoneyColumn = _dbMoneyColumn ;
 		isTwoSideProcessor = _isTwoSideProcessor; ;
 		regMoney = 0 ;
 		

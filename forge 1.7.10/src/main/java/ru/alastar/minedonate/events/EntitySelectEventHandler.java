@@ -4,13 +4,11 @@ import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
-
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.network.manage.packets.ManageResponsePacket.ResponseCode;
 import ru.alastar.minedonate.network.manage.packets.ManageResponsePacket.ResponseStatus;

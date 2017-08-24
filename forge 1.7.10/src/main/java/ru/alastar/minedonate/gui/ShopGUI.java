@@ -7,13 +7,12 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.item.ItemStack;
-
+import org.lwjgl.opengl.GL11;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.gui.categories.*;
+import ru.alastar.minedonate.merch.info.ShopInfo;
 import ru.alastar.minedonate.proxies.ClientProxy;
 import ru.alastar.minedonate.rtnl.ModNetwork;
-import ru.alastar.minedonate.merch.info.ShopInfo;
-
 import ru.log_inil.mc.minedonate.gui.*;
 import ru.log_inil.mc.minedonate.gui.context.ContextMenuManager;
 import ru.log_inil.mc.minedonate.gui.frames.*;
@@ -22,8 +21,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.lwjgl.opengl.GL11;
 
 /**
  * Created by Alastar on 18.07.2017.

@@ -1,7 +1,6 @@
 package ru.alastar.minedonate.gui;
 
 import ru.alastar.minedonate.merch.info.ItemInfo;
-
 import ru.log_inil.mc.minedonate.gui.GuiAbstractItemEntry;
 import ru.log_inil.mc.minedonate.gui.GuiTexturedButton;
 

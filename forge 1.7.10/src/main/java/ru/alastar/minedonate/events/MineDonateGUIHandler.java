@@ -1,10 +1,8 @@
 package ru.alastar.minedonate.events;
 
 import cpw.mods.fml.common.network.IGuiHandler;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
-
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.gui.merge.ShopInventoryContainer;

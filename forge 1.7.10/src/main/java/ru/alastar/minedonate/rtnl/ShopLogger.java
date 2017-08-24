@@ -1,25 +1,17 @@
 package ru.alastar.minedonate.rtnl;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.player.EntityPlayerMP;
+import ru.alastar.minedonate.MineDonate;
+import ru.alastar.minedonate.merch.Merch;
 
+import java.io.*;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.Statement;
-
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
-import net.minecraft.entity.player.EntityPlayerMP;
-
-import ru.alastar.minedonate.MineDonate;
-import ru.alastar.minedonate.merch.Merch;
 
 @SideOnly(Side.SERVER)
 public class ShopLogger {
@@ -95,8 +87,8 @@ public class ShopLogger {
 	private static void logReverse ( String playerName, int cost ) {
         
 		try {
-            
-        	logReverse . write ( calendar . getTime ( ) . toString ( ) + ";" + playerName + ";" + cost ) ;
+
+            logReverse.write(calendar.getTime().toString() + ";" + playerName + ";" + cost + "\r\n");
             logReverse . flush ( ) ;
             
         } catch ( Exception ex ) {
@@ -110,9 +102,10 @@ public class ShopLogger {
 	public static void logMoney ( String playerName, int last, int next, String factorData ) {
         
 		try {
-            
-        	logMoney . write ( calendar . getTime ( ) . toString ( ) + ";" + playerName + ";" + last + ";" + next + ";" + factorData ) ;
-        	logMoney . flush ( ) ;
+
+            logMoney.write(calendar.getTime().toString() + ";" + playerName + ";" + last + ";" + next + ";" + factorData + "\r\n");
+            ;
+            logMoney . flush ( ) ;
             
         } catch ( Exception ex ) {
             
@@ -263,10 +256,10 @@ public class ShopLogger {
 	}
 
 	private static void reverseMoney ( String playerName, int money, String moneyType ) {
-	
-    	MineDonate . getMoneyProcessor ( moneyType ) . returnMoney ( playerName, money ) ; 
-    	
-	}
+
+        MineDonate.getMoneyProcessor(moneyType).returnMoney(MineDonate.getUUIDFromName(playerName), money);
+
+    }
 
 	private static void reverseMerch ( boolean printFullInfo, int lineNumber, int shopId, int catId, int merchId, String [ ] splData, String playerName ) {
     	
