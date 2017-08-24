@@ -1,7 +1,7 @@
 {
   "cats": {
     "entities": {
-      "itemОсталось": "Осталось: ",
+      "itemLeft": "Осталось: ",
       "categoryButtonText": "Мобы",
       "categoryButtonWidth": 45,
       "itemBuyButton": {
@@ -16,7 +16,7 @@
       }
     },
     "itemsAndBlocks": {
-      "itemОсталось": "Осталось: ",
+      "itemLeft": "Осталось: ",
       "categoryButtonText": "Предметы",
       "categoryButtonWidth": 50,
       "itemBuyButton": {
