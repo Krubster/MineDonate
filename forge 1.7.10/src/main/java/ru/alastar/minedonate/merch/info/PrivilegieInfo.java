@@ -48,7 +48,9 @@ public class PrivilegieInfo extends Merch {
 
     @Override
     public void read(ByteBuf buf) {
+    	
         super.read(buf);
+        
         cost = buf.readInt();
         
         try {
@@ -83,7 +85,9 @@ public class PrivilegieInfo extends Merch {
 
     @Override
     public void write(ByteBuf buf) {
+    	
         super.write(buf);
+        
         buf.writeInt(cost);
 
         try {

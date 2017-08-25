@@ -138,6 +138,8 @@ public class GuiFrameEditItem extends GuiFrame {
 		nameField . setText ( fieldText != null ? fieldText : "" ) ;
 		nameField . setTextHolder ( MineDonate.getAccount().ms.currentItemStack != null ? MineDonate.getAccount().ms.currentItemStack.getDisplayName() : fieldHolder ) ;
 		
+		nameField . fieldBorderColor = fieldBorderColor ;
+
 		nameField . xPosition = posX + 10 ;
 		nameField . yPosition = posY + 15 ;
 
@@ -154,6 +156,8 @@ public class GuiFrameEditItem extends GuiFrame {
 			limitField . setText ( "" ) ;
 			limitField . setTextHolder ( "" ) ;
 			
+			limitField . fieldBorderColor = fieldBorderColor ;
+
 		}
 		
 		if ( costField == null ) {
@@ -167,6 +171,8 @@ public class GuiFrameEditItem extends GuiFrame {
 		costField . setText ( Integer . toString ( cost ) ) ; // douifcs . costField . text ) ;
 		costField . setTextHolder ( douifcs . costField . textHolder ) ; // . isEmpty ( ) ? Integer.toString ( cost ) : douifcs . costField . textHolder  ) ;
 		
+		costField . fieldBorderColor = fieldBorderColor ;
+
 		costField . xPosition = nameField . xPosition + nameField . width + 6 ;
 		costField . yPosition = nameField . yPosition ;
 

@@ -8,10 +8,14 @@ import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.network.manage.packets.AddNewEntryPacket;
 import ru.alastar.minedonate.network.manage.packets.ManageResponsePacket;
 import ru.alastar.minedonate.rtnl.Account;
+import ru.alastar.minedonate.rtnl.INetworkTask;
 import ru.alastar.minedonate.rtnl.Manager;
+import ru.alastar.minedonate.rtnl.NetworkMessageProcessor;
 import ru.alastar.minedonate.rtnl.Shop;
 
-public class AddNewEntryServerPacketHandler implements IMessageHandler < AddNewEntryPacket, IMessage > {
+public class AddNewEntryServerPacketHandler implements IMessageHandler < AddNewEntryPacket, IMessage >, INetworkTask < AddNewEntryPacket, IMessage > {
+	
+	// 12min
 	
     public AddNewEntryServerPacketHandler ( ) {
 
@@ -20,6 +24,15 @@ public class AddNewEntryServerPacketHandler implements IMessageHandler < AddNewE
     @Override
     public IMessage onMessage ( AddNewEntryPacket message, MessageContext ctx ) {
     	
+    	NetworkMessageProcessor . processTask ( ( INetworkTask ) this, message, ctx ) ; // + 60
+
+    	return null ;
+    	
+    }
+    
+    @Override
+    public IMessage onMessageProcess ( AddNewEntryPacket message, MessageContext ctx ) {
+
     	if ( ! MineDonate . checkShopExists ( message . shopId ) ) {
     		
 			return new ManageResponsePacket ( ManageResponsePacket.ResponseType.OBJ, ManageResponsePacket.ResponseCode.ADD, ManageResponsePacket.ResponseStatus.ERROR_SHOP_NOTFOUND ) ;
@@ -52,6 +65,12 @@ public class AddNewEntryServerPacketHandler implements IMessageHandler < AddNewE
 
 			}
 			
+			if ( ! acc . canUnlimitedEntities ( ) ) {
+				
+				message . limit = 1 ;
+				
+			}
+			
 			switch ( s . cats [ message . catId ] . getCatType ( ) ) {
 				
 				case ITEMS :
@@ -66,7 +85,7 @@ public class AddNewEntryServerPacketHandler implements IMessageHandler < AddNewE
 						
 				        return new ManageResponsePacket ( ManageResponsePacket.ResponseType.OBJ, ManageResponsePacket.ResponseCode.ADD, ManageResponsePacket.ResponseStatus.ERROR_ACCESS_DENIED ) ;
 		
-					}
+					}		
 					
 					Manager . addItemToShop ( acc, s, message . catId, message . limit, message . cost, message . name ) ;
 

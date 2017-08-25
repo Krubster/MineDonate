@@ -31,6 +31,12 @@ public class RenameShopServerPacketHandler implements IMessageHandler < RenameSh
 		
 		if ( MineDonate . getAccount ( serverPlayer ) . canRenameShop ( s . owner ) ) {
 			
+			if ( s . isFreezed ) {
+
+				return new ManageResponsePacket ( ManageResponsePacket.ResponseType.SHOP, ManageResponsePacket.ResponseCode.RENAME, ManageResponsePacket.ResponseStatus.ERROR_SHOP_FREEZED ) ;
+
+			}
+			
 			if ( message . name == null || message . name . isEmpty ( ) || message . name . length ( ) > 140 ) {
 
 				return new ManageResponsePacket ( ManageResponsePacket.ResponseType.SHOP, ManageResponsePacket.ResponseCode.RENAME, ManageResponsePacket.ResponseStatus.ERROR_UNKNOWN ) ;

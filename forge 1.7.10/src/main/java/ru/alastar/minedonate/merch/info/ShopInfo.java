@@ -91,6 +91,12 @@ public class ShopInfo extends Merch {
         	
         }
         
+        if ( isFreezed ) {
+        	
+        	rating = -1 ;
+        	
+        }
+        
     }
 
     
@@ -191,7 +197,7 @@ public class ShopInfo extends Merch {
 	@Override
 	public String getSearchValue ( ) {
 		
-		return EnumChatFormatting . getTextWithoutFormattingCodes ( name + owner ) ;
+		return EnumChatFormatting . getTextWithoutFormattingCodes ( name + ownerName ) ;
 		
 	}
 	

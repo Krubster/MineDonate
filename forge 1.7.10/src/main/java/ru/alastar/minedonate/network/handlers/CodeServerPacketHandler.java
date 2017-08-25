@@ -8,20 +8,20 @@ import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.mproc.AbstractMoneyProcessor;
 import ru.alastar.minedonate.network.packets.AccountInfoPacket;
 import ru.alastar.minedonate.network.packets.AddMerchPacket;
-import ru.alastar.minedonate.network.packets.NeedUpdatePacket;
+import ru.alastar.minedonate.network.packets.CodePacket;
 import ru.alastar.minedonate.network.packets.SupportedFeaturesPacket;
 import ru.alastar.minedonate.rtnl.ModNetwork;
 
-public class NeedUpdateServerPacketHandler implements IMessageHandler<NeedUpdatePacket, IMessage> {
+public class CodeServerPacketHandler implements IMessageHandler<CodePacket, IMessage> {
     
-	public NeedUpdateServerPacketHandler ( ) {
+	public CodeServerPacketHandler ( ) {
 
     }
     
     @Override 
-    public IMessage onMessage(NeedUpdatePacket message, MessageContext ctx) {
+    public IMessage onMessage(CodePacket message, MessageContext ctx) {
 
-    	if ( message . r == 0 ) {
+    	if ( message . code == CodePacket . Code . CLIENT_NEED_FULL_INFO ) {
 
     		if ( MineDonate . m_Enabled ) {
 		
@@ -41,7 +41,7 @@ public class NeedUpdateServerPacketHandler implements IMessageHandler<NeedUpdate
                 SupportedFeaturesPacket features_packet = new SupportedFeaturesPacket ( MineDonate . cfg ) ;
 
                 ModNetwork . sendTo ( serverPlayer, features_packet ) ;
-        		ModNetwork . sendTo ( serverPlayer, new AccountInfoPacket ( userName ) ) ;
+        		ModNetwork . sendTo ( serverPlayer, new AccountInfoPacket ( serverPlayer . getGameProfile ( ) . getId ( ) . toString ( ), userName ) ) ;
                                         
                 // MineDonate . networkChannel . sendTo ( new CategoryPacket ( 0, features_packet . firstCatId, MineDonate . shops . get ( 0 ) . cats [ features_packet . firstCatId ] . subCategories ), serverPlayer ) ;
                 
@@ -51,7 +51,7 @@ public class NeedUpdateServerPacketHandler implements IMessageHandler<NeedUpdate
 
                 }
 
-                return new NeedUpdatePacket ( 1 ) ;
+                return new CodePacket ( CodePacket . Code . CLIENT_RECEIVED_FULL_INFO ) ;
 
             }
     			

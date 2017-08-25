@@ -3,21 +3,24 @@ package ru.alastar.minedonate.network.handlers;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import net.minecraft.client.Minecraft;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumChatFormatting;
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.gui.categories.ItemNBlockCategory;
 import ru.alastar.minedonate.gui.categories.UsersShopsCategory;
-import ru.alastar.minedonate.network.packets.NeedUpdatePacket;
+import ru.alastar.minedonate.network.packets.CodePacket;
 
-public class NeedUpdateClientPacketHandler implements IMessageHandler<NeedUpdatePacket, IMessage> {
+public class CodeClientPacketHandler implements IMessageHandler<CodePacket, IMessage> {
 
-    public NeedUpdateClientPacketHandler() {
+    public CodeClientPacketHandler ( ) {
 
     }
 
     @Override 
-    public IMessage onMessage(NeedUpdatePacket message, MessageContext ctx) {
+    public IMessage onMessage(CodePacket message, MessageContext ctx) {
     	
-    	if ( message . r == 1 ) {
+    	if ( message . code == CodePacket . Code . CLIENT_RECEIVED_FULL_INFO ) {
 	           
 			if ( ShopGUI . instance != null ) {
 
@@ -29,7 +32,7 @@ public class NeedUpdateClientPacketHandler implements IMessageHandler<NeedUpdate
     			
     	}
     	
-    	if ( message . r == 2 ) {
+    	if ( message . code == CodePacket . Code . CLIENT_RECEIVED_NEEDED_CAT_INFO ) {
 	           
 			if ( ShopGUI . instance != null ) {
 				 
@@ -53,8 +56,6 @@ public class NeedUpdateClientPacketHandler implements IMessageHandler<NeedUpdate
 						
 						usc . updateUserShopCategory ( ShopGUI . instance, cat, true ) ;
 						usc . postShow ( ShopGUI . instance ) ; 
-
-						//return null ;
 						
 					}
 			
@@ -62,6 +63,13 @@ public class NeedUpdateClientPacketHandler implements IMessageHandler<NeedUpdate
 				
 			}      
     			
+    	}
+    	
+    	if ( message . code == CodePacket . Code . SERVER_ERROR_WAIT_ANOTHER_PROCESS ) {
+
+        	Minecraft . getMinecraft ( ) . thePlayer . addChatMessage ( new ChatComponentText ( EnumChatFormatting . AQUA + " [MineDonate] " + EnumChatFormatting.RESET + message . code ) ) ;
+        	return null ;
+        	
     	}
     	
     	ShopGUI . instance . initGui ( ) ;

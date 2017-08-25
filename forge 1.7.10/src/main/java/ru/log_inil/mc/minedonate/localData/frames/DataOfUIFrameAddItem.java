@@ -5,7 +5,7 @@ import ru.log_inil.mc.minedonate.localData.ui.DataOfUITextHolderElement;
 
 public class DataOfUIFrameAddItem {
 
-	public DataOfUIElement createButton ;
+	public DataOfUIElement okButton, okExistsButton ;
 	public DataOfUIElement cancelButton ;
 	public String title;
 	public DataOfUITextHolderElement nameField, limitField, costField ;
@@ -13,7 +13,8 @@ public class DataOfUIFrameAddItem {
 	public DataOfUIFrameAddItem ( ) {
 		
 		title = "Add item to shop" ;
-		createButton = new DataOfUIElement ( "Add", 35, 20 ) ;
+		okButton = new DataOfUIElement ( "Add", 35, 20 ) ;
+		okExistsButton = new DataOfUIElement ( "Append", 55, 20 ) ;
 		cancelButton = new DataOfUIElement ( "Cancel", 50, 20 ) ;
 		nameField = new DataOfUITextHolderElement ( "", "Item name", 120, 20 ) ;
 		limitField = new DataOfUITextHolderElement ( "", "Limit", 40, 20 ) ;

@@ -107,7 +107,7 @@ public class StandartMoneyProcessor extends AbstractMoneyProcessor {
 			
 			Statement stat = MineDonate . getNewStatement ( domp . dbLinkName ) ;
 
-			ResultSet rs = stat.executeQuery("SELECT " + domp.dbMoneyColumn + " FROM " + domp.dbTable + " WHERE " + domp.dbIdColumn + "='" + id + "';");
+			ResultSet rs = stat.executeQuery("SELECT " + domp.dbMoneyColumn + " FROM " + domp.dbTable + " WHERE " + domp.dbIdColumn + "='" + id.toString() + "';");
 
 			boolean w = true ;
             int money = -1 ;
@@ -163,6 +163,8 @@ public class StandartMoneyProcessor extends AbstractMoneyProcessor {
 			
 		}
 
+		MineDonate . getAccount ( id ) . putMoney ( domp . moneyType, money ) ;
+		
 	}
 
 	@Override

@@ -3,18 +3,23 @@ package ru.alastar.minedonate.merch.info;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
+
 import ru.alastar.minedonate.merch.Merch;
+import ru.alastar.minedonate.network.manage.packets.EditMerchNumberPacket;
+import ru.alastar.minedonate.network.manage.packets.EditMerchStringPacket;
 import ru.alastar.minedonate.rtnl.Utils;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.sql.Blob;
 import java.sql.SQLException;
 
@@ -75,7 +80,9 @@ public class EntityInfo extends Merch {
 
     @Override
     public void read(ByteBuf buf) {
+    	
         super.read(buf);
+        
         cost = buf.readInt();
         
         try {
@@ -84,7 +91,7 @@ public class EntityInfo extends Merch {
 	        
 	        entity_data = ByteBufUtils.readTag(buf);
 	        limit = buf.readInt();
-					
+	        
         	classpath = Utils . netReadString ( buf ) ;
 			
 		} catch ( Exception ex ) {
@@ -96,18 +103,15 @@ public class EntityInfo extends Merch {
         try {
             entity = (EntityLivingBase) Class.forName(classpath).getDeclaredConstructor(net.minecraft.world.World.class).newInstance(Minecraft.getMinecraft().theWorld);
             entity.readFromNBT(entity_data);
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         
+        if ( limit < 0 ) {
+        	
+        	rating = -1 ;
+        	
+        }
         
     }
 
@@ -136,11 +140,51 @@ public class EntityInfo extends Merch {
     }
 
     @Override
+	public void updateNumber ( EditMerchNumberPacket . Type type, int number ) {	
+		
+    	super . updateNumber ( type, number ) ;
+    	
+		switch ( type ) {
+		
+			case LIMIT :
+				
+				 limit = number ;
+				
+			break;
+				
+		}
+			
+	}
+    
+    @Override
+	public void updateString ( EditMerchStringPacket . Type type, String str ) {	
+		
+    	super . updateString ( type, str ) ;
+    	
+		switch ( type ) {
+		
+			case NAME :
+				
+				 name = str ;
+				
+			break;
+				
+		}
+			
+	}
+	
+    @Override
     public String getBoughtMessage() {
         return "bought entity " + name;
     }
 
-
+    @Override
+    public boolean canBuy ( EntityPlayerMP serverPlayer, int amount ) { 
+    	
+    	return limit > 0 && amount <= limit && super . canBuy ( serverPlayer, amount ) ;
+    	
+    }
+    	
     @Override
     public int getAmountToBuy() {
         return 1;

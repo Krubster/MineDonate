@@ -114,6 +114,8 @@ public class GuiFrameDeleteItem extends GuiFrame {
 		codeField . setText ( fieldText != null ? fieldText : "" ) ;
 		codeField . setTextHolder ( fieldHolder ) ;
 		
+		codeField . fieldBorderColor = fieldBorderColor ;
+
 		codeField . xPosition = posX + 20 ;
 		codeField . yPosition = posY + 25 ;
 

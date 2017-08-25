@@ -111,6 +111,8 @@ public class GuiFrameTextField extends GuiFrame {
 		nameField . setText ( fieldText != null ? fieldText : "" ) ;
 		nameField . setTextHolder ( fieldHolder ) ;
 		
+		nameField . fieldBorderColor = fieldBorderColor ;
+
 		nameField . xPosition = posX + 20 ;
 		nameField . yPosition = posY + 15 ;
 

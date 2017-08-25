@@ -1,18 +1,21 @@
 package ru.alastar.minedonate;
 
 import com.mojang.authlib.GameProfile;
+
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import ru.alastar.minedonate.commands.AddMoneyCommand;
+
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.gui.merge.ShopInventoryContainer;
 import ru.alastar.minedonate.merch.Merch;
@@ -22,6 +25,7 @@ import ru.alastar.minedonate.plugin.PluginHelper;
 import ru.alastar.minedonate.proxies.CommonProxy;
 import ru.alastar.minedonate.rtnl.Account;
 import ru.alastar.minedonate.rtnl.Shop;
+
 import ru.log_inil.mc.minedonate.localData.DataOfConfig;
 import ru.log_inil.mc.minedonate.localData.DataOfDataBaseLink;
 import ru.log_inil.mc.minedonate.localData.DataOfMoneyProcessor;
@@ -37,7 +41,7 @@ import java.util.*;
 public class MineDonate {
 
     public static final String MODID = "MineDonate";
-    public static final String VERSION = "0.7.1.18";
+    public static final String VERSION = "0.7.1.19";
 
     public static boolean m_Enabled = false;
 
@@ -51,7 +55,6 @@ public class MineDonate {
 
     @SideOnly(Side.CLIENT)
     public static DataOfUIConfig cfgUI;
-    public static Map < String, Integer > clientMoney = new HashMap < > ( ) ;
 
     @Mod.Instance("MineDonate")
     private static MineDonate instance;
@@ -82,7 +85,6 @@ public class MineDonate {
     @Mod.EventHandler
     public void serverStarting ( FMLServerStartingEvent event ) {
     	proxy . serverStarting ( event ) ;
-        event.registerServerCommand(new AddMoneyCommand());
     }
     
     @SideOnly(Side.SERVER)
@@ -129,14 +131,14 @@ public class MineDonate {
     
     	Connection c ;
     	if ( link . hasCustomLink ) {
-    		
-    		c = DriverManager . getConnection ( link . customLink . replace ( "%host%", link . host ) . replace ( "%port%", Integer . toString ( link . port ) ) . replace ( "%name%", link . name ) . replace ( "%user%", link . user ) . replace ( "%password%", link . password ) ) ;
+
+    		c = DriverManager . getConnection ( link . customLink . replace ( "%host%", link . host ) . replace ( "%port%", Integer . toString ( link . port ) ) . replace ( "%name%", link . name ) + ( link . useUTF8 ? "?useUnicode=true&characterEncoding=UTF-8" : "" ), link . user, link . password ) ;
         	
     		dataBaseConnections . put ( linkName, c ) ;
     		
     	} else {
     		
-    		c = DriverManager . getConnection ( "jdbc:mysql://" + link . host + ":" + link . port + "/" + link . name, link . user, link . password ) ;
+    		c = DriverManager . getConnection ( "jdbc:mysql://" + link . host + ":" + link . port + "/" + link . name + ( link . useUTF8 ? "?useUnicode=true&characterEncoding=UTF-8" : "" ), link . user, link . password ) ;
     		dataBaseConnections . put ( linkName, c ) ;
     		
     	}
@@ -178,9 +180,6 @@ public class MineDonate {
 
             }
             
-            //  Class . forName ( "com.mysql.jdbc.Driver" ) . newInstance ( ) ;
-            // m_DB_Connection = DriverManager . getConnection("jdbc:mysql://" + cfg.dbHost + ":" + cfg.dbPort + "/" + cfg.dbName, cfg.dbUser, cfg.dbPassword ) ;
-
             loadServerMerch ( ) ;
             m_Enabled = true;
 
@@ -569,7 +568,13 @@ public class MineDonate {
 				
 			} else {
 				
-				acc = new Account ( rs . getString ( cfg . dbUsersIdColumn ), rs . getString ( cfg . dbUsersNameColumn ), getPermissionsByUser ( user ), ! cfg . defaultUserAllowShopCreate, cfg.defaultUserAllowShopCreate ? "SERVER" : null, cfg.defaultUserAllowShopCreate ? "Properties policy" : null, 0 ) ;
+				acc = new Account ( user . toString ( ), getNameFromUUID ( user ), getPermissionsByUser ( user ), ! cfg . defaultUserAllowShopCreate, cfg.defaultUserAllowShopCreate ? "SERVER" : null, cfg.defaultUserAllowShopCreate ? "Properties policy" : null, 0 ) ;
+				
+			}
+			
+			for ( String k : moneyProcessors . keySet ( ) ) {
+				
+				acc . putMoney ( k, moneyProcessors . get ( k ) . getMoneyFor ( user ) ) ;
 				
 			}
 			
@@ -592,19 +597,6 @@ public class MineDonate {
 		
 	}
 	
-    /*
-	public static Account getAccountFromCache ( UUID user ) {
-
-		if ( users . containsKey ( user ) ) {
-			
-			return users . get ( user ) ;
-			
-		}
-		
-		return null ;
-	
-	}
-	*/
     @SideOnly(Side.SERVER)
 	public static Account getAccountFromCache ( EntityPlayer user ) { 
 		
@@ -652,16 +644,16 @@ public class MineDonate {
     }
 
     @SideOnly(Side.SERVER)
-    private static void logError ( Object s ) {
+    public static void logInfo ( Object s ) {
         
-    	System . err . println ( "[MineDonate] [ERROR]: " + s ) ;
+    	System . err . println ( "[MineDonate] [INFO]: " + s) ;
         
     }
     
     @SideOnly(Side.SERVER)
-    private static void logInfo ( Object s ) {
+    public static void logError ( Object s ) {
         
-    	System . err . println ( "[MineDonate] [INFO]: " + s) ;
+    	System . err . println ( "[MineDonate] [ERROR]: " + s ) ;
         
     }
     
@@ -724,7 +716,7 @@ public class MineDonate {
 
     public static void setMoney ( String moneyType, int money ) {
 
-    	clientMoney . put ( moneyType, money ) ;
+    	getAccount ( ) . putMoney ( moneyType, money ) ;
     	
     	ShopGUI . instance . moneyArea . updateDrawData ( ) ;
     	

@@ -41,8 +41,8 @@ public class ModNetwork {
         
         i ++ ;
  
-        networkChannel . registerMessage ( NeedUpdateServerPacketHandler . class, NeedUpdatePacket . class, i, Side .  SERVER ) ;
-        networkChannel . registerMessage ( NeedUpdateClientPacketHandler . class, NeedUpdatePacket . class, i, Side . CLIENT ) ;
+        networkChannel . registerMessage ( CodeServerPacketHandler . class, CodePacket . class, i, Side .  SERVER ) ;
+        networkChannel . registerMessage ( CodeClientPacketHandler . class, CodePacket . class, i, Side . CLIENT ) ;
 
         i ++ ;
 
@@ -66,6 +66,7 @@ public class ModNetwork {
         //
         
         networkChannel . registerMessage ( AddNewEntryServerPacketHandler . class, AddNewEntryPacket . class, i ++, Side . SERVER ) ;
+        networkChannel . registerMessage ( UppendEntryServerPacketHandler . class, UppendEntryPacket . class, i ++, Side . SERVER ) ;
 
         i ++ ;
         
@@ -117,9 +118,9 @@ public class ModNetwork {
 		
 	}
 
-	public static void sendToServerNeedUpdatePacket ( int r ) {
+	public static void sendToServerNeedUpdatePacket ( CodePacket . Code c ) {
 
-		networkChannel . sendToServer ( new NeedUpdatePacket ( r ) ) ;
+		networkChannel . sendToServer ( new CodePacket ( c ) ) ;
 		
 	}
 
@@ -201,6 +202,12 @@ public class ModNetwork {
 		
 	}
 
+	public static void sendToServerUppendEntryPacket ( int shopId, int catId ) {
+		
+		networkChannel . sendToServer ( new UppendEntryPacket ( shopId, catId ) ) ;
+
+	}
+	
 	public static void sendToServerMobSelectPacket ( int s ) {
 
 		networkChannel . sendToServer ( new MobSelectPacket ( s ) ) ;
@@ -242,5 +249,5 @@ public class ModNetwork {
 		networkChannel . sendTo ( packet, player ) ;
 		
 	}
-	
+
 }

@@ -4,9 +4,14 @@ import java.util.UUID;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import io.netty.buffer.ByteBuf;
+
 import net.minecraft.entity.player.EntityPlayerMP;
+
 import ru.alastar.minedonate.MineDonate;
+import ru.alastar.minedonate.network.manage.packets.EditMerchNumberPacket;
+import ru.alastar.minedonate.network.manage.packets.EditMerchStringPacket;
 
 /**
  * Created by Alastar on 20.07.2017.
@@ -60,6 +65,20 @@ public abstract class Merch {
     	
     }
     
+	public void updateNumber ( EditMerchNumberPacket . Type type, int number ) {	
+		
+		if ( type == EditMerchNumberPacket . Type . COST ) {
+			
+			cost = number ;
+				
+		}
+			
+	}
+	
+	public void updateString ( EditMerchStringPacket . Type type, String str ) {
+		
+	}
+	
     public String getBoughtMessage ( ) {
     	
         return "" ;
@@ -76,9 +95,9 @@ public abstract class Merch {
         
     }
 
-    public boolean canBuy(EntityPlayerMP serverPlayer, int amount) {
+    public boolean canBuy ( EntityPlayerMP serverPlayer, int amount ) {
         
-    	return true;
+    	return amount > 0 && ! MineDonate . shops . get ( shopId ) . owner . equals ( serverPlayer . getGameProfile ( ) . getId ( ) . toString ( ) ) ;
         
     }
 

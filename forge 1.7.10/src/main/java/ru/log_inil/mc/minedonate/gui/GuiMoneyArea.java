@@ -31,7 +31,7 @@ public class GuiMoneyArea {
 		lines.clear();
 		for ( String type: lines . keySet ( ) ) {
 			
-			if ( ! MineDonate . clientMoney . containsKey ( type ) ) {
+			if ( ! MineDonate . getAccount ( ) . moneys . containsKey ( type ) ) {
 				
 				linesRemoved . add ( type ) ;
 				
@@ -49,7 +49,7 @@ public class GuiMoneyArea {
 		
 		MoneyLine ml ;
 
-		for ( String type: MineDonate . clientMoney . keySet ( ) ) {
+		for ( String type: MineDonate . getAccount ( ) . moneys . keySet ( ) ) {
 			
 			if ( ! lines . containsKey ( type ) ) {
 				
@@ -77,7 +77,7 @@ public class GuiMoneyArea {
 		
 		for ( MoneyLine moneyLine : lines . values ( ) ) {
 			
-			moneyLine . drawBalance ( i, s, MineDonate . clientMoney . get ( moneyLine . type ), offsetX, offsetY, mouseX, mouseY ) ;
+			moneyLine . drawBalance ( i, s, MineDonate . getAccount ( ) . getMoney ( moneyLine . type ), offsetX, offsetY, mouseX, mouseY ) ;
 			
 			i ++ ;
 			

@@ -23,18 +23,18 @@ public class ManageResponsePacket implements IMessage {
     @Override 
     public void toBytes ( ByteBuf buf ) {
 		
-		buf . writeInt ( type . ordinal ( ) ) ;
-		buf . writeInt ( code . ordinal ( ) ) ;
-		buf . writeInt ( status . ordinal ( ) ) ;
+		buf . writeByte ( type . ordinal ( ) ) ;
+		buf . writeByte ( code . ordinal ( ) ) ;
+		buf . writeByte ( status . ordinal ( ) ) ;
 
     }
 
     @Override 
     public void fromBytes ( ByteBuf buf ) {
 
-    	type = ResponseType . values ( ) [ buf . readInt ( ) ] ;
-    	code = ResponseCode . values ( ) [ buf . readInt ( ) ] ;
-    	status = ResponseStatus . values ( ) [ buf . readInt ( ) ] ;
+    	type = ResponseType . values ( ) [ buf . readByte ( ) ] ;
+    	code = ResponseCode . values ( ) [ buf . readByte ( ) ] ;
+    	status = ResponseStatus . values ( ) [ buf . readByte ( ) ] ;
 
     }
     
@@ -46,7 +46,7 @@ public class ManageResponsePacket implements IMessage {
     
     public enum ResponseCode {
     	
-    	CREATE, ADD, SELECT, RENAME, REMOVE, EDIT, FREEZ, UNFREEZ
+    	CREATE, ADD, UPPEND, SELECT, RENAME, REMOVE, EDIT, FREEZ, UNFREEZ
     	
     }
     

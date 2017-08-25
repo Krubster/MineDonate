@@ -15,16 +15,17 @@ public class Utils {
         return new String ( buf . readBytes ( buf . readInt ( ) ) . array ( ), "UTF-8" ) ;
         
     }
-
-    public static void sendModMessage(EntityPlayerMP player, String msg) {
-        player.addChatMessage(new ChatComponentText(EnumChatFormatting.AQUA + " [MineDonate] " + EnumChatFormatting.RESET + msg));
-    }
-     
     
     public static void netWriteString ( ByteBuf buf, String str ) throws UnsupportedEncodingException {
     	
         buf . writeInt ( str . getBytes ( "UTF-8" ) . length ) ;
         buf . writeBytes ( str . getBytes ( "UTF-8" ) ) ;
+        
+    }
+     
+    public static void sendModMessage(EntityPlayerMP player, String msg) {
+    	
+        player.addChatMessage(new ChatComponentText(EnumChatFormatting.AQUA + " [MineDonate] " + EnumChatFormatting.RESET + msg));
         
     }
     
@@ -39,7 +40,4 @@ public class Utils {
 		
 	}
 
-
-
-    
 }

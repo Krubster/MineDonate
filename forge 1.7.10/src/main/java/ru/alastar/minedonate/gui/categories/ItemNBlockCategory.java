@@ -8,6 +8,7 @@ import ru.alastar.minedonate.gui.ShopCategory;
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.merch.info.ItemInfo;
+import ru.alastar.minedonate.rtnl.Manager;
 import ru.alastar.minedonate.rtnl.ModNetwork;
 import ru.log_inil.mc.minedonate.gui.*;
 import ru.log_inil.mc.minedonate.gui.frames.GuiFrameAddItem;
@@ -85,24 +86,6 @@ public class ItemNBlockCategory extends ShopCategory {
     public void updateButtons(ShopGUI g, int page ) {
 
     	rightButton = g.rightButton;
-    	/*
-    	if ( ! ( relative.getCurrentCategory() instanceof ItemNBlockCategory ) ) {
-    		
-    		rightButton = (GuiButton) relative.getButtonList().get(relative.getButtonList().size()-1);
-
-    		if(rightButton.visible){
-        		rightButton = (GuiButton) relative.getButtonList().get(relative.getButtonList().size()-2);
-    		}
-    		
-    		if(rightButton.visible){
-        		rightButton = (GuiButton) relative.getButtonList().get(relative.getButtonList().size()-3);
-    		}
-    		
-    	} else {
-
-    		rightButton = relative.exitButton;
-    		
-    	}*/
 
     	if ( addButton != null ) {
     		
@@ -155,7 +138,7 @@ public class ItemNBlockCategory extends ShopCategory {
         	
         	GuiFrameAddItem gfai = ( GuiFrameAddItem ) g . showEntry ( "frame.item.add", true ) ;
         	
-        	gfai . setInfo ( g . getCurrentShopId ( ), catId ) ; // g . getCurrentCategory ( ) . getCatId ( ) ) ;
+        	gfai . setInfo ( g . getCurrentShopId ( ), catId, true ) ;
         	
         	MineDonateGUIHandler . setBackShopGUI ( true ) ;
         	

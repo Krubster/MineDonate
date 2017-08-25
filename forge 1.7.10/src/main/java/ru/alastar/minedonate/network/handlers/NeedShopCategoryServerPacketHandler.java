@@ -8,7 +8,7 @@ import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.info.ShopInfo;
 import ru.alastar.minedonate.network.packets.AddMerchPacket;
 import ru.alastar.minedonate.network.packets.NeedShopCategoryPacket;
-import ru.alastar.minedonate.network.packets.NeedUpdatePacket;
+import ru.alastar.minedonate.network.packets.CodePacket;
 import ru.alastar.minedonate.rtnl.ModNetwork;
 
 public class NeedShopCategoryServerPacketHandler implements IMessageHandler<NeedShopCategoryPacket, IMessage> {
@@ -72,7 +72,7 @@ public class NeedShopCategoryServerPacketHandler implements IMessageHandler<Need
             
             }
             
-            return new NeedUpdatePacket ( 2 ) ;
+            return new CodePacket ( CodePacket . Code . CLIENT_RECEIVED_NEEDED_CAT_INFO ) ;
             
         }
 		

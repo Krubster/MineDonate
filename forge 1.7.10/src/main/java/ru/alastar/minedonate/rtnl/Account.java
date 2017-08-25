@@ -1,10 +1,10 @@
 package ru.alastar.minedonate.rtnl;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
 import ru.alastar.minedonate.MineDonate;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Account {
 
@@ -17,6 +17,8 @@ public class Account {
 	public String freezShopCreateReason ;
 	public int shopsCount ;
 	
+    public Map < String, Integer > moneys = new HashMap < > ( ) ;
+
 	public Account ( String _id, String _name, List < String > _permissions, boolean _freezShopCreate, String _freezShopCreateFreezer, String _freezShopCreateReason, int _shopsCount ) {
 		
 		id = _id ;
@@ -38,31 +40,31 @@ public class Account {
 	
 	public boolean canFreezeShop ( String owner ) {
 
-		return ( name . equalsIgnoreCase ( owner ) && hasPermission ( "freezeOwnedShop" ) ) || ( hasPermission ( "freezeOtherShop" ) && ! owner . equalsIgnoreCase ( "SERVER" ) ) || hasPermission ( "*" ) ;
+		return ( id . equalsIgnoreCase ( owner ) && hasPermission ( "freezeOwnedShop" ) ) || ( hasPermission ( "freezeOtherShop" ) && ! owner . equalsIgnoreCase ( "SERVER" ) ) || hasPermission ( "*" ) ;
 		
 	}
 	
 	public boolean canUnFreezeShop ( String owner ) {
 
-		return ( name . equalsIgnoreCase ( owner ) && hasPermission ( "unFreezeOwnedShop" ) ) || ( hasPermission ( "unFreezeOtherShop" ) && ! owner . equalsIgnoreCase ( "SERVER" ) ) || hasPermission ( "*" ) ;
+		return ( id . equalsIgnoreCase ( owner ) && hasPermission ( "unFreezeOwnedShop" ) ) || ( hasPermission ( "unFreezeOtherShop" ) && ! owner . equalsIgnoreCase ( "SERVER" ) ) || hasPermission ( "*" ) ;
 		
 	}
 	
 	public boolean canDeleteShop ( String owner ) {
 		
-		return ( name . equalsIgnoreCase ( owner ) && hasPermission ( "removeOwnedShop" ) ) || ( hasPermission ( "removeOtherShop" ) && ! owner . equalsIgnoreCase ( "SERVER" ) ) || hasPermission ( "*" ) ;
+		return ( id . equalsIgnoreCase ( owner ) && hasPermission ( "removeOwnedShop" ) ) || ( hasPermission ( "removeOtherShop" ) && ! owner . equalsIgnoreCase ( "SERVER" ) ) || hasPermission ( "*" ) ;
 
 	}
 	
 	public boolean canRenameShop ( String owner ) {
 		
-		return ( name . equalsIgnoreCase ( owner ) && hasPermission ( "renameOwnedShop" ) ) || ( hasPermission ( "renameOtherShop" ) && ! owner . equalsIgnoreCase ( "SERVER" ) ) || hasPermission ( "*" ) ;
+		return ( id . equalsIgnoreCase ( owner ) && hasPermission ( "renameOwnedShop" ) ) || ( hasPermission ( "renameOtherShop" ) && ! owner . equalsIgnoreCase ( "SERVER" ) ) || hasPermission ( "*" ) ;
 
 	}
 	
 	public boolean canEditShop ( String owner ) {
 
-		return ( name . equalsIgnoreCase ( owner ) && hasPermission ( "editOwnedShop" ) ) || ( hasPermission ( "editOtherShop" ) && ! owner . equalsIgnoreCase ( "SERVER" ) ) || hasPermission ( "*" ) ;
+		return ( id . equalsIgnoreCase ( owner ) && hasPermission ( "editOwnedShop" ) ) || ( hasPermission ( "editOtherShop" ) && ! owner . equalsIgnoreCase ( "SERVER" ) ) || hasPermission ( "*" ) ;
 
 	}
 	
@@ -114,22 +116,22 @@ public class Account {
 		
 	}
 
-	public boolean canAddMoney() {
-		return hasPermission("canAddMoney") || hasPermission("*");
+	public boolean canAddMoney ( ) {
+		
+		return hasPermission ( "canAddMoney" ) || hasPermission ( "*" ) ;
+		
 	}
 
-	public class ManageSession {
+	public int getMoney ( String moneyType ) {
 	
-		public ItemStack currentItemStack ;
-	    public boolean mobSelect = false ;
-		public Entity currentMob ;
-
-		public void setItemStack ( ItemStack _currentItemStack ) {
-			
-			currentItemStack = _currentItemStack ;
-			
-		}
+		return moneys . get ( moneyType ) ;
 		
+	}
+	
+	public void putMoney ( String moneyType, int money ) {
+		
+		moneys . put ( moneyType, money ) ; 
+
 	}
 	
 }

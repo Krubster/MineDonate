@@ -11,6 +11,7 @@ import org.lwjgl.opengl.GL11;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.gui.categories.*;
 import ru.alastar.minedonate.merch.info.ShopInfo;
+import ru.alastar.minedonate.network.packets.CodePacket;
 import ru.alastar.minedonate.proxies.ClientProxy;
 import ru.alastar.minedonate.rtnl.ModNetwork;
 import ru.log_inil.mc.minedonate.gui.*;
@@ -590,7 +591,7 @@ public class ShopGUI extends MCGuiAccessible {
         
 		if ( needNetUpdate && ! loading ) {
 
-            ModNetwork . sendToServerNeedUpdatePacket ( 0 ) ;
+            ModNetwork . sendToServerNeedUpdatePacket ( CodePacket . Code . CLIENT_NEED_FULL_INFO ) ;
 
             loading = true ;
             
@@ -613,6 +614,29 @@ public class ShopGUI extends MCGuiAccessible {
 
     	ContextMenuManager . clean ( ) ;
 
+		if ( lastEntry != null && lastEntry . needUnShowWhenGuiClose ( ) ) {
+			
+			lastEntry . show ( false ) ;
+			lastEntry . unShow ( this ) ;
+
+			if ( lastEntry . needReloadOnUnShow ( ) ) {
+				
+				initGui ( ) ;
+				
+			} 
+						
+		}
+		
+    }
+    
+    public void onGuiClosed ( boolean byBacked ) {
+    
+    	if ( byBacked ) {
+    		
+        	ContextMenuManager . clean ( ) ;
+
+    	}
+    	
     }
     
     private void addCategories ( ) {

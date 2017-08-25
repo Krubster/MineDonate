@@ -29,7 +29,7 @@ public abstract class MerchCategory {
 
     }
     
-    protected Map < Integer, Merch > m_Merch = new HashMap < > ( ) ;
+    public Map < Integer, Merch > m_Merch = new HashMap < > ( ) ;
 
     @SideOnly(Side.SERVER)
     public boolean canReverse() {

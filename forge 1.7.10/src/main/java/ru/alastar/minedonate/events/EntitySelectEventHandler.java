@@ -33,6 +33,7 @@ public class EntitySelectEventHandler {
     				if ( ! ( e . target instanceof EntityLivingBase ) ) {
                         
                 		e . entityPlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Error add entity! EntityLivingBase check error!"));
+                		
                 		ModNetwork . sendToManageResponsePacket ( ( EntityPlayerMP ) e . entityPlayer, ResponseType . ENTITY, ResponseCode . SELECT, ResponseStatus . ERROR_ENTITY_CHECK_LIVINGBASE ) ;
                         
                 	} else {

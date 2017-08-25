@@ -21,14 +21,14 @@ public class BuyResponsePacket implements IMessage {
     @Override 
     public void toBytes ( ByteBuf buf ) {
 
-		buf . writeInt ( status . ordinal ( ) ) ;
+		buf . writeByte ( status . ordinal ( ) ) ;
 
     }
 
     @Override 
     public void fromBytes ( ByteBuf buf ) {
 
-    	status = Status . values ( ) [ buf . readInt ( ) ] ;
+    	status = Status . values ( ) [ buf . readByte ( ) ] ;
 
     }
     
@@ -37,6 +37,5 @@ public class BuyResponsePacket implements IMessage {
     	SUCCESSFUL, ERROR_UNKNOWN, ERROR_SHOP_FREEZED, ERROR_NOT_ENOUGH_MONEY, ERROR_CANT_BUY
     	
     }
-    
     
 }

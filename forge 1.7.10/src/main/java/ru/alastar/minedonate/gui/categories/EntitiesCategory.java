@@ -92,7 +92,7 @@ public class EntitiesCategory extends ShopCategory {
          	
     		GuiFrameAddEntity gfai = ( GuiFrameAddEntity ) g . showEntry ( "frame.entity.add", true ) ;
          	
-         	gfai . setInfo ( g . getCurrentShopId ( ), catId ) ;
+         	gfai . setInfo ( g . getCurrentShopId ( ), catId, false ) ;
          	
          	MineDonateGUIHandler . setBackShopGUI ( true ) ;
          	

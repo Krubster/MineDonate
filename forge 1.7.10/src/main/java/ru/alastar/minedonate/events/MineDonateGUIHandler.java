@@ -37,7 +37,7 @@ public class MineDonateGUIHandler implements IGuiHandler {
 
         	if ( lastOpened != null ) {
         		
-        		lastOpened . onGuiClosed ( ) ;
+        		lastOpened . onGuiClosed ( true ) ;
         		
         	}
 
@@ -59,7 +59,7 @@ public class MineDonateGUIHandler implements IGuiHandler {
         	
         } else if ( id == STORE_ID ) {
         	
-        	return new ShopInventoryGUI ( player . inventory ) ; // ( ShopInventoryContainer ) getServerGuiElement ( id, player, world, x, y, z )
+        	return new ShopInventoryGUI ( player . inventory ) ;
         	
         }
         

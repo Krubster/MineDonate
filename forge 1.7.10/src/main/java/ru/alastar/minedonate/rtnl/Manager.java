@@ -1,10 +1,14 @@
 package ru.alastar.minedonate.rtnl;
 
 import cpw.mods.fml.common.network.ByteBufUtils;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.merch.categories.MerchCategory;
@@ -18,8 +22,8 @@ import ru.alastar.minedonate.network.manage.packets.EditMerchStringPacket;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Map;
 import java.util.UUID;
 
 public class Manager {
@@ -37,6 +41,7 @@ public class Manager {
 
             statement.setString(1, owner.toString());
             statement.setString(2, ownerName);
+            System.err.println(name);
             statement.setString(3, name);
             statement.setInt(4, 0);
             statement.setBoolean(5, info.isFreezed);
@@ -89,13 +94,19 @@ public class Manager {
 			
 			st . close ( ) ;
 			
+			st = MineDonate . getNewStatement ( "main" ) ;
+			
+			st . executeUpdate ( "DELETE FROM " + MineDonate.cfg.dbUserItems + " WHERE shopId=" + s . sid + ";" ) ;
+			
+			st . close ( ) ;
+			
 		} catch ( Exception ex ) {
 			
 			ex . printStackTrace ( ) ;
 			
 		}
 		
-        MineDonate . getAccount ( UUID.fromString(s . owner) ) . shopsCount -- ;
+        MineDonate . getAccount ( UUID . fromString ( s . owner ) ) . shopsCount -- ;
         
 		try {
 			
@@ -248,12 +259,6 @@ public class Manager {
 
 
 	public static void addEntityToShop ( Account acc, Shop s, int catId, int limit, int cost, String name ) {
-		
-		if ( ! acc . canUnlimitedEntities ( ) ) {
-			
-			limit = 1 ;
-			
-		}
 
 		EntityInfo info = new EntityInfo(s.sid, catId, s.cats[catId].getNextMerchId(), 0, Integer.valueOf(cost), acc.ms.currentMob, name, limit);
         
@@ -287,28 +292,67 @@ public class Manager {
         
 	}
 	
-	public static void addItemToShop ( Account acc, Shop s, int catId, int limit, int cost, String name ) {
-		
-		if ( ! acc . canUnlimitedItems ( ) ) {
+	public static int canUppendAnotherItemInShop ( Account acc, Shop s, int catId ) {
+	
+		if ( acc . ms . currentItemStack == null ) {
 			
-			limit = 1 ;
+			return -1 ;
 			
 		}
 		
+		ItemInfo ii ;
+
+		for ( Merch m : s . cats [ catId ] . m_Merch . values ( ) ) {
+			
+			ii = ( ItemInfo ) m ;
+
+			if ( ii . limit >= 0 && ii . limit < 10 && ItemStack . areItemStacksEqual ( ii . m_stack, acc . ms . currentItemStack ) ) {
+				
+				return ii . merchId ;
+				
+			}
+			
+		}
+		
+		return -1 ;
+		
+	}
+	
+	public static void uppendItemInShop ( Account acc, Shop s, int catId, int merchId ) {
+	
+		ItemInfo ii = ( ItemInfo ) s . cats [ catId ] . getMerch ( merchId ) ;
+
+		if ( ii . limit < 10 && ItemStack . areItemStacksEqual ( ii . m_stack, acc . ms . currentItemStack ) ) {
+			
+			acc . ms . currentItemStack = null ;
+
+			ii . limit ++ ;
+
+			s . cats [ catId ] . updateMerch ( merchId, ii ) ;
+			
+			ModNetwork . sendToAllAddMerchPacket ( ii ) ;
+	        
+		}
+		
+	}
+	
+	public static void addItemToShop ( Account acc, Shop s, int catId, int limit, int cost, String name ) {
+		
     	ItemInfo info = new ItemInfo(s.sid, catId, s.cats[catId].getNextMerchId(), 0, Integer.valueOf(cost), name, Integer.valueOf(limit), acc.ms.currentItemStack);
-        
-        s.cats[catId].addMerch(info);
-       
-        ModNetwork . sendToAllAddMerchPacket ( info ) ;
 
         try {
           
-        	ByteBuf buf = Unpooled.buffer();
+        	ByteBuf buf = Unpooled . buffer ( ) ;
          
-            NBTTagCompound nbt = new NBTTagCompound();
+            NBTTagCompound nbt = new NBTTagCompound ( ) ;
             
-            acc.ms.currentItemStack.writeToNBT(nbt);
-          
+            acc . ms . currentItemStack . writeToNBT ( nbt ) ;
+            acc . ms . currentItemStack = null ;
+            
+            s . cats [ catId ] . addMerch ( info ) ;
+            
+            ModNetwork . sendToAllAddMerchPacket ( info ) ;
+            
             ByteBufUtils.writeTag(buf, nbt);
 
             InputStream stream = new ByteArrayInputStream(buf.array());
@@ -382,37 +426,10 @@ public class Manager {
 		MerchCategory mc = s . cats [ catId ] ;
 		Merch m = mc . getMerch ( merchId ) ;
 		
-		switch ( type ) {
-		
-			case LIMIT :
-				
-				switch ( mc . getCatType ( ) ) {
-				
-					case ITEMS :
-						
-						( ( ItemInfo ) m ) . limit = number ;
-	
-					break ;
-					
-					case ENTITIES :
-						
-						( ( EntityInfo ) m ) . limit = number ;
-	
-					break ;
-					
-				}
-				
-			break;
-			
-			case COST :
-			
-				m . cost = number ;
-			
-			break ;
-				
-		}
+		m . updateNumber ( type, number ) ;
 		
 		mc . updateMerch ( m . getId ( ), m ) ;
+		
         ModNetwork . sendToAllMerchInfoPacket ( m ) ;
 
 	}
@@ -422,31 +439,10 @@ public class Manager {
 		MerchCategory mc = s . cats [ catId ] ;
 		Merch m = mc . getMerch ( merchId ) ;
 		
-		switch ( type ) {
-		
-			case NAME :
-				
-				switch ( mc . getCatType ( ) ) {
-				
-					case ITEMS :
-						
-						( ( ItemInfo ) m ) . name = str ;
-	
-					break ;
-					
-					case ENTITIES :
-						
-						( ( EntityInfo ) m ) . name = str ;
-	
-					break ;
-					
-				}
-	
-			break;
-		
-		}
-		
+		m . updateString ( type, str ) ;
+
 		mc . updateMerch ( m . getId ( ), m ) ;
+		
         ModNetwork . sendToAllMerchInfoPacket ( m ) ;
 
 	}

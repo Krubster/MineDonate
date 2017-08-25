@@ -37,11 +37,11 @@ public class PluginHelper {
 				pexMgr = new PermissionsPluginReflection ( defineClassInClassLoader ( cl , MineDonate . cfg . permissionsPluginClassName, true ) . newInstance ( ) ) ;
 				pexMgr . load ( ) ;
 
-				System . out . println ( "[MineDonate] Pex loaded!" ) ;
+				MineDonate . logInfo ( "[MineDonate] Pex loaded!" ) ;
 				
 			} catch ( Exception ex ) {
 			
-				System . err . println ( "Error load pexMgr accessor plugin!" ) ;
+				MineDonate . logError ( "Error load pexMgr accessor plugin!" ) ;
 				
 				ex . printStackTrace ( ) ;
 				
@@ -60,11 +60,11 @@ public class PluginHelper {
 				wgMgr = new WorldGuardPluginReflection ( defineClassInClassLoader ( cl, MineDonate . cfg . worldGuardPluginClassName, true ) . newInstance ( ) ) ;
 				wgMgr . load ( ) ;
 				
-				System . out . println ( "[MineDonate] WG loaded!" ) ;
+				MineDonate . logInfo ( "[MineDonate] WG loaded!" ) ;
 				
 			} catch ( Exception ex ) {
 			
-				System . err . println ( "Error load wgMgr accessor plugin!" ) ;
+				MineDonate . logError ( "Error load wgMgr accessor plugin!" ) ;
 				
 				ex . printStackTrace ( ) ;
 				

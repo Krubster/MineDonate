@@ -52,9 +52,7 @@ public class Regions extends MerchCategory {
         try {
         	
         	Statement stmt = MineDonate . getNewStatement ( "main" ) ;
-            String sql;
-            sql = "INSERT INTO " + MineDonate.cfg.dbRegions + " (world, name, cost) VALUES('" + regionInfo.name + "', '" + regionInfo.world_name + "', " + regionInfo.getCost() + ")";
-            stmt.execute(sql);
+            stmt.execute("INSERT INTO " + MineDonate.cfg.dbRegions + " (world, name, cost) VALUES('" + regionInfo.name + "', '" + regionInfo.world_name + "', " + regionInfo.getCost() + ")");
             stmt.close();
             
         } catch ( Exception ex ) {

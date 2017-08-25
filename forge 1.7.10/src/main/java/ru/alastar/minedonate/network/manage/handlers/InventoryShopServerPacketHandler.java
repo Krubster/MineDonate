@@ -42,7 +42,11 @@ public class InventoryShopServerPacketHandler implements IMessageHandler<Invento
     				   				
     				return new ItemMergedPacket ( is ) ;
     				
-    			}	
+    			} else {
+
+    				return new ItemMergedPacket ( null ) ;
+
+    			}
     			
     		}
     		
@@ -58,6 +62,10 @@ public class InventoryShopServerPacketHandler implements IMessageHandler<Invento
     				
     				sic . mdInv . setInventorySlotContents ( 0, null ) ;
     				   				    				
+    			} else {
+
+    				return new ItemMergedPacket ( null ) ;
+
     			}	
 
     			sic = null ;

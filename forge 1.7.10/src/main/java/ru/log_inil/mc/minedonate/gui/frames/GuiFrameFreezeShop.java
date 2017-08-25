@@ -115,6 +115,8 @@ public class GuiFrameFreezeShop extends GuiFrame {
 		reasonField . setText ( fieldText != null ? fieldText : "" ) ;
 		reasonField . setTextHolder ( fieldHolder ) ;
 		
+		reasonField . fieldBorderColor = fieldBorderColor ;
+
 		reasonField . xPosition = posX + 20 ;
 		reasonField . yPosition = posY + 15 ;
 

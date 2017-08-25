@@ -4,7 +4,9 @@ public class DataOfDataBaseLink {
 
 	public String host, name, user, password ;
 	public int port ;
-	
+
+	public boolean useUTF8 = true ;
+
 	public boolean hasCustomLink = false ;
 	public String customLink = "" ;
 	public String preLoadClassName = "" ;

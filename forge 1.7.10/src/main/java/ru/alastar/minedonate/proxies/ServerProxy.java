@@ -3,8 +3,11 @@ package ru.alastar.minedonate.proxies;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+
 import net.minecraftforge.common.MinecraftForge;
+
 import ru.alastar.minedonate.MineDonate;
+import ru.alastar.minedonate.commands.AddMoneyCommand;
 import ru.alastar.minedonate.events.EntitySelectEventHandler;
 import ru.alastar.minedonate.plugin.PluginHelper;
 import ru.alastar.minedonate.rtnl.ShopLogger;
@@ -31,7 +34,7 @@ public class ServerProxy extends CommonProxy {
         MineDonate . initDataBase ( ) ;
 
         MinecraftForge . EVENT_BUS . register ( new EntitySelectEventHandler ( ) ) ;
-
+                
     }
     
     
@@ -48,7 +51,8 @@ public class ServerProxy extends CommonProxy {
         
     	PluginHelper . loadPlugins ( ) ;
     	
-        
+        event.registerServerCommand(new AddMoneyCommand());
+
     }
    
 	
