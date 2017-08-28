@@ -1,8 +1,10 @@
-package ru.alastar.minedonate.plugin.clean;
+package ru.alastar.minedonate.plugin.permissions;
 
 import java.util.UUID;
 
-public class PermissionsPlugin {
+import ru.alastar.minedonate.plugin.AccessorPlugin;
+
+public abstract class PermissionsPlugin extends AccessorPlugin {
 
 	public void load ( ) {
 		

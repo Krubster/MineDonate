@@ -7,9 +7,9 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.network.manage.packets.EditMerchStringPacket;
 import ru.alastar.minedonate.network.manage.packets.ManageResponsePacket;
-import ru.alastar.minedonate.rtnl.Account;
-import ru.alastar.minedonate.rtnl.Manager;
-import ru.alastar.minedonate.rtnl.Shop;
+import ru.alastar.minedonate.rtnl.ModManager;
+import ru.alastar.minedonate.rtnl.common.Account;
+import ru.alastar.minedonate.rtnl.common.Shop;
 
 public class EditMerchStringServerPacketHandler implements IMessageHandler < EditMerchStringPacket, IMessage > {
 	
@@ -58,7 +58,7 @@ public class EditMerchStringServerPacketHandler implements IMessageHandler < Edi
 
 			}
 
-			Manager . editShopEntryString ( serverPlayer, s, message . catId, message . merchId, message . type, message . str ) ;
+			ModManager . editShopEntryString ( serverPlayer, s, message . catId, message . merchId, message . type, message . str ) ;
 			
 	        return new ManageResponsePacket ( ManageResponsePacket.ResponseType.OBJ, ManageResponsePacket.ResponseCode.EDIT, ManageResponsePacket.ResponseStatus.OK ) ;
 

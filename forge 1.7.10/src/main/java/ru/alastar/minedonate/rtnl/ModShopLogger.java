@@ -15,7 +15,7 @@ import java.util.GregorianCalendar;
 import java.util.UUID;
 
 @SideOnly(Side.SERVER)
-public class ShopLogger {
+public class ModShopLogger {
 	
 	static GregorianCalendar calendar = new GregorianCalendar ( ) ;
 
@@ -71,7 +71,7 @@ public class ShopLogger {
             
             try {
             	
-            	Statement stmt = MineDonate . getNewStatement ( "main" ) ;
+            	Statement stmt = ModDataBase . getNewStatement ( MineDonate . cfg . dbLogsLinkName ) ;
                 stmt.execute( "INSERT INTO " + MineDonate.cfg.dbLogs + " (date, shopId, catId, merchId, playerName, money, moneyType, message, amount) VALUES('" + dateFormat.format(calendar.getTime()) + "'," + m .shopId + "," + m.catId + "," + m . getId ( ) + ", '" + by.getGameProfile().getId() + "', " + m.getCost() * amount + ", '" + moneyType + "', '" + m.getBoughtMessage() + "', " + amount + " )" );
                 stmt.close();
                 
@@ -141,7 +141,7 @@ public class ShopLogger {
         	
         	try {
         		
-        		Statement stmt = MineDonate . getNewStatement ( "main" ) ;
+        		Statement stmt = ModDataBase . getNewStatement ( MineDonate . cfg . dbLogsLinkName ) ;
                 ResultSet rs = stmt . executeQuery ( query ) ;
                 lineNumber = 0 ;
                 

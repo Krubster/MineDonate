@@ -1,12 +1,16 @@
 
 package ru.log_inil.mc.minedonate.localData;
 
+import java.util.Map;
+
 public class DataOfMoneyProcessor {
 
 	public String moneyType, className, dbTable, dbIdColumn, dbNameColumn, dbMoneyColumn, dbLinkName ;
 	public boolean isTwoSideProcessor ;
 	public int regMoney ;
 	
+	public static Map < String, Object > xProperties ;
+
 	public DataOfMoneyProcessor ( ) {
 		
 		moneyType = "unknown" ;

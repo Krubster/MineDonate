@@ -2,19 +2,19 @@ package ru.alastar.minedonate.plugin;
 
 import com.google.common.io.ByteStreams;
 import org.bukkit.Bukkit;
+
 import ru.alastar.minedonate.MineDonate;
-import ru.alastar.minedonate.plugin.clean.PermissionsPlugin;
-import ru.alastar.minedonate.plugin.clean.WorldGuardPlugin;
-import ru.alastar.minedonate.plugin.reflection.PermissionsPluginReflection;
-import ru.alastar.minedonate.plugin.reflection.WorldGuardPluginReflection;
+import ru.alastar.minedonate.plugin.permissions.PermissionsPlugin;
+import ru.log_inil.mc.minedonate.localData.DataOfAccessorPlugin;
 
 import java.io.InputStream;
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PluginHelper {
-
-	public static PermissionsPlugin pexMgr = new PermissionsPlugin ( ) ;
-	public static WorldGuardPlugin wgMgr = new WorldGuardPlugin ( ) ;
+	
+	public static Map < String, AccessorPlugin > accessorPlugins = new HashMap < > ( ) ;
 	
 	public static boolean hasExists ( String name ) {
 		
@@ -25,7 +25,52 @@ public class PluginHelper {
 	public static void loadPlugins ( ) {
 		
 		ClassLoader cl ;
+		Object oServerSide;
+		AccessorPlugin oModSide ;
 		
+		for ( DataOfAccessorPlugin doap : MineDonate . cfg . accessPlugins ) {
+			
+			if ( doap . load && hasExists ( doap . serverPluginName ) ) {
+			
+				MineDonate . logInfo ( "[MineDonate] Try init AccessorPlugin[" + doap . modPluginName + "], server name: " + doap . serverPluginName ) ;
+
+				try {
+					
+					cl = Bukkit . getPluginManager ( ) . getPlugin ( doap . serverPluginName ) . getClass ( ) . getClassLoader ( ) ;
+					
+					defineClassInClassLoader ( cl, PermissionsPlugin . class . getName ( ), false ) ;
+
+					oServerSide = defineClassInClassLoader ( cl , doap . serverInterfaceClassName, true ) . newInstance ( ) ;
+					
+					oModSide = ( AccessorPlugin ) Class . forName ( doap . reflectionInterfaceClassName ) . newInstance ( ) ;
+					
+					oModSide . init ( oServerSide, doap ) ;
+					
+					accessorPlugins . put ( doap . modPluginName, oModSide ) ;
+									
+					MineDonate . logInfo ( "[MineDonate] AccessorPlugin[" + doap . modPluginName + "] inited!" ) ;
+					
+				} catch ( Exception ex ) {
+					
+					ex . printStackTrace ( ) ;
+					
+				}
+				
+			}
+			
+		}
+		
+		for ( String k : accessorPlugins . keySet ( ) ) {
+		
+			MineDonate . logInfo ( "[MineDonate] Try load AccessorPlugin[" + k + "]" ) ;
+			
+			accessorPlugins . get ( k ) . load ( ) ;
+			
+			MineDonate . logInfo ( "[MineDonate] AccessorPlugin[" + k + "] loaded!" ) ;
+
+		}
+		
+		/*
 		if ( MineDonate . cfg . sellPrivelegies && hasExists ( "PermissionsEx" ) ) {
 			
 			try {
@@ -70,11 +115,17 @@ public class PluginHelper {
 				
 			}		
 			
-		}
+		}*/
 		
 		
 	}
 
+	public static AccessorPlugin getPlugin ( String modPluginName ) {
+		
+		return accessorPlugins . get ( modPluginName ) ;
+		
+	}
+	
 	public static boolean existsClass ( String name ) {
 		
 		try {

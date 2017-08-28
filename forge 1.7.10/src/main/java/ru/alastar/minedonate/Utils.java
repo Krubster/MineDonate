@@ -1,4 +1,4 @@
-package ru.alastar.minedonate.rtnl;
+package ru.alastar.minedonate;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;

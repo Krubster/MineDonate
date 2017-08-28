@@ -1,12 +1,10 @@
-package ru.alastar.minedonate.plugin.clean;
+package ru.alastar.minedonate.plugin.worldProtection;
 
 import java.util.UUID;
 
-public class WorldGuardPlugin {
+import ru.alastar.minedonate.plugin.AccessorPlugin;
 
-	public void load ( ) {
-		
-	}
+public abstract class WorldProtectionPlugin extends AccessorPlugin {
 
 	public void addPlayerToRegion ( String world, String rgName, UUID player ) {
 		

@@ -18,15 +18,16 @@ import ru.alastar.minedonate.merch.info.ItemInfo;
 import ru.alastar.minedonate.merch.info.ShopInfo;
 import ru.alastar.minedonate.network.manage.packets.EditMerchNumberPacket;
 import ru.alastar.minedonate.network.manage.packets.EditMerchStringPacket;
+import ru.alastar.minedonate.rtnl.common.Account;
+import ru.alastar.minedonate.rtnl.common.Shop;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
-import java.util.Map;
 import java.util.UUID;
 
-public class Manager {
+public class ModManager {
 
 	public static void createShop ( UUID owner, String ownerName, String name ) {
 		
@@ -37,7 +38,7 @@ public class Manager {
       
         try {
 
-            PreparedStatement statement = MineDonate.getPreparedStatement("main", "INSERT INTO " + MineDonate.cfg.dbShops + " (UUID, ownerName, name, lastUpdate, isFreezed, freezer, freezReason, moneyType) VALUES(?,?,?,?,?,?,?,?)");
+            PreparedStatement statement = ModDataBase . getPreparedStatement("main", "INSERT INTO " + MineDonate.cfg.dbShops + " (UUID, ownerName, name, lastUpdate, isFreezed, freezer, freezReason, moneyType) VALUES(?,?,?,?,?,?,?,?)");
 
             statement.setString(1, owner.toString());
             statement.setString(2, ownerName);
@@ -62,7 +63,7 @@ public class Manager {
         
 		try {
 			
-			Statement st = MineDonate . getNewStatement ( "main" ) ;
+			Statement st = ModDataBase . getNewStatement ( "main" ) ;
 
             st.executeUpdate("UPDATE " + MineDonate.cfg.dbUsers + " SET shopsCount = " + MineDonate.getAccount(owner).shopsCount + " WHERE " + MineDonate.cfg.dbUsersIdColumn + "= '" + owner + "';");
 
@@ -75,7 +76,7 @@ public class Manager {
 		}
 				
         MineDonate . loadUserShop ( info . shopId ) ;
-        ModNetwork . sendToAllAddMerchPacket ( info ) ;
+        ModNetworkRegistry . sendToAllAddMerchPacket ( info ) ;
         
 	}
 
@@ -88,13 +89,13 @@ public class Manager {
 		
 		try {
 			
-			Statement st = MineDonate . getNewStatement ( "main" ) ;
+			Statement st = ModDataBase . getNewStatement ( "main" ) ;
 			
 			st . executeUpdate ( "DELETE FROM " + MineDonate.cfg.dbShops + " WHERE id=" + s . sid + ";" ) ;
 			
 			st . close ( ) ;
 			
-			st = MineDonate . getNewStatement ( "main" ) ;
+			st = ModDataBase . getNewStatement ( "main" ) ;
 			
 			st . executeUpdate ( "DELETE FROM " + MineDonate.cfg.dbUserItems + " WHERE shopId=" + s . sid + ";" ) ;
 			
@@ -110,7 +111,7 @@ public class Manager {
         
 		try {
 			
-			Statement st = MineDonate . getNewStatement ( "main" ) ;
+			Statement st = ModDataBase . getNewStatement ( "main" ) ;
 
             st.executeUpdate("UPDATE " + MineDonate.cfg.dbUsers + " SET shopsCount = " + MineDonate.getAccount(UUID.fromString(s . owner)).shopsCount + " WHERE " + MineDonate.cfg.dbUsersIdColumn + "= '" + MineDonate.getUUIDFromName(s.owner) + "';");
 
@@ -122,7 +123,7 @@ public class Manager {
 		
 		}
 		
-        ModNetwork . sendToAllRemoveMerchPacket ( 0, 4, si . getId ( ) ) ;
+        ModNetworkRegistry . sendToAllRemoveMerchPacket ( 0, 4, si . getId ( ) ) ;
 
 	}
 	
@@ -134,11 +135,11 @@ public class Manager {
 		si . freezer = s . freezer = freezer ;
 		si . freezReason = s . freezReason = reason ;
 		
-        ModNetwork . sendToAllAddMerchPacket ( si ) ;
+        ModNetworkRegistry . sendToAllAddMerchPacket ( si ) ;
 
         try {
         	
-            PreparedStatement statement = MineDonate . getPreparedStatement ( "main", "UPDATE " + MineDonate.cfg.dbShops + " SET isFreezed = 1, freezer = ?, freezReason = ? WHERE id = ?");
+            PreparedStatement statement = ModDataBase . getPreparedStatement ( "main", "UPDATE " + MineDonate.cfg.dbShops + " SET isFreezed = 1, freezer = ?, freezReason = ? WHERE id = ?");
             
             statement.setString(1, freezer);
             statement.setString(2, reason);
@@ -163,11 +164,11 @@ public class Manager {
 		si . freezer = s . freezer = unFreezer ;
 		si . freezReason = s . freezReason = "" ;
 		
-        ModNetwork . sendToAllAddMerchPacket ( si ) ;
+        ModNetworkRegistry . sendToAllAddMerchPacket ( si ) ;
 
 		try {
 			
-			Statement st = MineDonate . getNewStatement ( "main" ) ;
+			Statement st = ModDataBase . getNewStatement ( "main" ) ;
 			
 			st . executeUpdate ( "UPDATE " + MineDonate.cfg.dbShops + " SET isFreezed = " + 0 + ", freezer='" + unFreezer + "', freezReason='' WHERE id=" + s . sid + ";" ) ;
 			
@@ -187,11 +188,11 @@ public class Manager {
 
 		si . name = s . name = name ;
 		
-        ModNetwork . sendToAllAddMerchPacket ( si ) ;
+        ModNetworkRegistry . sendToAllAddMerchPacket ( si ) ;
 
         try {
         	
-            PreparedStatement statement = MineDonate . getPreparedStatement ( "main", "UPDATE " + MineDonate.cfg.dbShops + " SET name = ? WHERE id = ?");
+            PreparedStatement statement = ModDataBase . getPreparedStatement ( "main", "UPDATE " + MineDonate.cfg.dbShops + " SET name = ? WHERE id = ?");
             
             statement.setString(1, name);
             statement.setInt(2, s.sid);
@@ -215,7 +216,7 @@ public class Manager {
 		
         try {
 
-            PreparedStatement statement = MineDonate . getPreparedStatement ( "main", "UPDATE " + MineDonate.cfg.dbUsers + " SET freezShopCreate = 1, freezShopCreateFreezer = ?, freezShopCreateReason = ? WHERE " + MineDonate.cfg.dbUsersIdColumn + " = ?");
+            PreparedStatement statement = ModDataBase . getPreparedStatement ( "main", "UPDATE " + MineDonate.cfg.dbUsers + " SET freezShopCreate = 1, freezShopCreateFreezer = ?, freezShopCreateReason = ? WHERE " + MineDonate.cfg.dbUsersIdColumn + " = ?");
             
             statement.setString(1, freezer);
             statement.setString(2, reason);
@@ -240,7 +241,7 @@ public class Manager {
 		
 		try {
 
-            PreparedStatement statement = MineDonate . getPreparedStatement("main", "UPDATE " + MineDonate.cfg.dbUsers + " SET freezShopCreate = 0, freezShopCreateFreezer = ?, freezShopCreateReason = ? WHERE " + MineDonate.cfg.dbUsersIdColumn + " = ?");
+            PreparedStatement statement = ModDataBase . getPreparedStatement("main", "UPDATE " + MineDonate.cfg.dbUsers + " SET freezShopCreate = 0, freezShopCreateFreezer = ?, freezShopCreateReason = ? WHERE " + MineDonate.cfg.dbUsersIdColumn + " = ?");
             
             statement.setString(1, unFreezer);
             statement.setString(2, "");
@@ -264,7 +265,7 @@ public class Manager {
         
         s.cats[catId].addMerch(info);
        
-        ModNetwork . sendToAllAddMerchPacket ( info ) ;
+        ModNetworkRegistry . sendToAllAddMerchPacket ( info ) ;
 
         try {
           
@@ -274,7 +275,7 @@ public class Manager {
             
             InputStream stream = new ByteArrayInputStream(buf.array());
         
-            PreparedStatement statement = MineDonate . getPreparedStatement("main", "INSERT INTO " + s.cats[catId].getDatabaseTable() + " (name, data, cost, lim) VALUES(?,?,?,?)");
+            PreparedStatement statement = ModDataBase . getPreparedStatement ( "main", "INSERT INTO " + s.cats[catId].getDatabaseTable() + " (name, data, cost, lim) VALUES(?,?,?,?)");
             
             statement.setString(1, name);
             statement.setBlob(2, stream);
@@ -330,7 +331,7 @@ public class Manager {
 
 			s . cats [ catId ] . updateMerch ( merchId, ii ) ;
 			
-			ModNetwork . sendToAllAddMerchPacket ( ii ) ;
+			ModNetworkRegistry . sendToAllAddMerchPacket ( ii ) ;
 	        
 		}
 		
@@ -351,7 +352,7 @@ public class Manager {
             
             s . cats [ catId ] . addMerch ( info ) ;
             
-            ModNetwork . sendToAllAddMerchPacket ( info ) ;
+            ModNetworkRegistry . sendToAllAddMerchPacket ( info ) ;
             
             ByteBufUtils.writeTag(buf, nbt);
 
@@ -361,11 +362,11 @@ public class Manager {
             
             if ( s . sid == 0 ) {
             
-            	statement = MineDonate . getPreparedStatement ( "main", "INSERT INTO " + s.cats[catId].getDatabaseTable() + " (name, cost, lim, stack_data) VALUES(?,?,?,?)");
+            	statement = ModDataBase . getPreparedStatement ( "main", "INSERT INTO " + s.cats[catId].getDatabaseTable() + " (name, cost, lim, stack_data) VALUES(?,?,?,?)");
             
             } else {
          
-            	statement = MineDonate . getPreparedStatement ( "main", "INSERT INTO " + s.cats[catId].getDatabaseTable() + " (name, cost, lim, stack_data, shopId) VALUES(?,?,?,?,?)");
+            	statement = ModDataBase . getPreparedStatement ( "main", "INSERT INTO " + s.cats[catId].getDatabaseTable() + " (name, cost, lim, stack_data, shopId) VALUES(?,?,?,?,?)");
                 statement.setInt(5, s.sid);
 
             }
@@ -393,7 +394,7 @@ public class Manager {
 		
 		try {
 			
-			Statement st = MineDonate . getNewStatement ( "main" ) ;
+			Statement st = ModDataBase . getNewStatement ( "main" ) ;
 			
 			st . executeUpdate ( "DELETE FROM " + s . cats [ catId ] . getDatabaseTable ( ) + " WHERE id=" + merchId + ";" ) ;
 			
@@ -405,7 +406,7 @@ public class Manager {
 			
 		}
 		
-        ModNetwork . sendToAllRemoveMerchPacket ( s . sid, catId, merchId ) ;
+        ModNetworkRegistry . sendToAllRemoveMerchPacket ( s . sid, catId, merchId ) ;
         
 		if ( s . cats [ catId ] . getCatType ( ) == MerchCategory . Type . ITEMS ) {
 			
@@ -430,7 +431,7 @@ public class Manager {
 		
 		mc . updateMerch ( m . getId ( ), m ) ;
 		
-        ModNetwork . sendToAllMerchInfoPacket ( m ) ;
+        ModNetworkRegistry . sendToAllMerchInfoPacket ( m ) ;
 
 	}
 	
@@ -443,7 +444,7 @@ public class Manager {
 
 		mc . updateMerch ( m . getId ( ), m ) ;
 		
-        ModNetwork . sendToAllMerchInfoPacket ( m ) ;
+        ModNetworkRegistry . sendToAllMerchInfoPacket ( m ) ;
 
 	}
 	

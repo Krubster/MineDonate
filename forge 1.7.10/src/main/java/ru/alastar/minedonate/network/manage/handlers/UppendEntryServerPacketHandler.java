@@ -6,12 +6,12 @@ import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import net.minecraft.entity.player.EntityPlayerMP;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.network.manage.packets.UppendEntryPacket;
+import ru.alastar.minedonate.network.INetworkTask;
 import ru.alastar.minedonate.network.manage.packets.ManageResponsePacket;
-import ru.alastar.minedonate.rtnl.Account;
-import ru.alastar.minedonate.rtnl.INetworkTask;
-import ru.alastar.minedonate.rtnl.Manager;
-import ru.alastar.minedonate.rtnl.NetworkMessageProcessor;
-import ru.alastar.minedonate.rtnl.Shop;
+import ru.alastar.minedonate.rtnl.ModManager;
+import ru.alastar.minedonate.rtnl.ModNetworkTaskProcessor;
+import ru.alastar.minedonate.rtnl.common.Account;
+import ru.alastar.minedonate.rtnl.common.Shop;
 
 public class UppendEntryServerPacketHandler implements IMessageHandler < UppendEntryPacket, IMessage >, INetworkTask < UppendEntryPacket, IMessage > {
 	
@@ -22,7 +22,7 @@ public class UppendEntryServerPacketHandler implements IMessageHandler < UppendE
     @Override
     public IMessage onMessage ( UppendEntryPacket message, MessageContext ctx ) {
     	
-    	NetworkMessageProcessor . processTask ( ( INetworkTask ) this, message, ctx ) ;
+    	ModNetworkTaskProcessor . processTask ( ( INetworkTask ) this, message, ctx ) ;
 
     	return null ;
     	
@@ -67,7 +67,7 @@ public class UppendEntryServerPacketHandler implements IMessageHandler < UppendE
 
 					}
 					
-					int merchId = Manager . canUppendAnotherItemInShop ( acc, s, message . catId ) ;
+					int merchId = ModManager . canUppendAnotherItemInShop ( acc, s, message . catId ) ;
 					
 					if ( merchId == -1 ) {
 						
@@ -75,7 +75,7 @@ public class UppendEntryServerPacketHandler implements IMessageHandler < UppendE
 		
 					}		
 					
-					Manager . uppendItemInShop ( acc, s, message . catId, merchId ) ;
+					ModManager . uppendItemInShop ( acc, s, message . catId, merchId ) ;
 
 				break ;		
 				

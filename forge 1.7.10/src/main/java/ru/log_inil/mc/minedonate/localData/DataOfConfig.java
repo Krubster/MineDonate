@@ -4,8 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ru.alastar.minedonate.mproc.StandartMoneyProcessor;
-import ru.alastar.minedonate.plugin.bukkit.PermissionsBukkitPlugin;
-import ru.alastar.minedonate.plugin.bukkit.WorldGuardBukkitPlugin;
+import ru.alastar.minedonate.plugin.permissions.PermissionsBukkitPlugin;
+import ru.alastar.minedonate.plugin.permissions.PermissionsPlugin;
+import ru.alastar.minedonate.plugin.permissions.PermissionsPluginReflection;
+import ru.alastar.minedonate.plugin.worldProtection.WorldGuardBukkitPlugin;
+import ru.alastar.minedonate.plugin.worldProtection.WorldProtectionPlugin;
+import ru.alastar.minedonate.plugin.worldProtection.WorldGuardPluginReflection;
 
 public class DataOfConfig {
 
@@ -48,13 +52,15 @@ public class DataOfConfig {
 	public String dbModPermissionsTable;
 	public DataOfPermissionEntry [ ] permissionsTriggerList ;
 
-	public String permissionsPluginClassName ;
-	public String worldGuardPluginClassName ;
+	public DataOfAccessorPlugin [ ] accessPlugins ;
 
 	public int packetsMaxLimit ;
 
 	public boolean sendLogToDB ;
 	public String dbLogs ;
+	public String dbLogsLinkName ;
+	
+	public boolean displayInfoLog ;
 	
 	public DataOfConfig ( ) {
 		
@@ -93,23 +99,37 @@ public class DataOfConfig {
 		autoFixMoneyProcessorsTableCollisions = true ;
 		
 		moneyProcessors = new DataOfMoneyProcessor [ ] {
-				new DataOfMoneyProcessor("rub", StandartMoneyProcessor.class.getName(), "md_accounts", "UUID", "name", "money", "main", false),
-				new DataOfMoneyProcessor("coin", StandartMoneyProcessor.class.getName(), "md_accounts", "UUID", "name", "coins", "main", true),
+				
+			new DataOfMoneyProcessor ( "rub", StandartMoneyProcessor . class . getName ( ), "md_accounts", "UUID", "name", "money", "main", false ),
+			new DataOfMoneyProcessor ( "coin", StandartMoneyProcessor . class . getName ( ), "md_accounts", "UUID", "name", "coins", "main", true ),
+	
 		} ;
 		
 		enablePermissionsMode = false ;
 		dbModPermissionsTable = "md_perms" ;
 		
-		permissionsTriggerList = new DataOfPermissionEntry [ ] { new DataOfPermissionEntry ( "minedonate.default", new String [ ] { "default" } ), new DataOfPermissionEntry ( "minedonate.moderation", new String [ ] { "default", "moder" } ) } ;
+		permissionsTriggerList = new DataOfPermissionEntry [ ] { 
+				
+			new DataOfPermissionEntry ( "minedonate.default", new String [ ] { "default" } ), 
+			new DataOfPermissionEntry ( "minedonate.moderation", new String [ ] { "default", "moder" } ) 
+			
+		} ;
 	
-		permissionsPluginClassName = PermissionsBukkitPlugin . class . getName ( ) ;
-		worldGuardPluginClassName = WorldGuardBukkitPlugin . class . getName ( ) ;
+		accessPlugins = new DataOfAccessorPlugin [ ] { 
+				
+			new DataOfAccessorPlugin ( "permissionsManager", sellPrivelegies || enablePermissionsMode, "PermissionsEx", PermissionsBukkitPlugin . class . getName ( ), PermissionsPluginReflection . class . getName ( ), PermissionsPlugin . class . getName ( ) ),
+			new DataOfAccessorPlugin ( "worldProtectionManager", sellRegions, "WorldGuard", WorldGuardBukkitPlugin . class . getName ( ), WorldGuardPluginReflection . class . getName ( ), WorldProtectionPlugin . class . getName ( ) ) 
+
+		} ;
 		
 		packetsMaxLimit = 3 ;
 		
 		sendLogToDB = true ;
 		dbLogs = "md_logs" ;
-				
+		dbLogsLinkName = "main" ;
+		
+		displayInfoLog = true ;
+		
 	}
 	
 }

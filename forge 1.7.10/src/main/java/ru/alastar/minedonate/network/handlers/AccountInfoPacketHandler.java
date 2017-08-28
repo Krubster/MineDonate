@@ -6,7 +6,7 @@ import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.network.packets.AccountInfoPacket;
-import ru.alastar.minedonate.rtnl.Account;
+import ru.alastar.minedonate.rtnl.common.Account;
 
 /**
  * Created by Alastar on 18.07.2017.

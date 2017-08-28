@@ -1,9 +1,9 @@
-package ru.alastar.minedonate.plugin.bukkit;
+package ru.alastar.minedonate.plugin.permissions;
 
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
-import ru.alastar.minedonate.plugin.clean.PermissionsPlugin;
+
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 public class PermissionsBukkitPlugin extends PermissionsPlugin {

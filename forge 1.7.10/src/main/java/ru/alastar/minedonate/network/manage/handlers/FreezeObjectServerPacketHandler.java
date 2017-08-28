@@ -9,9 +9,9 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.network.manage.packets.FreezeObjectPacket;
 import ru.alastar.minedonate.network.manage.packets.ManageResponsePacket;
-import ru.alastar.minedonate.rtnl.Account;
-import ru.alastar.minedonate.rtnl.Manager;
-import ru.alastar.minedonate.rtnl.Shop;
+import ru.alastar.minedonate.rtnl.ModManager;
+import ru.alastar.minedonate.rtnl.common.Account;
+import ru.alastar.minedonate.rtnl.common.Shop;
 
 public class FreezeObjectServerPacketHandler implements IMessageHandler < FreezeObjectPacket, IMessage > {
 	
@@ -56,11 +56,11 @@ public class FreezeObjectServerPacketHandler implements IMessageHandler < Freeze
     			    			
     			if ( message . bool ) {
     			
-    				Manager . freezeShop ( s, serverPlayer . getDisplayName ( ), message . reason ) ;
+    				ModManager . freezeShop ( s, serverPlayer . getDisplayName ( ), message . reason ) ;
     			
     			} else {
 
-    				Manager . unFreezeShop ( s, serverPlayer . getDisplayName ( ) ) ;
+    				ModManager . unFreezeShop ( s, serverPlayer . getDisplayName ( ) ) ;
 
     			}
     			
@@ -102,11 +102,11 @@ public class FreezeObjectServerPacketHandler implements IMessageHandler < Freeze
     			
     			if ( message . bool ) {
     			
-    				Manager . freezePlayer ( accFreez, serverPlayer . getDisplayName ( ), message . reason ) ;
+    				ModManager . freezePlayer ( accFreez, serverPlayer . getDisplayName ( ), message . reason ) ;
     			
     			} else {
 
-    				Manager . unFreezePlayer ( accFreez, serverPlayer . getDisplayName ( ) ) ;
+    				ModManager . unFreezePlayer ( accFreez, serverPlayer . getDisplayName ( ) ) ;
 
     			}
     			

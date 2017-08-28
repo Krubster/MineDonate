@@ -2,11 +2,11 @@ package ru.log_inil.mc.minedonate.gui.frames;
 
 import net.minecraft.client.gui.GuiButton;
 import ru.alastar.minedonate.MineDonate;
+import ru.alastar.minedonate.Utils;
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.network.manage.packets.EditMerchNumberPacket;
 import ru.alastar.minedonate.network.manage.packets.EditMerchStringPacket;
-import ru.alastar.minedonate.rtnl.ModNetwork;
-import ru.alastar.minedonate.rtnl.Utils;
+import ru.alastar.minedonate.rtnl.ModNetworkRegistry;
 import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.gui.GuiFrame;
 import ru.log_inil.mc.minedonate.gui.GuiGradientButton;
@@ -228,7 +228,7 @@ public class GuiFrameEditItem extends GuiFrame {
 	    					g . setLoading ( true ) ;
 	    					hideFrame ( g ) ;
 	    			    		
-	    					ModNetwork . sendToServerEditMerchNumberPacket ( shopId, catId, merch_id, EditMerchNumberPacket . Type . LIMIT, ( int ) n ) ;
+	    					ModNetworkRegistry . sendToServerEditMerchNumberPacket ( shopId, catId, merch_id, EditMerchNumberPacket . Type . LIMIT, ( int ) n ) ;
 	    					
 	    					limit = n ;
 	    					    						
@@ -253,7 +253,7 @@ public class GuiFrameEditItem extends GuiFrame {
 						g . setLoading ( true ) ;
 						hideFrame ( g ) ;
 				        
-						ModNetwork . sendToServerEditMerchNumberPacket ( shopId, catId, merch_id, EditMerchNumberPacket . Type . COST, ( int ) n ) ;
+						ModNetworkRegistry . sendToServerEditMerchNumberPacket ( shopId, catId, merch_id, EditMerchNumberPacket . Type . COST, ( int ) n ) ;
 						
 						cost = n ;
 											
@@ -270,7 +270,7 @@ public class GuiFrameEditItem extends GuiFrame {
     			g . setLoading ( true ) ;
 				hideFrame ( g ) ;
 		        
-    			ModNetwork . sendToServerEditMerchStringPacket ( shopId, catId, merch_id, EditMerchStringPacket . Type . NAME, ( fieldText = nameField . getText ( ) ) ) ;
+    			ModNetworkRegistry . sendToServerEditMerchStringPacket ( shopId, catId, merch_id, EditMerchStringPacket . Type . NAME, ( fieldText = nameField . getText ( ) ) ) ;
     			
     		}
     		

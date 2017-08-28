@@ -13,11 +13,10 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
-
+import ru.alastar.minedonate.Utils;
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.network.manage.packets.EditMerchNumberPacket;
 import ru.alastar.minedonate.network.manage.packets.EditMerchStringPacket;
-import ru.alastar.minedonate.rtnl.Utils;
 
 import java.io.IOException;
 import java.sql.Blob;

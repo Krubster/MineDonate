@@ -2,7 +2,7 @@ package ru.alastar.minedonate.merch.categories;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.server.MinecraftServer;
+
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.merch.info.EntityInfo;
@@ -26,15 +26,25 @@ public class Entities extends MerchCategory {
 
     @Override
     public void loadMerchFromDB(ResultSet rs) {
+    	
         try {
+        	
             while (rs.next()) {
+            	
                 final EntityInfo info = new EntityInfo(shopId, catId, rs.getInt("id"), rs.getInt("rating"), rs.getInt("cost"), rs.getBlob("data"), rs.getString("name"), rs.getInt("lim"));
+              
                 this.addMerch(info);
+                
             }
+            
         } catch (SQLException e) {
+        	
             e.printStackTrace();
+            
         }
-        MinecraftServer.getServer().logInfo("Loaded " + m_Merch.size() + " entities");
+        
+        MineDonate . logInfo ( "Loaded " + m_Merch . size() + " merch in " + toString ( ) ) ;
+
     }
 
     @Override

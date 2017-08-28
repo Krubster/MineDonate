@@ -2,7 +2,7 @@ package ru.log_inil.mc.minedonate.gui.frames;
 
 import net.minecraft.client.gui.GuiButton;
 import ru.alastar.minedonate.gui.ShopGUI;
-import ru.alastar.minedonate.rtnl.ModNetwork;
+import ru.alastar.minedonate.rtnl.ModNetworkRegistry;
 import ru.log_inil.mc.minedonate.localData.frames.DataOfUIFrameField;
 
 public class GuiFrameFreezeAccount extends GuiFrameTextField {
@@ -31,7 +31,7 @@ public class GuiFrameFreezeAccount extends GuiFrameTextField {
     		
     		g . setLoading ( true ) ;
     		
-    		ModNetwork . sendToServerFreezeAccountPacket ( account, nameField . getText ( ) ) ;
+    		ModNetworkRegistry . sendToServerFreezeAccountPacket ( account, nameField . getText ( ) ) ;
     		
 			hideFrame ( g ) ;
 			

@@ -13,8 +13,8 @@ import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.network.manage.packets.ManageResponsePacket.ResponseCode;
 import ru.alastar.minedonate.network.manage.packets.ManageResponsePacket.ResponseStatus;
 import ru.alastar.minedonate.network.manage.packets.ManageResponsePacket.ResponseType;
-import ru.alastar.minedonate.rtnl.Account;
-import ru.alastar.minedonate.rtnl.ModNetwork;
+import ru.alastar.minedonate.rtnl.ModNetworkRegistry;
+import ru.alastar.minedonate.rtnl.common.Account;
 
 public class EntitySelectEventHandler {
 
@@ -34,7 +34,7 @@ public class EntitySelectEventHandler {
                         
                 		e . entityPlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Error add entity! EntityLivingBase check error!"));
                 		
-                		ModNetwork . sendToManageResponsePacket ( ( EntityPlayerMP ) e . entityPlayer, ResponseType . ENTITY, ResponseCode . SELECT, ResponseStatus . ERROR_ENTITY_CHECK_LIVINGBASE ) ;
+                		ModNetworkRegistry . sendToManageResponsePacket ( ( EntityPlayerMP ) e . entityPlayer, ResponseType . ENTITY, ResponseCode . SELECT, ResponseStatus . ERROR_ENTITY_CHECK_LIVINGBASE ) ;
                         
                 	} else {
                 	
@@ -44,7 +44,7 @@ public class EntitySelectEventHandler {
 	
 	                	} catch ( Exception ex ) {
 	                		
-	                		ModNetwork . sendToManageResponsePacket ( ( EntityPlayerMP ) e . entityPlayer, ResponseType . ENTITY, ResponseCode . SELECT, ResponseStatus . ERROR_ENTITY_CHECK_INIT ) ;
+	                		ModNetworkRegistry . sendToManageResponsePacket ( ( EntityPlayerMP ) e . entityPlayer, ResponseType . ENTITY, ResponseCode . SELECT, ResponseStatus . ERROR_ENTITY_CHECK_INIT ) ;
 	                	
 	                		e . setCanceled ( true ) ;
 	                        acc . ms . mobSelect = false ;
@@ -55,16 +55,16 @@ public class EntitySelectEventHandler {
 	                	
 	                	acc . ms . currentMob = e . target ;
 
-	                	ModNetwork . sendToManageResponsePacket ( ( EntityPlayerMP ) e . entityPlayer, ResponseType . ENTITY, ResponseCode . SELECT, ResponseStatus . OK ) ;
+	                	ModNetworkRegistry . sendToManageResponsePacket ( ( EntityPlayerMP ) e . entityPlayer, ResponseType . ENTITY, ResponseCode . SELECT, ResponseStatus . OK ) ;
 
-	            		ModNetwork . sendToMobSelectPacket ( ( EntityPlayerMP ) e . entityPlayer, 1 ) ;
+	            		ModNetworkRegistry . sendToMobSelectPacket ( ( EntityPlayerMP ) e . entityPlayer, 1 ) ;
 
                 	}
     				
             		e . setCanceled ( true ) ;
                     acc . ms . mobSelect = false ;
     				
-                	ModNetwork . sendToManageResponsePacket ( ( EntityPlayerMP ) e . entityPlayer, ResponseType . ENTITY, ResponseCode . ADD, ResponseStatus . ENTITY_SELECT_STOP ) ;
+                	ModNetworkRegistry . sendToManageResponsePacket ( ( EntityPlayerMP ) e . entityPlayer, ResponseType . ENTITY, ResponseCode . ADD, ResponseStatus . ENTITY_SELECT_STOP ) ;
 
     			}
 	

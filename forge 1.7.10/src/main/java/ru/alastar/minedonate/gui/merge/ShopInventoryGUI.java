@@ -7,7 +7,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import ru.alastar.minedonate.MineDonate;
-import ru.alastar.minedonate.rtnl.ModNetwork;
+import ru.alastar.minedonate.rtnl.ModNetworkRegistry;
 
 public class ShopInventoryGUI extends GuiContainer {
 
@@ -49,7 +49,7 @@ public class ShopInventoryGUI extends GuiContainer {
     	
     	if ( b . id == acceptButton . id && sic . mdInv . getStackInSlot ( 0 ) != null ) {
     	
-    		ModNetwork . sendToServerCloseShopInventoryPacket ( ) ;
+    		ModNetworkRegistry . sendToServerCloseShopInventoryPacket ( ) ;
     		
     	}
     	

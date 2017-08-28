@@ -6,9 +6,10 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
+import ru.alastar.minedonate.Utils;
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.plugin.PluginHelper;
-import ru.alastar.minedonate.rtnl.Utils;
+import ru.alastar.minedonate.plugin.worldProtection.WorldProtectionPlugin;
 
 /**
  * Created by Alastar on 20.07.2017.
@@ -29,7 +30,7 @@ public class RegionInfo extends Merch {
     @Override
     public boolean canBuy(EntityPlayerMP serverPlayer, int amount) {
     	
-    	if ( PluginHelper . wgMgr . checkRegionMaxOut ( this . world_name, serverPlayer.getGameProfile().getId() ) ) {
+    	if ( ( ( WorldProtectionPlugin ) PluginHelper . getPlugin ( "worldProtectionManager" ) ) . checkRegionMaxOut ( this . world_name, serverPlayer.getGameProfile().getId() ) ) {
  		 
     		serverPlayer . addChatMessage ( new ChatComponentText ( "You can't have more regions!" ) ) ;
 

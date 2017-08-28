@@ -8,7 +8,7 @@ import ru.alastar.minedonate.gui.ShopCategory;
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.merch.info.EntityInfo;
-import ru.alastar.minedonate.rtnl.ModNetwork;
+import ru.alastar.minedonate.rtnl.ModNetworkRegistry;
 import ru.log_inil.mc.minedonate.gui.*;
 import ru.log_inil.mc.minedonate.gui.frames.GuiFrameAddEntity;
 import ru.log_inil.mc.minedonate.gui.items.GuiItemEntryOfEntityMerch;
@@ -96,7 +96,7 @@ public class EntitiesCategory extends ShopCategory {
          	
          	MineDonateGUIHandler . setBackShopGUI ( true ) ;
          	
-    		ModNetwork . sendToServerMobSelectPacket ( 0 ) ;
+    		ModNetworkRegistry . sendToServerMobSelectPacket ( 0 ) ;
          	
     		Minecraft . getMinecraft ( ) . displayGuiScreen ( null ) ;
     		

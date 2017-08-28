@@ -1,11 +1,12 @@
 package ru.alastar.minedonate.merch.categories;
 
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.server.MinecraftServer;
+
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.merch.info.PrivilegieInfo;
 import ru.alastar.minedonate.plugin.PluginHelper;
+import ru.alastar.minedonate.plugin.permissions.PermissionsPlugin;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -32,7 +33,7 @@ public class Privelegies extends MerchCategory {
     @Override
     public void reverseFor ( int merchId, UUID player, String [ ] data ) {
         
-    	PluginHelper.pexMgr.removeGroup ( player, data[9].split("-")[1] ) ;
+    	( ( PermissionsPlugin ) PluginHelper . getPlugin ( "permissionsManager" ) ) . removeGroup ( player, data[9].split("-")[1] ) ;
 
     }
 
@@ -51,26 +52,40 @@ public class Privelegies extends MerchCategory {
     }
 
     @Override
-    public void loadMerchFromDB(ResultSet rs) {
+    public void loadMerchFromDB ( ResultSet rs ) {
+    	
         try {
+        	
             while (rs.next()) {
+            	
                 final PrivilegieInfo info = new PrivilegieInfo(shopId, catId, rs.getInt("id"), rs.getString("name"), rs.getString("description"), rs.getString("pic_url"), rs.getInt("cost"), rs.getLong("time"), rs.getString("worlds"));
+               
                 this.addMerch(info);
+                
             }
+            
         } catch (SQLException e) {
+        	
             e.printStackTrace();
+            
         }
-        MinecraftServer.getServer().logInfo("Loaded " + m_Merch.size() + " groups");
+        
+        MineDonate . logInfo ( "Loaded " + m_Merch . size() + " merch in " + toString ( ) ) ;
+        
     }
 
     @Override
     public String getDatabaseTable ( ) {
-        return MineDonate.cfg.dbPrivelegies;
+        
+    	return MineDonate . cfg . dbPrivelegies;
+        
     }
 
     @Override
-    public boolean isEnabled() {
-        return enabled;
+    public boolean isEnabled ( ) {
+        
+    	return enabled ;
+        
     }
     
     @Override
@@ -81,23 +96,23 @@ public class Privelegies extends MerchCategory {
     }
 
     @Override
-    public void giveMerch(EntityPlayerMP serverPlayer, Merch merch, int amount) {
+    public void giveMerch ( EntityPlayerMP serverPlayer, Merch merch, int amount ) {
     	
         try {
             
-        	final PrivilegieInfo info = (PrivilegieInfo) merch;
+        	final PrivilegieInfo info = ( PrivilegieInfo ) merch ;
             
-            if (info.worlds.length > 0) {
+            if ( info . worlds . length > 0 ) {
             	
-                for (String world : info.worlds) {
+                for ( String world : info . worlds ) {
                 	
-                	PluginHelper.pexMgr.addGroup(serverPlayer .getGameProfile().getId(), info.name, world, info.getTimeInSeconds());
+                	( ( PermissionsPlugin ) PluginHelper . getPlugin ( "permissionsManager" ) ) . addGroup ( serverPlayer . getGameProfile ( ) . getId ( ), info . name, world, info . getTimeInSeconds ( ) ) ;
                 	
                 }
                 
             } else {
             	
-            	PluginHelper.pexMgr.addGroup(serverPlayer .getGameProfile().getId(), info.name, null, info.getTimeInSeconds());
+            	( ( PermissionsPlugin ) PluginHelper . getPlugin ( "permissionsManager" ) ) . addGroup ( serverPlayer . getGameProfile ( ) . getId ( ), info . name, null, info . getTimeInSeconds ( ) ) ;
 
             }
             
@@ -110,7 +125,7 @@ public class Privelegies extends MerchCategory {
     }
 
     @Override
-    public String getMoneyType() {
+    public String getMoneyType ( ) {
 
         return moneyType;
 

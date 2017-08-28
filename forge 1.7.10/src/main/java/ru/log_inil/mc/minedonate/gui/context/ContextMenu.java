@@ -1,7 +1,7 @@
 package ru.log_inil.mc.minedonate.gui.context;
 
 import net.minecraft.client.gui.Gui;
-import ru.alastar.minedonate.rtnl.Utils;
+import ru.alastar.minedonate.Utils;
 import ru.log_inil.mc.minedonate.gui.MCGuiAccessible;
 
 import java.awt.*;

@@ -2,9 +2,11 @@ package ru.alastar.minedonate.merch.categories;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import net.minecraft.entity.player.EntityPlayerMP;
-import ru.alastar.minedonate.MineDonate;
+
 import ru.alastar.minedonate.merch.Merch;
+import ru.alastar.minedonate.rtnl.ModDataBase;
 
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -77,7 +79,7 @@ public abstract class MerchCategory {
 		
         try {
         	
-        	Statement stmt = MineDonate . getNewStatement ( "main" ) ;
+        	Statement stmt = ModDataBase . getNewStatement ( "main" ) ;
             ResultSet rs = stmt . executeQuery ( "SHOW TABLE STATUS LIKE '" + getDatabaseTable ( ) + "';" ) ;
 
             int r = -1 ;
@@ -138,6 +140,13 @@ public abstract class MerchCategory {
     
     public abstract Type getCatType ( ) ;
 
+    @Override
+    public String toString ( ) {
+    
+    	return "MerchCategory@" + hashCode ( ) + "{shopId=" + shopId +", catId=" + catId + ", catType=" + getCatType ( ) + ", moneyType=" + getMoneyType ( ) + "}" ;
+    	
+    }
+    
     public enum Type { 
     	
     	ITEMS, PRIVELEGIES, REGIONS, ENTITIES, SHOPS

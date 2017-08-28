@@ -7,9 +7,9 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.network.manage.packets.DeleteShopMerchPacket;
 import ru.alastar.minedonate.network.manage.packets.ManageResponsePacket;
-import ru.alastar.minedonate.rtnl.Account;
-import ru.alastar.minedonate.rtnl.Manager;
-import ru.alastar.minedonate.rtnl.Shop;
+import ru.alastar.minedonate.rtnl.ModManager;
+import ru.alastar.minedonate.rtnl.common.Account;
+import ru.alastar.minedonate.rtnl.common.Shop;
 
 public class DeleteShopMerchServerPacketHandler implements IMessageHandler < DeleteShopMerchPacket, IMessage > {
 	
@@ -52,7 +52,7 @@ public class DeleteShopMerchServerPacketHandler implements IMessageHandler < Del
 
 			}
 			
-			Manager . removeEntryFromShop ( serverPlayer, s, message . catId, message . merchId ) ;
+			ModManager . removeEntryFromShop ( serverPlayer, s, message . catId, message . merchId ) ;
 			
 	        return new ManageResponsePacket ( ManageResponsePacket.ResponseType.OBJ, ManageResponsePacket.ResponseCode.REMOVE, ManageResponsePacket.ResponseStatus.OK ) ;
 

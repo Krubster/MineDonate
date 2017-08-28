@@ -1,5 +1,7 @@
 package ru.log_inil.mc.minedonate.localData;
 
+import java.util.Map;
+
 public class DataOfDataBaseLink {
 
 	public String host, name, user, password ;
@@ -11,6 +13,8 @@ public class DataOfDataBaseLink {
 	public String customLink = "" ;
 	public String preLoadClassName = "" ;
 	
+	public static Map < String, Object > xProperties ;
+
 	public DataOfDataBaseLink ( ) {
 		
 	}

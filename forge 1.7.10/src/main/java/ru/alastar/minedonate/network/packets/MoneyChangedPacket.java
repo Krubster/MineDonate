@@ -2,7 +2,7 @@ package ru.alastar.minedonate.network.packets;
 
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import io.netty.buffer.ByteBuf;
-import ru.alastar.minedonate.rtnl.Utils;
+import ru.alastar.minedonate.Utils;
 
 import java.io.UnsupportedEncodingException;
 

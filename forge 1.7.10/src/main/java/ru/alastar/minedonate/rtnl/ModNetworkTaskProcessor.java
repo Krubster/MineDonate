@@ -1,6 +1,5 @@
 package ru.alastar.minedonate.rtnl;
 
-import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutorService;
@@ -8,10 +7,12 @@ import java.util.concurrent.Executors;
 
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+
 import ru.alastar.minedonate.MineDonate;
+import ru.alastar.minedonate.network.INetworkTask;
 import ru.alastar.minedonate.network.packets.CodePacket;
 
-public class NetworkMessageProcessor extends Thread {
+public class ModNetworkTaskProcessor extends Thread {
 
 	static ExecutorService executor = Executors . newFixedThreadPool ( 4 ) ;
 
@@ -21,7 +22,7 @@ public class NetworkMessageProcessor extends Thread {
 		
 		if ( checkTaskLimit ( k ) ) {
 			
-    		ModNetwork . sendTo ( ctx . getServerHandler ( ) . playerEntity, new CodePacket ( CodePacket . Code . SERVER_ERROR_WAIT_OTHER_TASK ) ) ;
+    		ModNetworkRegistry . sendTo ( ctx . getServerHandler ( ) . playerEntity, new CodePacket ( CodePacket . Code . SERVER_ERROR_WAIT_OTHER_TASK ) ) ;
     		
     		return ;
     				
@@ -39,7 +40,7 @@ public class NetworkMessageProcessor extends Thread {
 
 		    	if ( msg != null ) {
 		    	
-		    		ModNetwork . sendTo ( ctx . getServerHandler ( ) . playerEntity, msg ) ;
+		    		ModNetworkRegistry . sendTo ( ctx . getServerHandler ( ) . playerEntity, msg ) ;
 		    	
 		    	}
 		    			    	

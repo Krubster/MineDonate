@@ -1,4 +1,4 @@
-package ru.alastar.minedonate.rtnl;
+package ru.alastar.minedonate.rtnl.common;
 
 import ru.alastar.minedonate.merch.categories.MerchCategory;
 

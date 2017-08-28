@@ -7,8 +7,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.EnumChatFormatting;
+import ru.alastar.minedonate.Utils;
 import ru.alastar.minedonate.merch.Merch;
-import ru.alastar.minedonate.rtnl.Utils;
 
 public class ShopInfo extends Merch {
 	

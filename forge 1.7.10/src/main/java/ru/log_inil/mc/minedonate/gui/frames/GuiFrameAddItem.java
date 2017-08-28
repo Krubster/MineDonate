@@ -3,10 +3,10 @@ package ru.log_inil.mc.minedonate.gui.frames;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.RenderHelper;
 import ru.alastar.minedonate.MineDonate;
+import ru.alastar.minedonate.Utils;
 import ru.alastar.minedonate.gui.ShopGUI;
-import ru.alastar.minedonate.rtnl.Manager;
-import ru.alastar.minedonate.rtnl.ModNetwork;
-import ru.alastar.minedonate.rtnl.Utils;
+import ru.alastar.minedonate.rtnl.ModManager;
+import ru.alastar.minedonate.rtnl.ModNetworkRegistry;
 import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.gui.GuiFrame;
 import ru.log_inil.mc.minedonate.gui.GuiGradientButton;
@@ -92,7 +92,7 @@ public class GuiFrameAddItem extends GuiFrame {
     	
     	if ( canUppend ) {
 
-    		canUppend = Manager . canUppendAnotherItemInShop ( MineDonate . getAccount ( ), MineDonate . shops . get ( g . getCurrentShopId ( ) ), catId ) != -1 ;
+    		canUppend = ModManager . canUppendAnotherItemInShop ( MineDonate . getAccount ( ), MineDonate . shops . get ( g . getCurrentShopId ( ) ), catId ) != -1 ;
     		
     	}
     	
@@ -251,7 +251,7 @@ public class GuiFrameAddItem extends GuiFrame {
 
 		if ( unShowDropFix && MineDonate . getAccount ( ) . ms . currentItemStack != null ) {
 			new Exception().printStackTrace();
-			ModNetwork . sendToServerCancelShopInventoryPacket ( ) ;
+			ModNetworkRegistry . sendToServerCancelShopInventoryPacket ( ) ;
 			
 		}
 		
@@ -319,7 +319,7 @@ public class GuiFrameAddItem extends GuiFrame {
     		
     		g . setLoading ( true ) ;
     		
-            ModNetwork . sendToServerAddNewEntryPacket ( shopId, catId, limit, cost, this . nameField . getText ( ) ) ;
+            ModNetworkRegistry . sendToServerAddNewEntryPacket ( shopId, catId, limit, cost, this . nameField . getText ( ) ) ;
             
     		unShowDropFix = false ;
 
@@ -331,7 +331,7 @@ public class GuiFrameAddItem extends GuiFrame {
         	        	
     		if ( MineDonate . getAccount ( ) . ms . currentItemStack != null ) {
     			
-    			ModNetwork . sendToServerUppendEntryPacket ( shopId, catId ) ;
+    			ModNetworkRegistry . sendToServerUppendEntryPacket ( shopId, catId ) ;
     			
     		}
     		
@@ -345,7 +345,7 @@ public class GuiFrameAddItem extends GuiFrame {
 
     		if ( MineDonate . getAccount ( ) . ms . currentItemStack != null ) {
     			
-    			ModNetwork . sendToServerCancelShopInventoryPacket ( ) ;
+    			ModNetworkRegistry . sendToServerCancelShopInventoryPacket ( ) ;
     			
     		}
     		

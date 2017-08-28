@@ -9,7 +9,7 @@ import ru.alastar.minedonate.gui.GoButton;
 import ru.alastar.minedonate.gui.ShopCategory;
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.merch.info.ShopInfo;
-import ru.alastar.minedonate.rtnl.ModNetwork;
+import ru.alastar.minedonate.rtnl.ModNetworkRegistry;
 import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.gui.GuiAbstractItemEntry;
 import ru.log_inil.mc.minedonate.gui.GuiItemsScrollArea;
@@ -242,7 +242,7 @@ public class GuiItemEntryOfUserShopMerch extends GuiAbstractItemEntry {
 					
 				case "unfreeze" :
 					
-		    		ModNetwork . sendToServerUnfreezeShopPacket ( info . shopId ) ;
+		    		ModNetworkRegistry . sendToServerUnfreezeShopPacket ( info . shopId ) ;
 
 		    		g . setLoading ( true ) ;
 
@@ -279,7 +279,7 @@ public class GuiItemEntryOfUserShopMerch extends GuiAbstractItemEntry {
 				
 				case "unFreezeAcc" :
 					
-		    		ModNetwork . sendToServerUnfreezeAccountPacket ( info . owner ) ;
+		    		ModNetworkRegistry . sendToServerUnfreezeAccountPacket ( info . owner ) ;
 
 		    		g . setLoading ( true ) ;
 		    		

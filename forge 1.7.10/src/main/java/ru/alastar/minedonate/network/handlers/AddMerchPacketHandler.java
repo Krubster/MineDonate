@@ -10,7 +10,7 @@ import ru.alastar.minedonate.merch.categories.ItemNBlocks;
 import ru.alastar.minedonate.merch.categories.MerchCategory;
 import ru.alastar.minedonate.merch.info.ShopInfo;
 import ru.alastar.minedonate.network.packets.AddMerchPacket;
-import ru.alastar.minedonate.rtnl.Shop;
+import ru.alastar.minedonate.rtnl.common.Shop;
 
 /**
  * Created by Alastar on 18.07.2017.

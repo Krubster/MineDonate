@@ -1,12 +1,14 @@
 package ru.alastar.minedonate.merch.categories;
 
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.server.MinecraftServer;
+
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.merch.info.RegionInfo;
 import ru.alastar.minedonate.plugin.PluginHelper;
-import ru.alastar.minedonate.rtnl.ModNetwork;
+import ru.alastar.minedonate.plugin.worldProtection.WorldProtectionPlugin;
+import ru.alastar.minedonate.rtnl.ModDataBase;
+import ru.alastar.minedonate.rtnl.ModNetworkRegistry;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -39,7 +41,7 @@ public class Regions extends MerchCategory {
         String world_name = msg.split("=")[1];
         String name = msg.split("=")[0];
         
-        PluginHelper.wgMgr.removePlayerFromRegion(world_name, name, player);
+        ( ( WorldProtectionPlugin ) PluginHelper . getPlugin ( "worldProtectionManager" ) ) . removePlayerFromRegion ( world_name, name, player ) ;
 
         returnToStock(new RegionInfo(shopId, catId, merchId, Integer.valueOf(data[6]), name, world_name));
         
@@ -51,7 +53,7 @@ public class Regions extends MerchCategory {
                 
         try {
         	
-        	Statement stmt = MineDonate . getNewStatement ( "main" ) ;
+        	Statement stmt = ModDataBase . getNewStatement ( "main" ) ;
             stmt.execute("INSERT INTO " + MineDonate.cfg.dbRegions + " (world, name, cost) VALUES('" + regionInfo.name + "', '" + regionInfo.world_name + "', " + regionInfo.getCost() + ")");
             stmt.close();
             
@@ -61,21 +63,31 @@ public class Regions extends MerchCategory {
             
         }
 
-        ModNetwork . sendToAllAddMerchPacket ( regionInfo ) ;
+        ModNetworkRegistry . sendToAllAddMerchPacket ( regionInfo ) ;
 
     }
 
     @Override
     public void loadMerchFromDB(ResultSet rs) {
+    	
         try {
+        	
             while (rs.next()) {
+            	
                 final RegionInfo info = new RegionInfo(shopId, catId, rs.getInt("id"), rs.getInt("cost"), rs.getString("name"), rs.getString("world"));
+               
                 this.addMerch(info);
+                
             }
+            
         } catch (SQLException e) {
+        	
             e.printStackTrace();
+            
         }
-        MinecraftServer.getServer().logInfo("Loaded " + m_Merch.size() + " regions");
+        
+        MineDonate . logInfo ( "Loaded " + m_Merch . size() + " merch in " + toString ( ) ) ;
+        
     }
 
     @Override
@@ -104,7 +116,7 @@ public class Regions extends MerchCategory {
     public void giveMerch(EntityPlayerMP player, Merch merch, int amount) {
 
     	final RegionInfo info = (RegionInfo) merch;
-        PluginHelper.wgMgr.addPlayerToRegion(info.world_name, info.name, player.getGameProfile().getId());
+    	( ( WorldProtectionPlugin ) PluginHelper . getPlugin ( "worldProtectionManager" ) ) . addPlayerToRegion ( info . world_name, info . name, player . getGameProfile ( ) . getId ( ) ) ;
         
         removeRegion ( info.world_name, info.name ) ;
         
@@ -114,7 +126,7 @@ public class Regions extends MerchCategory {
     	
         try {
         	
-            Statement stmt = MineDonate . getNewStatement ( "main" ) ;
+            Statement stmt = ModDataBase . getNewStatement ( "main" ) ;
             
             stmt.execute("DELETE FROM " + MineDonate.cfg.dbRegions + " WHERE name='" + name + "' AND world='" + world_name + "';");
             stmt.close();

@@ -15,7 +15,7 @@ import ru.alastar.minedonate.network.manage.packets.ManageResponsePacket.Respons
 import ru.alastar.minedonate.network.manage.packets.ManageResponsePacket.ResponseType;
 import ru.alastar.minedonate.network.packets.*;
 
-public class ModNetwork {
+public class ModNetworkRegistry {
 
     public static SimpleNetworkWrapper networkChannel ;
 

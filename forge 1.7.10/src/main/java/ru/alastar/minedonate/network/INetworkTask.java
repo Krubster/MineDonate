@@ -1,4 +1,4 @@
-package ru.alastar.minedonate.rtnl;
+package ru.alastar.minedonate.network;
 
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;

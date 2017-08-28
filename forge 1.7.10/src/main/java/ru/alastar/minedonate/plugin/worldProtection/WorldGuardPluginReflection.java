@@ -1,18 +1,21 @@
-package ru.alastar.minedonate.plugin.reflection;
-
-import ru.alastar.minedonate.plugin.clean.WorldGuardPlugin;
+package ru.alastar.minedonate.plugin.worldProtection;
 
 import java.lang.reflect.Method;
 import java.util.UUID;
 
-public class WorldGuardPluginReflection extends WorldGuardPlugin {
+import ru.log_inil.mc.minedonate.localData.DataOfAccessorPlugin;
 
-	Method mLoad,  mAddPlayerToRegion, mRemovePlayerFromRegion, mCheckRegionMaxOut;
+public class WorldGuardPluginReflection extends WorldProtectionPlugin {
+
+	Method mLoad, mAddPlayerToRegion, mRemovePlayerFromRegion, mCheckRegionMaxOut;
 	
 	Object o ;
 	
-	public WorldGuardPluginReflection ( Object _o ) {
+	@Override
+	public void init ( Object _o, DataOfAccessorPlugin _doap ) {
 	
+		super . init ( _o, _doap ) ;
+		
 		try {
 			
 			o = _o ;

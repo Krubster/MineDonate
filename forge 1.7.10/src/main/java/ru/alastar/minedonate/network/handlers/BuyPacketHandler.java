@@ -8,8 +8,8 @@ import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.network.packets.BuyPacket;
 import ru.alastar.minedonate.network.packets.BuyResponsePacket;
-import ru.alastar.minedonate.rtnl.ModNetwork;
-import ru.alastar.minedonate.rtnl.ShopLogger;
+import ru.alastar.minedonate.rtnl.ModNetworkRegistry;
+import ru.alastar.minedonate.rtnl.ModShopLogger;
 
 /**
  * Created by Alastar on 18.07.2017.
@@ -50,11 +50,11 @@ public class BuyPacketHandler implements IMessageHandler<BuyPacket, IMessage> {
 
                                 if ((procMoney = MineDonate.getMoneyProcessor(info.getMoneyType()).canBuy(info, MineDonate.getUUIDFromPlayer(serverPlayer), message.amount)) != -1) {
 
-                                    ShopLogger.logBuy(info, serverPlayer, message.amount, info.getMoneyType());
+                                    ModShopLogger.logBuy(info, serverPlayer, message.amount, info.getMoneyType());
 
                                     int currentMoney = info.withdrawMoney(serverPlayer.getGameProfile().getId(), procMoney);
 
-                                    ModNetwork.sendToMoneyChangedPacket((EntityPlayerMP) serverPlayer, currentMoney, info.getMoneyType());
+                                    ModNetworkRegistry.sendToMoneyChangedPacket((EntityPlayerMP) serverPlayer, currentMoney, info.getMoneyType());
 
                                     MineDonate.shops.get(message.shopId).cats[message.category].giveMerch(serverPlayer, info, message.amount);
 

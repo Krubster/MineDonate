@@ -7,8 +7,8 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.network.manage.packets.ManageResponsePacket;
 import ru.alastar.minedonate.network.manage.packets.RenameShopPacket;
-import ru.alastar.minedonate.rtnl.Manager;
-import ru.alastar.minedonate.rtnl.Shop;
+import ru.alastar.minedonate.rtnl.ModManager;
+import ru.alastar.minedonate.rtnl.common.Shop;
 
 public class RenameShopServerPacketHandler implements IMessageHandler < RenameShopPacket, IMessage > {
 	
@@ -43,7 +43,7 @@ public class RenameShopServerPacketHandler implements IMessageHandler < RenameSh
 
 			}
 			
-			Manager . renameShop ( s, message . name ) ;
+			ModManager . renameShop ( s, message . name ) ;
 			
 	        return new ManageResponsePacket ( ManageResponsePacket.ResponseType.SHOP, ManageResponsePacket.ResponseCode.RENAME, ManageResponsePacket.ResponseStatus.OK ) ;
 

@@ -10,7 +10,7 @@ import ru.alastar.minedonate.network.packets.AccountInfoPacket;
 import ru.alastar.minedonate.network.packets.AddMerchPacket;
 import ru.alastar.minedonate.network.packets.CodePacket;
 import ru.alastar.minedonate.network.packets.SupportedFeaturesPacket;
-import ru.alastar.minedonate.rtnl.ModNetwork;
+import ru.alastar.minedonate.rtnl.ModNetworkRegistry;
 
 public class CodeServerPacketHandler implements IMessageHandler<CodePacket, IMessage> {
     
@@ -40,14 +40,14 @@ public class CodeServerPacketHandler implements IMessageHandler<CodePacket, IMes
 
                 SupportedFeaturesPacket features_packet = new SupportedFeaturesPacket ( MineDonate . cfg ) ;
 
-                ModNetwork . sendTo ( serverPlayer, features_packet ) ;
-        		ModNetwork . sendTo ( serverPlayer, new AccountInfoPacket ( serverPlayer . getGameProfile ( ) . getId ( ) . toString ( ), userName ) ) ;
+                ModNetworkRegistry . sendTo ( serverPlayer, features_packet ) ;
+        		ModNetworkRegistry . sendTo ( serverPlayer, new AccountInfoPacket ( serverPlayer . getGameProfile ( ) . getId ( ) . toString ( ), userName ) ) ;
                                         
                 // MineDonate . networkChannel . sendTo ( new CategoryPacket ( 0, features_packet . firstCatId, MineDonate . shops . get ( 0 ) . cats [ features_packet . firstCatId ] . subCategories ), serverPlayer ) ;
                 
                 for ( int j = 0; j < MineDonate . shops . get ( 0 ) . cats [ features_packet . firstCatId ] . getMerch ( ) . length ; ++ j ) {
                 	
-                	ModNetwork . sendTo ( serverPlayer, new AddMerchPacket ( MineDonate . shops . get ( 0 ) . cats [ features_packet . firstCatId ] . getMerch ( ) [ j ] ) ) ;
+                	ModNetworkRegistry . sendTo ( serverPlayer, new AddMerchPacket ( MineDonate . shops . get ( 0 ) . cats [ features_packet . firstCatId ] . getMerch ( ) [ j ] ) ) ;
 
                 }
 

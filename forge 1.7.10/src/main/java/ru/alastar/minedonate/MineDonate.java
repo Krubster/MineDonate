@@ -12,8 +12,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.*;
 import net.minecraft.server.MinecraftServer;
 
 import ru.alastar.minedonate.gui.ShopGUI;
@@ -22,12 +21,12 @@ import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.merch.categories.*;
 import ru.alastar.minedonate.mproc.AbstractMoneyProcessor;
 import ru.alastar.minedonate.plugin.PluginHelper;
+import ru.alastar.minedonate.plugin.permissions.PermissionsPlugin;
 import ru.alastar.minedonate.proxies.CommonProxy;
-import ru.alastar.minedonate.rtnl.Account;
-import ru.alastar.minedonate.rtnl.Shop;
+import ru.alastar.minedonate.rtnl.ModDataBase;
+import ru.alastar.minedonate.rtnl.common.*;
 
 import ru.log_inil.mc.minedonate.localData.DataOfConfig;
-import ru.log_inil.mc.minedonate.localData.DataOfDataBaseLink;
 import ru.log_inil.mc.minedonate.localData.DataOfMoneyProcessor;
 import ru.log_inil.mc.minedonate.localData.DataOfPermissionEntry;
 import ru.log_inil.mc.minedonate.localData.LocalDataInterchange;
@@ -40,12 +39,11 @@ import java.util.*;
 @Mod(modid = MineDonate.MODID, version = MineDonate.VERSION)
 public class MineDonate {
 
-    public static final String MODID = "MineDonate";
-    public static final String VERSION = "0.7.1.20";
+    public static final String MODID = "MineDonate" ;
+    public static final String VERSION = "0.7.1.21" ;
 
     public static boolean m_Enabled = false;
 
-    public static Map < String, Connection > dataBaseConnections = new HashMap < > ( ) ;
     public static Map < Integer, Shop > shops = new HashMap < > ( ) ;
     public static Map < String, ShopInventoryContainer > mergeContainers = new HashMap < > ( ) ;
     public static Map < Object, List < String > > permissions = new HashMap < > ( ) ;
@@ -62,8 +60,10 @@ public class MineDonate {
     @SidedProxy(clientSide = "ru.alastar.minedonate.proxies.ClientProxy", serverSide = "ru.alastar.minedonate.proxies.ServerProxy")
     public static CommonProxy proxy;
 
-    public static MineDonate getInstance() {
-        return instance;
+    public static MineDonate getInstance ( ) {
+        
+    	return instance ;
+        
     }
 
     @Mod.EventHandler
@@ -92,9 +92,9 @@ public class MineDonate {
 
         try {
 
-            cfg = (DataOfConfig) LocalDataInterchange.read(DataOfConfig.class, new File("."), "server");
+            cfg = ( DataOfConfig ) LocalDataInterchange . read ( DataOfConfig . class, new File ( "." ), "server" ) ;
 
-        } catch (Exception ex) {
+        } catch ( Exception ex ) {
 
             System . err . println ( "Config read error!" ) ;
             ex . printStackTrace ( ) ;
@@ -103,99 +103,9 @@ public class MineDonate {
 
     }
 
-    public static Statement getNewStatement ( String dbLinkName ) throws Exception {
-    	
-    	return getDataBaseConnection ( dbLinkName ) . createStatement ( ) ;
-    	
-    }
-    
-    public static PreparedStatement getPreparedStatement ( String dbLinkName, String sql ) throws Exception {
-        
-    	return getDataBaseConnection ( dbLinkName ) . prepareStatement(sql);
-        
-    }
-    
-    public static Connection getDataBaseConnection ( String dbLinkName ) throws Exception {
-    	
-    	return checkAndReconnectDataBase ( dbLinkName, dataBaseConnections . get ( dbLinkName ) ) ;
-    	
-    }
-    
-    public static Connection getDataBaseConnection ( String linkName, DataOfDataBaseLink link, boolean doPreLoadClass ) throws Exception {
-    	
-    	if ( doPreLoadClass && ! "" . equals ( link . preLoadClassName ) ) {
-    		
-    		 Class . forName ( link . preLoadClassName ) . newInstance ( ) ;
-    		 
-    	}
-    
-    	Connection c ;
-    	if ( link . hasCustomLink ) {
-
-    		c = DriverManager . getConnection ( link . customLink . replace ( "%host%", link . host ) . replace ( "%port%", Integer . toString ( link . port ) ) . replace ( "%name%", link . name ) + ( link . useUTF8 ? "?useUnicode=true&characterEncoding=UTF-8" : "" ), link . user, link . password ) ;
-        	
-    		dataBaseConnections . put ( linkName, c ) ;
-    		
-    	} else {
-    		
-    		c = DriverManager . getConnection ( "jdbc:mysql://" + link . host + ":" + link . port + "/" + link . name + ( link . useUTF8 ? "?useUnicode=true&characterEncoding=UTF-8" : "" ), link . user, link . password ) ;
-    		dataBaseConnections . put ( linkName, c ) ;
-    		
-    	}
-    	
-    	return c ;
-    	
-    }
-    
-    public static Connection checkAndReconnectDataBase ( String linkName, Connection c ) throws Exception {
-    	
-    	if ( c . isClosed ( ) ) {
-    		
-    		return getDataBaseConnection ( linkName, cfg . dataBases . get ( linkName ), false ) ;
- 
-    	}
-    	
-    	return c ;
-    	
-    }
-    
     @SideOnly(Side.SERVER)
-    public static void initDataBase ( ) {
-
-        try {
-
-            logInfo("Init connections to database's...");
-
-            DataOfDataBaseLink tmpDBLink ;
-            
-            for ( String linkName : cfg . dataBases . keySet ( ) ) {
-            	
-                logInfo("Load and try connect db[" + linkName+"]");
-
-            	tmpDBLink = cfg . dataBases . get ( linkName ) ;
-            	
-            	getDataBaseConnection ( linkName, tmpDBLink, true ) ;
-            	
-                logInfo("Connected db[" + linkName + "]!");
-
-            }
-            
-            loadServerMerch ( ) ;
-            m_Enabled = true;
-
-        } catch ( Exception ex ) {
-            
-            logError("An error occured! Disabling feature!");
-            m_Enabled = false;
-
-        	ex . printStackTrace ( ) ;
-            
-        }
-                
-    }
-
-    @SideOnly(Side.SERVER)
-    private static void loadServerMerch ( ) {
+	public
+    static void loadServerMerch ( ) {
     	
         try {
         	
@@ -213,7 +123,7 @@ public class MineDonate {
             	
                 if ( shops . get ( 0 ) . cats [ i ] . isEnabled ( ) ) {
                 	
-                    stmt = getNewStatement ( "main" ) ;
+                    stmt = ModDataBase . getNewStatement ( "main" ) ;
                     
                     rs = stmt . executeQuery ( "SELECT * FROM " + shops . get ( 0 ) . cats [ i ] . getDatabaseTable ( ) + ";" ) ;
                     
@@ -245,6 +155,8 @@ public class MineDonate {
             
         } catch ( Exception ex ) {
         	
+            MineDonate . m_Enabled = false ;
+
             ex . printStackTrace ( ) ;
             
         }
@@ -290,7 +202,7 @@ public class MineDonate {
 
         try {
             
-        	Statement stmt = getNewStatement ( "main" ) ;
+        	Statement stmt = ModDataBase . getNewStatement ( "main" ) ;
             ResultSet rs = stmt . executeQuery ( "SELECT " + "id" + " FROM " + cfg.dbShops + " WHERE id=" + shopId + ";" ) ;
             
             while ( rs . next ( ) ) {
@@ -319,7 +231,7 @@ public class MineDonate {
     	
         try {
         	
-        	Statement stmt = getNewStatement ( "main" ) ;
+        	Statement stmt = ModDataBase . getNewStatement ( "main" ) ;
             ResultSet rs = stmt . executeQuery ( "SHOW TABLE STATUS LIKE '" + cfg.dbShops + "';" ) ;
 
             while ( rs . next ( ) ) {
@@ -345,7 +257,7 @@ public class MineDonate {
         
         try {
         	
-        	Statement stmt = getNewStatement ( "main" ) ;
+        	Statement stmt = ModDataBase . getNewStatement ( "main" ) ;
             ResultSet rs = stmt . executeQuery ( "SELECT * FROM " + cfg.dbShops + " WHERE id=" + shopId + ";" ) ;
 
             while ( rs . next ( ) ) {
@@ -406,7 +318,7 @@ public class MineDonate {
             	
                 if ( shops . get ( shopId ) . cats [ i ] . isEnabled ( ) ) {
                 	
-                    Statement stmt = getNewStatement ( "main" ) ;
+                    Statement stmt = ModDataBase . getNewStatement ( "main" ) ;
                     
                     ResultSet rs = stmt . executeQuery ( "SELECT * FROM " + shops . get ( shopId ) . cats [ i ] . getDatabaseTable ( ) + " WHERE shopId = " + shopId + ";" ) ;
                     
@@ -449,7 +361,7 @@ public class MineDonate {
 			
 			for ( DataOfPermissionEntry dopl : cfg . permissionsTriggerList ) {
 
-				if ( PluginHelper . pexMgr . hasPermission ( userName, dopl . permission ) ) {
+				if ( ( ( PermissionsPlugin ) PluginHelper . getPlugin ( "permissionsManager" ) ) . hasPermission ( userName, dopl . permission ) ) {
 					
 					l . addAll ( getPermissionsByGroups ( dopl . groups ) ) ;
 					
@@ -475,7 +387,7 @@ public class MineDonate {
 
         try {
         	
-        	Statement stmt = getNewStatement ( "main" ) ;
+        	Statement stmt = ModDataBase . getNewStatement ( "main" ) ;
             ResultSet rs = stmt.executeQuery("SELECT * FROM " + cfg.dbModPermissionsTable+ " WHERE groupName = '" + groupName + "';");
             
             while ( rs . next ( ) ) {
@@ -527,7 +439,7 @@ public class MineDonate {
         
         try {
         	
-        	Statement stmt = getNewStatement ( "main" ) ;
+        	Statement stmt = ModDataBase . getNewStatement ( "main" ) ;
             ResultSet rs = stmt.executeQuery("SELECT * FROM " + cfg.dbUsers + " WHERE " + cfg.dbUsersIdColumn + "='" + user.toString() + "';");
 
             while ( rs . next ( ) ) {
@@ -646,7 +558,11 @@ public class MineDonate {
     @SideOnly(Side.SERVER)
     public static void logInfo ( Object s ) {
         
-    	System . err . println ( "[MineDonate] [INFO]: " + s) ;
+    	if ( cfg . displayInfoLog ) {
+    	
+    		System . err . println ( "[MineDonate] [INFO]: " + s) ;
+    	
+    	}
         
     }
     

@@ -5,13 +5,13 @@ import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import net.minecraft.entity.player.EntityPlayerMP;
 import ru.alastar.minedonate.MineDonate;
+import ru.alastar.minedonate.network.INetworkTask;
 import ru.alastar.minedonate.network.manage.packets.AddNewEntryPacket;
 import ru.alastar.minedonate.network.manage.packets.ManageResponsePacket;
-import ru.alastar.minedonate.rtnl.Account;
-import ru.alastar.minedonate.rtnl.INetworkTask;
-import ru.alastar.minedonate.rtnl.Manager;
-import ru.alastar.minedonate.rtnl.NetworkMessageProcessor;
-import ru.alastar.minedonate.rtnl.Shop;
+import ru.alastar.minedonate.rtnl.ModManager;
+import ru.alastar.minedonate.rtnl.ModNetworkTaskProcessor;
+import ru.alastar.minedonate.rtnl.common.Account;
+import ru.alastar.minedonate.rtnl.common.Shop;
 
 public class AddNewEntryServerPacketHandler implements IMessageHandler < AddNewEntryPacket, IMessage >, INetworkTask < AddNewEntryPacket, IMessage > {
 		
@@ -22,7 +22,7 @@ public class AddNewEntryServerPacketHandler implements IMessageHandler < AddNewE
     @Override
     public IMessage onMessage ( AddNewEntryPacket message, MessageContext ctx ) {
     	
-    	NetworkMessageProcessor . processTask ( ( INetworkTask ) this, message, ctx ) ; // + 60
+    	ModNetworkTaskProcessor . processTask ( ( INetworkTask ) this, message, ctx ) ; // + 60
 
     	return null ;
     	
@@ -85,7 +85,7 @@ public class AddNewEntryServerPacketHandler implements IMessageHandler < AddNewE
 		
 					}		
 					
-					Manager . addItemToShop ( acc, s, message . catId, message . limit, message . cost, message . name ) ;
+					ModManager . addItemToShop ( acc, s, message . catId, message . limit, message . cost, message . name ) ;
 
 				break ;
 				
@@ -103,7 +103,7 @@ public class AddNewEntryServerPacketHandler implements IMessageHandler < AddNewE
 		
 					}
 					
-					Manager . addEntityToShop ( acc, s, message . catId, message . limit, message . cost, message . name ) ;
+					ModManager . addEntityToShop ( acc, s, message . catId, message . limit, message . cost, message . name ) ;
 
 				break ;
 				

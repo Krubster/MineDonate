@@ -3,7 +3,7 @@ package ru.log_inil.mc.minedonate.gui.frames;
 import net.minecraft.client.gui.GuiButton;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.gui.ShopGUI;
-import ru.alastar.minedonate.rtnl.ModNetwork;
+import ru.alastar.minedonate.rtnl.ModNetworkRegistry;
 import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.localData.frames.DataOfUIFrameAddItem;
 
@@ -87,7 +87,7 @@ public class GuiFrameAddEntity extends GuiFrameAddItem {
     		
     		g . setLoading ( true ) ;
     		
-            ModNetwork . sendToServerAddNewEntryPacket ( shopId, catId, limit, cost, this . nameField . getText ( ) ) ;
+            ModNetworkRegistry . sendToServerAddNewEntryPacket ( shopId, catId, limit, cost, this . nameField . getText ( ) ) ;
 
             this . hideFrame ( g ) ;
 

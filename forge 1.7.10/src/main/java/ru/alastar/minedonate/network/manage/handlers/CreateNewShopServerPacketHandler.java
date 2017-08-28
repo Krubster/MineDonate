@@ -7,8 +7,8 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.network.manage.packets.CreateNewShopPacket;
 import ru.alastar.minedonate.network.manage.packets.ManageResponsePacket;
-import ru.alastar.minedonate.rtnl.Account;
-import ru.alastar.minedonate.rtnl.Manager;
+import ru.alastar.minedonate.rtnl.ModManager;
+import ru.alastar.minedonate.rtnl.common.Account;
 
 public class CreateNewShopServerPacketHandler implements IMessageHandler < CreateNewShopPacket, IMessage > {
 	
@@ -49,7 +49,7 @@ public class CreateNewShopServerPacketHandler implements IMessageHandler < Creat
 
 			}
 			
-			Manager . createShop ( serverPlayer.getGameProfile().getId(), acc . name, message . name ) ;
+			ModManager . createShop ( serverPlayer.getGameProfile().getId(), acc . name, message . name ) ;
 			
 	        return new ManageResponsePacket ( ManageResponsePacket.ResponseType.SHOP, ManageResponsePacket.ResponseCode.CREATE, ManageResponsePacket.ResponseStatus.OK ) ;
 

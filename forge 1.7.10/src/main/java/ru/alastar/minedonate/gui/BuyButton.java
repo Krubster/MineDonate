@@ -1,7 +1,7 @@
 package ru.alastar.minedonate.gui;
 
 import ru.alastar.minedonate.MineDonate;
-import ru.alastar.minedonate.rtnl.ModNetwork;
+import ru.alastar.minedonate.rtnl.ModNetworkRegistry;
 import ru.log_inil.mc.minedonate.gui.GuiTexturedButton;
 
 /**
@@ -37,7 +37,7 @@ public class BuyButton extends GuiTexturedButton {
     	
         if ( merch_id != -1 ) {
         	
-        	ModNetwork . sendToServerBuyPacket ( shopId, merch_id, catId, MineDonate . shops . get ( shopId ) . cats [ catId ] . getMerch ( merch_id ) . getAmountToBuy ( ) ) ;
+        	ModNetworkRegistry . sendToServerBuyPacket ( shopId, merch_id, catId, MineDonate . shops . get ( shopId ) . cats [ catId ] . getMerch ( merch_id ) . getAmountToBuy ( ) ) ;
      
         }
         

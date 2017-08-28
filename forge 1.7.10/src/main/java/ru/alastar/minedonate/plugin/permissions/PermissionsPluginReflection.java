@@ -1,18 +1,21 @@
-package ru.alastar.minedonate.plugin.reflection;
-
-import ru.alastar.minedonate.plugin.clean.PermissionsPlugin;
+package ru.alastar.minedonate.plugin.permissions;
 
 import java.lang.reflect.Method;
 import java.util.UUID;
+
+import ru.log_inil.mc.minedonate.localData.DataOfAccessorPlugin;
 
 public class PermissionsPluginReflection extends PermissionsPlugin {
 
 	Method mLoad,  mHasPermission, mAddGroup, mRemoveGroup;
 	
 	Object o ;
-
-	public PermissionsPluginReflection ( Object _o ) {
 	
+	@Override
+	public void init ( Object _o, DataOfAccessorPlugin _doap ) {
+	
+		super . init ( _o, _doap ) ;
+		
 		try {
 			
 			o = _o ;

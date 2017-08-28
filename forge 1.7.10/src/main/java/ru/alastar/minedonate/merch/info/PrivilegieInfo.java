@@ -1,8 +1,8 @@
 package ru.alastar.minedonate.merch.info;
 
 import io.netty.buffer.ByteBuf;
+import ru.alastar.minedonate.Utils;
 import ru.alastar.minedonate.merch.Merch;
-import ru.alastar.minedonate.rtnl.Utils;
 
 /**
  * Created by Alastar on 19.07.2017.

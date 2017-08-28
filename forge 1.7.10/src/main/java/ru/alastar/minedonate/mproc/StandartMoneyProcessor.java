@@ -2,7 +2,9 @@ package ru.alastar.minedonate.mproc;
 
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
-import ru.alastar.minedonate.rtnl.ShopLogger;
+import ru.alastar.minedonate.rtnl.ModDataBase;
+import ru.alastar.minedonate.rtnl.ModShopLogger;
+
 import ru.log_inil.mc.minedonate.localData.DataOfMoneyProcessor;
 
 import java.sql.ResultSet;
@@ -66,7 +68,7 @@ public class StandartMoneyProcessor extends AbstractMoneyProcessor {
 		
 		try {
 			
-			Statement stat = MineDonate . getNewStatement ( domp . dbLinkName ) ;
+			Statement stat = ModDataBase . getNewStatement ( domp . dbLinkName ) ;
 
 			stat.execute("INSERT INTO " + domp.dbTable + " (" + domp.dbIdColumn + "," + domp . dbNameColumn + "," + domp.dbMoneyColumn + ") VALUES ( '" + id.toString() + "', '" + name + "', " + domp.regMoney + " )");
 
@@ -80,7 +82,7 @@ public class StandartMoneyProcessor extends AbstractMoneyProcessor {
 						
 						if ( amp . domp . regMoney > 0 ) {
 
-							ShopLogger.logMoney(id.toString(), 0, domp.regMoney, "register>" + amp.domp.moneyType);
+							ModShopLogger.logMoney(id.toString(), 0, domp.regMoney, "register>" + amp.domp.moneyType);
 						
 						}
 
@@ -105,7 +107,7 @@ public class StandartMoneyProcessor extends AbstractMoneyProcessor {
 
 		try {
 			
-			Statement stat = MineDonate . getNewStatement ( domp . dbLinkName ) ;
+			Statement stat = ModDataBase . getNewStatement ( domp . dbLinkName ) ;
 
 			ResultSet rs = stat.executeQuery("SELECT " + domp.dbMoneyColumn + " FROM " + domp.dbTable + " WHERE " + domp.dbIdColumn + "='" + id.toString() + "';");
 
@@ -140,7 +142,7 @@ public class StandartMoneyProcessor extends AbstractMoneyProcessor {
 
 		int last = getMoneyFor(id);
 
-		ShopLogger.logMoney(id.toString(), last, last + money, "returnMoney>" + domp.moneyType);
+		ModShopLogger.logMoney(id.toString(), last, last + money, "returnMoney>" + domp.moneyType);
 
 		setMoney(id, last + money);
 			
@@ -151,7 +153,7 @@ public class StandartMoneyProcessor extends AbstractMoneyProcessor {
 		
 		try {
 			
-			Statement stat = MineDonate . getNewStatement ( domp . dbLinkName ) ;
+			Statement stat = ModDataBase . getNewStatement ( domp . dbLinkName ) ;
 
 			stat.executeUpdate("UPDATE " + domp.dbTable + " SET " + domp.dbMoneyColumn + "=" + money + " WHERE " + domp.dbIdColumn + "='" + id + "';");
 
@@ -172,7 +174,7 @@ public class StandartMoneyProcessor extends AbstractMoneyProcessor {
 
 		try {
 		
-			Statement stat = MineDonate . getNewStatement ( domp . dbLinkName ) ;
+			Statement stat = ModDataBase . getNewStatement ( domp . dbLinkName ) ;
 			ResultSet rs = stat.executeQuery("SELECT id FROM " + domp.dbTable + " WHERE " + domp.dbIdColumn + "='" + id + "';");
 
 			while ( rs . next ( ) ) {

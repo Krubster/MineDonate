@@ -2,11 +2,12 @@ package ru.alastar.minedonate.merch.categories;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.MinecraftServer;
+
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.merch.info.ItemInfo;
-import ru.alastar.minedonate.rtnl.ModNetwork;
+import ru.alastar.minedonate.rtnl.ModDataBase;
+import ru.alastar.minedonate.rtnl.ModNetworkRegistry;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -27,19 +28,29 @@ public class ItemNBlocks extends MerchCategory {
 
     @Override
     public void loadMerchFromDB(ResultSet rs) {
+    	
         try {
+        	
             while (rs.next()) {
+            	
                 final ItemInfo info = new ItemInfo(shopId, catId, rs.getInt("id"), rs.getInt("rating"),
                         rs.getInt("cost"),
                         rs.getString("name"),
                         rs.getInt("lim"),
                         rs.getBlob("stack_data"));
+                
                 this.addMerch(info);
+                
             }
+            
         } catch (SQLException e) {
+        	
             e.printStackTrace();
+            
         }
-        MinecraftServer.getServer().logInfo("Loaded " + m_Merch.size() + " lots");
+        
+        MineDonate . logInfo ( "Loaded " + m_Merch . size() + " merch in " + toString ( ) ) ;
+        
     }
 
     String dbTable = MineDonate.cfg.dbItems;
@@ -160,7 +171,7 @@ public class ItemNBlocks extends MerchCategory {
         
         try {
             
-        	stmt = MineDonate . getNewStatement ( "main" ) ;
+        	stmt = ModDataBase . getNewStatement ( "main" ) ;
             stmt.executeUpdate("UPDATE " + getDatabaseTable ( ) + " SET lim=" + info.limit + " WHERE id=" + info . getId ( ) + ( info . shopId > 0 ? " AND shopId=" + info . shopId : "" ) + ";");
             stmt.close();
             
@@ -170,7 +181,7 @@ public class ItemNBlocks extends MerchCategory {
             
         }
         
-        ModNetwork . sendToAllMerchInfoPacket ( info ) ;
+        ModNetworkRegistry . sendToAllMerchInfoPacket ( info ) ;
 
     }
 

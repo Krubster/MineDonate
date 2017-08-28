@@ -9,8 +9,8 @@ import ru.alastar.minedonate.network.manage.packets.ManageResponsePacket;
 import ru.alastar.minedonate.network.manage.packets.ManageResponsePacket.ResponseCode;
 import ru.alastar.minedonate.network.manage.packets.ManageResponsePacket.ResponseStatus;
 import ru.alastar.minedonate.network.manage.packets.ManageResponsePacket.ResponseType;
+import ru.alastar.minedonate.rtnl.common.Account;
 import ru.alastar.minedonate.network.manage.packets.MobSelectPacket;
-import ru.alastar.minedonate.rtnl.Account;
 
 public class MobSelectServerPacketHandler implements IMessageHandler < MobSelectPacket, IMessage > {
 

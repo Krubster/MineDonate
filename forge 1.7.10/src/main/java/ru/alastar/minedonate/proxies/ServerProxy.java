@@ -10,7 +10,8 @@ import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.commands.AddMoneyCommand;
 import ru.alastar.minedonate.events.EntitySelectEventHandler;
 import ru.alastar.minedonate.plugin.PluginHelper;
-import ru.alastar.minedonate.rtnl.ShopLogger;
+import ru.alastar.minedonate.rtnl.ModDataBase;
+import ru.alastar.minedonate.rtnl.ModShopLogger;
 
 /**
  * Created by Alastar on 01.04.2017.
@@ -22,7 +23,7 @@ public class ServerProxy extends CommonProxy {
 
         super.preInit(event);
 
-        ShopLogger . init ( ) ;
+        ModShopLogger . init ( ) ;
         MineDonate . loadServerConfig ( ) ;
         
         if ( ! MineDonate . cfg . enable ) { 
@@ -31,8 +32,9 @@ public class ServerProxy extends CommonProxy {
         	
         }
 
-        MineDonate . initDataBase ( ) ;
-
+        ModDataBase . initDataBase ( ) ;
+        MineDonate . loadServerMerch ( ) ;
+        
         MinecraftForge . EVENT_BUS . register ( new EntitySelectEventHandler ( ) ) ;
                 
     }

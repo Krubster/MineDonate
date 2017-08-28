@@ -13,7 +13,7 @@ import ru.alastar.minedonate.gui.categories.*;
 import ru.alastar.minedonate.merch.info.ShopInfo;
 import ru.alastar.minedonate.network.packets.CodePacket;
 import ru.alastar.minedonate.proxies.ClientProxy;
-import ru.alastar.minedonate.rtnl.ModNetwork;
+import ru.alastar.minedonate.rtnl.ModNetworkRegistry;
 import ru.log_inil.mc.minedonate.gui.*;
 import ru.log_inil.mc.minedonate.gui.context.ContextMenuManager;
 import ru.log_inil.mc.minedonate.gui.frames.*;
@@ -404,7 +404,7 @@ public class ShopGUI extends MCGuiAccessible {
                 m_Page = 0;
                 lastCategory = m_Selected_Category = ((CategoryButton) button).getCategory();
 
-                ModNetwork . sendToServerNeedShopCategoryPacket ( getCurrentShopId ( ), m_Selected_Category ) ;
+                ModNetworkRegistry . sendToServerNeedShopCategoryPacket ( getCurrentShopId ( ), m_Selected_Category ) ;
 
                 loading = true ;
                 
@@ -422,7 +422,7 @@ public class ShopGUI extends MCGuiAccessible {
             } else if ( button instanceof GoButton ) {
             	
             	( ( UsersShopsCategory ) getCurrentCategory ( ) ) . selectedShop = ( ShopInfo ) MineDonate . shops . get ( 0 ) . cats [ ( getCurrentCategory ( ) ).getCatId ( ) ] . getMerch (  ( ( GoButton ) button ) . shopId ) ;
-                ModNetwork . sendToServerNeedShopCategoryPacket ( ( ( GoButton ) button ) . shopId, 0 ) ;
+                ModNetworkRegistry . sendToServerNeedShopCategoryPacket ( ( ( GoButton ) button ) . shopId, 0 ) ;
 
                 loading = true ;
                 
@@ -591,7 +591,7 @@ public class ShopGUI extends MCGuiAccessible {
         
 		if ( needNetUpdate && ! loading ) {
 
-            ModNetwork . sendToServerNeedUpdatePacket ( CodePacket . Code . CLIENT_NEED_FULL_INFO ) ;
+            ModNetworkRegistry . sendToServerNeedUpdatePacket ( CodePacket . Code . CLIENT_NEED_FULL_INFO ) ;
 
             loading = true ;
             

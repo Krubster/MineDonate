@@ -1,4 +1,4 @@
-package ru.alastar.minedonate.rtnl;
+package ru.alastar.minedonate.rtnl.common;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;

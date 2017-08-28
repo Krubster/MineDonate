@@ -1,10 +1,10 @@
-package ru.alastar.minedonate.plugin.bukkit;
+package ru.alastar.minedonate.plugin.worldProtection;
 
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
 
-public class WorldGuardBukkitPlugin extends ru.alastar.minedonate.plugin.clean.WorldGuardPlugin {
+public class WorldGuardBukkitPlugin extends ru.alastar.minedonate.plugin.worldProtection.WorldProtectionPlugin {
 
 	boolean loaded = false ;
 	com.sk89q.worldguard.bukkit.WorldGuardPlugin wgMgr ;

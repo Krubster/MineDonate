@@ -1,7 +1,7 @@
 package ru.alastar.minedonate.merch.categories;
 
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.server.MinecraftServer;
+
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.merch.info.ShopInfo;
@@ -38,15 +38,25 @@ public class UsersShops extends MerchCategory {
     }
     @Override
     public void loadMerchFromDB(ResultSet rs) {
+    	
         try {        	
+        	
             while (rs.next()) {
+            	
                 final ShopInfo info = new ShopInfo(rs.getInt("id"), rs.getInt("id"), rs.getInt("rating"), rs.getString("UUID"), rs.getString("ownerName"), rs.getString("name"), rs.getBoolean("isFreezed"), rs.getString("freezer"), rs.getString("freezReason"), true, rs.getString("moneyType"));
+                
                 this.addMerch(info);
+                
             }
+            
         } catch (SQLException e) {
+        	
             e.printStackTrace();
+            
         }
-        MinecraftServer.getServer().logInfo("Loaded " + m_Merch.size() + " users shops");
+    
+        MineDonate . logInfo ( "Loaded " + m_Merch . size() + " merch in " + toString ( ) ) ;
+
     }
 
     @Override
