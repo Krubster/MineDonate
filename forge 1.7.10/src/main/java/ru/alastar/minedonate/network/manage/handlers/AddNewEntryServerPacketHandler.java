@@ -14,9 +14,7 @@ import ru.alastar.minedonate.rtnl.NetworkMessageProcessor;
 import ru.alastar.minedonate.rtnl.Shop;
 
 public class AddNewEntryServerPacketHandler implements IMessageHandler < AddNewEntryPacket, IMessage >, INetworkTask < AddNewEntryPacket, IMessage > {
-	
-	// 12min
-	
+		
     public AddNewEntryServerPacketHandler ( ) {
 
     }

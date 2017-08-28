@@ -13,63 +13,103 @@ public class DataOfConfig {
 	
 	public Map < String, DataOfDataBaseLink > dataBases ;
 
-	public String dbUsers = "md_accounts" ;
-	public String dbUsersIdColumn = "UUID";
-	public String dbUsersNameColumn = "name" ;
-	public String dbUsersLinkName = "main" ;
+	public String dbUsers ;
+	public String dbUsersIdColumn ;
+	public String dbUsersNameColumn ;
+	public String dbUsersLinkName ;
 
-	public boolean sellItems = true ;
-	public String dbItems = "md_items" ;
-	public String itemsMoneyType = "coin" ;
+	public boolean sellItems ;
+	public String dbItems ;
+	public String itemsMoneyType ;
 
-	public boolean sellPrivelegies = true ;
-	public String dbPrivelegies = "md_privelegies" ;
-	public String privelegiesMoneyType = "rub" ;
+	public boolean sellPrivelegies ;
+	public String dbPrivelegies ;
+	public String privelegiesMoneyType ;
 
-	public boolean sellRegions = false ;
-	public String dbRegions = "md_regions" ;
-	public String regionMoneyType = "rub" ;
+	public boolean sellRegions ;
+	public String dbRegions ;
+	public String regionMoneyType ;
 
-	public boolean sellEntities = true ;
-	public String dbEntities = "md_entities" ;
-	public String entitiesMoneyType = "coin" ;
+	public boolean sellEntities ;
+	public String dbEntities ;
+	public String entitiesMoneyType ;
 
-	public boolean userShops = true;
-	public String dbUserItems = "md_userItems" ;
-	public String dbShops = "md_shops" ;
-	public String defaultUserShopMoneyType = "coin" ;
-	public int maxUsersShopsCount = 3 ;
-	public boolean defaultUserAllowShopCreate = true ;
+	public boolean userShops ;
+	public String dbUserItems ;
+	public String dbShops ;
+	public String defaultUserShopMoneyType ;
+	public int maxUsersShopsCount ;
+	public boolean defaultUserAllowShopCreate ;
 	
-	public boolean autoFixMoneyProcessorsTableCollisions = true ;
+	public boolean autoFixMoneyProcessorsTableCollisions ;
 	public DataOfMoneyProcessor [ ] moneyProcessors ;
-
-	public boolean sendLogToDB = true;
-	public String dbLogs = "md_logs";
 	
-	public boolean enablePermissionsMode = false ;
-	public String dbModPermissionsTable = "md_perms" ;
+	public boolean enablePermissionsMode ;
+	public String dbModPermissionsTable;
 	public DataOfPermissionEntry [ ] permissionsTriggerList ;
 
 	public String permissionsPluginClassName ;
 	public String worldGuardPluginClassName ;
 
+	public int packetsMaxLimit ;
+
+	public boolean sendLogToDB ;
+	public String dbLogs ;
+	
 	public DataOfConfig ( ) {
 		
 		dataBases = new HashMap < > ( ) ;
 		
 		dataBases . put ( "main", new DataOfDataBaseLink ( "localhost", 3306, "shop", "username", "password", "com.mysql.jdbc.Driver" ) ) ;
 		
+		dbUsers = "md_accounts" ;
+		dbUsersIdColumn = "UUID";
+		dbUsersNameColumn = "name" ;
+		dbUsersLinkName = "main" ;
+		 
+		sellItems = true ;
+		dbItems = "md_items" ;
+		itemsMoneyType = "coin" ;
+		
+		sellPrivelegies = true ;
+		dbPrivelegies = "md_privelegies" ;
+		privelegiesMoneyType = "rub" ;
+				
+		sellRegions = false ;
+		dbRegions = "md_regions" ;
+		regionMoneyType = "rub" ;
+		
+		sellEntities = true ;
+		dbEntities = "md_entities" ;
+		entitiesMoneyType = "coin" ;
+				
+		userShops = true ;
+		dbUserItems = "md_userItems" ;
+		dbShops = "md_shops" ;
+		defaultUserShopMoneyType = "coin" ;
+		maxUsersShopsCount = 3 ;
+		defaultUserAllowShopCreate = true ;
+		
+		autoFixMoneyProcessorsTableCollisions = true ;
+		
 		moneyProcessors = new DataOfMoneyProcessor [ ] {
 				new DataOfMoneyProcessor("rub", StandartMoneyProcessor.class.getName(), "md_accounts", "UUID", "name", "money", "main", false),
 				new DataOfMoneyProcessor("coin", StandartMoneyProcessor.class.getName(), "md_accounts", "UUID", "name", "coins", "main", true),
 		} ;
+		
+		enablePermissionsMode = false ;
+		dbModPermissionsTable = "md_perms" ;
 		
 		permissionsTriggerList = new DataOfPermissionEntry [ ] { new DataOfPermissionEntry ( "minedonate.default", new String [ ] { "default" } ), new DataOfPermissionEntry ( "minedonate.moderation", new String [ ] { "default", "moder" } ) } ;
 	
 		permissionsPluginClassName = PermissionsBukkitPlugin . class . getName ( ) ;
 		worldGuardPluginClassName = WorldGuardBukkitPlugin . class . getName ( ) ;
 		
+		packetsMaxLimit = 3 ;
+		
+		sendLogToDB = true ;
+		dbLogs = "md_logs" ;
+				
 	}
 	
 }

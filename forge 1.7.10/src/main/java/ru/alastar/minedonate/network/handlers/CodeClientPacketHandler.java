@@ -65,7 +65,7 @@ public class CodeClientPacketHandler implements IMessageHandler<CodePacket, IMes
     			
     	}
     	
-    	if ( message . code == CodePacket . Code . SERVER_ERROR_WAIT_ANOTHER_PROCESS ) {
+    	if ( message . code == CodePacket . Code . SERVER_ERROR_WAIT_OTHER_TASK ) {
 
         	Minecraft . getMinecraft ( ) . thePlayer . addChatMessage ( new ChatComponentText ( EnumChatFormatting . AQUA + " [MineDonate] " + EnumChatFormatting.RESET + message . code ) ) ;
         	return null ;
