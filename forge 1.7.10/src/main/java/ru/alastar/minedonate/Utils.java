@@ -40,4 +40,18 @@ public class Utils {
 		
 	}
 
+	public static boolean classExists ( String name ) {
+		
+		try { 
+		
+			Class . forName ( name ) ;
+			
+			return true ;
+			
+		} catch ( Exception ex ) { }
+		
+		return false ;
+		
+	}
+	
 }

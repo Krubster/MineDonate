@@ -7,6 +7,7 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.common.MinecraftForge;
 
 import ru.alastar.minedonate.MineDonate;
+import ru.alastar.minedonate.Utils;
 import ru.alastar.minedonate.commands.AddMoneyCommand;
 import ru.alastar.minedonate.events.EntitySelectEventHandler;
 import ru.alastar.minedonate.plugin.PluginHelper;
@@ -21,7 +22,7 @@ public class ServerProxy extends CommonProxy {
     @Override
     public void preInit(FMLPreInitializationEvent event) {
 
-        super.preInit(event);
+        super . preInit ( event ) ;
 
         ModShopLogger . init ( ) ;
         MineDonate . loadServerConfig ( ) ;
@@ -32,6 +33,16 @@ public class ServerProxy extends CommonProxy {
         	
         }
 
+        if ( ! Utils . classExists ( "org.apache.commons.dbcp2.BasicDataSource" ) ) {
+        	
+        	MineDonate . logError ( "Class[org.apache.commons.dbcp2.BasicDataSource] not found, the database can not work!" ) ;
+        	
+        	MineDonate . m_Enabled = false ;
+        	
+        	return ;
+        			
+        }
+        
         ModDataBase . initDataBase ( ) ;
         MineDonate . loadServerMerch ( ) ;
         

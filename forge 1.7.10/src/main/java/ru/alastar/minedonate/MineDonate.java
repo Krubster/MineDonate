@@ -40,7 +40,7 @@ import java.util.*;
 public class MineDonate {
 
     public static final String MODID = "MineDonate" ;
-    public static final String VERSION = "0.7.1.21" ;
+    public static final String VERSION = "0.7.1.22" ;
 
     public static boolean m_Enabled = false;
 
@@ -84,7 +84,9 @@ public class MineDonate {
    
     @Mod.EventHandler
     public void serverStarting ( FMLServerStartingEvent event ) {
+    	
     	proxy . serverStarting ( event ) ;
+    	
     }
     
     @SideOnly(Side.SERVER)
@@ -198,7 +200,7 @@ public class MineDonate {
 
     }
 
-    public static boolean userShopExistsInDataBase(int shopId) {
+    public static boolean userShopExistsInDataBase ( int shopId ) {
 
         try {
             

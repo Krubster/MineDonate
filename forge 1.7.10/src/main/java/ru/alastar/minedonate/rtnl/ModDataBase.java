@@ -14,6 +14,7 @@ import ru.alastar.minedonate.MineDonate;
 
 import ru.log_inil.mc.minedonate.localData.DataOfDataBaseLink;
 
+@SideOnly(Side.SERVER)
 public class ModDataBase {
 
     public static Map < String, Connection > dataBaseConnections = new HashMap < > ( ) ;
@@ -70,11 +71,10 @@ public class ModDataBase {
     
     public static PreparedStatement getPreparedStatement ( String dbLinkName, String sql ) throws Exception {
         
-    	return getDataBaseConnection ( dbLinkName ) . prepareStatement(sql);
+    	return getDataBaseConnection ( dbLinkName ) . prepareStatement ( sql ) ;
         
     }
     
-    @SideOnly(Side.SERVER)
     public static void initDataBase ( ) {
 
         try {
