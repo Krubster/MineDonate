@@ -109,10 +109,6 @@ public class ModNetworkRegistry {
 	public static void sendToServerBuyPacket ( int shopId, int merch_id, int catId, int amountToBuy ) {
 
 		networkChannel . sendToServer ( new BuyPacket ( shopId, merch_id, catId, amountToBuy ) ) ;
-		networkChannel . sendToServer ( new BuyPacket ( shopId, merch_id, catId, amountToBuy ) ) ;
-		networkChannel . sendToServer ( new BuyPacket ( shopId, merch_id, catId, amountToBuy ) ) ;
-		networkChannel . sendToServer ( new BuyPacket ( shopId, merch_id, catId, amountToBuy ) ) ;
-		networkChannel . sendToServer ( new BuyPacket ( shopId, merch_id, catId, amountToBuy ) ) ;
 
 	}
 

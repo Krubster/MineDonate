@@ -18,7 +18,7 @@ import ru.alastar.minedonate.network.packets.CodePacket;
  * Лимитор и ?прокси?-процессинг всех сообщений адресованых серверу
  *
  */
-public class ModNetworkTaskProcessor extends Thread {
+public class ModNetworkTaskProcessor {
 
 	static ExecutorService executor = Executors . newCachedThreadPool ( ) ;
 
