@@ -14,7 +14,7 @@ public abstract class WorldProtectionPlugin extends AccessorPlugin {
 		
 	}
 
-	public boolean checkRegionMaxOut ( String world, UUID name ) {
+	public boolean checkRegionMaxOut ( String world, UUID player ) {
 		
 		return false ;
 		

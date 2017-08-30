@@ -50,12 +50,14 @@ public class Regions extends MerchCategory {
     private void returnToStock(RegionInfo regionInfo) {
         
     	addMerch(regionInfo);
-                
+             
+    	Statement stat = null ;
+    	
         try {
         	
-        	Statement stmt = ModDataBase . getNewStatement ( "main" ) ;
-            stmt.execute("INSERT INTO " + MineDonate.cfg.dbRegions + " (world, name, cost) VALUES('" + regionInfo.name + "', '" + regionInfo.world_name + "', " + regionInfo.getCost() + ")");
-            stmt.close();
+        	stat = ModDataBase . getNewStatement ( "main" ) ;
+
+        	stat . execute ( "INSERT INTO " + MineDonate.cfg.dbRegions + " (world, name, cost) VALUES('" + regionInfo.name + "', '" + regionInfo.world_name + "', " + regionInfo.getCost() + ")");
             
         } catch ( Exception ex ) {
             
@@ -63,6 +65,8 @@ public class Regions extends MerchCategory {
             
         }
 
+		ModDataBase . closeStatementAndConnection ( stat ) ;
+		
         ModNetworkRegistry . sendToAllAddMerchPacket ( regionInfo ) ;
 
     }
@@ -124,12 +128,13 @@ public class Regions extends MerchCategory {
 
     private void removeRegion(String world_name, String name) {
     	
+    	Statement stat = null ;
+    	 
         try {
         	
-            Statement stmt = ModDataBase . getNewStatement ( "main" ) ;
+            stat = ModDataBase . getNewStatement ( "main" ) ;
             
-            stmt.execute("DELETE FROM " + MineDonate.cfg.dbRegions + " WHERE name='" + name + "' AND world='" + world_name + "';");
-            stmt.close();
+            stat . execute ( "DELETE FROM " + MineDonate.cfg.dbRegions + " WHERE name='" + name + "' AND world='" + world_name + "';");
             
         } catch ( Exception ex ) {
             
@@ -137,6 +142,8 @@ public class Regions extends MerchCategory {
             
         }
         
+		ModDataBase . closeStatementAndConnection ( stat ) ;
+		
     }
     
 	@Override

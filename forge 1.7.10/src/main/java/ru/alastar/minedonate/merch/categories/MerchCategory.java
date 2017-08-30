@@ -10,7 +10,7 @@ import ru.alastar.minedonate.rtnl.ModDataBase;
 
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -31,7 +31,7 @@ public abstract class MerchCategory {
 
     }
     
-    public Map < Integer, Merch > m_Merch = new HashMap < > ( ) ;
+    public Map < Integer, Merch > m_Merch = new LinkedHashMap < > ( ) ;
 
     @SideOnly(Side.SERVER)
     public boolean canReverse() {
@@ -77,10 +77,12 @@ public abstract class MerchCategory {
 
 	public int getNextMerchId ( ) {
 		
+		Statement stat = null ;
+		
         try {
         	
-        	Statement stmt = ModDataBase . getNewStatement ( "main" ) ;
-            ResultSet rs = stmt . executeQuery ( "SHOW TABLE STATUS LIKE '" + getDatabaseTable ( ) + "';" ) ;
+        	stat = ModDataBase . getNewStatement ( "main" ) ;
+            ResultSet rs = stat . executeQuery ( "SHOW TABLE STATUS LIKE '" + getDatabaseTable ( ) + "';" ) ;
 
             int r = -1 ;
             while ( rs . next ( ) ) {
@@ -90,7 +92,7 @@ public abstract class MerchCategory {
             }
             
             rs . close ( ) ;
-            stmt . close ( ) ;
+    		ModDataBase . closeStatementAndConnection ( stat ) ;
 
             return r ;
             
@@ -99,6 +101,8 @@ public abstract class MerchCategory {
         	ex . printStackTrace ( ) ;
             
         }
+
+		ModDataBase . closeStatementAndConnection ( stat ) ;
 
         return -1 ;
         
@@ -143,7 +147,7 @@ public abstract class MerchCategory {
     @Override
     public String toString ( ) {
     
-    	return "MerchCategory@" + hashCode ( ) + "{shopId=" + shopId +", catId=" + catId + ", catType=" + getCatType ( ) + ", moneyType=" + getMoneyType ( ) + "}" ;
+    	return getClass ( ) . getName ( ) + "@" + hashCode ( ) + "{shopId=" + shopId +", catId=" + catId + ", catType=" + getCatType ( ) + ", moneyType=" + getMoneyType ( ) + "}" ;
     	
     }
     

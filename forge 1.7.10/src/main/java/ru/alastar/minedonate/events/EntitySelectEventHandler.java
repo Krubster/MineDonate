@@ -16,6 +16,10 @@ import ru.alastar.minedonate.network.manage.packets.ManageResponsePacket.Respons
 import ru.alastar.minedonate.rtnl.ModNetworkRegistry;
 import ru.alastar.minedonate.rtnl.common.Account;
 
+/**
+ *	Добавление мобов в магазин 
+ * */
+
 public class EntitySelectEventHandler {
 
  	@SideOnly ( Side . SERVER )

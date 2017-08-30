@@ -1,16 +1,17 @@
 package ru.alastar.minedonate.plugin.permissions;
 
 import java.lang.reflect.Method;
+import java.util.Map;
 import java.util.UUID;
 
 import ru.log_inil.mc.minedonate.localData.DataOfAccessorPlugin;
 
 public class PermissionsPluginReflection extends PermissionsPlugin {
-
-	Method mLoad,  mHasPermission, mAddGroup, mRemoveGroup;
 	
 	Object o ;
 	
+	Method mLoad, mHasPermission, mAddGroup, mRemoveGroup;
+
 	@Override
 	public void init ( Object _o, DataOfAccessorPlugin _doap ) {
 	
@@ -20,7 +21,7 @@ public class PermissionsPluginReflection extends PermissionsPlugin {
 			
 			o = _o ;
 
-			mLoad = o.getClass().getMethod("load");
+			mLoad = o.getClass().getMethod("load", new Class[]{Map.class});
 			mHasPermission = o.getClass().getMethod("hasPermission", new Class[]{UUID.class, String.class});
 			mAddGroup = o.getClass().getMethod("addGroup", new Class[]{UUID.class, String.class, String.class, Long.class});
 			mRemoveGroup  = o.getClass().getMethod("removeGroup", new Class[]{UUID.class, String.class});
@@ -32,10 +33,10 @@ public class PermissionsPluginReflection extends PermissionsPlugin {
 	}
 
 	@Override
-	public void load() {
+	public void load ( Map < String, Object > prop ) {
 		
 		try {
-			mLoad.invoke(o);
+			mLoad.invoke(o, prop);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

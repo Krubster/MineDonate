@@ -22,7 +22,7 @@ public class AddNewEntryServerPacketHandler implements IMessageHandler < AddNewE
     @Override
     public IMessage onMessage ( AddNewEntryPacket message, MessageContext ctx ) {
     	
-    	ModNetworkTaskProcessor . processTask ( ( INetworkTask ) this, message, ctx ) ; // + 60
+    	ModNetworkTaskProcessor . processTask ( ( INetworkTask ) this, message, ctx ) ;
 
     	return null ;
     	
@@ -105,6 +105,9 @@ public class AddNewEntryServerPacketHandler implements IMessageHandler < AddNewE
 					
 					ModManager . addEntityToShop ( acc, s, message . catId, message . limit, message . cost, message . name ) ;
 
+				break ;
+				
+				default :
 				break ;
 				
 			}

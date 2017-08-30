@@ -1,14 +1,26 @@
 package ru.alastar.minedonate.plugin;
 
+import java.util.Map;
+
 import ru.log_inil.mc.minedonate.localData.DataOfAccessorPlugin;
 
 public abstract class AccessorPlugin {
 
-	public void init ( Object _o, DataOfAccessorPlugin _doap ) {
+	DataOfAccessorPlugin doap ;
+	
+	public DataOfAccessorPlugin getConfigPluginData ( ) {
+		
+		return doap ;
 		
 	}
 	
-	public void load ( ) {
+	public void init ( Object _o, DataOfAccessorPlugin _doap ) {
+	
+		doap = _doap ;
+		
+	}
+	
+	public void load ( Map < String, Object > prop ) {
 		
 	}
 

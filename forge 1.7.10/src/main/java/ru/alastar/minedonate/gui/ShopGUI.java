@@ -486,7 +486,7 @@ public class ShopGUI extends MCGuiAccessible {
     	
         if ( ! needNetUpdate ) {
         	
-        	moneyArea . drawBalanceArea ( ( int ) resolution . getScaledWidth ( ) - 20, ( int ) ( resolution . getScaledHeight ( ) * 0.1 + 25 ), mouseX, mouseY ) ;
+        	moneyArea . drawBalanceArea ( ( int ) resolution . getScaledWidth ( ) - 20, ( int ) ( resolution . getScaledHeight ( ) * 0.1 + 29 ), mouseX, mouseY ) ;
         	
 	        if ( ! loading ) { 
 	        	
@@ -820,6 +820,16 @@ public class ShopGUI extends MCGuiAccessible {
 
 	@Override
 	public void drawDefaultBackground ( ) {
+		
+	}
+
+	public void refresh ( ) {
+		
+		if ( Minecraft . getMinecraft ( ) . currentScreen == this ) {
+			
+			initGui ( ) ;
+			
+		}
 		
 	}
 	

@@ -5,10 +5,6 @@ import java.util.UUID;
 import ru.alastar.minedonate.plugin.AccessorPlugin;
 
 public abstract class PermissionsPlugin extends AccessorPlugin {
-
-	public void load ( ) {
-		
-	}
 	
 	public boolean hasPermission ( UUID user, String name ) {
 		

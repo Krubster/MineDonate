@@ -40,7 +40,7 @@ public class ModNetworkRegistry {
         //
         
         i ++ ;
- 
+        
         networkChannel . registerMessage ( CodeServerPacketHandler . class, CodePacket . class, i, Side .  SERVER ) ;
         networkChannel . registerMessage ( CodeClientPacketHandler . class, CodePacket . class, i, Side . CLIENT ) ;
 
@@ -66,7 +66,7 @@ public class ModNetworkRegistry {
         //
         
         networkChannel . registerMessage ( AddNewEntryServerPacketHandler . class, AddNewEntryPacket . class, i ++, Side . SERVER ) ;
-        networkChannel . registerMessage ( UppendEntryServerPacketHandler . class, UppendEntryPacket . class, i ++, Side . SERVER ) ;
+        networkChannel . registerMessage ( AppendEntryServerPacketHandler . class, AppendEntryPacket . class, i ++, Side . SERVER ) ;
 
         i ++ ;
         
@@ -109,7 +109,11 @@ public class ModNetworkRegistry {
 	public static void sendToServerBuyPacket ( int shopId, int merch_id, int catId, int amountToBuy ) {
 
 		networkChannel . sendToServer ( new BuyPacket ( shopId, merch_id, catId, amountToBuy ) ) ;
-		
+		networkChannel . sendToServer ( new BuyPacket ( shopId, merch_id, catId, amountToBuy ) ) ;
+		networkChannel . sendToServer ( new BuyPacket ( shopId, merch_id, catId, amountToBuy ) ) ;
+		networkChannel . sendToServer ( new BuyPacket ( shopId, merch_id, catId, amountToBuy ) ) ;
+		networkChannel . sendToServer ( new BuyPacket ( shopId, merch_id, catId, amountToBuy ) ) ;
+
 	}
 
 	public static void sendToServerNeedShopCategoryPacket ( int shopId, int catId ) {
@@ -204,7 +208,7 @@ public class ModNetworkRegistry {
 
 	public static void sendToServerUppendEntryPacket ( int shopId, int catId ) {
 		
-		networkChannel . sendToServer ( new UppendEntryPacket ( shopId, catId ) ) ;
+		networkChannel . sendToServer ( new AppendEntryPacket ( shopId, catId ) ) ;
 
 	}
 	
@@ -245,9 +249,9 @@ public class ModNetworkRegistry {
 	}
 	
 	public static void sendTo ( EntityPlayerMP player, IMessage packet ) {
-		
+
 		networkChannel . sendTo ( packet, player ) ;
-		
+
 	}
 
 }

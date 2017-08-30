@@ -28,8 +28,9 @@ public class GuiMoneyArea {
 	
 	public GuiMoneyArea updateDrawData ( ) {
 
-		lines.clear();
-		for ( String type: lines . keySet ( ) ) {
+		// lines . clear ( ) ;
+		
+		for ( String type : lines . keySet ( ) ) {
 			
 			if ( ! MineDonate . getAccount ( ) . moneys . containsKey ( type ) ) {
 				
@@ -171,10 +172,9 @@ public class GuiMoneyArea {
 		int tmpY ;
 		
 		public void drawBalance ( int i, int max, int count, int offsetX, int offsetY, int mouseX, int mouseY ) {
-		
 			
 			tmpX = offsetX - 20 - ( gui . getFontRenderer ( ) . getStringWidth ( count + ( balanceSuff != null ? balanceSuff : "" ) ) ) ;
-			tmpY = offsetY - ( max * 3 ) + ( i * 10 ) ;
+			tmpY = offsetY - ( ( i ) * 10 ) ; // - ( max * 3 )
 			
 			tmp = 0 ;
 			
@@ -192,11 +192,11 @@ public class GuiMoneyArea {
 			 	gui . drawTexturedModalRectNormal ( tmpX, tmpY, 8, 8 ) ;
 					
      		    GL11.glDisable(GL11.GL_BLEND);
-
-				tmp += 10 ;
 				
 			}
 			
+			tmp += 10 ;
+
 			gui . getFontRenderer ( ) . drawString ( count + ( balanceSuff != null ? balanceSuff : "" ), tmpX + tmp, tmpY, 14737632 ) ;
 
 		}

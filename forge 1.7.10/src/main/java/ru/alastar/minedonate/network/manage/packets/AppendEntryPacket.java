@@ -3,12 +3,12 @@ package ru.alastar.minedonate.network.manage.packets;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import io.netty.buffer.ByteBuf;
 
-public class UppendEntryPacket implements IMessage {
+public class AppendEntryPacket implements IMessage {
 
 	public int shopId, catId ;
 	
-    public UppendEntryPacket ( ) { }
-    public UppendEntryPacket ( int _shopId, int _catId ) {
+    public AppendEntryPacket ( ) { }
+    public AppendEntryPacket ( int _shopId, int _catId ) {
     	
     	shopId = _shopId ;
     	catId = _catId ;

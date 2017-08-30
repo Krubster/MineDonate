@@ -6,10 +6,15 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.merch.info.EntityInfo;
+import ru.alastar.minedonate.rtnl.ModDataBase;
+import ru.alastar.minedonate.rtnl.ModNetworkRegistry;
 
-import java.lang.reflect.InvocationTargetException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * Created by Alastar on 21.07.2017.
@@ -65,29 +70,82 @@ public class Entities extends MerchCategory {
     }
 
     @Override
-    public void giveMerch(EntityPlayerMP serverPlayer, Merch merch, int amount) {
+    public void giveMerch ( EntityPlayerMP serverPlayer, Merch merch, int amount ) {
+    	
+    	EntityInfo info = ( EntityInfo ) merch ;
+        
+        if ( info . limit != -1 ) {
+        
+        	if ( info . limit < amount ) {
+        		
+        		MineDonate . logError ( "Buy error, amount[" + amount +"] > info[" + info . toString ( ) + "].limit[" + info . limit + "]" ) ;
+        	
+        		return ;
+        		
+        	}
+        	
+        	info . limit -= amount ;
+        	
+        }
+        
         try {
-            EntityInfo info = (EntityInfo)merch;
+           
             Entity entity = (Entity) Class.forName(info.classpath).getDeclaredConstructor(net.minecraft.world.World.class).newInstance(serverPlayer.getEntityWorld());
             entity.readFromNBT(info.entity_data);
             entity.setLocationAndAngles(serverPlayer.posX, serverPlayer.posY, serverPlayer.posZ, serverPlayer.rotationYaw, serverPlayer.rotationPitch);
+          
             serverPlayer.getEntityWorld().spawnEntityInWorld(entity);
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            
+        } catch ( Exception ex ) {
+            
+        	ex . printStackTrace ( ) ;
+            
         }
+        
+        if ( info . limit > -1 ) {
+            
+        	updateEntityInfo ( info ) ;
+        
+        }
+        
     }
 
+    private void updateEntityInfo ( EntityInfo info ) {
+    	
+        Statement stat = null ;
+        
+        try {
+            
+        	stat = ModDataBase . getNewStatement ( "main" ) ;
+            stat . executeUpdate ( "UPDATE " + getDatabaseTable ( ) + " SET lim=" + info.limit + " WHERE id=" + info . getId ( ) + ( info . shopId > 0 ? " AND shopId=" + info . shopId : "" ) + ";");
+            
+        } catch ( Exception ex ) {
+            
+        	ex . printStackTrace ( ) ;
+            
+        }
+
+        ModDataBase . closeStatementAndConnection ( stat ) ;
+
+        ModNetworkRegistry . sendToAllMerchInfoPacket ( info ) ;
+
+    }
+    
+    @SideOnly ( Side . SERVER )
     @Override
-    public Merch constructMerch() {
-        return new EntityInfo();
+    public void updateMerch ( int id, Merch info ) {
+        
+    	super . updateMerch ( id, info ) ;
+        
+    	updateEntityInfo ( ( EntityInfo ) info ) ;
+    	
+    }
+    
+    @Override
+    public Merch constructMerch ( ) {
+        
+    	return new EntityInfo ( ) ;
+        
     }
     
 	@Override

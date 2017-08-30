@@ -1,5 +1,6 @@
 package ru.alastar.minedonate.plugin.worldProtection;
 
+import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -7,14 +8,14 @@ import org.bukkit.Bukkit;
 public class WorldGuardBukkitPlugin extends ru.alastar.minedonate.plugin.worldProtection.WorldProtectionPlugin {
 
 	boolean loaded = false ;
-	com.sk89q.worldguard.bukkit.WorldGuardPlugin wgMgr ;
+	com.sk89q.worldguard.bukkit.WorldGuardPlugin wgPlugin ;
 	
 	@Override
-	public void load ( ) {
+	public void load ( Map < String, Object > prop ) {
 		
 		if ( ! loaded ) {
 			
-			wgMgr = ( ( com.sk89q.worldguard.bukkit.WorldGuardPlugin ) Bukkit . getPluginManager ( ) . getPlugin ( "WorldGuard" ) ) . inst ( ) ;
+			wgPlugin = ( ( com.sk89q.worldguard.bukkit.WorldGuardPlugin ) Bukkit . getPluginManager ( ) . getPlugin ( "WorldGuard" ) ) . inst ( ) ;
 			
 			loaded = true ;
 			
@@ -27,7 +28,7 @@ public class WorldGuardBukkitPlugin extends ru.alastar.minedonate.plugin.worldPr
 		
 		try {
 			
-			wgMgr . getRegionManager ( Bukkit . getWorld ( world ) ) . getRegion ( rgName ) . getOwners ( ) . addPlayer (  wgMgr . wrapPlayer ( Bukkit . getPlayer ( player ) ) ) ;
+			wgPlugin . getRegionManager ( Bukkit . getWorld ( world ) ) . getRegion ( rgName ) . getOwners ( ) . addPlayer (  wgPlugin . wrapPlayer ( Bukkit . getPlayer ( player ) ) ) ;
 			
 		} catch ( Exception ex ) {
 			
@@ -42,7 +43,7 @@ public class WorldGuardBukkitPlugin extends ru.alastar.minedonate.plugin.worldPr
 		
 		try {
 
-			wgMgr . getRegionManager ( Bukkit . getWorld ( world ) ) . getRegion ( rgName ) . getOwners ( ) . removePlayer ( wgMgr . wrapPlayer ( Bukkit . getPlayer ( player ) ) ) ;
+			wgPlugin . getRegionManager ( Bukkit . getWorld ( world ) ) . getRegion ( rgName ) . getOwners ( ) . removePlayer ( wgPlugin . wrapPlayer ( Bukkit . getPlayer ( player ) ) ) ;
 
 		} catch ( Exception ex ) {
 			
@@ -63,7 +64,7 @@ public class WorldGuardBukkitPlugin extends ru.alastar.minedonate.plugin.worldPr
     		
     	}
 
-    	return wgMgr . getGlobalStateManager ( ) . get ( Bukkit . getWorld ( world ) ) . getMaxRegionCount ( Bukkit . getPlayer ( player ) ) <= wgMgr . getGlobalRegionManager ( ) . get ( Bukkit . getWorld ( world ) ) . getRegionCountOfPlayer ( wgMgr . wrapPlayer ( Bukkit . getPlayer ( player ) ) ) ;
+    	return wgPlugin . getGlobalStateManager ( ) . get ( Bukkit . getWorld ( world ) ) . getMaxRegionCount ( Bukkit . getPlayer ( player ) ) <= wgPlugin . getGlobalRegionManager ( ) . get ( Bukkit . getWorld ( world ) ) . getRegionCountOfPlayer ( wgPlugin . wrapPlayer ( Bukkit . getPlayer ( player ) ) ) ;
 		
 	}
 	

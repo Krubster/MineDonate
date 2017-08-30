@@ -1,11 +1,14 @@
 package ru.alastar.minedonate.rtnl;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.sql.DataSource;
+
+import org.apache.commons.dbcp2.BasicDataSource;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -14,14 +17,17 @@ import ru.alastar.minedonate.MineDonate;
 
 import ru.log_inil.mc.minedonate.localData.DataOfDataBaseLink;
 
+/**
+ * Доступ к ресурсам бд
+ */
 @SideOnly(Side.SERVER)
 public class ModDataBase {
 
-    public static Map < String, Connection > dataBaseConnections = new HashMap < > ( ) ;
+    public static Map < String, DataSource > dataBaseSources = new HashMap < > ( ) ;
 
     public static Connection getDataBaseConnection ( String dbLinkName ) throws Exception {
     	
-    	return checkAndReconnectDataBase ( dbLinkName, dataBaseConnections . get ( dbLinkName ) ) ;
+    	return dataBaseSources . get ( dbLinkName ) . getConnection ( ) ;
     	
     }
     
@@ -32,49 +38,85 @@ public class ModDataBase {
     		 Class . forName ( link . preLoadClassName ) . newInstance ( ) ;
     		 
     	}
-    
-    	Connection c ;
+    	
+		BasicDataSource bds = new BasicDataSource ( ) ;
+		
     	if ( link . hasCustomLink ) {
 
-    		c = DriverManager . getConnection ( link . customLink . replace ( "%host%", link . host ) . replace ( "%port%", Integer . toString ( link . port ) ) . replace ( "%name%", link . name ) + ( link . useUTF8 ? "?useUnicode=true&characterEncoding=UTF-8" : "" ), link . user, link . password ) ;
-        	
-    		dataBaseConnections . put ( linkName, c ) ;
-    		
+    		bds . setUrl ( link . customLink . replace ( "%host%", link . host ) . replace ( "%port%", Integer . toString ( link . port ) ) . replace ( "%name%", link . name ) + ( link . useUTF8 ? "?useUnicode=true&characterEncoding=UTF-8" : "" ) ) ;
+  		
     	} else {
     		
-    		c = DriverManager . getConnection ( "jdbc:mysql://" + link . host + ":" + link . port + "/" + link . name + ( link . useUTF8 ? "?useUnicode=true&characterEncoding=UTF-8" : "" ), link . user, link . password ) ;
-    		dataBaseConnections . put ( linkName, c ) ;
-    		
+    		bds . setUrl (  "jdbc:mysql://" + link . host + ":" + link . port + "/" + link . name + ( link . useUTF8 ? "?useUnicode=true&characterEncoding=UTF-8" : "" ) ) ;
+    		    		
     	}
     	
-    	return c ;
-    	
-    }
-    
-    public static Connection checkAndReconnectDataBase ( String linkName, Connection c ) throws Exception {
-    	
-    	if ( c . isClosed ( ) ) {
-    		
-    		return getDataBaseConnection ( linkName, MineDonate . cfg . dataBases . get ( linkName ), false ) ;
- 
-    	}
-    	
-    	return c ;
+		if ( ! "" . equals ( link . user ) && ! "" . equals ( link . password ) ) {
+			
+			bds . setUsername ( link . user ) ;
+			bds . setPassword ( link . password ) ;
+			
+		}
+
+		dataBaseSources . put ( linkName, bds ) ;
+
+    	return bds . getConnection ( ) ;
     	
     }
     
     public static Statement getNewStatement ( String dbLinkName ) throws Exception {
-    	
-    	return getDataBaseConnection ( dbLinkName ) . createStatement ( ) ;
+
+    	return getDataBaseConnection ( dbLinkName ) . createStatement ( )  ;
     	
     }
     
+	public static void closeStatementAndConnection ( Statement stat ) {
+		
+		try {
+
+			Connection c = null ;
+			
+			if ( stat != null && ! stat . isClosed ( ) ) {
+				
+				c = stat . getConnection ( ) ;
+				
+				stat . close ( ) ;
+	
+			}
+			
+			try {
+
+				if ( c != null && ! c . isClosed ( ) ) {
+										
+					c . close ( ) ;
+					
+					c = null ;
+					
+				}
+				
+			} catch ( Exception ex ) { ex . printStackTrace ( ) ; }
+
+		} catch ( Exception ex ) {
+			
+			ex . printStackTrace ( ) ;
+			
+		}
+			
+	}
+	
     public static PreparedStatement getPreparedStatement ( String dbLinkName, String sql ) throws Exception {
-        
+
     	return getDataBaseConnection ( dbLinkName ) . prepareStatement ( sql ) ;
         
     }
     
+	public static void closePreparedStatementAndConnection ( PreparedStatement stat ) {
+		
+		closeStatementAndConnection ( stat ) ;
+
+	}
+	
+	
     public static void initDataBase ( ) {
 
         try {
@@ -89,10 +131,12 @@ public class ModDataBase {
 
             	tmpDBLink = MineDonate . cfg . dataBases . get ( linkName ) ;
             	
-            	getDataBaseConnection ( linkName, tmpDBLink, true ) ;
+            	Connection c = getDataBaseConnection ( linkName, tmpDBLink, true ) ;
             	
             	MineDonate . logInfo ( "Connected db[" + linkName + "]!" ) ;
 
+            	c . close ( ) ;
+            	
             }
             
             MineDonate . m_Enabled = true;
@@ -107,5 +151,5 @@ public class ModDataBase {
         }
                 
     }
-    
+
 }

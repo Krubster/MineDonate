@@ -1,7 +1,5 @@
 package ru.alastar.minedonate;
 
-import com.mojang.authlib.GameProfile;
-
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -13,7 +11,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.*;
-import net.minecraft.server.MinecraftServer;
 
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.gui.merge.ShopInventoryContainer;
@@ -40,7 +37,7 @@ import java.util.*;
 public class MineDonate {
 
     public static final String MODID = "MineDonate" ;
-    public static final String VERSION = "0.7.1.22" ;
+    public static final String VERSION = "0.7.1.23" ;
 
     public static boolean m_Enabled = false;
 
@@ -48,6 +45,7 @@ public class MineDonate {
     public static Map < String, ShopInventoryContainer > mergeContainers = new HashMap < > ( ) ;
     public static Map < Object, List < String > > permissions = new HashMap < > ( ) ;
     public static Map < String, AbstractMoneyProcessor > moneyProcessors = new HashMap < > ( ) ;
+	public static Map < UUID, Account > users = new HashMap < > ( ) ;
 
     public static DataOfConfig cfg;
 
@@ -106,8 +104,7 @@ public class MineDonate {
     }
 
     @SideOnly(Side.SERVER)
-	public
-    static void loadServerMerch ( ) {
+	public static void loadServerMerch ( ) {
     	
         try {
         	
@@ -118,42 +115,24 @@ public class MineDonate {
     			
         	}
      	
-        	Statement stmt ;
+        	Statement stat = ModDataBase . getNewStatement ( "main" ) ;
         	ResultSet rs ;
-        	
+
             for ( int i = 0; i < shops . get ( 0 ) . cats . length ; i ++ ) {
             	
                 if ( shops . get ( 0 ) . cats [ i ] . isEnabled ( ) ) {
-                	
-                    stmt = ModDataBase . getNewStatement ( "main" ) ;
-                    
-                    rs = stmt . executeQuery ( "SELECT * FROM " + shops . get ( 0 ) . cats [ i ] . getDatabaseTable ( ) + ";" ) ;
+          
+                    rs = stat . executeQuery ( "SELECT * FROM " + shops . get ( 0 ) . cats [ i ] . getDatabaseTable ( ) + ";" ) ;
                     
                     shops . get ( 0 ) . cats [ i ] . loadMerchFromDB ( rs ) ;
                     
                     rs . close ( ) ;
-                    stmt . close ( ) ;
                     
                 }
+                
             }
             
-            for ( DataOfMoneyProcessor domp : cfg . moneyProcessors ) {
-            	
-            	if ( domp != null ) {
-            		
-            		try {
-
-                		moneyProcessors . put ( domp . moneyType, ( AbstractMoneyProcessor ) MineDonate . class . getClassLoader ( ) . loadClass ( domp . className ) . getConstructor ( new Class [ ] { DataOfMoneyProcessor . class } ) . newInstance ( domp ) ) ;
-    				
-                	} catch ( Exception ex ) {
-    					
-    					ex . printStackTrace ( ) ;
-    					
-    				}
-            		
-            	}
-            	          	
-            }
+    		ModDataBase . closeStatementAndConnection ( stat ) ;
             
         } catch ( Exception ex ) {
         	
@@ -163,6 +142,38 @@ public class MineDonate {
             
         }
         
+    }
+    
+    public static void loadMoneyProccessors ( ) {
+    	
+        try {
+
+	        for ( DataOfMoneyProcessor domp : cfg . moneyProcessors ) {
+	        	
+	        	if ( domp != null && domp . load ) {
+	        		
+	        		try {
+	
+	            		moneyProcessors . put ( domp . moneyType, ( AbstractMoneyProcessor ) MineDonate . class . getClassLoader ( ) . loadClass ( domp . className ) . getConstructor ( new Class [ ] { DataOfMoneyProcessor . class } ) . newInstance ( domp ) ) ;
+					
+	            	} catch ( Exception ex ) {
+						
+						ex . printStackTrace ( ) ;
+						
+					}
+	        		
+	        	}
+	        	          	
+	        }
+        
+	    } catch ( Exception ex ) {
+	    	
+	        MineDonate . m_Enabled = false ;
+	
+	        ex . printStackTrace ( ) ;
+	        
+	    }
+    
     }
     
 	public static boolean checkShopExists ( int shopId ) {
@@ -202,28 +213,31 @@ public class MineDonate {
 
     public static boolean userShopExistsInDataBase ( int shopId ) {
 
+    	Statement stat = null ;
+    	
         try {
             
-        	Statement stmt = ModDataBase . getNewStatement ( "main" ) ;
-            ResultSet rs = stmt . executeQuery ( "SELECT " + "id" + " FROM " + cfg.dbShops + " WHERE id=" + shopId + ";" ) ;
+        	stat = ModDataBase . getNewStatement ( "main" ) ;
+            ResultSet rs = stat . executeQuery ( "SELECT " + "id" + " FROM " + cfg.dbShops + " WHERE id=" + shopId + ";" ) ;
             
             while ( rs . next ( ) ) {
             	
                 rs . close ( ) ;
-                stmt . close ( ) ;
+        		ModDataBase . closeStatementAndConnection ( stat ) ;
                 
                 return true;
                 
             }
 
             rs . close ( ) ;
-            stmt . close ( ) ;
             
         } catch ( Exception ex ) {
             
         	ex . printStackTrace ( ) ;
             
         }
+
+		ModDataBase . closeStatementAndConnection ( stat ) ;
 
         return false ;
 
@@ -231,80 +245,68 @@ public class MineDonate {
     
     public static int getNextShopId ( ) {
     	
+    	Statement stat = null ;
+
         try {
         	
-        	Statement stmt = ModDataBase . getNewStatement ( "main" ) ;
-            ResultSet rs = stmt . executeQuery ( "SHOW TABLE STATUS LIKE '" + cfg.dbShops + "';" ) ;
+        	stat = ModDataBase . getNewStatement ( "main" ) ;
+            ResultSet rs = stat . executeQuery ( "SHOW TABLE STATUS LIKE '" + cfg.dbShops + "';" ) ;
 
             while ( rs . next ( ) ) {
 
-                return rs . getInt ( "Auto_increment" ) ;
+            	int i = rs . getInt ( "Auto_increment" ) ;
+            	
+            	rs . close ( ) ;
+        		ModDataBase . closeStatementAndConnection ( stat ) ;
+
+                return i ;
 
             }
             
-            stmt . close ( ) ;
-
         } catch ( Exception ex ) {
             
         	ex . printStackTrace ( ) ;
             
         }
 
-        return -1;
+		ModDataBase . closeStatementAndConnection ( stat ) ;
 
-    }
-    
-
-    public static ResultSet getShopData ( int shopId ) {
-        
-        try {
-        	
-        	Statement stmt = ModDataBase . getNewStatement ( "main" ) ;
-            ResultSet rs = stmt . executeQuery ( "SELECT * FROM " + cfg.dbShops + " WHERE id=" + shopId + ";" ) ;
-
-            while ( rs . next ( ) ) {
-
-                return rs;
-
-            }
-            
-            stmt . close ( ) ;
-
-        } catch ( Exception ex ) {
-            
-        	ex . printStackTrace ( ) ;
-            
-        }
-
-        return null;
+        return -1 ;
 
     }
     
 	public static void loadUserShop ( int shopId ) {
-
-		ResultSet sdata = getShopData ( shopId ) ;
-		
-		if ( sdata == null ) {
-			
-			return ;
-			
-		}
 		
 		Shop s = null ;
-		
-		try {
-			
-			ItemNBlocks inb = new ItemNBlocks ( shopId, 0, sdata . getString ( "moneyType" ) ) ;
-			
-			inb . setCustomDBTable ( cfg . dbUserItems ) ;
-			inb . setEnabled ( cfg . userShops ) ;
+    	Statement stat = null ;
 
-            s = new Shop(shopId, new MerchCategory[]{inb}, sdata.getString("UUID"), sdata.getString("ownerName"), sdata.getString("name"), sdata.getBoolean("isFreezed"), sdata.getString("freezer"), sdata.getString("freezReason"), false);
-            sdata . close ( ) ;
+		try {
+        	
+        	stat = ModDataBase . getNewStatement ( "main" ) ;
+            ResultSet rs = stat . executeQuery ( "SELECT * FROM " + cfg.dbShops + " WHERE id=" + shopId + ";" ) ;
+
+            while ( rs . next ( ) ) {
+    	
+            	ItemNBlocks inb = new ItemNBlocks ( shopId, 0, rs . getString ( "moneyType" ) ) ;
+				
+				inb . setCustomDBTable ( cfg . dbUserItems ) ;
+				inb . setEnabled ( cfg . userShops ) ;
+	
+	            s = new Shop(shopId, new MerchCategory[]{inb}, rs.getString("UUID"), rs.getString("ownerName"), rs.getString("name"), rs.getBoolean("isFreezed"), rs.getString("freezer"), rs.getString("freezReason"), false);
+	            
+	            continue ;
+            
+            }
+            
+            rs . close ( ) ;
 			
-		} catch (SQLException e1) {
-			e1.printStackTrace();
+		} catch ( Exception ex) {
+			
+			ex . printStackTrace ( ) ;
+			
 		}
+		
+		ModDataBase . closeStatementAndConnection ( stat ) ;
 		
 		if ( s == null ) {
 			
@@ -316,18 +318,17 @@ public class MineDonate {
 
 		try {
         	
-            for (int i = 0; i < shops . get ( shopId ) . cats . length ; i ++ ) {
+			stat = ModDataBase . getNewStatement ( "main" ) ;
+			
+            for ( int i = 0; i < shops . get ( shopId ) . cats . length ; i ++ ) {
             	
                 if ( shops . get ( shopId ) . cats [ i ] . isEnabled ( ) ) {
-                	
-                    Statement stmt = ModDataBase . getNewStatement ( "main" ) ;
-                    
-                    ResultSet rs = stmt . executeQuery ( "SELECT * FROM " + shops . get ( shopId ) . cats [ i ] . getDatabaseTable ( ) + " WHERE shopId = " + shopId + ";" ) ;
+                	                    
+                    ResultSet rs = stat . executeQuery ( "SELECT * FROM " + shops . get ( shopId ) . cats [ i ] . getDatabaseTable ( ) + " WHERE shopId = " + shopId + ";" ) ;
                     
                     shops . get ( shopId ) . cats [ i ] . loadMerchFromDB ( rs ) ;
                     
                     rs . close ( ) ;
-                    stmt . close ( ) ;
                     
                 }
                 
@@ -339,6 +340,8 @@ public class MineDonate {
             
         }
         
+		ModDataBase . closeStatementAndConnection ( stat ) ;
+
 	}
 
 	public static String getMoneyType ( int shopId, int catId ) {
@@ -361,10 +364,13 @@ public class MineDonate {
 
 		if ( cfg . enablePermissionsMode ) {
 			
+			// Получаем все объекты пермишенов
 			for ( DataOfPermissionEntry dopl : cfg . permissionsTriggerList ) {
 
+				// Проверяем пермишен через плагин
 				if ( ( ( PermissionsPlugin ) PluginHelper . getPlugin ( "permissionsManager" ) ) . hasPermission ( userName, dopl . permission ) ) {
 					
+					// Загружаем в лист все пермишены доступных групп мода
 					l . addAll ( getPermissionsByGroups ( dopl . groups ) ) ;
 					
 				}
@@ -387,10 +393,12 @@ public class MineDonate {
 		
 		List < String > l = new ArrayList < > ( ) ;
 
+    	Statement stat = null ;
+
         try {
         	
-        	Statement stmt = ModDataBase . getNewStatement ( "main" ) ;
-            ResultSet rs = stmt.executeQuery("SELECT * FROM " + cfg.dbModPermissionsTable+ " WHERE groupName = '" + groupName + "';");
+        	stat = ModDataBase . getNewStatement ( "main" ) ;
+            ResultSet rs = stat . executeQuery ( "SELECT * FROM " + cfg . dbModPermissionsTable+ " WHERE groupName = '" + groupName + "';");
             
             while ( rs . next ( ) ) {
 
@@ -399,13 +407,14 @@ public class MineDonate {
             }
 
             rs . close ( ) ;
-            stmt . close ( ) ;
          
         } catch ( Exception ex ) {
         	
         	ex . printStackTrace ( ) ;
         	
         }
+
+		ModDataBase . closeStatementAndConnection ( stat ) ;
 
         permissions . put ( groupName, l ) ;
         
@@ -434,89 +443,126 @@ public class MineDonate {
 		return l ;
 		
     }
-	
-	public static Map < UUID, Account > users = new HashMap < > ( ) ;
-	
-    public static ResultSet getAccountData ( UUID user ) {
-        
-        try {
-        	
-        	Statement stmt = ModDataBase . getNewStatement ( "main" ) ;
-            ResultSet rs = stmt.executeQuery("SELECT * FROM " + cfg.dbUsers + " WHERE " + cfg.dbUsersIdColumn + "='" + user.toString() + "';");
-
-            while ( rs . next ( ) ) {
-
-                return rs;
-
-            }
-            
-            stmt . close ( ) ;
-
-        } catch ( Exception ex ) {
-            
-        	ex . printStackTrace ( ) ;
-            
-        }
-
-        return null;
-
-    }
-	
-	public static Account getAccount ( UUID user ) {
+		
+	public static Account getAccount0 ( UUID user, boolean getWithRegister, boolean getWithMoneyRegister ) {
 
 		if ( users . containsKey ( user ) ) {
 			
 			return users . get ( user ) ;
 			
 		}
-		
-		Account acc = null ;
-		
-		try {
-			
-			ResultSet rs = getAccountData ( user ) ;
 
-			if ( rs != null ) {
+		Account acc = null ;
+
+		Statement stat = null ;
+
+		try {
 				
-				acc = new Account ( rs . getString ( cfg . dbUsersIdColumn ), rs . getString ( cfg . dbUsersNameColumn ), getPermissionsByUser ( user ), rs . getBoolean ( "freezShopCreate" ), rs . getString ( "freezShopCreateFreezer" ), rs . getString ( "freezShopCreateReason" ), rs . getInt ( "shopsCount" ) );
+			List < String > permissions = getPermissionsByUser ( user ) ;
+			stat = ModDataBase . getNewStatement ( "main" ) ;
+          
+			// Ищем в бд аккаунт по uuid
+			ResultSet rs = stat . executeQuery ( "SELECT * FROM " + cfg.dbUsers + " WHERE " + cfg.dbUsersIdColumn + "='" + user.toString() + "';" ) ;
+            
+			while ( rs . next ( ) ) {
 				
-			} else {
+				acc = new Account ( rs . getString ( cfg . dbUsersIdColumn ), rs . getString ( cfg . dbUsersNameColumn ), permissions, rs . getBoolean ( "freezShopCreate" ), rs . getString ( "freezShopCreateFreezer" ), rs . getString ( "freezShopCreateReason" ), rs . getInt ( "shopsCount" ) );
+
+			}
+			
+			rs . close ( ) ;
+    	
+			ModDataBase . closeStatementAndConnection ( stat ) ;
+    	
+			boolean registerMoney = false ;
+			
+    		// Аккаунта нет и нам нужно его создать
+			if ( registerMoney = ( acc == null && getWithRegister ) ) {
 				
-				acc = new Account ( user . toString ( ), getNameFromUUID ( user ), getPermissionsByUser ( user ), ! cfg . defaultUserAllowShopCreate, cfg.defaultUserAllowShopCreate ? "SERVER" : null, cfg.defaultUserAllowShopCreate ? "Properties policy" : null, 0 ) ;
+				// Создаем объект и выдаем блок, если нужен
+				acc = new Account ( user . toString ( ), Utils . getNameFromUUID ( user ), permissions, ! cfg . defaultUserAllowShopCreate, cfg.defaultUserAllowShopCreate ? "SERVER" : null, cfg.defaultUserAllowShopCreate ? "Properties policy" : null, 0 ) ;
+
+				stat = ModDataBase . getNewStatement ( "main" ) ;
+		        
+				// Регистрируем аккаунт
+				stat . execute ( "INSERT INTO " + cfg . dbUsers + " (" + cfg . dbUsersIdColumn + "," + cfg . dbUsersNameColumn + ", freezShopCreate, freezShopCreateFreezer, freezShopCreateReason) VALUES ( '" + acc . id + "', '" + acc . name + "', " + acc . freezShopCreate + ", '" + acc . freezShopCreateFreezer + "', '" + acc . freezShopCreateReason + "' )" ) ;
+	            
+	    		ModDataBase . closeStatementAndConnection ( stat ) ;
+	    		
+			} else if ( ! getWithRegister ) { // Аккаунт не найден и его не надо регистрировать
+
+				return null ;
 				
 			}
 			
+			// Проверяем на то, если у аккаунт есть блок, который был выдан при ! defaultUserAllowShopCreate в конфиге
+			if ( cfg . defaultUserAllowShopCreate && acc . freezShopCreate && "SERVER" . equals ( acc . freezShopCreateFreezer ) && "Properties policy" . equals ( acc . freezShopCreateReason ) ) {
+				
+				acc . freezShopCreate = false ;
+				acc . freezShopCreateFreezer = acc . freezShopCreateReason = "" ;
+
+			}
+			
+			users . put ( user, acc ) ;
+
+			if ( registerMoney ) {
+				
+	            for ( AbstractMoneyProcessor amp : MineDonate . moneyProcessors . values ( ) ) {
+		
+	                amp . registerPlayer ( user, acc . name, MineDonate . moneyProcessors . values ( ) ) ;
+	            	
+	            }
+	            
+			}
+			
+			// Получаем деньги для игрока
 			for ( String k : moneyProcessors . keySet ( ) ) {
 				
 				acc . putMoney ( k, moneyProcessors . get ( k ) . getMoneyFor ( user ) ) ;
 				
 			}
 			
-			users . put ( user, acc ) ;
-
-		} catch ( SQLException ex ) {
+		} catch ( Exception ex ) {
 			
 			ex . printStackTrace ( ) ;
 			
 		}
 				
+		ModDataBase . closeStatementAndConnection ( stat ) ;
+
 		return acc ;
 		
 	}
 	
-    @SideOnly(Side.SERVER)
 	public static Account getAccount ( EntityPlayer epmp ) {
 		
-    	return getAccount ( epmp . getGameProfile ( ) . getId ( ) ) ;
+    	return getAccount0 ( epmp . getGameProfile ( ) . getId ( ), false, false ) ;
+		
+	}
+    
+	public static Account getAccountWithRegister ( UUID uid ) {
+		
+    	return getAccount0 ( uid, true, true ) ;
 		
 	}
 	
-    @SideOnly(Side.SERVER)
-	public static Account getAccountFromCache ( EntityPlayer user ) { 
+	public static Account getAccountWithoutMoneyRegister ( UUID uid ) {
 		
-		if ( users . containsKey ( user . getGameProfile ( ) . getId ( ) ) ) {
+    	return getAccount0 ( uid, true, false ) ;
+		
+	}
+    
+	public static Account getAccountWithoutRegister ( UUID uid ) {
+		
+    	return getAccount0 ( uid, false, false ) ;
+		
+	}
+	
+	public static Account getAccountFromCache ( UUID uid ) { 
+		
+		if ( users . containsKey ( uid ) ) {
 			
-			return users . get ( user . getGameProfile ( ) . getId ( ) ) ;
+			return users . get ( uid ) ;
 			
 		}
 		
@@ -524,45 +570,18 @@ public class MineDonate {
 	
 	}
 		
-    @SideOnly(Side.SERVER)
-    public static String getNameFromUUID(UUID id) {
-        GameProfile profile = MinecraftServer.getServer().func_152358_ax().func_152652_a(id);
-        if (profile != null) {
-            return profile.getName();
-        } else {
-            logError("Null profile, for id[" + id + "]!");
-        }
-        return "";
-    }
-
-    @SideOnly(Side.SERVER)
-    public static UUID getUUIDFromName(String name) {
-        GameProfile profile = MinecraftServer.getServer().func_152358_ax().func_152655_a(name);
-        if (profile != null) {
-            return profile.getId();
-        } else {
-            logError("Null profile for name[" + name + "]!");
-        }
-        return null;
-    }
-    
-    @SideOnly(Side.SERVER)
-    public static UUID getUUIDFromPlayer(EntityPlayerMP serverPlayer) {
-        GameProfile profile = MinecraftServer.getServer().func_152358_ax().func_152655_a(serverPlayer.getDisplayName());
-        if (profile != null) {
-            return profile.getId();
-        } else {
-            logError("Null profile, for player[" + serverPlayer + "]!");
-        }
-        return null;
-    }
-
+	public static Account getAccountFromCache ( EntityPlayer user ) { 
+	
+		return getAccountFromCache ( user . getGameProfile ( ) . getId ( ) ) ;
+	
+	}
+	
     @SideOnly(Side.SERVER)
     public static void logInfo ( Object s ) {
         
     	if ( cfg . displayInfoLog ) {
     	
-    		System . err . println ( "[MineDonate] [INFO]: " + s) ;
+    		System . out . println ( s ) ;
     	
     	}
         
@@ -571,7 +590,7 @@ public class MineDonate {
     @SideOnly(Side.SERVER)
     public static void logError ( Object s ) {
         
-    	System . err . println ( "[MineDonate] [ERROR]: " + s ) ;
+    	System . err . println ( "[ERROR]: " + s ) ;
         
     }
     

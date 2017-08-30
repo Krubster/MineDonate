@@ -1,7 +1,9 @@
 package ru.alastar.minedonate.rtnl;
 
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -12,14 +14,24 @@ import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.network.INetworkTask;
 import ru.alastar.minedonate.network.packets.CodePacket;
 
+/**
+ * Лимитор и ?прокси?-процессинг всех сообщений адресованых серверу
+ *
+ */
 public class ModNetworkTaskProcessor extends Thread {
 
-	static ExecutorService executor = Executors . newFixedThreadPool ( 4 ) ;
+	static ExecutorService executor = Executors . newCachedThreadPool ( ) ;
 
 	public static void processTask ( final INetworkTask < IMessage, ? > task, final IMessage message, final MessageContext ctx ) {
 		
-		final String k = ctx . getServerHandler ( ) . playerEntity . getGameProfile ( ) . getId ( ) . toString ( ) ;
+		if ( ! MineDonate . m_Enabled ) {
+			
+			return ; 
+				
+		}
 		
+		final String k = ctx . getServerHandler ( ) . playerEntity . getGameProfile ( ) . getId ( ) . toString ( ) ;
+
 		if ( checkTaskLimit ( k ) ) {
 			
     		ModNetworkRegistry . sendTo ( ctx . getServerHandler ( ) . playerEntity, new CodePacket ( CodePacket . Code . SERVER_ERROR_WAIT_OTHER_TASK ) ) ;
@@ -27,39 +39,42 @@ public class ModNetworkTaskProcessor extends Thread {
     		return ;
     				
 		}
-		
+    	
 		executor . submit ( new Runnable ( ) {
 			
-		    public void run() {
-		    
-		    	upTaskLimit ( k ) ;
+		    public void run ( ) {	
+					
+				IMessage msg ;
+		    		
+			    upTaskLimit ( k ) ;
+			    	
+			   	msg = task . onMessageProcess ( message, ctx ) ;
+    	
+			    downTaskLimit ( k ) ;   
 		    	
-		    	IMessage msg = task . onMessageProcess ( message, ctx ) ;
-		    	
-		    	downTaskLimit ( k ) ;
-
 		    	if ( msg != null ) {
-		    	
+			    	
 		    		ModNetworkRegistry . sendTo ( ctx . getServerHandler ( ) . playerEntity, msg ) ;
 		    	
 		    	}
-		    			    	
+		    	
 		    }
 		    
 		} ) ;
-		
+				
 	}
 
+	final static Map < String, Integer > stat = Collections . synchronizedMap ( new HashMap < String, Integer> ( ) ) ;// new ConcurrentHashMap < > ( ) ;
 	
-	static ConcurrentMap < String, Integer > stat = new ConcurrentHashMap < > ( ) ;
-	
-	public static int getTaskCount ( String k ) {
+	public static Integer getTaskCount ( String k ) {
 		
 		if ( stat . containsKey ( k ) ) {
 			
 			return stat . get ( k ) ;
 			
 		}
+		
+		stat . put ( k, 0 ) ;
 		
 		return 0 ;
 		

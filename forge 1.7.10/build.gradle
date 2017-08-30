@@ -18,7 +18,7 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "0.7.1.19"
+version = "0.7.1.23"
 group= "minedonate" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "minedonate"
 
@@ -35,7 +35,7 @@ minecraft {
 }
 
 dependencies {
-	compile files('libs/bukkit.jar', 'libs/we.jar', 'libs/wg.jar', 'libs/pex.jar', 'libs/commons-dbcp2-2.1.1.jar')
+	compile files('libs/bukkit.jar', 'libs/we.jar', 'libs/wg.jar', 'libs/pex.jar', 'libs/vault.jar', 'libs/commons-dbcp2-2.1.1.jar', 'libs/commons-pool2-2.4.2.jar', 'libs/commons-logging-1.2.jar')
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..
     //compile "some.group:artifact:version:classifier"

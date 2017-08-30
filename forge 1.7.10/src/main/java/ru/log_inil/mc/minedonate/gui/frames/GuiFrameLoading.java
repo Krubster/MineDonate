@@ -80,10 +80,17 @@ public class GuiFrameLoading extends GuiFrame {
     @Override
 	public boolean isVisible ( ) {
 		
-		return ShopGUI.instance.loading ;
+		return ShopGUI . instance . loading ;
 		
 	}
     
+    @Override
+	public boolean lockButtonsUnderEntry ( ) {
+		
+		return isVisible ( ) ;
+		
+	}
+	
     String t ;
     
     public void setText ( String _t ) {

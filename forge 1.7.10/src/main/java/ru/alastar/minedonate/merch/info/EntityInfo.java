@@ -150,7 +150,16 @@ public class EntityInfo extends Merch {
 				 limit = number ;
 				
 			break;
+		
+			case COST :
 				
+				cost = number ;
+			
+			break ;
+			
+			default :
+			break ;
+			
 		}
 			
 	}

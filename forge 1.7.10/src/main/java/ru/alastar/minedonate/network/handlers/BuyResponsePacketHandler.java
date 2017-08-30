@@ -19,7 +19,7 @@ public class BuyResponsePacketHandler implements IMessageHandler<BuyResponsePack
 
     }
 
-    @Override @SideOnly(Side.CLIENT)
+    @Override
     public IMessage onMessage ( BuyResponsePacket message, MessageContext ctx ) {
 
     	Minecraft . getMinecraft ( ) . thePlayer . addChatMessage ( new ChatComponentText ( EnumChatFormatting . AQUA + " [MineDonate] " + EnumChatFormatting.RESET + message . status ) ) ;

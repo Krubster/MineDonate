@@ -27,6 +27,11 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.UUID;
 
+/**
+ * Класс для удаления/создания/добавления/изменения/блокирования объектов/магазинов/игроков
+ * 	Все вызовы делаются из network.manage.handlers
+ */
+
 public class ModManager {
 
 	public static void createShop ( UUID owner, String ownerName, String name ) {
@@ -36,22 +41,22 @@ public class ModManager {
        
         MineDonate . shops . get ( 0 ) . cats [ 4 ] . addMerch ( info ) ;
       
+        PreparedStatement pstat = null ;
+        
         try {
 
-            PreparedStatement statement = ModDataBase . getPreparedStatement("main", "INSERT INTO " + MineDonate.cfg.dbShops + " (UUID, ownerName, name, lastUpdate, isFreezed, freezer, freezReason, moneyType) VALUES(?,?,?,?,?,?,?,?)");
+        	pstat = ModDataBase . getPreparedStatement("main", "INSERT INTO " + MineDonate.cfg.dbShops + " (UUID, ownerName, name, lastUpdate, isFreezed, freezer, freezReason, moneyType) VALUES(?,?,?,?,?,?,?,?)");
 
-            statement.setString(1, owner.toString());
-            statement.setString(2, ownerName);
-            System.err.println(name);
-            statement.setString(3, name);
-            statement.setInt(4, 0);
-            statement.setBoolean(5, info.isFreezed);
-            statement.setString(6, "");
-            statement.setString(7, "");
-            statement.setString(8, info.moneyType);
+        	pstat.setString(1, owner.toString());
+            pstat.setString(2, ownerName);
+            pstat.setString(3, name);
+            pstat.setInt(4, 0);
+            pstat.setBoolean(5, info.isFreezed);
+            pstat.setString(6, "");
+            pstat.setString(7, "");
+            pstat.setString(8, info.moneyType);
 
-            statement.execute();
-            statement.close();
+            pstat.execute();
             
         } catch ( Exception ex ) {
             
@@ -59,22 +64,26 @@ public class ModManager {
             
         }
         
-        MineDonate . getAccount ( owner ) . shopsCount ++ ;
+        ModDataBase . closePreparedStatementAndConnection ( pstat ) ;
+        
+        MineDonate . getAccountWithoutMoneyRegister ( owner ) . shopsCount ++ ;
+        
+        Statement stat = null ;
         
 		try {
 			
-			Statement st = ModDataBase . getNewStatement ( "main" ) ;
+			stat = ModDataBase . getNewStatement ( "main" ) ;
 
-            st.executeUpdate("UPDATE " + MineDonate.cfg.dbUsers + " SET shopsCount = " + MineDonate.getAccount(owner).shopsCount + " WHERE " + MineDonate.cfg.dbUsersIdColumn + "= '" + owner + "';");
-
-            st . close ( ) ;
+            stat . executeUpdate("UPDATE " + MineDonate.cfg.dbUsers + " SET shopsCount = " + MineDonate . getAccountWithoutMoneyRegister ( owner ) . shopsCount + " WHERE " + MineDonate.cfg.dbUsersIdColumn + "= '" + owner + "';");
 			
 		} catch ( Exception ex ) {
 			
 			ex . printStackTrace ( ) ;
 		
 		}
-				
+					
+		ModDataBase . closeStatementAndConnection ( stat ) ;
+		
         MineDonate . loadUserShop ( info . shopId ) ;
         ModNetworkRegistry . sendToAllAddMerchPacket ( info ) ;
         
@@ -87,41 +96,45 @@ public class ModManager {
 		MineDonate . shops . get ( 0 ) . cats [ 4 ] . removeMerch ( si ) ;
 		MineDonate . shops . remove ( s . sid ) ;
 		
+		Statement stat = null ;
+		
 		try {
 			
-			Statement st = ModDataBase . getNewStatement ( "main" ) ;
+			stat = ModDataBase . getNewStatement ( "main" ) ;
 			
-			st . executeUpdate ( "DELETE FROM " + MineDonate.cfg.dbShops + " WHERE id=" + s . sid + ";" ) ;
+			stat . executeUpdate ( "DELETE FROM " + MineDonate.cfg.dbShops + " WHERE id=" + s . sid + ";" ) ;
 			
-			st . close ( ) ;
+    		ModDataBase . closeStatementAndConnection ( stat ) ;
 			
-			st = ModDataBase . getNewStatement ( "main" ) ;
+			stat = ModDataBase . getNewStatement ( "main" ) ;
 			
-			st . executeUpdate ( "DELETE FROM " + MineDonate.cfg.dbUserItems + " WHERE shopId=" + s . sid + ";" ) ;
+			stat . executeUpdate ( "DELETE FROM " + MineDonate.cfg.dbUserItems + " WHERE shopId=" + s . sid + ";" ) ;
 			
-			st . close ( ) ;
+    		ModDataBase . closeStatementAndConnection ( stat ) ;
 			
 		} catch ( Exception ex ) {
 			
 			ex . printStackTrace ( ) ;
 			
 		}
-		
-        MineDonate . getAccount ( UUID . fromString ( s . owner ) ) . shopsCount -- ;
+					
+		ModDataBase . closeStatementAndConnection ( stat ) ;
+
+        MineDonate . getAccountWithoutRegister ( UUID . fromString ( s . owner ) ) . shopsCount -- ;
         
 		try {
 			
-			Statement st = ModDataBase . getNewStatement ( "main" ) ;
+			stat = ModDataBase . getNewStatement ( "main" ) ;
 
-            st.executeUpdate("UPDATE " + MineDonate.cfg.dbUsers + " SET shopsCount = " + MineDonate.getAccount(UUID.fromString(s . owner)).shopsCount + " WHERE " + MineDonate.cfg.dbUsersIdColumn + "= '" + MineDonate.getUUIDFromName(s.owner) + "';");
-
-            st . close ( ) ;
+            stat . executeUpdate("UPDATE " + MineDonate.cfg.dbUsers + " SET shopsCount = " + MineDonate . getAccountWithoutRegister ( UUID . fromString ( s . owner ) ) . shopsCount + " WHERE " + MineDonate.cfg.dbUsersIdColumn + "= '" + s . owner + "';");
 			
 		} catch ( Exception ex ) {
 			
 			ex . printStackTrace ( ) ;
 		
 		}
+		
+		ModDataBase . closeStatementAndConnection ( stat ) ;
 		
         ModNetworkRegistry . sendToAllRemoveMerchPacket ( 0, 4, si . getId ( ) ) ;
 
@@ -137,16 +150,17 @@ public class ModManager {
 		
         ModNetworkRegistry . sendToAllAddMerchPacket ( si ) ;
 
+        PreparedStatement pstat = null ;
+        
         try {
         	
-            PreparedStatement statement = ModDataBase . getPreparedStatement ( "main", "UPDATE " + MineDonate.cfg.dbShops + " SET isFreezed = 1, freezer = ?, freezReason = ? WHERE id = ?");
+        	pstat = ModDataBase . getPreparedStatement ( "main", "UPDATE " + MineDonate.cfg.dbShops + " SET isFreezed = 1, freezer = ?, freezReason = ? WHERE id = ?");
             
-            statement.setString(1, freezer);
-            statement.setString(2, reason);
-            statement.setInt(3, s.sid);
+        	pstat . setString ( 1, freezer ) ;
+            pstat . setString ( 2, reason ) ;
+            pstat . setInt ( 3, s . sid ) ;
             
-            statement.execute();
-            statement.close();
+            pstat . execute ( ); 
             
         } catch ( Exception ex ) {
             
@@ -154,6 +168,8 @@ public class ModManager {
             
         }
 		
+        ModDataBase . closeStatementAndConnection ( pstat ) ;
+
 	}
 	
 	public static void unFreezeShop ( Shop s, String unFreezer ) {
@@ -166,19 +182,21 @@ public class ModManager {
 		
         ModNetworkRegistry . sendToAllAddMerchPacket ( si ) ;
 
+        Statement stat = null ;
+        
 		try {
 			
-			Statement st = ModDataBase . getNewStatement ( "main" ) ;
+			stat = ModDataBase . getNewStatement ( "main" ) ;
 			
-			st . executeUpdate ( "UPDATE " + MineDonate.cfg.dbShops + " SET isFreezed = " + 0 + ", freezer='" + unFreezer + "', freezReason='' WHERE id=" + s . sid + ";" ) ;
-			
-			st . close ( ) ;
-			
+			stat . executeUpdate ( "UPDATE " + MineDonate.cfg.dbShops + " SET isFreezed = " + 0 + ", freezer='" + unFreezer + "', freezReason='' WHERE id=" + s . sid + ";" ) ;
+						
 		} catch ( Exception ex ) {
 			
 			ex . printStackTrace ( ) ;
 			
 		}
+		
+		ModDataBase . closeStatementAndConnection ( stat ) ;
 		
 	}
 
@@ -190,21 +208,24 @@ public class ModManager {
 		
         ModNetworkRegistry . sendToAllAddMerchPacket ( si ) ;
 
+        PreparedStatement pstat = null ;
+
         try {
         	
-            PreparedStatement statement = ModDataBase . getPreparedStatement ( "main", "UPDATE " + MineDonate.cfg.dbShops + " SET name = ? WHERE id = ?");
+        	pstat = ModDataBase . getPreparedStatement ( "main", "UPDATE " + MineDonate.cfg.dbShops + " SET name = ? WHERE id = ?");
             
-            statement.setString(1, name);
-            statement.setInt(2, s.sid);
+        	pstat . setString ( 1, name ) ;
+        	pstat . setInt ( 2, s . sid ) ;
             
-            statement.execute();
-            statement.close();
+        	pstat . execute ( ) ;
             
         } catch ( Exception ex ) {
             
         	ex . printStackTrace ( ) ;
             
         }
+
+        ModDataBase . closePreparedStatementAndConnection ( pstat ) ;
 
  	}
 	
@@ -214,16 +235,17 @@ public class ModManager {
 		acc . freezShopCreateFreezer = freezer ;
 		acc . freezShopCreateReason = reason ;
 		
+        PreparedStatement pstat = null ;
+
         try {
 
-            PreparedStatement statement = ModDataBase . getPreparedStatement ( "main", "UPDATE " + MineDonate.cfg.dbUsers + " SET freezShopCreate = 1, freezShopCreateFreezer = ?, freezShopCreateReason = ? WHERE " + MineDonate.cfg.dbUsersIdColumn + " = ?");
+            pstat = ModDataBase . getPreparedStatement ( "main", "UPDATE " + MineDonate.cfg.dbUsers + " SET freezShopCreate = 1, freezShopCreateFreezer = ?, freezShopCreateReason = ? WHERE " + MineDonate.cfg.dbUsersIdColumn + " = ?");
             
-            statement.setString(1, freezer);
-            statement.setString(2, reason);
-            statement.setString(3, MineDonate.getUUIDFromName(acc.name).toString());
+            pstat.setString(1, freezer ) ;
+            pstat.setString(2, reason ) ;
+            pstat.setString(3, acc . id ) ;
             
-            statement.execute();
-            statement.close();
+            pstat.execute();
             
         } catch ( Exception ex ) {
             
@@ -231,6 +253,8 @@ public class ModManager {
             
         }
 		
+        ModDataBase . closePreparedStatementAndConnection ( pstat ) ;
+
 	}
 
 	public static void unFreezePlayer ( Account acc, String unFreezer ) {
@@ -239,16 +263,17 @@ public class ModManager {
 		acc . freezShopCreateFreezer = unFreezer ;
 		acc . freezShopCreateReason = "" ;
 		
+        PreparedStatement pstat = null ;
+
 		try {
 
-            PreparedStatement statement = ModDataBase . getPreparedStatement("main", "UPDATE " + MineDonate.cfg.dbUsers + " SET freezShopCreate = 0, freezShopCreateFreezer = ?, freezShopCreateReason = ? WHERE " + MineDonate.cfg.dbUsersIdColumn + " = ?");
+			pstat = ModDataBase . getPreparedStatement("main", "UPDATE " + MineDonate.cfg.dbUsers + " SET freezShopCreate = 0, freezShopCreateFreezer = ?, freezShopCreateReason = ? WHERE " + MineDonate.cfg.dbUsersIdColumn + " = ?");
             
-            statement.setString(1, unFreezer);
-            statement.setString(2, "");
-            statement.setString(3, MineDonate.getUUIDFromName(acc.name).toString());
+			pstat.setString(1, unFreezer ) ;
+            pstat.setString(2, "" ) ;
+            pstat.setString(3, acc . id ) ;
             
-            statement.execute();
-            statement.close();
+            pstat.execute();
 			
 		} catch ( Exception ex ) {
 			
@@ -256,6 +281,8 @@ public class ModManager {
 			
 		}
 		
+        ModDataBase . closePreparedStatementAndConnection ( pstat ) ;
+
 	}
 
 
@@ -267,6 +294,8 @@ public class ModManager {
        
         ModNetworkRegistry . sendToAllAddMerchPacket ( info ) ;
 
+        PreparedStatement pstat = null ;
+
         try {
           
             ByteBuf buf = Unpooled.buffer();
@@ -275,15 +304,14 @@ public class ModManager {
             
             InputStream stream = new ByteArrayInputStream(buf.array());
         
-            PreparedStatement statement = ModDataBase . getPreparedStatement ( "main", "INSERT INTO " + s.cats[catId].getDatabaseTable() + " (name, data, cost, lim) VALUES(?,?,?,?)");
+            pstat = ModDataBase . getPreparedStatement ( "main", "INSERT INTO " + s.cats[catId].getDatabaseTable() + " (name, data, cost, lim) VALUES(?,?,?,?)");
             
-            statement.setString(1, name);
-            statement.setBlob(2, stream);
-            statement.setInt(3, cost);
-            statement.setInt(4, limit);
+            pstat.setString(1, name);
+            pstat.setBlob(2, stream);
+            pstat.setInt(3, cost);
+            pstat.setInt(4, limit);
 
-            statement.execute();
-            statement.close();
+            pstat.execute();
             
         } catch ( Exception ex ) {
             
@@ -291,6 +319,8 @@ public class ModManager {
             
         }
         
+        ModDataBase . closePreparedStatementAndConnection ( pstat ) ;
+
 	}
 	
 	public static int canUppendAnotherItemInShop ( Account acc, Shop s, int catId ) {
@@ -341,6 +371,8 @@ public class ModManager {
 		
     	ItemInfo info = new ItemInfo(s.sid, catId, s.cats[catId].getNextMerchId(), 0, Integer.valueOf(cost), name, Integer.valueOf(limit), acc.ms.currentItemStack);
 
+        PreparedStatement pstat = null ;
+
         try {
           
         	ByteBuf buf = Unpooled . buffer ( ) ;
@@ -358,25 +390,23 @@ public class ModManager {
 
             InputStream stream = new ByteArrayInputStream(buf.array());
            
-            PreparedStatement statement ; 
             
             if ( s . sid == 0 ) {
             
-            	statement = ModDataBase . getPreparedStatement ( "main", "INSERT INTO " + s.cats[catId].getDatabaseTable() + " (name, cost, lim, stack_data) VALUES(?,?,?,?)");
+            	pstat = ModDataBase . getPreparedStatement ( "main", "INSERT INTO " + s.cats[catId].getDatabaseTable() + " (name, cost, lim, stack_data) VALUES(?,?,?,?)");
             
             } else {
          
-            	statement = ModDataBase . getPreparedStatement ( "main", "INSERT INTO " + s.cats[catId].getDatabaseTable() + " (name, cost, lim, stack_data, shopId) VALUES(?,?,?,?,?)");
-                statement.setInt(5, s.sid);
+            	pstat = ModDataBase . getPreparedStatement ( "main", "INSERT INTO " + s.cats[catId].getDatabaseTable() + " (name, cost, lim, stack_data, shopId) VALUES(?,?,?,?,?)");
+            	pstat.setInt(5, s.sid);
 
             }
             
-            statement.setString(1, name);
-            statement.setInt(2, Integer.valueOf(cost));
-            statement.setInt(3, Integer.valueOf(limit));
-            statement.setBlob(4, stream);
-            statement.execute();
-            statement.close();
+            pstat.setString(1, name);
+            pstat.setInt(2, Integer.valueOf(cost));
+            pstat.setInt(3, Integer.valueOf(limit));
+            pstat.setBlob(4, stream);
+            pstat.execute();
             
         } catch ( Exception ex ) {
             
@@ -384,6 +414,8 @@ public class ModManager {
             
         }
         
+        ModDataBase . closePreparedStatementAndConnection ( pstat ) ;
+
 	}
 	
 	public static void removeEntryFromShop ( EntityPlayerMP player, Shop s, int catId, int merchId ) {
@@ -392,19 +424,21 @@ public class ModManager {
 		
 		MineDonate . shops . get ( s . sid ) . cats [ catId ] . removeMerch ( m ) ;
 		
+		Statement stat = null ;
+		
 		try {
 			
-			Statement st = ModDataBase . getNewStatement ( "main" ) ;
+			stat = ModDataBase . getNewStatement ( "main" ) ;
 			
-			st . executeUpdate ( "DELETE FROM " + s . cats [ catId ] . getDatabaseTable ( ) + " WHERE id=" + merchId + ";" ) ;
-			
-			st . close ( ) ;
-			
+			stat . executeUpdate ( "DELETE FROM " + s . cats [ catId ] . getDatabaseTable ( ) + " WHERE id=" + merchId + ";" ) ;
+						
 		} catch ( Exception ex ) {
 			
 			ex . printStackTrace ( ) ;
 			
 		}
+		
+        ModDataBase . closeStatementAndConnection ( stat ) ;
 		
         ModNetworkRegistry . sendToAllRemoveMerchPacket ( s . sid, catId, merchId ) ;
         

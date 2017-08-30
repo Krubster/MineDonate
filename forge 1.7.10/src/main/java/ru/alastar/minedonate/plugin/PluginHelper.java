@@ -4,7 +4,6 @@ import com.google.common.io.ByteStreams;
 import org.bukkit.Bukkit;
 
 import ru.alastar.minedonate.MineDonate;
-import ru.alastar.minedonate.plugin.permissions.PermissionsPlugin;
 import ru.log_inil.mc.minedonate.localData.DataOfAccessorPlugin;
 
 import java.io.InputStream;
@@ -12,11 +11,14 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Загрузка и получение плагинов доступа к плагинам сервера (т.е. костыли)
+ * */
 public class PluginHelper {
 	
 	public static Map < String, AccessorPlugin > accessorPlugins = new HashMap < > ( ) ;
 	
-	public static boolean hasExists ( String name ) {
+	public static boolean hasExistsOnServer ( String name ) {
 		
 		return Bukkit . getPluginManager ( ) . isPluginEnabled ( name ) ;
 		
@@ -28,9 +30,11 @@ public class PluginHelper {
 		Object oServerSide;
 		AccessorPlugin oModSide ;
 		
+		boolean abstractAccessorClassLoaded = false ;
+		
 		for ( DataOfAccessorPlugin doap : MineDonate . cfg . accessPlugins ) {
 			
-			if ( doap . load && hasExists ( doap . serverPluginName ) ) {
+			if ( doap . load && hasExistsOnServer ( doap . serverPluginName ) ) {
 			
 				MineDonate . logInfo ( "[MineDonate] Try init AccessorPlugin[" + doap . modPluginName + "], server name: " + doap . serverPluginName ) ;
 
@@ -38,10 +42,26 @@ public class PluginHelper {
 					
 					cl = Bukkit . getPluginManager ( ) . getPlugin ( doap . serverPluginName ) . getClass ( ) . getClassLoader ( ) ;
 					
-					defineClassInClassLoader ( cl, PermissionsPlugin . class . getName ( ), false ) ;
+					// Проверяем и загружаем родительский класс плагинов доступа
+					if ( ! abstractAccessorClassLoaded ) {
+						
+						defineClassInClassLoader ( cl, AccessorPlugin . class . getName ( ), false ) ;
 
+						abstractAccessorClassLoaded = true ;
+						
+					}
+					
+					if ( doap . cleanInterfaceClassName != null && doap . cleanInterfaceClassName . equals ( "" ) ) {
+						
+						// загружаем в класс лоадер "чистый" класс плагина доступа
+						defineClassInClassLoader ( cl, doap . cleanInterfaceClassName, false ) ;
+						
+					}
+					
+					// загружаем дочернийх[cleanInterfaceClassName] класс с реализацией методов
 					oServerSide = defineClassInClassLoader ( cl , doap . serverInterfaceClassName, true ) . newInstance ( ) ;
 					
+					// получаем конечный, дочерный класс с доступом к классу[serverInterfaceClassName] с реализацией методов
 					oModSide = ( AccessorPlugin ) Class . forName ( doap . reflectionInterfaceClassName ) . newInstance ( ) ;
 					
 					oModSide . init ( oServerSide, doap ) ;
@@ -64,79 +84,17 @@ public class PluginHelper {
 		
 			MineDonate . logInfo ( "[MineDonate] Try load AccessorPlugin[" + k + "]" ) ;
 			
-			accessorPlugins . get ( k ) . load ( ) ;
+			accessorPlugins . get ( k ) . load ( accessorPlugins . get ( k ) . getConfigPluginData ( ) . xProperties ) ;
 			
 			MineDonate . logInfo ( "[MineDonate] AccessorPlugin[" + k + "] loaded!" ) ;
 
 		}
-		
-		/*
-		if ( MineDonate . cfg . sellPrivelegies && hasExists ( "PermissionsEx" ) ) {
-			
-			try {
-				
-				cl = Bukkit . getPluginManager ( ) . getPlugin ( "PermissionsEx" ) . getClass ( ) . getClassLoader ( ) ;
-				
-				defineClassInClassLoader ( cl, PermissionsPlugin . class . getName ( ), false ) ;
-				
-				pexMgr = new PermissionsPluginReflection ( defineClassInClassLoader ( cl , MineDonate . cfg . permissionsPluginClassName, true ) . newInstance ( ) ) ;
-				pexMgr . load ( ) ;
 
-				MineDonate . logInfo ( "[MineDonate] Pex loaded!" ) ;
-				
-			} catch ( Exception ex ) {
-			
-				MineDonate . logError ( "Error load pexMgr accessor plugin!" ) ;
-				
-				ex . printStackTrace ( ) ;
-				
-			}		
-			
-		}
-		
-		if ( MineDonate . cfg . sellRegions && hasExists ( "WorldGuard" ) ) {
-
-			
-			try {
-								
-				cl = Bukkit . getPluginManager ( ) . getPlugin ( "WorldGuard" ) . getClass ( ) . getClassLoader ( ) ;
-				defineClassInClassLoader ( cl, WorldGuardPlugin . class . getName ( ), false ) ;
-			
-				wgMgr = new WorldGuardPluginReflection ( defineClassInClassLoader ( cl, MineDonate . cfg . worldGuardPluginClassName, true ) . newInstance ( ) ) ;
-				wgMgr . load ( ) ;
-				
-				MineDonate . logInfo ( "[MineDonate] WG loaded!" ) ;
-				
-			} catch ( Exception ex ) {
-			
-				MineDonate . logError ( "Error load wgMgr accessor plugin!" ) ;
-				
-				ex . printStackTrace ( ) ;
-				
-			}		
-			
-		}*/
-		
-		
 	}
 
 	public static AccessorPlugin getPlugin ( String modPluginName ) {
 		
 		return accessorPlugins . get ( modPluginName ) ;
-		
-	}
-	
-	public static boolean existsClass ( String name ) {
-		
-		try {
-			
-			Class . forName ( name ) ;
-			
-			return true ;
-			
-		} catch ( Exception ex ) { }
-		
-		return false ;
 		
 	}
         
@@ -150,7 +108,7 @@ public class PluginHelper {
 			Method m = ClassLoader . class . getDeclaredMethod ( "defineClass", new Class [ ] { String . class, byte [ ] . class, int . class, int . class } ) ;
 			
 			m . setAccessible ( true ) ;
-			m . invoke(classLoader, null, b, 0, b . length ) ;
+			m . invoke ( classLoader, null, b, 0, b . length ) ;
 						
 			if ( loadClass ) {
 				

@@ -49,7 +49,8 @@ public class AddMerchPacketHandler implements IMessageHandler<AddMerchPacket, IM
         if ( ShopGUI . instance != null ) {
         
         	ShopGUI . instance . updateButtons ( true ) ;
-        
+            ShopGUI . instance . refresh ( ) ;
+
         }
         
         return null;

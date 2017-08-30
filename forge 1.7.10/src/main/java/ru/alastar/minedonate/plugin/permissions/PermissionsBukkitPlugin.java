@@ -1,5 +1,6 @@
 package ru.alastar.minedonate.plugin.permissions;
 
+import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -9,16 +10,16 @@ import ru.tehkode.permissions.bukkit.PermissionsEx;
 public class PermissionsBukkitPlugin extends PermissionsPlugin {
 
 	boolean loaded = false ;
-	PermissionsEx pexMgr ;
+	PermissionsEx pexPlugin ;
 
-	public PermissionsBukkitPlugin(){}
+	public PermissionsBukkitPlugin ( ) { }
 
 	@Override
-	public void load ( ) {
+	public void load ( Map < String, Object > prop ) {
 		
 		if ( ! loaded ) {
 		
-			pexMgr = ( PermissionsEx ) Bukkit . getPluginManager ( ) . getPlugin ( "PermissionsEx" ) ;
+			pexPlugin = ( PermissionsEx ) Bukkit . getPluginManager ( ) . getPlugin ( "PermissionsEx" ) ;
 			
 			loaded = true ;
 			
@@ -31,7 +32,7 @@ public class PermissionsBukkitPlugin extends PermissionsPlugin {
 		
 		if ( Bukkit . getPlayer ( user ) != null ) {
 		
-			return pexMgr . has ( Bukkit . getPlayer ( user ), name ) ;
+			return pexPlugin . has ( Bukkit . getPlayer ( user ), name ) ;
 		
 		} else {
 			
@@ -44,14 +45,14 @@ public class PermissionsBukkitPlugin extends PermissionsPlugin {
 	@Override
 	public void addGroup ( UUID user, String name, String world, Long time ) {
 					
-		pexMgr . getUser ( Bukkit . getPlayer ( user ) ) . addGroup ( name, world . isEmpty ( ) ? null : world, time ) ;
+		pexPlugin . getUser ( Bukkit . getPlayer ( user ) ) . addGroup ( name, world . isEmpty ( ) ? null : world, time ) ;
 		
 	}
 	
 	@Override
 	public void removeGroup ( UUID user, String name ) {
 		
-		pexMgr . getUser ( Bukkit . getPlayer ( user ) ) . removeGroup ( name ) ;
+		pexPlugin . getUser ( Bukkit . getPlayer ( user ) ) . removeGroup ( name ) ;
 		
 	}
 	

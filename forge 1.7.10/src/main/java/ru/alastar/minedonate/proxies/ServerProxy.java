@@ -10,8 +10,8 @@ import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.Utils;
 import ru.alastar.minedonate.commands.AddMoneyCommand;
 import ru.alastar.minedonate.events.EntitySelectEventHandler;
+import ru.alastar.minedonate.events.PlayerJoinEventHandler;
 import ru.alastar.minedonate.plugin.PluginHelper;
-import ru.alastar.minedonate.rtnl.ModDataBase;
 import ru.alastar.minedonate.rtnl.ModShopLogger;
 
 /**
@@ -20,7 +20,7 @@ import ru.alastar.minedonate.rtnl.ModShopLogger;
 public class ServerProxy extends CommonProxy {
 
     @Override
-    public void preInit(FMLPreInitializationEvent event) {
+    public void preInit ( FMLPreInitializationEvent event ) {
 
         super . preInit ( event ) ;
 
@@ -33,28 +33,54 @@ public class ServerProxy extends CommonProxy {
         	
         }
 
-        if ( ! Utils . classExists ( "org.apache.commons.dbcp2.BasicDataSource" ) ) {
-        	
-        	MineDonate . logError ( "Class[org.apache.commons.dbcp2.BasicDataSource] not found, the database can not work!" ) ;
-        	
+        ClassLoader cl = this . getClass ( ) . getClassLoader ( ) ;
+        
+        // hly shi~
+        if ( ! Utils . loadLibs (
+        		
+	    		new String [ ] [ ] {
+	    			new String [ ] { "org.apache.commons.logging.LogFactory", "commons-logging-1.2.jar" },
+	    			new String [ ] { "org.apache.commons.pool2.PooledObjectFactory", "commons-pool2-2.4.2.jar" },
+	    			new String [ ] { "org.apache.commons.dbcp2.BasicDataSource", "commons-dbcp2-2.1.1.jar" },
+				}, ( net . minecraft . launchwrapper . LaunchClassLoader ) cl
+	    		
+    		) ) {
+        
+        	MineDonate . logError ( "Error load libraries, the database can not work!" ) ;
         	MineDonate . m_Enabled = false ;
         	
         	return ;
-        			
+        	
         }
-        
-        ModDataBase . initDataBase ( ) ;
+    	
+        try {
+		
+        	Class . forName ( "ru.alastar.minedonate.rtnl.ModDataBase" ) . getMethod ( "initDataBase" ) . invoke ( null ) ;
+		
+        } catch ( Exception ex ) {
+			
+			ex . printStackTrace ( ) ;
+			
+		}
+
         MineDonate . loadServerMerch ( ) ;
         
         MinecraftForge . EVENT_BUS . register ( new EntitySelectEventHandler ( ) ) ;
                 
     }
-    
-    
-    @Mod.EventHandler
+
+	@Mod.EventHandler
     public void serverStarting ( FMLServerStartingEvent event ) {
     	
     	super . serverStarting ( event ) ;
+    	
+        MinecraftForge . EVENT_BUS . register ( new PlayerJoinEventHandler ( ) ) ;
+
+    	if ( ! MineDonate . m_Enabled ) {
+    		
+    		return ;
+    		
+    	}
     	
         if ( ! MineDonate . cfg . enable ) { 
        	 
@@ -63,8 +89,9 @@ public class ServerProxy extends CommonProxy {
         }
         
     	PluginHelper . loadPlugins ( ) ;
+    	MineDonate . loadMoneyProccessors ( ) ;
     	
-        event.registerServerCommand(new AddMoneyCommand());
+        event . registerServerCommand ( new AddMoneyCommand ( ) ) ;
 
     }
    

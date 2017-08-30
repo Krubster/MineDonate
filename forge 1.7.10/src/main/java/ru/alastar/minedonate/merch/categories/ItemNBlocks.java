@@ -13,6 +13,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 /**
  * Created by Alastar on 21.07.2017.
  */
@@ -75,28 +78,37 @@ public class ItemNBlocks extends MerchCategory {
     }
 
     @Override
-    public void giveMerch(EntityPlayerMP player, Merch merch, int amount) {
+    public void giveMerch ( EntityPlayerMP player, Merch merch, int amount ) {
 
-        ItemInfo info = (ItemInfo) merch;
-        int toPut = amount * info.stack_data.getInteger("Count") ;
+        ItemInfo info = ( ItemInfo ) merch ;
+        
+        if ( info . limit != -1 ) {
+        	
+        	if ( info . limit < amount ) {
+        		
+        		MineDonate . logError ( "Buy error, amount[" + amount +"] > info[" + info . toString ( ) + "].limit[" + info . limit + "]" ) ;
+        	
+        		return ;
+        		
+        	}
+        	
+        	info . limit -= amount ;
+        
+        }
+        
+        int toPut = amount * info . stack_data . getInteger ( "Count" ) ;
         
         if ( toPut < 1 ) {
         	
         	return ;
         	
         }
-        
-        if ( info.limit != -1 ) {
-        	
-        	info . limit -= amount ;
-        
-        }
   
-        ItemStack stack = ItemStack.loadItemStackFromNBT(info.stack_data);
+        ItemStack stack = ItemStack . loadItemStackFromNBT ( info . stack_data ) ;
         
         if ( info . name != null && ! info . name . trim ( ) . isEmpty ( ) ) {
         	
-        	stack.setStackDisplayName(info.name);
+        	stack . setStackDisplayName ( info . name ) ;
         	
         }
 
@@ -143,11 +155,11 @@ public class ItemNBlocks extends MerchCategory {
         
         tmpCopy = null ;
         
-        player.inventory.markDirty();
+        player . inventory . markDirty ( ) ;
         
-        if (info.limit > -1) {
+        if ( info . limit > -1 ) {
         
-        	updateItemInfo(info);
+        	updateItemInfo ( info ) ;
         
         }
         
@@ -165,15 +177,14 @@ public class ItemNBlocks extends MerchCategory {
         
     }
     
-    private void updateItemInfo(ItemInfo info) {
+    private void updateItemInfo ( ItemInfo info ) {
     	
-        Statement stmt = null;
+        Statement stat = null;
         
         try {
             
-        	stmt = ModDataBase . getNewStatement ( "main" ) ;
-            stmt.executeUpdate("UPDATE " + getDatabaseTable ( ) + " SET lim=" + info.limit + " WHERE id=" + info . getId ( ) + ( info . shopId > 0 ? " AND shopId=" + info . shopId : "" ) + ";");
-            stmt.close();
+        	stat = ModDataBase . getNewStatement ( "main" ) ;
+        	stat . executeUpdate ( "UPDATE " + getDatabaseTable ( ) + " SET lim=" + info.limit + " WHERE id=" + info . getId ( ) + ( info . shopId > 0 ? " AND shopId=" + info . shopId : "" ) + ";");
             
         } catch ( Exception ex ) {
             
@@ -181,10 +192,22 @@ public class ItemNBlocks extends MerchCategory {
             
         }
         
+		ModDataBase . closeStatementAndConnection ( stat ) ;
+
         ModNetworkRegistry . sendToAllMerchInfoPacket ( info ) ;
 
     }
 
+    @SideOnly ( Side . SERVER )
+    @Override
+    public void updateMerch ( int id, Merch info ) {
+        
+    	super . updateMerch ( id, info ) ;
+        
+    	updateItemInfo ( ( ItemInfo ) info ) ;
+    	
+    }
+    
     @Override
     public Merch constructMerch() {
         return new ItemInfo();

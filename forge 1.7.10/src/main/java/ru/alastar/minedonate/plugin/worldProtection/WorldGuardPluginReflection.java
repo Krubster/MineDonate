@@ -1,6 +1,7 @@
 package ru.alastar.minedonate.plugin.worldProtection;
 
 import java.lang.reflect.Method;
+import java.util.Map;
 import java.util.UUID;
 
 import ru.log_inil.mc.minedonate.localData.DataOfAccessorPlugin;
@@ -20,7 +21,7 @@ public class WorldGuardPluginReflection extends WorldProtectionPlugin {
 			
 			o = _o ;
 			
-			mLoad = o.getClass().getMethod("load");
+			mLoad = o.getClass().getMethod("load", new Class[]{Map.class});
 			mAddPlayerToRegion = o.getClass().getMethod("addPlayerToRegion", new Class[]{String.class, String.class, UUID.class});
 			mRemovePlayerFromRegion = o.getClass().getMethod("removePlayerFromRegion", new Class[]{String.class, String.class, UUID.class});
 			mCheckRegionMaxOut = o.getClass().getMethod("checkRegionMaxOut", new Class[]{String.class, UUID.class});
@@ -32,10 +33,10 @@ public class WorldGuardPluginReflection extends WorldProtectionPlugin {
 	}
 
 	@Override
-	public void load() {
+	public void load ( Map < String, Object > prop ) {
 		
 		try {
-			mLoad.invoke(o);
+			mLoad.invoke(o, prop);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

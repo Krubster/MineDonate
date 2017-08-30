@@ -28,10 +28,13 @@ public class AccountInfoPacket implements IMessage {
 	
     public String id, userName ;
     
-    public AccountInfoPacket ( String _id, String _userName ) {
+    public Account acc ;
+    
+    public AccountInfoPacket ( String _id, String _userName, Account _acc ) {
   
     	id = _id ;
     	userName = _userName ;
+    	acc = _acc ;
     	
 	}
 
@@ -42,8 +45,6 @@ public class AccountInfoPacket implements IMessage {
         	
     		Utils . netWriteString ( buf, id ) ;
     		Utils . netWriteString ( buf, userName ) ;
-
-            Account acc = MineDonate . getAccount ( MineDonate . getUUIDFromName ( userName ) ) ;
 
             buf . writeInt ( acc . moneys . size ( ) ) ;
 

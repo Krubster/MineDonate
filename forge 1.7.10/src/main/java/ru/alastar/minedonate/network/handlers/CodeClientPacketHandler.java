@@ -6,6 +6,7 @@ import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
+import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.gui.categories.ItemNBlockCategory;
 import ru.alastar.minedonate.gui.categories.UsersShopsCategory;
@@ -68,10 +69,30 @@ public class CodeClientPacketHandler implements IMessageHandler<CodePacket, IMes
     	if ( message . code == CodePacket . Code . SERVER_ERROR_WAIT_OTHER_TASK ) {
 
         	Minecraft . getMinecraft ( ) . thePlayer . addChatMessage ( new ChatComponentText ( EnumChatFormatting . AQUA + " [MineDonate] " + EnumChatFormatting.RESET + message . code ) ) ;
+        
         	return null ;
-        	
+
     	}
     	
+    	switch ( message . code ) {
+    	
+    		case SERVER_ERROR_WAIT_OTHER_TASK :
+    			
+            	Minecraft . getMinecraft ( ) . thePlayer . addChatMessage ( new ChatComponentText ( EnumChatFormatting . AQUA + " [MineDonate] " + EnumChatFormatting.RESET + message . code ) ) ;
+                
+        	return null ;
+    		
+    		case MOD_ENABLED :
+    		case MOD_DISABLED :
+
+    			MineDonate . m_Enabled = message . code == CodePacket . Code . MOD_ENABLED ;
+        	
+			return null ;
+
+    		default :
+			break ;
+			
+    	}
     	ShopGUI . instance . initGui ( ) ;
 
         return null ;

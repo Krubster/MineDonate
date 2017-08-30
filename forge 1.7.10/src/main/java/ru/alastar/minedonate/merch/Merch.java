@@ -85,8 +85,10 @@ public abstract class Merch {
         
     }
 
-    public int getCost() {
-        return cost;
+    public int getCost ( ) {
+        
+    	return cost ;
+        
     }
 
     public int getId ( ) {
@@ -151,4 +153,11 @@ public abstract class Merch {
 		
 	}
 	
+    @Override
+    public String toString ( ) {
+    
+    	return getClass ( ) . getName ( ) + "@" + hashCode ( ) + "{shopId=" + shopId +", catId=" + catId + ", cost=" + cost + ", rating=" + rating + ", moneyType=" + getMoneyType ( ) + "}" ;
+    	
+    }
+    
 }

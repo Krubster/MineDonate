@@ -5,7 +5,7 @@ import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import net.minecraft.entity.player.EntityPlayerMP;
 import ru.alastar.minedonate.MineDonate;
-import ru.alastar.minedonate.network.manage.packets.UppendEntryPacket;
+import ru.alastar.minedonate.network.manage.packets.AppendEntryPacket;
 import ru.alastar.minedonate.network.INetworkTask;
 import ru.alastar.minedonate.network.manage.packets.ManageResponsePacket;
 import ru.alastar.minedonate.rtnl.ModManager;
@@ -13,14 +13,14 @@ import ru.alastar.minedonate.rtnl.ModNetworkTaskProcessor;
 import ru.alastar.minedonate.rtnl.common.Account;
 import ru.alastar.minedonate.rtnl.common.Shop;
 
-public class UppendEntryServerPacketHandler implements IMessageHandler < UppendEntryPacket, IMessage >, INetworkTask < UppendEntryPacket, IMessage > {
+public class AppendEntryServerPacketHandler implements IMessageHandler < AppendEntryPacket, IMessage >, INetworkTask < AppendEntryPacket, IMessage > {
 	
-    public UppendEntryServerPacketHandler ( ) {
+    public AppendEntryServerPacketHandler ( ) {
 
     }
 
     @Override
-    public IMessage onMessage ( UppendEntryPacket message, MessageContext ctx ) {
+    public IMessage onMessage ( AppendEntryPacket message, MessageContext ctx ) {
     	
     	ModNetworkTaskProcessor . processTask ( ( INetworkTask ) this, message, ctx ) ;
 
@@ -29,7 +29,7 @@ public class UppendEntryServerPacketHandler implements IMessageHandler < UppendE
     }
     
     @Override
-    public IMessage onMessageProcess ( UppendEntryPacket message, MessageContext ctx ) {
+    public IMessage onMessageProcess ( AppendEntryPacket message, MessageContext ctx ) {
 
     	if ( ! MineDonate . checkShopExists ( message . shopId ) ) {
     		
@@ -77,7 +77,10 @@ public class UppendEntryServerPacketHandler implements IMessageHandler < UppendE
 					
 					ModManager . uppendItemInShop ( acc, s, message . catId, merchId ) ;
 
-				break ;		
+				break ;	
+				
+				default :
+				break ;
 				
 			}
 						

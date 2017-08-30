@@ -4,6 +4,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayerMP;
 import ru.alastar.minedonate.MineDonate;
+import ru.alastar.minedonate.Utils;
 import ru.alastar.minedonate.merch.Merch;
 
 import java.io.*;
@@ -14,6 +15,10 @@ import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 import java.util.UUID;
 
+/**
+ * Логгер действий шопа(покупка/работа с деньгами) + реверс
+ * 
+ */
 @SideOnly(Side.SERVER)
 public class ModShopLogger {
 	
@@ -54,7 +59,7 @@ public class ModShopLogger {
 
     public static void logBuy ( Merch m, EntityPlayerMP by, int amount, String moneyType ) {
     	
-        if ( ! MineDonate . cfg . sendLogToDB ) {
+        if ( ! MineDonate . cfg . sendShopLogToDB ) {
         	
             try {
                 
@@ -69,18 +74,22 @@ public class ModShopLogger {
             
         } else {
             
+        	Statement stat = null ;
+        	
             try {
             	
-            	Statement stmt = ModDataBase . getNewStatement ( MineDonate . cfg . dbLogsLinkName ) ;
-                stmt.execute( "INSERT INTO " + MineDonate.cfg.dbLogs + " (date, shopId, catId, merchId, playerName, money, moneyType, message, amount) VALUES('" + dateFormat.format(calendar.getTime()) + "'," + m .shopId + "," + m.catId + "," + m . getId ( ) + ", '" + by.getGameProfile().getId() + "', " + m.getCost() * amount + ", '" + moneyType + "', '" + m.getBoughtMessage() + "', " + amount + " )" );
-                stmt.close();
+            	stat = ModDataBase . getNewStatement ( MineDonate . cfg . dbShopLogLinkName ) ;
                 
+            	stat . execute ( "INSERT INTO " + MineDonate.cfg.dbShopLog + " (date, shopId, catId, merchId, playerName, money, moneyType, message, amount) VALUES('" + dateFormat.format(calendar.getTime()) + "'," + m .shopId + "," + m.catId + "," + m . getId ( ) + ", '" + by.getGameProfile().getId() + "', " + m.getCost() * amount + ", '" + moneyType + "', '" + m.getBoughtMessage() + "', " + amount + " )" );
+                                
             } catch ( Exception ex ) {
                 
             	ex . printStackTrace ( ) ;
                 
             }
             
+    		ModDataBase . closeStatementAndConnection ( stat ) ;
+    		
        }
         
     }
@@ -105,7 +114,6 @@ public class ModShopLogger {
 		try {
 
             logMoney.write(calendar.getTime().toString() + ";" + playerName + ";" + last + ";" + next + ";" + factorData + "\r\n");
-            ;
             logMoney . flush ( ) ;
             
         } catch ( Exception ex ) {
@@ -131,7 +139,7 @@ public class ModShopLogger {
 
     	if ( fromDB ) {
     		
-    		String query = "SELECT * FROM " + MineDonate . cfg . dbLogs + " WHERE " + ( forOncePlayer ? "playerName='" + _playerName + "' AND " : "" ) + " date BETWEEN '" + dateFormat.format(from) + " 00:00:00' AND '" + dateFormat.format(to) + " 23:59:59'" ;
+    		String query = "SELECT * FROM " + MineDonate . cfg . dbShopLog + " WHERE " + ( forOncePlayer ? "playerName='" + _playerName + "' AND " : "" ) + " date BETWEEN '" + dateFormat.format(from) + " 00:00:00' AND '" + dateFormat.format(to) + " 23:59:59'" ;
       
     		if ( printFullInfo ) {
 
@@ -139,10 +147,14 @@ public class ModShopLogger {
 
         	}
         	
+    		Statement stat = null ;
+    		
         	try {
         		
-        		Statement stmt = ModDataBase . getNewStatement ( MineDonate . cfg . dbLogsLinkName ) ;
-                ResultSet rs = stmt . executeQuery ( query ) ;
+        		stat = ModDataBase . getNewStatement ( MineDonate . cfg . dbShopLogLinkName ) ;
+                
+        		ResultSet rs = stat . executeQuery ( query ) ;
+                
                 lineNumber = 0 ;
                 
                 while ( rs . next ( ) ) {
@@ -153,13 +165,15 @@ public class ModShopLogger {
                 	
                 }
                 
-                stmt . close ( ) ;
+                rs . close ( ) ;
                 
         	} catch ( Exception ex ) {
         		
         		ex . printStackTrace ( ) ;
         		
         	}
+    		
+    		ModDataBase . closeStatementAndConnection ( stat ) ;
     		
     	} else {
     		
@@ -258,7 +272,7 @@ public class ModShopLogger {
 
 	private static void reverseMoney ( String playerName, int money, String moneyType ) {
 
-        MineDonate.getMoneyProcessor(moneyType).returnMoney(MineDonate.getUUIDFromName(playerName), money);
+        MineDonate . getMoneyProcessor ( moneyType ) . returnMoney ( Utils . getUUIDFromName ( playerName ), money ) ;
 
     }
 

@@ -95,7 +95,16 @@ public class ItemInfo extends Merch {
 				 limit = number ;
 				
 			break;
+			
+			case COST :
 				
+				cost = number ;
+			
+			break ;
+			
+			default :
+			break ;
+			
 		}
 			
 	}
@@ -113,6 +122,9 @@ public class ItemInfo extends Merch {
 				
 			break;
 				
+			default :
+			break ;
+			
 		}
 			
 	}

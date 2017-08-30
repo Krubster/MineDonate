@@ -1,5 +1,9 @@
 package ru.log_inil.mc.minedonate.gui.context;
 
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.util.EnumChatFormatting;
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.log_inil.mc.minedonate.gui.MCGuiAccessible;
@@ -30,13 +34,16 @@ public class ContextElement  {
 	
 	public void draw ( MCGuiAccessible g, int ind, int max, int xOffset, int yOffset, ContextDrawType cdt ) {
 		
+		//GL11 . glEnable ( GL12 . GL_RESCALE_NORMAL ) ;
+		RenderHelper . enableGUIStandardItemLighting ( ) ;
+		
 		if ( cdt == ContextDrawType . NORMAL ) {
 			
-			g . drawString ( g . getFontRenderer ( ), line, xOffset + 4, yOffset + ( ind * lineHeight ), 14737632 ) ;
+			g . drawString ( g . getFontRenderer ( ), line, xOffset + 4, yOffset + ( ind * lineHeight ), 16777215 ) ;
 			
 		} else {
 			
-			g . drawString ( g . getFontRenderer ( ), EnumChatFormatting . UNDERLINE + line, xOffset + 4, yOffset + ( ind * lineHeight ), 14737632 ) ;
+			g . drawString ( g . getFontRenderer ( ), EnumChatFormatting . UNDERLINE + line, xOffset + 4, yOffset + ( ind * lineHeight ), 16777215 ) ;
 			
 		}
 		
