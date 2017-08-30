@@ -1,14 +1,17 @@
 {
+  
   "enable": true,
+  
   "dataBases": {
     "main": {
       "host": "localhost",
-      "name": "mcshop",
-      "user": "mcshop",
-      "password": "123",
+      "name": "dbname",
+      "user": "username",
+      "password": "password",
       "port": 3306,
+	  "useUTF8": true,
       "hasCustomLink": false,
-      "customLink": "",
+      "customLink": "jdbc:mysql:\/\/%host%:%port%\/%name%",
       "preLoadClassName": "com.mysql.jdbc.Driver"
     }
   },
@@ -20,7 +23,7 @@
   
   "sellItems": true,
   "dbItems": "md_items",
-  "itemsMoneyType": "coin",
+  "itemsMoneyType": "vault",
   
   "sellPrivelegies": true,
   "dbPrivelegies": "md_privelegies",
@@ -41,9 +44,9 @@
   "maxUsersShopsCount": 3,
   "defaultUserAllowShopCreate": true,
   
-  "autoFixMoneyProcessorsTableCollisions": true,
   "moneyProcessors": [
     {
+      "load": true,
       "moneyType": "rub",
       "className": "ru.alastar.minedonate.mproc.StandartMoneyProcessor",
       "dbTable": "md_accounts",
@@ -52,9 +55,10 @@
       "dbMoneyColumn": "money",
       "dbLinkName": "main",
       "isTwoSideProcessor": false,
-      "regMoney": 10
+      "regMoney": 1000
     },
     {
+      "load": true,
       "moneyType": "coin",
       "className": "ru.alastar.minedonate.mproc.StandartMoneyProcessor",
       "dbTable": "md_accounts",
@@ -64,11 +68,18 @@
       "dbLinkName": "main",
       "isTwoSideProcessor": true,
       "regMoney": 1000
+    },
+    {
+      "load": true,
+      "moneyType": "vault",
+      "className": "ru.alastar.minedonate.mproc.MoneyAccessorPluginMoneyProcessor",
+      "isTwoSideProcessor": true,
+      "regMoney": 1000,
+      "xProperties": {
+        "modPluginName": "money.vault"
+      }
     }
   ],
-  
-  "sendLogToDB": true,
-  "dbLogs": "md_logs",
   
   "enablePermissionsMode": true,
   "dbModPermissionsTable": "md_perms",
@@ -88,6 +99,39 @@
     }
   ],
   
-  "permissionsPluginClassName": "ru.alastar.minedonate.plugin.bukkit.PermissionsBukkitPlugin",
-  "worldGuardPluginClassName": "ru.alastar.minedonate.plugin.bukkit.WorldGuardBukkitPlugin"
+  "accessPlugins": [
+    {
+      "modPluginName": "permissionsManager",
+      "load": true,
+      "serverPluginName": "PermissionsEx",
+      "cleanInterfaceClassName": "ru.alastar.minedonate.plugin.permissions.PermissionsPlugin",
+      "serverInterfaceClassName": "ru.alastar.minedonate.plugin.permissions.PermissionsBukkitPlugin",
+      "reflectionInterfaceClassName": "ru.alastar.minedonate.plugin.permissions.PermissionsPluginReflection"
+    },
+    {
+      "modPluginName": "worldProtectionManager",
+      "load": false,
+      "serverPluginName": "WorldGuard",
+      "cleanInterfaceClassName": "ru.alastar.minedonate.plugin.worldProtection.WorldProtectionPlugin",
+      "serverInterfaceClassName": "ru.alastar.minedonate.plugin.worldProtection.WorldGuardBukkitPlugin",
+      "reflectionInterfaceClassName": "ru.alastar.minedonate.plugin.worldProtection.WorldGuardPluginReflection"
+    },
+    {
+      "modPluginName": "money.vault",
+      "load": true,
+      "serverPluginName": "Vault",
+      "cleanInterfaceClassName": "ru.alastar.minedonate.plugin.money.MoneyPlugin",
+      "serverInterfaceClassName": "ru.alastar.minedonate.plugin.money.VaultBukkitPlugin",
+      "reflectionInterfaceClassName": "ru.alastar.minedonate.plugin.money.VaultPluginReflection"
+    }
+  ],
+  
+  "packetsMaxLimit": 3,
+  
+  "sendShopLogToDB": true,
+  "dbShopLog": "md_logs",
+  "dbShopLogLinkName": "main",
+  
+  "displayInfoLog": true
+  
 }
