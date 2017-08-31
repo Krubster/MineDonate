@@ -33,16 +33,11 @@ public class ClientEventHandler {
     @SubscribeEvent(priority= EventPriority.NORMAL, receiveCanceled=true)
     public void onEvent(InputEvent.KeyInputEvent event) {
     	
-    	if (ClientProxy.openShop.isPressed() ){//&& Minecraft.getMinecraft().theWorld.isRemote) {
-    		    		
-    		//MineDonate.networkChannel.sendToServer( new InventoryShopPacket ( InventoryShopPacket.Type.OPEN_INV ) ) ;
+    	if ( ClientProxy . openShop . isPressed ( ) ) {
+    		
             Minecraft.getMinecraft().thePlayer.openGui(MineDonate.getInstance(), 0, Minecraft.getMinecraft().theWorld, (int)  Minecraft.getMinecraft().thePlayer.posX, (int)  Minecraft.getMinecraft().thePlayer.posY, (int)  Minecraft.getMinecraft().thePlayer.posZ);
 
-        }/* else if (ClientProxy.openAdmin.isPressed() && Minecraft.getMinecraft().theWorld.isRemote) {
-
-            Minecraft.getMinecraft().thePlayer.openGui(MineDonate.getInstance(), 1, Minecraft.getMinecraft().theWorld, (int)  Minecraft.getMinecraft().thePlayer.posX, (int)  Minecraft.getMinecraft().thePlayer.posY, (int)  Minecraft.getMinecraft().thePlayer.posZ);
-
-        }*/
+        }
         
     }
 	

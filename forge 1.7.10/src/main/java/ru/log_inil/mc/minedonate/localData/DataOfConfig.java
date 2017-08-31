@@ -1,69 +1,163 @@
 package ru.log_inil.mc.minedonate.localData;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import ru.alastar.minedonate.mproc.MoneyAccessorPluginMoneyProcessor;
 import ru.alastar.minedonate.mproc.StandartMoneyProcessor;
-import ru.alastar.minedonate.plugin.bukkit.PermissionsBukkitPlugin;
-import ru.alastar.minedonate.plugin.bukkit.WorldGuardBukkitPlugin;
+import ru.alastar.minedonate.plugin.money.MoneyPlugin;
+import ru.alastar.minedonate.plugin.money.VaultBukkitPlugin;
+import ru.alastar.minedonate.plugin.money.VaultPluginReflection;
+import ru.alastar.minedonate.plugin.permissions.PermissionsBukkitPlugin;
+import ru.alastar.minedonate.plugin.permissions.PermissionsPlugin;
+import ru.alastar.minedonate.plugin.permissions.PermissionsPluginReflection;
+import ru.alastar.minedonate.plugin.worldProtection.WorldGuardBukkitPlugin;
+import ru.alastar.minedonate.plugin.worldProtection.WorldProtectionPlugin;
+import ru.alastar.minedonate.plugin.worldProtection.WorldGuardPluginReflection;
 
 public class DataOfConfig {
 
+	// Мод включен
 	public boolean enable = false ;
 	
-	public String dbHost = "localhost";
-	public int dbPort = 3306 ;
-	public String dbName = "shop";
-	public String dbUser = "username" ;
-	public String dbPassword = "password" ;
+	// Базы
+	public Map < String, DataOfDataBaseLink > dataBases ;
 
-	public String dbUsers = "md_accounts" ;
-	public String dbUsersIdColumn = "UUID";
+	// Параметры таблицы с пользователями(должны иметь uuid(str), name(str), freezShopCreate(bool), freezShopCreateFreezer(str), freezShopCreateReason(str), shopsCount(int) )
+	public String dbUsers ;
+	public String dbUsersIdColumn ;
+	public String dbUsersNameColumn ;
+	public String dbUsersLinkName ;
+
+	public boolean sellItems ;
+	public String dbItems ;
+	public String itemsMoneyType ;
+
+	public boolean sellPrivelegies ;
+	public String dbPrivelegies ;
+	public String privelegiesMoneyType ;
+
+	public boolean sellRegions ;
+	public String dbRegions ;
+	public String regionMoneyType ;
+
+	public boolean sellEntities ;
+	public String dbEntities ;
+	public String entitiesMoneyType ;
+
+	public boolean userShops ;
+	public String dbUserItems ;
+	public String dbShops ;
+	public String defaultUserShopMoneyType ;
+	public int maxUsersShopsCount ;
+	public boolean defaultUserAllowShopCreate ;
 	
-	public boolean sellItems = true ;
-	public String dbItems = "md_items" ;
-	public String itemsMoneyType = "coin" ;
-
-	public boolean sellPrivelegies = true ;
-	public String dbPrivelegies = "md_privelegies" ;
-	public String privelegiesMoneyType = "rub" ;
-
-	public boolean sellRegions = false ;
-	public String dbRegions = "md_regions" ;
-	public String regionMoneyType = "rub" ;
-
-	public boolean sellEntities = true ;
-	public String dbEntities = "md_entities" ;
-	public String entitiesMoneyType = "coin" ;
-
-	public boolean userShops = true;
-	public String dbUserItems = "md_userItems" ;
-	public String dbShops = "md_shops" ;
-	public String defaultUserShopMoneyType = "coin" ;
-	public int maxUsersShopsCount = 3 ;
-	public boolean defaultUserAllowShopCreate = true ;
-	
-	public boolean autoFixMoneyProcessorsTableCollisions = true ;
 	public DataOfMoneyProcessor [ ] moneyProcessors ;
-
-	public boolean sendLogToDB = true;
-	public String dbLogs = "md_logs";
 	
-	public boolean enablePermissionsMode = false ;
-	public String dbModPermissionsTable = "md_perms" ;
+	// Включить режим разрешений
+	public boolean enablePermissionsMode ;
+	
+	// Таблица (внутренняя группа мода -> внутренний пермишен мода)
+	public String dbModPermissionsTable;
+	
+	// Триггеры разрешений (имя пермишена на сервере -> внутренние группы мода)
 	public DataOfPermissionEntry [ ] permissionsTriggerList ;
 
-	public String permissionsPluginClassName ;
-	public String worldGuardPluginClassName ;
+	// Плагины доступа
+	public DataOfAccessorPlugin [ ] accessPlugins ;
+
+	
+	// Лимит кол-ва пакетных задач от клиента
+	public int packetsMaxLimit ;
+
+	
+	// Отправлять логи магазига в бд
+	public boolean sendShopLogToDB ;
+	
+	// Таблица с логами магазига
+	public String dbShopLog ;
+	
+	// Имя используемой бд
+	public String dbShopLogLinkName ;
+	
+	// Выводить в консоль доп. инфо
+	public boolean displayInfoLog ;
+	
+	public Map < String, Object > xProperties ;
 
 	public DataOfConfig ( ) {
 		
+		dataBases = new HashMap < > ( ) ;
+		
+		dataBases . put ( "main", new DataOfDataBaseLink ( "localhost", 3306, "shop", "username", "password", "com.mysql.jdbc.Driver" ) ) ;
+		
+		dbUsers = "md_accounts" ;
+		dbUsersIdColumn = "UUID";
+		dbUsersNameColumn = "name" ;
+		dbUsersLinkName = "main" ;
+		 
+		sellItems = true ;
+		dbItems = "md_items" ;
+		itemsMoneyType = "vault" ;
+		
+		sellPrivelegies = true ;
+		dbPrivelegies = "md_privelegies" ;
+		privelegiesMoneyType = "rub" ;
+				
+		sellRegions = false ;
+		dbRegions = "md_regions" ;
+		regionMoneyType = "rub" ;
+		
+		sellEntities = true ;
+		dbEntities = "md_entities" ;
+		entitiesMoneyType = "coin" ;
+				
+		userShops = true ;
+		dbUserItems = "md_userItems" ;
+		dbShops = "md_shops" ;
+		defaultUserShopMoneyType = "coin" ;
+		maxUsersShopsCount = 3 ;
+		defaultUserAllowShopCreate = true ;
+			
+		Map < String, Object > vaultMPXProps = new HashMap < > ( ) ;
+		vaultMPXProps . put ( "modPluginName", "money.vault" ) ;
+		
 		moneyProcessors = new DataOfMoneyProcessor [ ] {
-				new DataOfMoneyProcessor("rub", StandartMoneyProcessor.class.getName(), "md_accounts", "UUID", "money", false),
-				new DataOfMoneyProcessor("coin", StandartMoneyProcessor.class.getName(), "md_accounts", "UUID", "coins", false),
+				
+			new DataOfMoneyProcessor ( true, "rub", StandartMoneyProcessor . class . getName ( ), "md_accounts", "UUID", "name", "money", "main", false ),
+			new DataOfMoneyProcessor ( true, "coin", StandartMoneyProcessor . class . getName ( ), "md_accounts", "UUID", "name", "coins", "main", true ),
+			new DataOfMoneyProcessor ( true, "vault", MoneyAccessorPluginMoneyProcessor . class . getName ( ), null, null, null, null, null, true, vaultMPXProps ),
+
 		} ;
 		
-		permissionsTriggerList = new DataOfPermissionEntry [ ] { new DataOfPermissionEntry ( "minedonate.default", new String [ ] { "default" } ), new DataOfPermissionEntry ( "minedonate.moderation", new String [ ] { "default", "moder" } ) } ;
+		enablePermissionsMode = false ;
+		dbModPermissionsTable = "md_perms" ;
+		
+		permissionsTriggerList = new DataOfPermissionEntry [ ] { 
+				
+			new DataOfPermissionEntry ( "minedonate.default", new String [ ] { "default" } ), 
+			new DataOfPermissionEntry ( "minedonate.moderation", new String [ ] { "default", "moder" } ) 
+			
+		} ;
 	
-		permissionsPluginClassName = PermissionsBukkitPlugin . class . getName ( ) ;
-		worldGuardPluginClassName = WorldGuardBukkitPlugin . class . getName ( ) ;
+		//Map < String, Object > vaultAPXProps = new HashMap < > ( ) ;
+		// vaultAPXProps . put ( "serviceClassName", "Essentials Economy" ) ;
+		
+		accessPlugins = new DataOfAccessorPlugin [ ] { 
+				
+			new DataOfAccessorPlugin ( "permissionsManager", sellPrivelegies || enablePermissionsMode, "PermissionsEx", PermissionsBukkitPlugin . class . getName ( ), PermissionsPluginReflection . class . getName ( ), PermissionsPlugin . class . getName ( ) ),
+			new DataOfAccessorPlugin ( "worldProtectionManager", sellRegions, "WorldGuard", WorldGuardBukkitPlugin . class . getName ( ), WorldGuardPluginReflection . class . getName ( ), WorldProtectionPlugin . class . getName ( ) ),
+			new DataOfAccessorPlugin ( "money.vault", true, "Vault", VaultBukkitPlugin . class . getName ( ), VaultPluginReflection . class . getName ( ), MoneyPlugin . class . getName ( ) ) 
+
+		} ;
+		
+		packetsMaxLimit = 3 ;
+		
+		sendShopLogToDB = true ;
+		dbShopLog = "md_logs" ;
+		dbShopLogLinkName = "main" ;
+		
+		displayInfoLog = true ;
 		
 	}
 	

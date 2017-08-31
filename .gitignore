@@ -1,7 +1,6 @@
 .bat
 logs/
 out/
-libs/
 gradle/
 eclipse/
 build/

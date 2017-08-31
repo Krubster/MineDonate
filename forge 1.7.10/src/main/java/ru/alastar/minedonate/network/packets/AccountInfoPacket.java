@@ -3,9 +3,8 @@ package ru.alastar.minedonate.network.packets;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import io.netty.buffer.ByteBuf;
 import ru.alastar.minedonate.MineDonate;
-import ru.alastar.minedonate.mproc.AbstractMoneyProcessor;
-import ru.alastar.minedonate.rtnl.Account;
-import ru.alastar.minedonate.rtnl.Utils;
+import ru.alastar.minedonate.Utils;
+import ru.alastar.minedonate.rtnl.common.Account;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -15,8 +14,8 @@ import java.util.List;
  * Created by Alastar on 18.07.2017.
  */
 public class AccountInfoPacket implements IMessage {
-    // A default constructor is always required
-    public AccountInfoPacket(){}
+
+	public AccountInfoPacket ( ) { }
 
     public MoneySystem [ ] mSystems ;
     
@@ -27,11 +26,15 @@ public class AccountInfoPacket implements IMessage {
 	public String freezShopCreateReason ;
 	public int shopsCount ;
 	
-    String userName ;
+    public String id, userName ;
     
-    public AccountInfoPacket ( String _userName ) {
+    public Account acc ;
+    
+    public AccountInfoPacket ( String _id, String _userName, Account _acc ) {
   
+    	id = _id ;
     	userName = _userName ;
+    	acc = _acc ;
     	
 	}
 
@@ -40,25 +43,18 @@ public class AccountInfoPacket implements IMessage {
         
         try {
         	
-            buf . writeInt ( MineDonate . moneyProcessors . size ( ) ) ;
+    		Utils . netWriteString ( buf, id ) ;
+    		Utils . netWriteString ( buf, userName ) ;
 
-            for ( AbstractMoneyProcessor amp : MineDonate . moneyProcessors . values ( ) ) {
+            buf . writeInt ( acc . moneys . size ( ) ) ;
 
-                buf.writeInt(amp.getMoneyFor(MineDonate.getUUIDFromName(userName)));
-                Utils . netWriteString ( buf, amp . getMoneyType ( ) ) ;
-              
-            	buf . writeBoolean ( amp . isCustomMoneyType ( ) ) ;
+            for ( String k : acc . moneys . keySet ( ) ) {
             	
-            	if ( amp . isCustomMoneyType ( ) ) {
-            		
-            		Utils . netWriteString ( buf, amp . getClientMoneyType ( ) ) ;
-                	
-            	}
-            	
-            }
-				
-            Account acc = MineDonate . getAccount ( userName . toLowerCase ( ) ) ;
-    		
+                Utils . netWriteString ( buf, k ) ;
+                buf . writeInt ( acc . getMoney ( k ) ) ;
+
+            }   
+				    		
             buf . writeInt ( acc . permissions . size ( ) ) ;
             
             for ( String p : acc . permissions  ) {
@@ -89,15 +85,17 @@ public class AccountInfoPacket implements IMessage {
     @Override 
     public void fromBytes(ByteBuf buf) {
     	
-        
         try {
-			
+        	
+        	id = Utils . netReadString ( buf ) ;
+        	userName = Utils . netReadString ( buf ) ;
+
         	int l = buf . readInt ( ) ;
         	mSystems = new MoneySystem [ l ] ;
         	
         	for ( int i = 0 ; i < l ; i ++ ) {
         	
-        		mSystems [ i ] = new MoneySystem ( buf . readInt ( ), Utils . netReadString ( buf ), buf . readBoolean ( ), buf ) ;
+        		mSystems [ i ] = new MoneySystem ( Utils . netReadString ( buf ), buf . readInt ( ) ) ;
         		
         	}
         	
@@ -136,26 +134,13 @@ public class AccountInfoPacket implements IMessage {
      
     public class MoneySystem {
     	
-    	public int balance ;
     	public String type ;
-    	public boolean isCustom ;
-    	public String clData ;
+    	public int balance ;
     	
-    	public MoneySystem ( int _balance, String _type, boolean _isCustom, ByteBuf _buf ) {
+    	public MoneySystem ( String _type, int _balance ) {
     		
     		balance = _balance ;
     		type = _type ;
-    		isCustom = _isCustom ;
-    		
-    		try {
-    			
-    			clData = isCustom ? Utils . netReadString ( _buf ) : null ;
-    			
-    		} catch ( Exception ex ) {
-    			
-    			ex . printStackTrace ( ) ;
-    			
-    		}
     		
     	}
     	

@@ -38,7 +38,6 @@ public class MerchInfoPacket  implements IMessage {
     	shopId = buf.readInt();
         m_category = buf.readInt();
         info =  MineDonate.shops.get(shopId).cats[m_category].constructMerch();
-        info . setShopId ( shopId ) ;
         info.read(buf);
     }
 }

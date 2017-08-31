@@ -3,9 +3,10 @@ package ru.log_inil.mc.minedonate.gui.frames;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.RenderHelper;
 import ru.alastar.minedonate.MineDonate;
+import ru.alastar.minedonate.Utils;
 import ru.alastar.minedonate.gui.ShopGUI;
-import ru.alastar.minedonate.rtnl.ModNetwork;
-import ru.alastar.minedonate.rtnl.Utils;
+import ru.alastar.minedonate.rtnl.ModManager;
+import ru.alastar.minedonate.rtnl.ModNetworkRegistry;
 import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.gui.GuiFrame;
 import ru.log_inil.mc.minedonate.gui.GuiGradientButton;
@@ -71,11 +72,12 @@ public class GuiFrameAddItem extends GuiFrame {
         	
     }
     
-    GuiButton saveChangesButton ;
+    GuiButton saveChangesButton, uppendChangesButton ;
     GuiButton cancelChangesButton ;
     GuiGradientTextField nameField, costField, limitField ; 
     
     String fieldText, fieldHolder ;
+    boolean canUppend, unShowDropFix ;
     
     @Override
 	public void postShow ( ShopGUI g ) {
@@ -87,8 +89,15 @@ public class GuiFrameAddItem extends GuiFrame {
 		}
 		
     	super . postShow ( g ) ;
+    	
+    	if ( canUppend ) {
 
-
+    		canUppend = ModManager . canUppendAnotherItemInShop ( MineDonate . getAccount ( ), MineDonate . shops . get ( g . getCurrentShopId ( ) ), catId ) != -1 ;
+    		
+    	}
+    	
+    	unShowDropFix = true ;
+    	
     	width = 5 ;
 
     	if ( drawItemStack ) {
@@ -114,17 +123,24 @@ public class GuiFrameAddItem extends GuiFrame {
     	posX = (g.getScaledResolution().getScaledWidth()/2) - widthCenter;
     	posY = (g.getScaledResolution().getScaledHeight()/2) - heightCenter;
 
-    	if ( saveChangesButton == null ) {
+    	if ( uppendChangesButton == null && douifcs . okExistsButton != null ) {
         	
-    		saveChangesButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), posX, posY + height, 
-    				douifcs.createButton.width, douifcs.createButton.height, douifcs.createButton.text, false ) ;
+    		uppendChangesButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), posX, posY + height, 
+    				douifcs.okExistsButton.width, douifcs.okExistsButton.height, douifcs.okExistsButton.text, false ) ;
     	
     	}
     	
-    	if ( this . isVisible ( ) ) {
+    	if ( uppendChangesButton != null ) {
+    	
+    		uppendChangesButton . visible = uppendChangesButton . enabled = canUppend ;
+    	
+    	}
 
-    		g . addButton ( saveChangesButton, false ) ;
-    		
+    	if ( saveChangesButton == null ) {
+        	
+    		saveChangesButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), posX, posY + height, 
+    				douifcs.okButton.width, douifcs.okButton.height, douifcs.okButton.text, false ) ;
+    	
     	}
     	
     	if ( cancelChangesButton == null ) {
@@ -133,13 +149,7 @@ public class GuiFrameAddItem extends GuiFrame {
     				douifcs.cancelButton.width, douifcs.cancelButton.height, douifcs.cancelButton.text, false ) ;
     	
     	}
-    	
-    	if ( this . isVisible ( ) ) {
-
-    		g . addButton ( cancelChangesButton, false ) ;
-    		
-    	}
-
+		
 		if ( nameField == null ) {
 						
 			nameField = new GuiGradientTextField ( g.getFontRenderer(), 30, 10, douifcs . nameField . width - 1, douifcs . nameField . height, true ) ;
@@ -151,6 +161,8 @@ public class GuiFrameAddItem extends GuiFrame {
 		nameField . setText ( fieldText != null ? fieldText : "" ) ;
 		nameField . setTextHolder ( MineDonate.getAccount().ms.currentItemStack != null ? MineDonate.getAccount().ms.currentItemStack.getDisplayName() : fieldHolder ) ;
 		
+		nameField . fieldBorderColor = fieldBorderColor ;
+
 		nameField . xPosition = posX + 10 + ( drawItemStack ? 22 : 0 ) ;
 		nameField . yPosition = posY + 15 ;
 
@@ -166,7 +178,8 @@ public class GuiFrameAddItem extends GuiFrame {
 			
 			limitField . setText ( "" ) ;
 			limitField . setTextHolder ( "" ) ;
-			
+    		limitField . fieldBorderColor = fieldBorderColor ;
+
 		}
 		
 		if ( costField == null ) {
@@ -180,6 +193,8 @@ public class GuiFrameAddItem extends GuiFrame {
 		costField . setText ( douifcs . costField . text ) ;
 		costField . setTextHolder ( douifcs . costField . textHolder ) ;
 		
+		costField . fieldBorderColor = fieldBorderColor ;
+
 		costField . xPosition = nameField . xPosition + nameField . width + 6 ;
 		costField . yPosition = nameField . yPosition ;
 
@@ -204,6 +219,25 @@ public class GuiFrameAddItem extends GuiFrame {
     	cancelChangesButton . xPosition = posX + width - cancelChangesButton . width ;
     	saveChangesButton . xPosition = cancelChangesButton . xPosition - saveChangesButton . width ;
     	
+    	if ( uppendChangesButton != null ) {
+
+    		uppendChangesButton . xPosition = saveChangesButton . xPosition - uppendChangesButton . width ;
+    	
+    	}
+    	
+    	if ( this . isVisible ( ) ) {
+
+    		if ( canUppend && uppendChangesButton != null ) {
+        		
+    			g . addButton ( uppendChangesButton, false ) ;
+    		
+    		}
+    		
+    		g . addButton ( saveChangesButton, false ) ;
+			g . addButton ( cancelChangesButton, false ) ;
+
+    	}
+
     }
     
     @Override
@@ -211,9 +245,16 @@ public class GuiFrameAddItem extends GuiFrame {
 		
     	super . unShow ( g ) ;
     	
-    	g . removeButton ( cancelChangesButton ) ;
+    	g . removeButton ( uppendChangesButton ) ;
     	g . removeButton ( saveChangesButton ) ;
+    	g . removeButton ( cancelChangesButton ) ;
 
+		if ( unShowDropFix && MineDonate . getAccount ( ) . ms . currentItemStack != null ) {
+			new Exception().printStackTrace();
+			ModNetworkRegistry . sendToServerCancelShopInventoryPacket ( ) ;
+			
+		}
+		
 	}
 	
     @Override
@@ -278,20 +319,38 @@ public class GuiFrameAddItem extends GuiFrame {
     		
     		g . setLoading ( true ) ;
     		
-            ModNetwork . sendToServerAddNewEntryPacket ( shopId, catId, limit, cost, this . nameField . getText ( ) ) ;
+            ModNetworkRegistry . sendToServerAddNewEntryPacket ( shopId, catId, limit, cost, this . nameField . getText ( ) ) ;
             
+    		unShowDropFix = false ;
+
             this . hideFrame ( g ) ;
            
     	}
     	
-    	if ( b . id == cancelChangesButton . id ) {
-    	
+    	if ( uppendChangesButton != null && b . id == uppendChangesButton . id ) {
+        	        	
     		if ( MineDonate . getAccount ( ) . ms . currentItemStack != null ) {
     			
-    			ModNetwork . sendToServerCancelShopInventoryPacket ( ) ;
+    			ModNetworkRegistry . sendToServerUppendEntryPacket ( shopId, catId ) ;
     			
     		}
     		
+    		unShowDropFix = false ;
+
+            this . hideFrame ( g ) ;
+    		
+    	}
+    	
+    	if ( b . id == cancelChangesButton . id ) {
+
+    		if ( MineDonate . getAccount ( ) . ms . currentItemStack != null ) {
+    			
+    			ModNetworkRegistry . sendToServerCancelShopInventoryPacket ( ) ;
+    			
+    		}
+    		
+    		unShowDropFix = false ;
+
             this . hideFrame ( g ) ;
     		
     	}
@@ -370,10 +429,18 @@ public class GuiFrameAddItem extends GuiFrame {
 	
 	public boolean isOwnerButton ( GuiButton gb ) {
 		
-		return ( gb == cancelChangesButton || gb == saveChangesButton ) ;
+		return ( ( uppendChangesButton != null && gb == uppendChangesButton ) || gb == saveChangesButton || gb == cancelChangesButton ) ;
 		
 	}
 	
+	
+    @Override
+	public boolean needUnShowWhenGuiClose ( ) {
+		
+		return ! unShowDropFix ;
+		
+	}
+    
     @Override
 	public boolean coordContains ( int x, int y ) {
 		
@@ -402,11 +469,12 @@ public class GuiFrameAddItem extends GuiFrame {
 
     }
 
-	public void setInfo ( int _shopId, int _catId ) {
+	public void setInfo ( int _shopId, int _catId, boolean _canUppend ) {
 
 		shopId = _shopId ;
 		catId = _catId ;
-
+		canUppend = _canUppend ;
+		
 	}
     
     

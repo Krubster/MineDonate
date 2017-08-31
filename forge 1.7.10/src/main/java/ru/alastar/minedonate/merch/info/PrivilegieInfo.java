@@ -1,8 +1,8 @@
 package ru.alastar.minedonate.merch.info;
 
 import io.netty.buffer.ByteBuf;
+import ru.alastar.minedonate.Utils;
 import ru.alastar.minedonate.merch.Merch;
-import ru.alastar.minedonate.rtnl.Utils;
 
 /**
  * Created by Alastar on 19.07.2017.
@@ -48,7 +48,9 @@ public class PrivilegieInfo extends Merch {
 
     @Override
     public void read(ByteBuf buf) {
+    	
         super.read(buf);
+        
         cost = buf.readInt();
         
         try {
@@ -83,7 +85,9 @@ public class PrivilegieInfo extends Merch {
 
     @Override
     public void write(ByteBuf buf) {
+    	
         super.write(buf);
+        
         buf.writeInt(cost);
 
         try {

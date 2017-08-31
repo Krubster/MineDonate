@@ -292,7 +292,7 @@ public class UsersShopsCategory extends ShopCategory {
 		        		
 		        		if ( iim != null ) {
 
-			        		if ( ( iim . isFreezed ? ! MineDonate . cfgUI . cats . shops . dontShowFreezed : true ) && ( viewMyShops ? ( iim . owner . equalsIgnoreCase ( searchValue ) ) : ( iim . owner . toLowerCase ( ) . contains ( searchValue ) ||  iim . getSearchValue ( ) . toLowerCase ( ) . contains ( searchValue ) ) ) ) {
+			        		if ( ( iim . isFreezed ? ! MineDonate . cfgUI . cats . shops . dontShowFreezed : true ) && ( viewMyShops ? ( iim . ownerName . equalsIgnoreCase ( searchValue ) ) : ( iim . ownerName . toLowerCase ( ) . contains ( searchValue ) ||  iim . getSearchValue ( ) . toLowerCase ( ) . contains ( searchValue ) ) ) ) {
 			        			
 			        			entrs . add ( new GuiItemEntryOfUserShopMerch ( iim, this ) . addButtons ( gui ) . updateDrawData ( ) ) ;
 			        			

@@ -2,14 +2,17 @@ package ru.alastar.minedonate.merch.categories;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import net.minecraft.entity.player.EntityPlayerMP;
-import ru.alastar.minedonate.MineDonate;
+
 import ru.alastar.minedonate.merch.Merch;
+import ru.alastar.minedonate.rtnl.ModDataBase;
 
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Created by Alastar on 21.07.2017.
@@ -28,7 +31,7 @@ public abstract class MerchCategory {
 
     }
     
-    protected Map < Integer, Merch > m_Merch = new HashMap < > ( ) ;
+    public Map < Integer, Merch > m_Merch = new LinkedHashMap < > ( ) ;
 
     @SideOnly(Side.SERVER)
     public boolean canReverse() {
@@ -38,7 +41,7 @@ public abstract class MerchCategory {
     }
 
     @SideOnly(Side.SERVER)
-    public void reverseFor ( int merchId, String player, String [ ] data ) {
+    public void reverseFor ( int merchId, UUID player, String [ ] data ) {
     	
     }
 
@@ -74,10 +77,12 @@ public abstract class MerchCategory {
 
 	public int getNextMerchId ( ) {
 		
+		Statement stat = null ;
+		
         try {
         	
-        	Statement stmt = MineDonate . getNewStatement ( ) ;
-            ResultSet rs = stmt . executeQuery ( "SHOW TABLE STATUS LIKE '" + getDatabaseTable ( ) + "';" ) ;
+        	stat = ModDataBase . getNewStatement ( "main" ) ;
+            ResultSet rs = stat . executeQuery ( "SHOW TABLE STATUS LIKE '" + getDatabaseTable ( ) + "';" ) ;
 
             int r = -1 ;
             while ( rs . next ( ) ) {
@@ -87,7 +92,7 @@ public abstract class MerchCategory {
             }
             
             rs . close ( ) ;
-            stmt . close ( ) ;
+    		ModDataBase . closeStatementAndConnection ( stat ) ;
 
             return r ;
             
@@ -96,6 +101,8 @@ public abstract class MerchCategory {
         	ex . printStackTrace ( ) ;
             
         }
+
+		ModDataBase . closeStatementAndConnection ( stat ) ;
 
         return -1 ;
         
@@ -137,6 +144,13 @@ public abstract class MerchCategory {
     
     public abstract Type getCatType ( ) ;
 
+    @Override
+    public String toString ( ) {
+    
+    	return getClass ( ) . getName ( ) + "@" + hashCode ( ) + "{shopId=" + shopId +", catId=" + catId + ", catType=" + getCatType ( ) + ", moneyType=" + getMoneyType ( ) + "}" ;
+    	
+    }
+    
     public enum Type { 
     	
     	ITEMS, PRIVELEGIES, REGIONS, ENTITIES, SHOPS

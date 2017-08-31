@@ -15,17 +15,22 @@ public class MineDonateGUIHandler implements IGuiHandler {
     @Override
     public Object getServerGuiElement ( int id, EntityPlayer player, World world, int x, int y, int z) {
 
-    	if ( id == STORE_ID ) {
+    	if ( MineDonate . m_Enabled ) {
     		
-    		ShopInventoryContainer sic = new ShopInventoryContainer ( player . inventory ) ;
-    		
-    		MineDonate . mergeContainers . put ( player . getDisplayName ( ), sic ) ;
-    		
-        	return sic ;
-        
-        }
+	    	if ( id == STORE_ID ) {
+	    		
+	    		ShopInventoryContainer sic = new ShopInventoryContainer ( player . inventory ) ;
+	    		
+	    		MineDonate . mergeContainers . put ( player . getDisplayName ( ), sic ) ;
+	    		
+	        	return sic ;
+	        
+	        } 
+	    	
+    	}
 
-        return null;
+        return null ;
+        
     }
 
     public static ShopGUI lastOpened, lastBacked ;
@@ -33,36 +38,39 @@ public class MineDonateGUIHandler implements IGuiHandler {
     @Override
     public Object getClientGuiElement ( int id, EntityPlayer player, World world, int x, int y, int z) {
     	
-        if ( id == SHOP_ID ) {
+    	if ( MineDonate . m_Enabled ) {
 
-        	if ( lastOpened != null ) {
-        		
-        		lastOpened . onGuiClosed ( ) ;
-        		
-        	}
-
-        	if ( lastBacked != null && ( MineDonate . getAccount ( ) . ms . currentItemStack != null || MineDonate . getAccount ( ) . ms . mobSelect ) ) {
-        	
-        		MineDonate . getAccount ( ) . ms . mobSelect = false ;
-        		
-        		lastOpened = lastBacked ;
-        		
-        		lastBacked = null ;
-        		
-        	} else {
-        		
-        		lastOpened = new ShopGUI ( ) ;
-        	
-        	}
-        	
-        	return lastOpened ;
-        	
-        } else if ( id == STORE_ID ) {
-        	
-        	return new ShopInventoryGUI ( player . inventory ) ; // ( ShopInventoryContainer ) getServerGuiElement ( id, player, world, x, y, z )
-        	
-        }
-        
+	        if ( id == SHOP_ID ) {
+	
+	        	if ( lastOpened != null ) {
+	        		
+	        		lastOpened . onGuiClosed ( true ) ;
+	        		
+	        	}
+	
+	        	if ( lastBacked != null && ( MineDonate . getAccount ( ) . ms . currentItemStack != null || MineDonate . getAccount ( ) . ms . mobSelect ) ) {
+	        	
+	        		MineDonate . getAccount ( ) . ms . mobSelect = false ;
+	        		
+	        		lastOpened = lastBacked ;
+	        		
+	        		lastBacked = null ;
+	        		
+	        	} else {
+	        		
+	        		lastOpened = new ShopGUI ( ) ;
+	        	
+	        	}
+	        	
+	        	return lastOpened ;
+	        	
+	        } else if ( id == STORE_ID ) {
+	        	
+	        	return new ShopInventoryGUI ( player . inventory ) ;
+	        	
+	        } 
+	        
+        }   
 
         return null ;
 

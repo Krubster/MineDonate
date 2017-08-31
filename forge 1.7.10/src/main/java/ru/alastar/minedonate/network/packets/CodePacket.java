@@ -3,25 +3,25 @@ package ru.alastar.minedonate.network.packets;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import io.netty.buffer.ByteBuf;
 
-public class NeedUpdatePacket implements IMessage {
+public class CodePacket implements IMessage {
 
-	public int r ;
+	public Code code ;
 	
-	public NeedUpdatePacket ( ) {
+	public CodePacket ( ) {
 		
 	}
 	
 	// r - 0 - client need full info, 1 - client has received needed full info, 2 - client has received needed cat info
-	public NeedUpdatePacket(int _r){
+	public CodePacket ( Code _code ) {
 		
-		r = _r ;
+		code = _code ;
 		
 	}
 
     @Override 
-    public void toBytes(ByteBuf buf) {
+    public void toBytes ( ByteBuf buf ) {
     	
-    	buf.writeInt(r);
+    	buf . writeByte ( code . ordinal ( ) ) ;
     	
     }
 
@@ -30,7 +30,7 @@ public class NeedUpdatePacket implements IMessage {
     
     	try {
     		
-    		r = buf.readInt();
+    		code = Code . values ( ) [ buf . readByte ( ) ] ;
 	    	
 		} catch ( Exception ex ) {
 			
@@ -38,6 +38,12 @@ public class NeedUpdatePacket implements IMessage {
 			
 		}
 		
+    }
+    
+    public enum Code {
+    	
+    	MOD_DISABLED, MOD_ENABLED, CLIENT_NEED_FULL_INFO, CLIENT_RECEIVED_FULL_INFO, CLIENT_RECEIVED_NEEDED_CAT_INFO, SERVER_ERROR_WAIT_OTHER_TASK
+    	
     }
     
 }

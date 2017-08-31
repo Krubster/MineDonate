@@ -3,15 +3,19 @@ package ru.alastar.minedonate.network.manage.handlers;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.events.MineDonateGUIHandler;
 import ru.alastar.minedonate.gui.merge.ShopInventoryContainer;
+import ru.alastar.minedonate.network.INetworkTask;
 import ru.alastar.minedonate.network.manage.packets.InventoryShopPacket;
 import ru.alastar.minedonate.network.manage.packets.ItemMergedPacket;
+import ru.alastar.minedonate.rtnl.ModNetworkTaskProcessor;
 
-public class InventoryShopServerPacketHandler implements IMessageHandler<InventoryShopPacket, IMessage> {
+public class InventoryShopServerPacketHandler implements IMessageHandler<InventoryShopPacket, IMessage>, INetworkTask < InventoryShopPacket, IMessage > {
 
     public InventoryShopServerPacketHandler ( ) {
 
@@ -19,6 +23,15 @@ public class InventoryShopServerPacketHandler implements IMessageHandler<Invento
 
     @Override
     public IMessage onMessage ( InventoryShopPacket message, MessageContext ctx ) {
+    	
+    	ModNetworkTaskProcessor . processTask ( ( INetworkTask ) this, message, ctx ) ;
+
+    	return null ;
+    	
+    }
+    
+    @Override
+    public IMessage onMessageProcess ( InventoryShopPacket message, MessageContext ctx ) {
     	
 		EntityPlayerMP serverPlayer = ctx . getServerHandler ( ) . playerEntity ;
 
@@ -38,11 +51,15 @@ public class InventoryShopServerPacketHandler implements IMessageHandler<Invento
     				
     				sic . mdInv . setInventorySlotContents ( 0, null ) ;
 
-    				MineDonate . getAccount ( serverPlayer . getDisplayName ( )  . toLowerCase ( ) ) . ms . setItemStack ( is ) ;
+    				MineDonate . getAccount ( serverPlayer ) . ms . setItemStack ( is ) ;
     				   				
     				return new ItemMergedPacket ( is ) ;
     				
-    			}	
+    			} else {
+
+    				return new ItemMergedPacket ( null ) ;
+
+    			}
     			
     		}
     		
@@ -57,18 +74,26 @@ public class InventoryShopServerPacketHandler implements IMessageHandler<Invento
     			if ( ( is = sic . mdInv . getStackInSlot ( 0 ) ) != null ) {
     				
     				sic . mdInv . setInventorySlotContents ( 0, null ) ;
-    				   				    				
+
     			}	
 
     			sic = null ;
     			
-				is = MineDonate . getAccount ( serverPlayer . getDisplayName ( ) . toLowerCase ( ) ) . ms . currentItemStack ;
+				is = MineDonate . getAccount ( serverPlayer ) . ms . currentItemStack ;
 
-				MineDonate . getAccount ( serverPlayer . getDisplayName ( ) . toLowerCase ( ) ) . ms . setItemStack ( null ) ;
+				MineDonate . getAccount ( serverPlayer ) . ms . setItemStack ( null ) ;
 
     			if ( is != null ) {
     				
-    				serverPlayer . dropPlayerItemWithRandomChoice ( is, false ) ;
+    				try {
+    					
+    					serverPlayer . dropPlayerItemWithRandomChoice ( is, false ) ;
+    					
+    				} catch ( Exception ex ) {
+    					
+    					ex . printStackTrace ( ) ;
+    					
+    				}
     				
     			} 
     			

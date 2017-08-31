@@ -6,8 +6,8 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import ru.alastar.minedonate.MineDonate;
+import ru.alastar.minedonate.Utils;
 import ru.alastar.minedonate.mproc.AbstractMoneyProcessor;
-import ru.alastar.minedonate.rtnl.Utils;
 
 import java.util.UUID;
 
@@ -52,7 +52,7 @@ public class AddMoneyCommand extends CommandBase {
             }
         } else if (iCommandSender instanceof EntityPlayerMP) { //Эта проверка вообще нужна?
             EntityPlayerMP player = (EntityPlayerMP) iCommandSender;
-            if (MineDonate.getAccount(player.getDisplayName()).canAddMoney()) {
+            if (MineDonate.getAccount(player).canAddMoney()) {
                 String player_name = strings[0];
                 String moneyType = strings[1];
                 int amount;

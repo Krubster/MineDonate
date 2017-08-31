@@ -10,7 +10,7 @@ import ru.alastar.minedonate.network.packets.MerchInfoPacket;
 /**
  * Created by Alastar on 23.07.2017.
  */
-public class MerchInfoPacketHandler  implements IMessageHandler<MerchInfoPacket, IMessage> {
+public class MerchInfoPacketHandler implements IMessageHandler<MerchInfoPacket, IMessage> {
 	
     public MerchInfoPacketHandler(){
 
@@ -18,13 +18,17 @@ public class MerchInfoPacketHandler  implements IMessageHandler<MerchInfoPacket,
     
     @Override
     public IMessage onMessage(MerchInfoPacket message, MessageContext ctx) {
-        MineDonate.modify(message.shopId, message.m_category, message.info.getId(), message.info);
+        
+    	MineDonate.modify(message.shopId, message.m_category, message.info.getId(), message.info);
+        
         if(ShopGUI.instance != null){
         	
             ShopGUI.instance.updateButtons(true);
             ShopGUI.instance.initGui();
 
         }
+        
         return null;
+        
     }
 }

@@ -1,9 +1,9 @@
 package ru.log_inil.mc.minedonate.gui.frames;
 
 import net.minecraft.client.gui.GuiButton;
+import ru.alastar.minedonate.Utils;
 import ru.alastar.minedonate.gui.ShopGUI;
-import ru.alastar.minedonate.rtnl.ModNetwork;
-import ru.alastar.minedonate.rtnl.Utils;
+import ru.alastar.minedonate.rtnl.ModNetworkRegistry;
 import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.gui.GuiFrame;
 import ru.log_inil.mc.minedonate.gui.GuiGradientButton;
@@ -114,6 +114,8 @@ public class GuiFrameDeleteItem extends GuiFrame {
 		codeField . setText ( fieldText != null ? fieldText : "" ) ;
 		codeField . setTextHolder ( fieldHolder ) ;
 		
+		codeField . fieldBorderColor = fieldBorderColor ;
+
 		codeField . xPosition = posX + 20 ;
 		codeField . yPosition = posY + 25 ;
 
@@ -149,7 +151,7 @@ public class GuiFrameDeleteItem extends GuiFrame {
     		g . setLoading ( true ) ;
 			hideFrame ( g ) ;
 
-    		ModNetwork . sendToServerDeleteShopMerchPacket ( shopId, catId, merchId ) ;
+    		ModNetworkRegistry . sendToServerDeleteShopMerchPacket ( shopId, catId, merchId ) ;
 
     	}
     	

@@ -7,7 +7,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import ru.alastar.minedonate.MineDonate;
-import ru.alastar.minedonate.rtnl.ModNetwork;
+import ru.alastar.minedonate.rtnl.ModNetworkRegistry;
 
 public class ShopInventoryGUI extends GuiContainer {
 
@@ -49,7 +49,7 @@ public class ShopInventoryGUI extends GuiContainer {
     	
     	if ( b . id == acceptButton . id && sic . mdInv . getStackInSlot ( 0 ) != null ) {
     	
-    		ModNetwork . sendToServerCloseShopInventoryPacket ( ) ;
+    		ModNetworkRegistry . sendToServerCloseShopInventoryPacket ( ) ;
     		
     	}
     	
@@ -58,15 +58,16 @@ public class ShopInventoryGUI extends GuiContainer {
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float p_146976_1_, int p_146976_2_, int p_146976_3_) {
 
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GL11 . glColor4f ( 1.0F, 1.0F, 1.0F, 1.0F ) ;
         
-		this.mc.getTextureManager().bindTexture(mdinvGuiTexture);
+		this . mc . getTextureManager ( ) . bindTexture ( mdinvGuiTexture ) ;
         
-        int k = (this.width - this.xSize) / 2;
-        int l = (this.height - this.ySize) / 2;
-        this.drawTexturedModalRect(k, l, 0, 0, this.xSize, this.ySize);
+        int top = ( this . width - this . xSize ) / 2 ;
+        int left = ( this . height - this . ySize ) / 2 ;
+        
+        this . drawTexturedModalRect ( top, left, 0, 0, this . xSize, this . ySize ) ;
 
-        this.fontRendererObj.drawString( "MineDonate", k+8, l+5, -10132123);
+        this . fontRendererObj . drawString ( "MineDonate", top + 8, left + 5, -10132123 ) ;
         
 	}
 

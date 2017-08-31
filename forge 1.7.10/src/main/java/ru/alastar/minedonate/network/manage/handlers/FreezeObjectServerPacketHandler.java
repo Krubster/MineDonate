@@ -1,17 +1,23 @@
 package ru.alastar.minedonate.network.manage.handlers;
 
+import java.util.UUID;
+
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+
 import net.minecraft.entity.player.EntityPlayerMP;
+
 import ru.alastar.minedonate.MineDonate;
+import ru.alastar.minedonate.network.INetworkTask;
 import ru.alastar.minedonate.network.manage.packets.FreezeObjectPacket;
 import ru.alastar.minedonate.network.manage.packets.ManageResponsePacket;
-import ru.alastar.minedonate.rtnl.Account;
-import ru.alastar.minedonate.rtnl.Manager;
-import ru.alastar.minedonate.rtnl.Shop;
+import ru.alastar.minedonate.rtnl.ModManager;
+import ru.alastar.minedonate.rtnl.ModNetworkTaskProcessor;
+import ru.alastar.minedonate.rtnl.common.Account;
+import ru.alastar.minedonate.rtnl.common.Shop;
 
-public class FreezeObjectServerPacketHandler implements IMessageHandler < FreezeObjectPacket, IMessage > {
+public class FreezeObjectServerPacketHandler implements IMessageHandler < FreezeObjectPacket, IMessage >, INetworkTask < FreezeObjectPacket, IMessage > {
 	
     public FreezeObjectServerPacketHandler ( ) {
 
@@ -20,9 +26,18 @@ public class FreezeObjectServerPacketHandler implements IMessageHandler < Freeze
     @Override
     public IMessage onMessage ( FreezeObjectPacket message, MessageContext ctx ) {
     	
+    	ModNetworkTaskProcessor . processTask ( ( INetworkTask ) this, message, ctx ) ;
+
+    	return null ;
+    	
+    }
+    
+    @Override
+    public IMessage onMessageProcess ( FreezeObjectPacket message, MessageContext ctx ) {
+    	
     	EntityPlayerMP serverPlayer = ctx . getServerHandler ( ) . playerEntity ;
 
-    	Account acc = MineDonate . getAccount ( serverPlayer . getDisplayName ( ) . toLowerCase ( ) ) ;
+    	Account acc = MineDonate . getAccount ( serverPlayer ) ;
 
     	if ( message . type == FreezeObjectPacket . Type . SHOP ) {
         	    		
@@ -54,11 +69,11 @@ public class FreezeObjectServerPacketHandler implements IMessageHandler < Freeze
     			    			
     			if ( message . bool ) {
     			
-    				Manager . freezeShop ( s, serverPlayer . getDisplayName ( ), message . reason ) ;
+    				ModManager . freezeShop ( s, serverPlayer . getDisplayName ( ), message . reason ) ;
     			
     			} else {
 
-    				Manager . unFreezeShop ( s, serverPlayer . getDisplayName ( ) ) ;
+    				ModManager . unFreezeShop ( s, serverPlayer . getDisplayName ( ) ) ;
 
     			}
     			
@@ -74,11 +89,11 @@ public class FreezeObjectServerPacketHandler implements IMessageHandler < Freeze
 
     		if ( ( message . bool && acc . canFreezeOtherAccount ( ) ) || ( ! message . bool && acc . canUnFreezeOtherAccount ( ) ) ) {
     			
-    			Account accFreez = MineDonate . getAccount ( message . accountName . toLowerCase ( ) ) ;
+    			Account accFreez = MineDonate . getAccountWithoutRegister ( UUID . fromString ( message . account ) ) ;
     			
     			if ( accFreez == null ) {
 
-    				return new ManageResponsePacket ( ManageResponsePacket.ResponseType.ACCOUNT, message . bool ? ManageResponsePacket.ResponseCode.FREEZ : ManageResponsePacket.ResponseCode.UNFREEZ, ManageResponsePacket.ResponseStatus.ERROR_UNKNOWN ) ;
+    				return new ManageResponsePacket ( ManageResponsePacket.ResponseType.ACCOUNT, message . bool ? ManageResponsePacket.ResponseCode.FREEZ : ManageResponsePacket.ResponseCode.UNFREEZ, ManageResponsePacket.ResponseStatus.ERROR_ACCOUNT_NOTFOUND ) ;
     	
     			}
     			
@@ -100,11 +115,11 @@ public class FreezeObjectServerPacketHandler implements IMessageHandler < Freeze
     			
     			if ( message . bool ) {
     			
-    				Manager . freezePlayer ( accFreez, serverPlayer . getDisplayName ( ), message . reason ) ;
+    				ModManager . freezePlayer ( accFreez, serverPlayer . getDisplayName ( ), message . reason ) ;
     			
     			} else {
 
-    				Manager . unFreezePlayer ( accFreez, serverPlayer . getDisplayName ( ) ) ;
+    				ModManager . unFreezePlayer ( accFreez, serverPlayer . getDisplayName ( ) ) ;
 
     			}
     			

@@ -12,6 +12,8 @@ public class DataOfUIFrameAddEntity extends DataOfUIFrameAddItem {
 
 		nameField = new DataOfUITextHolderElement ( "", "Entity name", 120, 20 ) ;
 		
+		okExistsButton = null ;
+		
 	}
 	
 }

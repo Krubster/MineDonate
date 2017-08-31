@@ -1,7 +1,12 @@
 package ru.log_inil.mc.minedonate.gui.items;
 
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.item.ItemStack;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 import ru.alastar.minedonate.MineDonate;
@@ -113,9 +118,16 @@ public class GuiItemEntryOfItemMerch extends GuiAbstractItemEntry {
 			GL11 . glScalef ( 1.2f, 1.2f, 1f ) ;  
 			
 			gi . parent . getItemRender ( ) . renderItemAndEffectIntoGUI ( gi . getFontRenderer ( ), gi . parent . mc . getTextureManager ( ), info . m_stack, 0, 0 ) ;
+		
+			GL11 . glTranslatef ( -2.3f, 4, 0 ) ;
+			GL11 . glScalef ( 1.24f, 1.0f, 1f ) ;  
 
+			renderItemOverlayIntoGUI ( gi . getFontRenderer ( ), gi . parent . mc . getTextureManager ( ), info . m_stack, 0,  0, stackCountLine, false ) ;
+			
 			GL11 . glPopMatrix ( ) ;
 			
+			renderItemOverlayIntoGUI ( gi . getFontRenderer ( ), gi . parent . mc . getTextureManager ( ), info . m_stack, 43, y_offset + 5, stackCountLine, true ) ;
+
 			//
 			
 			GL11 . glDisable ( GL12 . GL_RESCALE_NORMAL ) ;
@@ -129,9 +141,6 @@ public class GuiItemEntryOfItemMerch extends GuiAbstractItemEntry {
 
 	  		}
 	  		
-	  		
-			gi . parent . getItemRender ( ) . renderItemOverlayIntoGUI ( gi . getFontRenderer ( ), gi . parent . mc . getTextureManager ( ), info . m_stack, 45, y_offset + 5, stackCountLine ) ;
-
 			RenderHelper . disableStandardItemLighting ( ) ;
 			
 		} else if ( dt == DrawType . OVERLAY_PRE ) {
@@ -151,6 +160,62 @@ public class GuiItemEntryOfItemMerch extends GuiAbstractItemEntry {
 
 	}
 	
+	// RenderItem 700+
+    public void renderItemOverlayIntoGUI(FontRenderer p_94148_1_, TextureManager p_94148_2_, ItemStack p_94148_3_, int p_94148_4_, int p_94148_5_, String p_94148_6_, boolean t)
+    {
+        if (p_94148_3_ != null)
+        {
+            if ( t ) {
+            	
+            	if (p_94148_3_.stackSize > 1 || p_94148_6_ != null)
+                {
+                    String s1 = p_94148_6_ == null ? String.valueOf(p_94148_3_.stackSize) : p_94148_6_;
+                    GL11.glDisable(GL11.GL_LIGHTING);
+                    GL11.glDisable(GL11.GL_DEPTH_TEST);
+                    GL11.glDisable(GL11.GL_BLEND);
+                    p_94148_1_.drawStringWithShadow(s1, p_94148_4_ + 19 - 2 - p_94148_1_.getStringWidth(s1), p_94148_5_ + 6 + 3, 16777215);
+                    GL11.glEnable(GL11.GL_LIGHTING);
+                    GL11.glEnable(GL11.GL_DEPTH_TEST);
+                }
+            	
+            } else if (p_94148_3_.getItem().showDurabilityBar(p_94148_3_))
+            {
+                double health = p_94148_3_.getItem().getDurabilityForDisplay(p_94148_3_);
+                int j1 = (int)Math.round(13.0D - health * 13.0D);
+                int k = (int)Math.round(255.0D - health * 255.0D);
+                GL11.glDisable(GL11.GL_LIGHTING);
+                GL11.glDisable(GL11.GL_DEPTH_TEST);
+                GL11.glDisable(GL11.GL_TEXTURE_2D);
+                GL11.glDisable(GL11.GL_ALPHA_TEST);
+                GL11.glDisable(GL11.GL_BLEND);
+                Tessellator tessellator = Tessellator.instance;
+                int l = 255 - k << 16 | k << 8;
+                int i1 = (255 - k) / 4 << 16 | 16128;
+                renderQuad(tessellator, p_94148_4_ + 2, p_94148_5_ + 13, 13, 2, 0);
+                this.renderQuad(tessellator, p_94148_4_ + 2, p_94148_5_ + 13, 12, 1, i1);
+                this.renderQuad(tessellator, p_94148_4_ + 2, p_94148_5_ + 13, j1, 1, l);
+                //GL11.glEnable(GL11.GL_BLEND); // Forge: Disable Bled because it screws with a lot of things down the line.
+                GL11.glEnable(GL11.GL_ALPHA_TEST);
+                GL11.glEnable(GL11.GL_TEXTURE_2D);
+                GL11.glEnable(GL11.GL_LIGHTING);
+                GL11.glEnable(GL11.GL_DEPTH_TEST);
+                GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+            }
+        }
+    }
+    
+    // RenderItem 745+
+    private void renderQuad(Tessellator p_77017_1_, int p_77017_2_, int p_77017_3_, int p_77017_4_, int p_77017_5_, int p_77017_6_)
+    {
+        p_77017_1_.startDrawingQuads();
+        p_77017_1_.setColorOpaque_I(p_77017_6_);
+        p_77017_1_.addVertex((double)(p_77017_2_ + 0), (double)(p_77017_3_ + 0), 0.0D);
+        p_77017_1_.addVertex((double)(p_77017_2_ + 0), (double)(p_77017_3_ + p_77017_5_), 0.0D);
+        p_77017_1_.addVertex((double)(p_77017_2_ + p_77017_4_), (double)(p_77017_3_ + p_77017_5_), 0.0D);
+        p_77017_1_.addVertex((double)(p_77017_2_ + p_77017_4_), (double)(p_77017_3_ + 0), 0.0D);
+        p_77017_1_.draw();
+    }
+    
 	@Override
 	public void unDraw ( ) {
 

@@ -15,7 +15,7 @@ import ru.alastar.minedonate.network.manage.packets.ManageResponsePacket.Respons
 import ru.alastar.minedonate.network.manage.packets.ManageResponsePacket.ResponseType;
 import ru.alastar.minedonate.network.packets.*;
 
-public class ModNetwork {
+public class ModNetworkRegistry {
 
     public static SimpleNetworkWrapper networkChannel ;
 
@@ -40,9 +40,9 @@ public class ModNetwork {
         //
         
         i ++ ;
- 
-        networkChannel . registerMessage ( NeedUpdateServerPacketHandler . class, NeedUpdatePacket . class, i, Side .  SERVER ) ;
-        networkChannel . registerMessage ( NeedUpdateClientPacketHandler . class, NeedUpdatePacket . class, i, Side . CLIENT ) ;
+        
+        networkChannel . registerMessage ( CodeServerPacketHandler . class, CodePacket . class, i, Side .  SERVER ) ;
+        networkChannel . registerMessage ( CodeClientPacketHandler . class, CodePacket . class, i, Side . CLIENT ) ;
 
         i ++ ;
 
@@ -66,6 +66,7 @@ public class ModNetwork {
         //
         
         networkChannel . registerMessage ( AddNewEntryServerPacketHandler . class, AddNewEntryPacket . class, i ++, Side . SERVER ) ;
+        networkChannel . registerMessage ( AppendEntryServerPacketHandler . class, AppendEntryPacket . class, i ++, Side . SERVER ) ;
 
         i ++ ;
         
@@ -108,7 +109,7 @@ public class ModNetwork {
 	public static void sendToServerBuyPacket ( int shopId, int merch_id, int catId, int amountToBuy ) {
 
 		networkChannel . sendToServer ( new BuyPacket ( shopId, merch_id, catId, amountToBuy ) ) ;
-		
+
 	}
 
 	public static void sendToServerNeedShopCategoryPacket ( int shopId, int catId ) {
@@ -117,9 +118,9 @@ public class ModNetwork {
 		
 	}
 
-	public static void sendToServerNeedUpdatePacket ( int r ) {
+	public static void sendToServerNeedUpdatePacket ( CodePacket . Code c ) {
 
-		networkChannel . sendToServer ( new NeedUpdatePacket ( r ) ) ;
+		networkChannel . sendToServer ( new CodePacket ( c ) ) ;
 		
 	}
 
@@ -201,6 +202,12 @@ public class ModNetwork {
 		
 	}
 
+	public static void sendToServerUppendEntryPacket ( int shopId, int catId ) {
+		
+		networkChannel . sendToServer ( new AppendEntryPacket ( shopId, catId ) ) ;
+
+	}
+	
 	public static void sendToServerMobSelectPacket ( int s ) {
 
 		networkChannel . sendToServer ( new MobSelectPacket ( s ) ) ;
@@ -238,9 +245,9 @@ public class ModNetwork {
 	}
 	
 	public static void sendTo ( EntityPlayerMP player, IMessage packet ) {
-		
+
 		networkChannel . sendTo ( packet, player ) ;
-		
+
 	}
-	
+
 }

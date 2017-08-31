@@ -5,7 +5,7 @@ import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.network.manage.packets.EditMerchNumberPacket;
 import ru.alastar.minedonate.network.manage.packets.EditMerchStringPacket;
-import ru.alastar.minedonate.rtnl.ModNetwork;
+import ru.alastar.minedonate.rtnl.ModNetworkRegistry;
 import ru.log_inil.mc.minedonate.localData.frames.DataOfUIFramEditObject;
 
 public class GuiFrameEditEntity extends GuiFrameEditItem {
@@ -33,7 +33,7 @@ public class GuiFrameEditEntity extends GuiFrameEditItem {
     					
     					hideFrame ( g ) ;
     			    		
-    					ModNetwork . sendToServerEditMerchNumberPacket ( shopId, catId, merch_id, EditMerchNumberPacket . Type . LIMIT, ( int ) n ) ;
+    					ModNetworkRegistry . sendToServerEditMerchNumberPacket ( shopId, catId, merch_id, EditMerchNumberPacket . Type . LIMIT, ( int ) n ) ;
     					
     					limit = n ;
     					    						
@@ -53,7 +53,7 @@ public class GuiFrameEditEntity extends GuiFrameEditItem {
 					
 					hideFrame ( g ) ;
 			        
-					ModNetwork . sendToServerEditMerchNumberPacket ( shopId, catId, merch_id, EditMerchNumberPacket . Type . COST, ( int ) n ) ;
+					ModNetworkRegistry . sendToServerEditMerchNumberPacket ( shopId, catId, merch_id, EditMerchNumberPacket . Type . COST, ( int ) n ) ;
 					
 					cost = n ;
 										
@@ -67,7 +67,7 @@ public class GuiFrameEditEntity extends GuiFrameEditItem {
     			
 				hideFrame ( g ) ;
 		        
-    			ModNetwork . sendToServerEditMerchStringPacket ( shopId, catId, merch_id, EditMerchStringPacket . Type . NAME, ( fieldText = nameField . getText ( ) ) ) ;
+    			ModNetworkRegistry . sendToServerEditMerchStringPacket ( shopId, catId, merch_id, EditMerchStringPacket . Type . NAME, ( fieldText = nameField . getText ( ) ) ) ;
     			System.err.println(fieldText);
     		}
     		

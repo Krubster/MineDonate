@@ -2,15 +2,19 @@ package ru.alastar.minedonate.merch.categories;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.MinecraftServer;
+
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
 import ru.alastar.minedonate.merch.info.ItemInfo;
-import ru.alastar.minedonate.rtnl.ModNetwork;
+import ru.alastar.minedonate.rtnl.ModDataBase;
+import ru.alastar.minedonate.rtnl.ModNetworkRegistry;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * Created by Alastar on 21.07.2017.
@@ -27,19 +31,29 @@ public class ItemNBlocks extends MerchCategory {
 
     @Override
     public void loadMerchFromDB(ResultSet rs) {
+    	
         try {
+        	
             while (rs.next()) {
+            	
                 final ItemInfo info = new ItemInfo(shopId, catId, rs.getInt("id"), rs.getInt("rating"),
                         rs.getInt("cost"),
                         rs.getString("name"),
                         rs.getInt("lim"),
                         rs.getBlob("stack_data"));
+                
                 this.addMerch(info);
+                
             }
+            
         } catch (SQLException e) {
+        	
             e.printStackTrace();
+            
         }
-        MinecraftServer.getServer().logInfo("Loaded " + m_Merch.size() + " lots");
+        
+        MineDonate . logInfo ( "Loaded " + m_Merch . size() + " merch in " + toString ( ) ) ;
+        
     }
 
     String dbTable = MineDonate.cfg.dbItems;
@@ -64,28 +78,37 @@ public class ItemNBlocks extends MerchCategory {
     }
 
     @Override
-    public void giveMerch(EntityPlayerMP player, Merch merch, int amount) {
+    public void giveMerch ( EntityPlayerMP player, Merch merch, int amount ) {
 
-        ItemInfo info = (ItemInfo) merch;
-        int toPut = amount * info.stack_data.getInteger("Count") ;
+        ItemInfo info = ( ItemInfo ) merch ;
+        
+        if ( info . limit != -1 ) {
+        	
+        	if ( info . limit < amount ) {
+        		
+        		MineDonate . logError ( "Buy error, amount[" + amount +"] > info[" + info . toString ( ) + "].limit[" + info . limit + "]" ) ;
+        	
+        		return ;
+        		
+        	}
+        	
+        	info . limit -= amount ;
+        
+        }
+        
+        int toPut = amount * info . stack_data . getInteger ( "Count" ) ;
         
         if ( toPut < 1 ) {
         	
         	return ;
         	
         }
-        
-        if ( info.limit != -1 ) {
-        	
-        	info . limit -= amount ;
-        
-        }
   
-        ItemStack stack = ItemStack.loadItemStackFromNBT(info.stack_data);
+        ItemStack stack = ItemStack . loadItemStackFromNBT ( info . stack_data ) ;
         
         if ( info . name != null && ! info . name . trim ( ) . isEmpty ( ) ) {
         	
-        	stack.setStackDisplayName(info.name);
+        	stack . setStackDisplayName ( info . name ) ;
         	
         }
 
@@ -132,11 +155,11 @@ public class ItemNBlocks extends MerchCategory {
         
         tmpCopy = null ;
         
-        player.inventory.markDirty();
+        player . inventory . markDirty ( ) ;
         
-        if (info.limit > -1) {
+        if ( info . limit > -1 ) {
         
-        	updateItemInfo(info);
+        	updateItemInfo ( info ) ;
         
         }
         
@@ -154,26 +177,37 @@ public class ItemNBlocks extends MerchCategory {
         
     }
     
-    private void updateItemInfo(ItemInfo info) {
+    private void updateItemInfo ( ItemInfo info ) {
     	
-        Statement stmt = null;
+        Statement stat = null;
         
         try {
             
-        	stmt = MineDonate.m_DB_Connection.createStatement();
-            String sql;
-            sql = "UPDATE " + getDatabaseTable ( ) + " SET lim=" + info.limit + " WHERE id=" + info . getId ( ) + ( info . shopId > 0 ? " AND shopId=" + info . shopId : "" ) + ";";
-            stmt.executeUpdate(sql);
-            stmt.close();
+        	stat = ModDataBase . getNewStatement ( "main" ) ;
+        	stat . executeUpdate ( "UPDATE " + getDatabaseTable ( ) + " SET lim=" + info.limit + " WHERE id=" + info . getId ( ) + ( info . shopId > 0 ? " AND shopId=" + info . shopId : "" ) + ";");
             
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch ( Exception ex ) {
+            
+        	ex . printStackTrace ( ) ;
+            
         }
         
-        ModNetwork . sendToAllMerchInfoPacket ( info ) ;
+		ModDataBase . closeStatementAndConnection ( stat ) ;
+
+        ModNetworkRegistry . sendToAllMerchInfoPacket ( info ) ;
 
     }
 
+    @SideOnly ( Side . SERVER )
+    @Override
+    public void updateMerch ( int id, Merch info ) {
+        
+    	super . updateMerch ( id, info ) ;
+        
+    	updateItemInfo ( ( ItemInfo ) info ) ;
+    	
+    }
+    
     @Override
     public Merch constructMerch() {
         return new ItemInfo();

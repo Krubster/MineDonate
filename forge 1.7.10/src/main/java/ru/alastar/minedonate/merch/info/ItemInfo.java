@@ -3,14 +3,18 @@ package ru.alastar.minedonate.merch.info;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
+import ru.alastar.minedonate.Utils;
 import ru.alastar.minedonate.merch.Merch;
-import ru.alastar.minedonate.rtnl.Utils;
+import ru.alastar.minedonate.network.manage.packets.EditMerchNumberPacket;
+import ru.alastar.minedonate.network.manage.packets.EditMerchStringPacket;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -39,10 +43,10 @@ public class ItemInfo extends Merch {
     }
 
     @Override
-    public boolean canBuy(EntityPlayerMP serverPlayer, int amount) {
-        if(limit != -1 && limit < amount)// amount * stack_data.getInteger("Count"))
-            return false;
-        return true;
+    public boolean canBuy ( EntityPlayerMP serverPlayer, int amount ) { 
+    	
+    	return limit > 0 && amount <= limit && super . canBuy ( serverPlayer, amount ) ;
+    	
     }
 
     @Override
@@ -80,6 +84,52 @@ public class ItemInfo extends Merch {
     }
     
     @Override
+	public void updateNumber ( EditMerchNumberPacket . Type type, int number ) {	
+		
+    	super . updateNumber ( type, number ) ;
+
+		switch ( type ) {
+		
+			case LIMIT :
+				
+				 limit = number ;
+				
+			break;
+			
+			case COST :
+				
+				cost = number ;
+			
+			break ;
+			
+			default :
+			break ;
+			
+		}
+			
+	}
+    
+    @Override
+	public void updateString ( EditMerchStringPacket . Type type, String str ) {	
+		
+    	super . updateString ( type, str ) ;
+    	
+		switch ( type ) {
+		
+			case NAME :
+				
+				 name = str ;
+				
+			break;
+				
+			default :
+			break ;
+			
+		}
+			
+	}
+    
+    @Override
     public String getBoughtMessage() {
         return "bought item - " + name + "=" + stack_data.getInteger("Id") + "=" + stack_data.getInteger("Count");
     }
@@ -91,7 +141,9 @@ public class ItemInfo extends Merch {
 
     @Override
     public void read(ByteBuf buf) {
+    	
     	super.read(buf);
+    	
         this.cost = buf.readInt();
         
         try {
@@ -111,6 +163,12 @@ public class ItemInfo extends Merch {
         if ( name == null || name . isEmpty ( ) ) {
         	
         	name = m_stack . getDisplayName ( ) ;
+        	
+        }
+        
+        if ( limit < 0 ) {
+        	
+        	rating = -1 ;
         	
         }
         

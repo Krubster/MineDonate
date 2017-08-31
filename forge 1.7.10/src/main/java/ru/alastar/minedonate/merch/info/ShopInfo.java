@@ -1,18 +1,21 @@
 package ru.alastar.minedonate.merch.info;
 
+import java.util.UUID;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.EnumChatFormatting;
+import ru.alastar.minedonate.Utils;
 import ru.alastar.minedonate.merch.Merch;
-import ru.alastar.minedonate.rtnl.Utils;
 
 public class ShopInfo extends Merch {
 	
     public int merch_id ;
     public int shopId ;
     public String owner ;
+    public String ownerName ;
     public String name ;
     
     public boolean isFreezed ;
@@ -22,7 +25,7 @@ public class ShopInfo extends Merch {
     
     public String moneyType ;
     
-    public ShopInfo ( int _merch_id, int _shopId, int _rating, String _owner, String _name, boolean _isFreezed, String _freezer, String _freezReason, boolean _canVisibleFreezedText, String _moneyType ) {
+    public ShopInfo ( int _merch_id, int _shopId, int _rating, String _owner, String _ownerName, String _name, boolean _isFreezed, String _freezer, String _freezReason, boolean _canVisibleFreezedText, String _moneyType ) {
     	
        	super ( ) ;
        	
@@ -33,6 +36,7 @@ public class ShopInfo extends Merch {
        	shopId = _shopId;
        	
         this . owner = _owner ;
+        this . ownerName = _ownerName ;
         this . name = _name ;
         
         this . isFreezed = _isFreezed ;
@@ -65,7 +69,8 @@ public class ShopInfo extends Merch {
         	merch_id = buf . readInt ( ) ;
             shopId = buf . readInt ( ) ;
             
-            owner = Utils . netReadString ( buf ) ;          
+            owner = Utils . netReadString ( buf ) ;      
+            ownerName = Utils . netReadString ( buf ) ;   
             name = Utils . netReadString ( buf ) ;
 
             isFreezed = buf.readBoolean();
@@ -86,6 +91,12 @@ public class ShopInfo extends Merch {
         	
         }
         
+        if ( isFreezed ) {
+        	
+        	rating = -1 ;
+        	
+        }
+        
     }
 
     
@@ -98,6 +109,7 @@ public class ShopInfo extends Merch {
 	        buf . writeInt ( shopId ) ;
 	        
 	        Utils . netWriteString ( buf, owner ) ;
+	        Utils . netWriteString ( buf, ownerName ) ;
 	        Utils . netWriteString ( buf, name ) ;
 	
 	        buf . writeBoolean ( isFreezed ) ;
@@ -123,7 +135,7 @@ public class ShopInfo extends Merch {
     @Override
     public Merch copy ( ) {
     	
-    	return new ShopInfo ( merch_id, shopId, rating, owner, name, isFreezed, freezer, freezReason, canVisibleFreezedText, moneyType )  ;
+    	return new ShopInfo ( merch_id, shopId, rating, owner, ownerName, name, isFreezed, freezer, freezReason, canVisibleFreezedText, moneyType )  ;
     	
     }
     
@@ -177,7 +189,7 @@ public class ShopInfo extends Merch {
 	}
 
 	@Override
-	public int withdrawMoney(String buyer, int amount) {
+	public int withdrawMoney(UUID buyer, int amount) {
 		return -1 ;
 	}
     
@@ -185,7 +197,7 @@ public class ShopInfo extends Merch {
 	@Override
 	public String getSearchValue ( ) {
 		
-		return EnumChatFormatting . getTextWithoutFormattingCodes ( name + owner ) ;
+		return EnumChatFormatting . getTextWithoutFormattingCodes ( name + ownerName ) ;
 		
 	}
 	

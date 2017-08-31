@@ -4,6 +4,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayerMP;
 import ru.alastar.minedonate.MineDonate;
+import ru.alastar.minedonate.Utils;
 import ru.alastar.minedonate.merch.Merch;
 
 import java.io.*;
@@ -12,9 +13,14 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
+import java.util.UUID;
 
+/**
+ * Логгер действий шопа(покупка/работа с деньгами) + реверс
+ * 
+ */
 @SideOnly(Side.SERVER)
-public class ShopLogger {
+public class ModShopLogger {
 	
 	static GregorianCalendar calendar = new GregorianCalendar ( ) ;
 
@@ -53,11 +59,11 @@ public class ShopLogger {
 
     public static void logBuy ( Merch m, EntityPlayerMP by, int amount, String moneyType ) {
     	
-        if ( ! MineDonate . cfg . sendLogToDB ) {
+        if ( ! MineDonate . cfg . sendShopLogToDB ) {
         	
             try {
                 
-            	m_log . write ( dateFormat.format(calendar.getTime()) + ":" + m.shopId + ":" + m.catId + ":" + m . getId ( ) + ":" + by.getDisplayName() + ":" + m.getCategory() + ":" + ( m.getCost() * amount ) + ":" + moneyType +  ":x" + amount + ":" + m.getBoughtMessage() + "\r\n");
+            	m_log . write ( dateFormat.format(calendar.getTime()) + ":" + m.shopId + ":" + m.catId + ":" + m . getId ( ) + ":" + by.getGameProfile().getId() + ":" + m.getCategory() + ":" + ( m.getCost() * amount ) + ":" + moneyType +  ":x" + amount + ":" + m.getBoughtMessage() + "\r\n");
                 m_log . flush ( ) ;
                 
             } catch ( Exception ex ) {
@@ -68,18 +74,22 @@ public class ShopLogger {
             
         } else {
             
+        	Statement stat = null ;
+        	
             try {
             	
-            	Statement stmt = MineDonate.getNewStatement();
-                stmt.execute( "INSERT INTO " + MineDonate.cfg.dbLogs + " (date, shopId, catId, merchId, playerName, money, moneyType, message, amount) VALUES('" + dateFormat.format(calendar.getTime()) + "'," + m .shopId + "," + m.catId + "," + m . getId ( ) + ", '" + by.getDisplayName() + "', " + m.getCost() * amount + ", '" + moneyType + "', '" + m.getBoughtMessage() + "', " + amount + " )" );
-                stmt.close();
+            	stat = ModDataBase . getNewStatement ( MineDonate . cfg . dbShopLogLinkName ) ;
                 
+            	stat . execute ( "INSERT INTO " + MineDonate.cfg.dbShopLog + " (date, shopId, catId, merchId, playerName, money, moneyType, message, amount) VALUES('" + dateFormat.format(calendar.getTime()) + "'," + m .shopId + "," + m.catId + "," + m . getId ( ) + ", '" + by.getGameProfile().getId() + "', " + m.getCost() * amount + ", '" + moneyType + "', '" + m.getBoughtMessage() + "', " + amount + " )" );
+                                
             } catch ( Exception ex ) {
                 
             	ex . printStackTrace ( ) ;
                 
             }
             
+    		ModDataBase . closeStatementAndConnection ( stat ) ;
+    		
        }
         
     }
@@ -104,7 +114,6 @@ public class ShopLogger {
 		try {
 
             logMoney.write(calendar.getTime().toString() + ";" + playerName + ";" + last + ";" + next + ";" + factorData + "\r\n");
-            ;
             logMoney . flush ( ) ;
             
         } catch ( Exception ex ) {
@@ -130,7 +139,7 @@ public class ShopLogger {
 
     	if ( fromDB ) {
     		
-    		String query = "SELECT * FROM " + MineDonate . cfg . dbLogs + " WHERE " + ( forOncePlayer ? "playerName='" + _playerName + "' AND " : "" ) + " date BETWEEN '" + dateFormat.format(from) + " 00:00:00' AND '" + dateFormat.format(to) + " 23:59:59'" ;
+    		String query = "SELECT * FROM " + MineDonate . cfg . dbShopLog + " WHERE " + ( forOncePlayer ? "playerName='" + _playerName + "' AND " : "" ) + " date BETWEEN '" + dateFormat.format(from) + " 00:00:00' AND '" + dateFormat.format(to) + " 23:59:59'" ;
       
     		if ( printFullInfo ) {
 
@@ -138,10 +147,14 @@ public class ShopLogger {
 
         	}
         	
+    		Statement stat = null ;
+    		
         	try {
         		
-        		Statement stmt = MineDonate . getNewStatement ( ) ;
-                ResultSet rs = stmt . executeQuery ( query ) ;
+        		stat = ModDataBase . getNewStatement ( MineDonate . cfg . dbShopLogLinkName ) ;
+                
+        		ResultSet rs = stat . executeQuery ( query ) ;
+                
                 lineNumber = 0 ;
                 
                 while ( rs . next ( ) ) {
@@ -152,13 +165,15 @@ public class ShopLogger {
                 	
                 }
                 
-                stmt . close ( ) ;
+                rs . close ( ) ;
                 
         	} catch ( Exception ex ) {
         		
         		ex . printStackTrace ( ) ;
         		
         	}
+    		
+    		ModDataBase . closeStatementAndConnection ( stat ) ;
     		
     	} else {
     		
@@ -208,7 +223,7 @@ public class ShopLogger {
     }
 
     static String [ ] tmpSplit ;
-    static String tmpPlayerName, tmpMoneyType ;
+    static String tmpPlayer, tmpMoneyType ;
     static int tmpShopId, tmpCatId, tmpMerchId, tmpCost ;
 	
     private static void processLine ( String line, boolean printFullInfo, int lineNumber, boolean forOncePlayer, String _playerName ) {
@@ -219,13 +234,13 @@ public class ShopLogger {
     	tmpCatId = Integer . valueOf ( tmpSplit [ 2 ] ) ;
     	tmpMerchId = Integer . valueOf ( tmpSplit [ 3 ] ) ;
     	
-    	tmpPlayerName = tmpSplit [ 4 ] ;
+    	tmpPlayer = tmpSplit [ 4 ] ;
     	tmpCost = Integer . valueOf ( tmpSplit [ 5 ] ) ;
     	tmpMoneyType = tmpSplit [ 6 ] ;
 
     	if ( forOncePlayer ) {
     		
-    		if ( ! tmpPlayerName . equals ( _playerName ) ) {
+    		if ( ! tmpPlayer . equals ( _playerName ) ) {
     			
     			return ;
     			
@@ -235,15 +250,15 @@ public class ShopLogger {
     	
     	if ( printFullInfo ) {
     		
-    		System . out . println ( "[MineDonate] [Reverse] [P] [date=" + tmpSplit [ 0 ] + ", shopId=" + tmpShopId + ", catId=" + tmpCatId + ", merchId=" + tmpMerchId + ", playerName=" + tmpPlayerName + ", cost=" + tmpCost + ", moneyType=" + tmpMoneyType + "], row[" + lineNumber + "]"  ) ;
+    		System . out . println ( "[MineDonate] [Reverse] [P] [date=" + tmpSplit [ 0 ] + ", shopId=" + tmpShopId + ", catId=" + tmpCatId + ", merchId=" + tmpMerchId + ", player=" + tmpPlayer + ", cost=" + tmpCost + ", moneyType=" + tmpMoneyType + "], row[" + lineNumber + "]"  ) ;
 
     	}
     	
         try {
         	
-        	reverseMoney ( tmpPlayerName, tmpCost, tmpMoneyType ) ;
+        	reverseMoney ( tmpPlayer, tmpCost, tmpMoneyType ) ;
 
-        	reverseMerch ( printFullInfo, lineNumber, tmpShopId, tmpCatId, tmpMerchId, tmpSplit, tmpPlayerName ) ;
+        	reverseMerch ( printFullInfo, lineNumber, tmpShopId, tmpCatId, tmpMerchId, tmpSplit, tmpPlayer ) ;
         	
         } catch ( Exception ex ) {
         	
@@ -257,11 +272,11 @@ public class ShopLogger {
 
 	private static void reverseMoney ( String playerName, int money, String moneyType ) {
 
-        MineDonate.getMoneyProcessor(moneyType).returnMoney(MineDonate.getUUIDFromName(playerName), money);
+        MineDonate . getMoneyProcessor ( moneyType ) . returnMoney ( Utils . getUUIDFromName ( playerName ), money ) ;
 
     }
 
-	private static void reverseMerch ( boolean printFullInfo, int lineNumber, int shopId, int catId, int merchId, String [ ] splData, String playerName ) {
+	private static void reverseMerch ( boolean printFullInfo, int lineNumber, int shopId, int catId, int merchId, String [ ] splData, String player ) {
     	
         if ( MineDonate . checkShopAndLoad ( shopId ) ) {
         	
@@ -271,7 +286,7 @@ public class ShopLogger {
 
             		if ( MineDonate . shops . get ( shopId ) . cats [ catId ] . canReverse ( ) ) {
             			
-            			MineDonate . shops . get ( shopId ) . cats [ catId ] . reverseFor ( merchId, playerName, splData ) ;
+            			MineDonate . shops . get ( shopId ) . cats [ catId ] . reverseFor ( merchId, UUID . fromString ( player ), splData ) ;
             			
             		} else {
             			
@@ -283,7 +298,7 @@ public class ShopLogger {
                     	
             		} 
             		
-            		logReverse ( playerName, Integer . parseInt ( splData [ 5 ] ) ) ;
+            		logReverse ( player, Integer . parseInt ( splData [ 5 ] ) ) ;
             		
             	}
         		

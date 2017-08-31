@@ -2,7 +2,7 @@ package ru.log_inil.mc.minedonate.gui.frames;
 
 import net.minecraft.client.gui.GuiButton;
 import ru.alastar.minedonate.gui.ShopGUI;
-import ru.alastar.minedonate.rtnl.ModNetwork;
+import ru.alastar.minedonate.rtnl.ModNetworkRegistry;
 import ru.log_inil.mc.minedonate.localData.frames.DataOfUIFrameConfirm;
 
 public class GuiFrameDeleteShop extends GuiFrameConfirm {
@@ -28,7 +28,7 @@ public class GuiFrameDeleteShop extends GuiFrameConfirm {
     		
     		g . setLoading ( true ) ;
     		
-    		ModNetwork . sendToServerDeleteShopPacket ( shopId ) ;
+    		ModNetworkRegistry . sendToServerDeleteShopPacket ( shopId ) ;
 
 			hideFrame ( g ) ;
 

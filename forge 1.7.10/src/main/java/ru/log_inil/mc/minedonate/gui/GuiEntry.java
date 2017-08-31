@@ -85,6 +85,12 @@ public abstract class GuiEntry {
 		
 	}
 	
+	public boolean needUnShowWhenGuiClose ( ) {
+		
+		return true ;
+		
+	} 
+	
 	public boolean coordContains ( int x, int y ) {
 		
 		return false ;

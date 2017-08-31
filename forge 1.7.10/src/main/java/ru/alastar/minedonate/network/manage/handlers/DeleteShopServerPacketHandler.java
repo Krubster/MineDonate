@@ -3,14 +3,18 @@ package ru.alastar.minedonate.network.manage.handlers;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+
 import net.minecraft.entity.player.EntityPlayerMP;
+
 import ru.alastar.minedonate.MineDonate;
+import ru.alastar.minedonate.network.INetworkTask;
 import ru.alastar.minedonate.network.manage.packets.DeleteShopPacket;
 import ru.alastar.minedonate.network.manage.packets.ManageResponsePacket;
-import ru.alastar.minedonate.rtnl.Manager;
-import ru.alastar.minedonate.rtnl.Shop;
+import ru.alastar.minedonate.rtnl.ModManager;
+import ru.alastar.minedonate.rtnl.ModNetworkTaskProcessor;
+import ru.alastar.minedonate.rtnl.common.Shop;
 
-public class DeleteShopServerPacketHandler implements IMessageHandler < DeleteShopPacket, IMessage > {
+public class DeleteShopServerPacketHandler implements IMessageHandler < DeleteShopPacket, IMessage >, INetworkTask < DeleteShopPacket, IMessage > {
 	
     public DeleteShopServerPacketHandler ( ) {
 
@@ -18,6 +22,15 @@ public class DeleteShopServerPacketHandler implements IMessageHandler < DeleteSh
 
     @Override
     public IMessage onMessage ( DeleteShopPacket message, MessageContext ctx ) {
+    	
+    	ModNetworkTaskProcessor . processTask ( ( INetworkTask ) this, message, ctx ) ;
+
+    	return null ;
+    	
+    }
+    
+    @Override
+    public IMessage onMessageProcess ( DeleteShopPacket message, MessageContext ctx ) {
     	
     	if ( ! MineDonate . checkShopAndLoad ( message . shopId ) ) {
     		
@@ -29,7 +42,7 @@ public class DeleteShopServerPacketHandler implements IMessageHandler < DeleteSh
 		
 		Shop s = MineDonate . shops . get ( message . shopId ) ;
 		
-		if ( MineDonate . getAccount ( serverPlayer . getDisplayName ( ) . toLowerCase ( ) ) . canDeleteShop ( s . owner ) ) {
+		if ( MineDonate . getAccount ( serverPlayer ) . canDeleteShop ( s . owner ) ) {
 			
 			if ( s . isFreezed ) {
 
@@ -37,7 +50,7 @@ public class DeleteShopServerPacketHandler implements IMessageHandler < DeleteSh
 
 			}
 			
-			Manager . deleteShop ( s ) ;
+			ModManager . deleteShop ( s ) ;
 			
 	        return new ManageResponsePacket ( ManageResponsePacket.ResponseType.SHOP, ManageResponsePacket.ResponseCode.REMOVE, ManageResponsePacket.ResponseStatus.OK ) ;
 

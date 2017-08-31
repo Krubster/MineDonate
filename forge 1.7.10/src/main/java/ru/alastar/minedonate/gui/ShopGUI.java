@@ -11,8 +11,9 @@ import org.lwjgl.opengl.GL11;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.gui.categories.*;
 import ru.alastar.minedonate.merch.info.ShopInfo;
+import ru.alastar.minedonate.network.packets.CodePacket;
 import ru.alastar.minedonate.proxies.ClientProxy;
-import ru.alastar.minedonate.rtnl.ModNetwork;
+import ru.alastar.minedonate.rtnl.ModNetworkRegistry;
 import ru.log_inil.mc.minedonate.gui.*;
 import ru.log_inil.mc.minedonate.gui.context.ContextMenuManager;
 import ru.log_inil.mc.minedonate.gui.frames.*;
@@ -403,7 +404,7 @@ public class ShopGUI extends MCGuiAccessible {
                 m_Page = 0;
                 lastCategory = m_Selected_Category = ((CategoryButton) button).getCategory();
 
-                ModNetwork . sendToServerNeedShopCategoryPacket ( getCurrentShopId ( ), m_Selected_Category ) ;
+                ModNetworkRegistry . sendToServerNeedShopCategoryPacket ( getCurrentShopId ( ), m_Selected_Category ) ;
 
                 loading = true ;
                 
@@ -421,7 +422,7 @@ public class ShopGUI extends MCGuiAccessible {
             } else if ( button instanceof GoButton ) {
             	
             	( ( UsersShopsCategory ) getCurrentCategory ( ) ) . selectedShop = ( ShopInfo ) MineDonate . shops . get ( 0 ) . cats [ ( getCurrentCategory ( ) ).getCatId ( ) ] . getMerch (  ( ( GoButton ) button ) . shopId ) ;
-                ModNetwork . sendToServerNeedShopCategoryPacket ( ( ( GoButton ) button ) . shopId, 0 ) ;
+                ModNetworkRegistry . sendToServerNeedShopCategoryPacket ( ( ( GoButton ) button ) . shopId, 0 ) ;
 
                 loading = true ;
                 
@@ -485,7 +486,7 @@ public class ShopGUI extends MCGuiAccessible {
     	
         if ( ! needNetUpdate ) {
         	
-        	moneyArea . drawBalanceArea ( ( int ) resolution . getScaledWidth ( ) - 20, ( int ) ( resolution . getScaledHeight ( ) * 0.1 + 25 ), mouseX, mouseY ) ;
+        	moneyArea . drawBalanceArea ( ( int ) resolution . getScaledWidth ( ) - 20, ( int ) ( resolution . getScaledHeight ( ) * 0.1 + 29 ), mouseX, mouseY ) ;
         	
 	        if ( ! loading ) { 
 	        	
@@ -590,7 +591,7 @@ public class ShopGUI extends MCGuiAccessible {
         
 		if ( needNetUpdate && ! loading ) {
 
-            ModNetwork . sendToServerNeedUpdatePacket ( 0 ) ;
+            ModNetworkRegistry . sendToServerNeedUpdatePacket ( CodePacket . Code . CLIENT_NEED_FULL_INFO ) ;
 
             loading = true ;
             
@@ -613,6 +614,29 @@ public class ShopGUI extends MCGuiAccessible {
 
     	ContextMenuManager . clean ( ) ;
 
+		if ( lastEntry != null && lastEntry . needUnShowWhenGuiClose ( ) ) {
+			
+			lastEntry . show ( false ) ;
+			lastEntry . unShow ( this ) ;
+
+			if ( lastEntry . needReloadOnUnShow ( ) ) {
+				
+				initGui ( ) ;
+				
+			} 
+						
+		}
+		
+    }
+    
+    public void onGuiClosed ( boolean byBacked ) {
+    
+    	if ( byBacked ) {
+    		
+        	ContextMenuManager . clean ( ) ;
+
+    	}
+    	
     }
     
     private void addCategories ( ) {
@@ -796,6 +820,16 @@ public class ShopGUI extends MCGuiAccessible {
 
 	@Override
 	public void drawDefaultBackground ( ) {
+		
+	}
+
+	public void refresh ( ) {
+		
+		if ( Minecraft . getMinecraft ( ) . currentScreen == this ) {
+			
+			initGui ( ) ;
+			
+		}
 		
 	}
 	

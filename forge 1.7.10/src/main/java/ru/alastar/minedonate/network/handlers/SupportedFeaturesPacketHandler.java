@@ -32,6 +32,7 @@ public class SupportedFeaturesPacketHandler implements IMessageHandler<Supported
         MineDonate.cfg.userShops = message.userShops;
 
         MineDonate . loadClientMerch ( ) ;
+        
         ShopGUI . instance . defaultCategory = message . firstCatId ;
 
         return null;

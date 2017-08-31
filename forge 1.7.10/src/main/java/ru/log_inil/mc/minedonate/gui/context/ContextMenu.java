@@ -1,7 +1,7 @@
 package ru.log_inil.mc.minedonate.gui.context;
 
 import net.minecraft.client.gui.Gui;
-import ru.alastar.minedonate.rtnl.Utils;
+import ru.alastar.minedonate.Utils;
 import ru.log_inil.mc.minedonate.gui.MCGuiAccessible;
 
 import java.awt.*;
@@ -161,8 +161,8 @@ public class ContextMenu {
 	}
 
 	public void drawDebug(MCGuiAccessible g, int mouseX, int mouseY) {
-		//dbgColor
-    	g.drawRect(activateCoordX, activateCoordY, activateCoordXEnd, activateCoordY+1, dbgColor);
+
+		g.drawRect(activateCoordX, activateCoordY, activateCoordXEnd, activateCoordY+1, dbgColor);
     	
     	g.drawRect(activateCoordX, activateCoordY+1, activateCoordX+1, activateCoordYEnd, dbgColor);
 

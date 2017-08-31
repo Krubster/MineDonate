@@ -1,9 +1,9 @@
 package ru.log_inil.mc.minedonate.gui.frames;
 
 import net.minecraft.client.gui.GuiButton;
+import ru.alastar.minedonate.Utils;
 import ru.alastar.minedonate.gui.ShopGUI;
-import ru.alastar.minedonate.rtnl.ModNetwork;
-import ru.alastar.minedonate.rtnl.Utils;
+import ru.alastar.minedonate.rtnl.ModNetworkRegistry;
 import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.gui.GuiFrame;
 import ru.log_inil.mc.minedonate.gui.GuiGradientButton;
@@ -115,6 +115,8 @@ public class GuiFrameFreezeShop extends GuiFrame {
 		reasonField . setText ( fieldText != null ? fieldText : "" ) ;
 		reasonField . setTextHolder ( fieldHolder ) ;
 		
+		reasonField . fieldBorderColor = fieldBorderColor ;
+
 		reasonField . xPosition = posX + 20 ;
 		reasonField . yPosition = posY + 15 ;
 
@@ -151,7 +153,7 @@ public class GuiFrameFreezeShop extends GuiFrame {
     		
     		g . setLoading ( true ) ;
     		
-    		ModNetwork . sendToServerFreezeShopPacket ( this . shopId, ( lastReason = reasonField . getText ( ) ) ) ;
+    		ModNetworkRegistry . sendToServerFreezeShopPacket ( this . shopId, ( lastReason = reasonField . getText ( ) ) ) ;
     		
 			hideFrame ( g ) ;
 
