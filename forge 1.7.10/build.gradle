@@ -35,7 +35,7 @@ minecraft {
 }
 
 dependencies {
-	compile files('libs/bukkit.jar', 'libs/we.jar', 'libs/wg.jar', 'libs/pex.jar', 'libs/vault.jar', 'libs/commons-dbcp2-2.1.1.jar', 'libs/commons-pool2-2.4.2.jar', 'libs/commons-logging-1.2.jar')
+	compile files('libs/bukkit.jar', 'libs/we.jar', 'libs/wg.jar', 'libs/pex.jar', 'libs/vault.jar', 'libs.ext/commons-dbcp2-2.1.1.jar', 'libs.ext/commons-pool2-2.4.2.jar', 'libs.ext/commons-logging-1.2.jar')
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..
     //compile "some.group:artifact:version:classifier"

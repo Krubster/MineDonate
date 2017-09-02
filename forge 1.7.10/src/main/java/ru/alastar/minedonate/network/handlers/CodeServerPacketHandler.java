@@ -41,7 +41,7 @@ public class CodeServerPacketHandler implements IMessageHandler<CodePacket, IMes
             String userName = serverPlayer . getDisplayName ( ) . toLowerCase ( ) ;
 
             Account acc = MineDonate . getAccountWithRegister ( serverPlayer . getGameProfile ( ) . getId ( ) ) ;
-System.err.println("ACC:  "+acc);
+
             SupportedFeaturesPacket features_packet = new SupportedFeaturesPacket ( MineDonate . cfg ) ;
 
             ModNetworkRegistry . sendTo ( serverPlayer, features_packet ) ;
