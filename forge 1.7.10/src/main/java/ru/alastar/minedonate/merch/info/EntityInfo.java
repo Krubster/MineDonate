@@ -33,7 +33,7 @@ public class EntityInfo extends Merch {
     public int limit;
     public EntityLivingBase entity;
 
-    public EntityInfo(int _shopId, int _catId, int _rating, int merch_id, int cost, Blob data, String name, int lim) {
+    public EntityInfo(int _shopId, int _catId, int merch_id, int _rating, int cost, Blob data, String name, int lim) {
 
         super(_shopId, _catId, merch_id, _rating);
 

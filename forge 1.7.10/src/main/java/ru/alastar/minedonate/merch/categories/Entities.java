@@ -73,8 +73,8 @@ public class Entities extends MerchCategory {
     public void giveMerch ( EntityPlayerMP serverPlayer, Merch merch, int amount ) {
     	
     	EntityInfo info = ( EntityInfo ) merch ;
-        
-        if ( info . limit != -1 ) {
+
+    	if ( info . limit != -1 ) {
         
         	if ( info . limit < amount ) {
         		
@@ -86,6 +86,8 @@ public class Entities extends MerchCategory {
         	
         	info . limit -= amount ;
         	
+        	updateEntityInfo ( info ) ;
+
         }
         
         try {
@@ -102,11 +104,6 @@ public class Entities extends MerchCategory {
             
         }
         
-        if ( info . limit > -1 ) {
-            
-        	updateEntityInfo ( info ) ;
-        
-        }
         
     }
 
@@ -117,8 +114,8 @@ public class Entities extends MerchCategory {
         try {
             
         	stat = ModDataBase . getNewStatement ( "main" ) ;
-            stat . executeUpdate ( "UPDATE " + getDatabaseTable ( ) + " SET lim=" + info.limit + " WHERE id=" + info . getId ( ) + ( info . shopId > 0 ? " AND shopId=" + info . shopId : "" ) + ";");
-            
+            stat . executeUpdate ( "UPDATE " + getDatabaseTable ( ) + " SET lim=" + info.limit + " WHERE id=" + info . getId ( ) + ";");
+
         } catch ( Exception ex ) {
             
         	ex . printStackTrace ( ) ;
