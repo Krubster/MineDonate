@@ -37,7 +37,7 @@ import java.util.*;
 public class MineDonate {
 
     public static final String MODID = "MineDonate" ;
-    public static final String VERSION = "0.7.1.24" ;
+    public static final String VERSION = "0.7.1.25" ;
 
     public static boolean m_Enabled = false;
 
