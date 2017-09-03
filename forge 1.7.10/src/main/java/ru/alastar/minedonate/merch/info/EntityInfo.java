@@ -189,7 +189,7 @@ public class EntityInfo extends Merch {
     @Override
     public boolean canBuy ( EntityPlayerMP serverPlayer, int amount ) { 
     	
-    	return limit > 0 && amount <= limit && super . canBuy ( serverPlayer, amount ) ;
+    	return ( limit != -1 ? limit > 0 && amount <= limit : amount > 0 ) && super . canBuy ( serverPlayer, amount ) ;
     	
     }
     	
