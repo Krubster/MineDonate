@@ -2,7 +2,6 @@ package ru.alastar.minedonate.network.packets;
 
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import io.netty.buffer.ByteBuf;
-import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.Utils;
 import ru.alastar.minedonate.rtnl.common.Account;
 

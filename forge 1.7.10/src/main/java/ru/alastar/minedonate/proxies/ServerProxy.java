@@ -1,5 +1,6 @@
 package ru.alastar.minedonate.proxies;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
@@ -74,7 +75,7 @@ public class ServerProxy extends CommonProxy {
     	
     	super . serverStarting ( event ) ;
     	
-        MinecraftForge . EVENT_BUS . register ( new PlayerJoinEventHandler ( ) ) ;
+    	FMLCommonHandler . instance ( ) . bus ( ) . register ( new PlayerJoinEventHandler ( ) ) ;
 
     	if ( ! MineDonate . m_Enabled ) {
     		
