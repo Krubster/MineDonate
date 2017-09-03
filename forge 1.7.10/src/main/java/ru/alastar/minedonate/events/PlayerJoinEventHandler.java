@@ -16,6 +16,7 @@ public class PlayerJoinEventHandler {
 	public void onEntityJoin ( PlayerEvent . PlayerLoggedInEvent event ) {
    
 		ModNetworkRegistry . sendTo ( ( EntityPlayerMP ) event . player, new CodePacket ( MineDonate . m_Enabled ? CodePacket . Code . MOD_ENABLED : CodePacket . Code . MOD_DISABLED ) ) ;
+	
 	}
 	   
 }
