@@ -5,6 +5,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
+import ru.alastar.minedonate.merch.MerchCategory;
 import ru.alastar.minedonate.merch.info.EntityInfo;
 import ru.alastar.minedonate.rtnl.ModDataBase;
 import ru.alastar.minedonate.rtnl.ModNetworkRegistry;
@@ -30,7 +31,48 @@ public class Entities extends MerchCategory {
 	}
 
     @Override
-    public void loadMerchFromDB(ResultSet rs) {
+    public String getDatabaseTable ( ) {
+        return MineDonate.cfg.dbEntities;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
+    
+    @Override
+    public void setEnabled ( boolean _enabled ) {
+    	
+    	enabled = _enabled ;
+    	
+    }
+
+    @Override
+    public Merch constructMerch ( ) {
+        
+    	return new EntityInfo ( ) ;
+        
+    }
+    
+    @Override
+    public void loadCategory ( ) throws Exception {
+    
+    	Statement stat = ModDataBase . getNewStatement ( getDatabaseLinkName ( ) ) ;
+    	
+    	ResultSet rs = stat . executeQuery ( "SELECT * FROM " + getDatabaseTable ( ) + ";" ) ;
+    	
+    	loadCategoryFromObject ( rs ) ;
+    	
+    	rs . close ( ) ;
+
+    	ModDataBase . closeStatementAndConnection ( stat ) ;
+    	
+    }
+    
+    @Override
+    public void loadCategoryFromObject ( Object o ) {
+    	
+    	ResultSet rs = ( ResultSet ) o ;
     	
         try {
         	
@@ -50,23 +92,6 @@ public class Entities extends MerchCategory {
         
         MineDonate . logInfo ( "Loaded " + m_Merch . size() + " merch in " + toString ( ) ) ;
 
-    }
-
-    @Override
-    public String getDatabaseTable ( ) {
-        return MineDonate.cfg.dbEntities;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return enabled;
-    }
-    
-    @Override
-    public void setEnabled ( boolean _enabled ) {
-    	
-    	enabled = _enabled ;
-    	
     }
 
     @Override
@@ -113,7 +138,7 @@ public class Entities extends MerchCategory {
         
         try {
             
-        	stat = ModDataBase . getNewStatement ( "main" ) ;
+        	stat = ModDataBase . getNewStatement ( getDatabaseLinkName ( ) ) ;
             stat . executeUpdate ( "UPDATE " + getDatabaseTable ( ) + " SET lim=" + info.limit + " WHERE id=" + info . getId ( ) + ";");
 
         } catch ( Exception ex ) {
@@ -136,13 +161,6 @@ public class Entities extends MerchCategory {
         
     	updateEntityInfo ( ( EntityInfo ) info ) ;
     	
-    }
-    
-    @Override
-    public Merch constructMerch ( ) {
-        
-    	return new EntityInfo ( ) ;
-        
     }
     
 	@Override

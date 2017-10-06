@@ -13,7 +13,7 @@ import ru.alastar.minedonate.rtnl.ModNetworkRegistry;
 public class PlayerJoinEventHandler {
 
 	@SubscribeEvent
-	public void onEntityJoin ( PlayerEvent . PlayerLoggedInEvent event ) {
+	public void onPlayerLoggedInEvent ( PlayerEvent . PlayerLoggedInEvent event ) {
    
 		ModNetworkRegistry . sendTo ( ( EntityPlayerMP ) event . player, new CodePacket ( MineDonate . m_Enabled ? CodePacket . Code . MOD_ENABLED : CodePacket . Code . MOD_DISABLED ) ) ;
 	

@@ -66,6 +66,8 @@ public class ShopGUI extends MCGuiAccessible {
     GuiFrameLoading gfl ;
     public GuiButton rightButton ;
 
+    ContextMenuManager contextMenuManager ;
+    
     public ShopGUI ( ) {
 
     	cats = new ShopCategory [ ] { new ItemNBlockCategory ( "cat.items.base" ), new PrivilegieCategory ( "cat.privilegies" ), new RegionsCategory ( "cat.regions" ), new EntitiesCategory ( "cat.entities" ), new UsersShopsCategory ( "cat.shops" ) } ;
@@ -143,7 +145,13 @@ public class ShopGUI extends MCGuiAccessible {
     	
     }
     
-    public ShopCategory [ ] getCurrentShopCategories ( ) { // #LOG
+    public ContextMenuManager getContextMenuManager ( ) {
+    	
+    	return contextMenuManager ;
+    	
+    }
+    
+    public ShopCategory [ ] getCurrentShopCategories ( ) {
     	
     	return cats ;
     	
@@ -182,11 +190,11 @@ public class ShopGUI extends MCGuiAccessible {
 	}
 	
     @Override
-    protected void keyTyped ( char p_73869_1_, int p_73869_2_ ) {
+    protected void keyTyped ( char _char, int keyNumber ) {
 
         for ( ru.log_inil.mc.minedonate.gui.GuiEntry ge : gEntries . values ( ) ) {
 
-        	if ( ge . isVisible ( ) && ge . onKey ( p_73869_1_, p_73869_2_ ) ) {
+        	if ( ge . isVisible ( ) && ge . onKey ( _char, keyNumber ) ) {
         		
         		return ;
         		
@@ -196,7 +204,7 @@ public class ShopGUI extends MCGuiAccessible {
            
     	if ( searchField != null && searchField . isFocused ( ) ) {
     		
-    		searchField . textboxKeyTyped ( p_73869_1_, p_73869_2_ ) ;		
+    		searchField . textboxKeyTyped ( _char, keyNumber ) ;		
 
             //updateGrid ( ) ;
             //updateBtns ( ) ;
@@ -231,13 +239,13 @@ public class ShopGUI extends MCGuiAccessible {
 			
   			if ( ggtf . isFocused ( ) ) {
 			
-  				ggtf . textboxKeyTyped ( p_73869_1_, p_73869_2_ ) ;		
+  				ggtf . textboxKeyTyped ( _char, keyNumber ) ;		
   				
 			}
   			
 		}
 
-  		if ( dbgFlag && p_73869_2_ == 63 ) { 
+  		if ( dbgFlag && keyNumber == 63 ) { 
     		
     		MineDonate . loadClientConfig ( ) ;
     		initGui ( ) ;
@@ -248,21 +256,21 @@ public class ShopGUI extends MCGuiAccessible {
       	// 32 205 -> d
     	// 30 203 <- a
     	
-    	if ( ( 30 == p_73869_2_  || 203 == p_73869_2_ ) && pb . enabled ) {
+    	if ( ( 30 == keyNumber  || 203 == keyNumber ) && pb . enabled ) {
 
     		actionPerformed ( pb ) ;
     		
-    	} else if ( ( 32 == p_73869_2_  || 205 == p_73869_2_ ) && nb . enabled ) {
+    	} else if ( ( 32 == keyNumber  || 205 == keyNumber ) && nb . enabled ) {
 
     		actionPerformed ( nb ) ;
 
-    	} else if ( ClientProxy . openShop . getKeyCode ( ) == p_73869_2_ ) {
+    	} else if ( ClientProxy . openShop . getKeyCode ( ) == keyNumber ) {
     		
     		Minecraft . getMinecraft ( ) . displayGuiScreen ( null ) ;
     		
     	} else {
     		
-    		super . keyTyped ( p_73869_1_, p_73869_2_ ) ;
+    		super . keyTyped ( _char, keyNumber ) ;
     		
     	}
     	
@@ -271,11 +279,11 @@ public class ShopGUI extends MCGuiAccessible {
     public boolean contextMenuClickCallFlag = true ;
     
     @Override
-    protected void mouseClicked ( int p_73864_1_, int p_73864_2_, int p_73864_3_ ) {
+    protected void mouseClicked ( int x, int y, int k ) {
     	
     	if ( dbgFlag ) {
 
-    		System . err . println ( "Mouse click: x" + p_73864_1_ + ", y" + p_73864_2_ + ", k" + p_73864_3_ ) ;
+    		System . err . println ( "Mouse click: x" + x + ", y" + y + ", k" + k ) ;
     		
     	}
     	
@@ -283,9 +291,9 @@ public class ShopGUI extends MCGuiAccessible {
     	
         for ( ru.log_inil.mc.minedonate.gui.GuiEntry ge : gEntries . values ( ) ) {
 
-        	if ( ge . isVisible ( ) && ge . coordContains ( p_73864_1_,  p_73864_2_ ) ) {
+        	if ( ge . isVisible ( ) && ge . coordContains ( x,  y ) ) {
         			
-        		if ( ge . onClick ( p_73864_1_,  p_73864_2_, p_73864_3_ ) ) {
+        		if ( ge . onClick ( x,  y, k ) ) {
         			
         			return ;
         			
@@ -307,7 +315,7 @@ public class ShopGUI extends MCGuiAccessible {
           
         if ( contextMenuClickCallFlag ) {
 
-        	if ( ContextMenuManager . click ( this, p_73864_1_, p_73864_2_, p_73864_3_ ) ) {
+        	if ( contextMenuManager . click ( this, x, y, k ) ) {
         		
         		return ;
         		
@@ -317,16 +325,16 @@ public class ShopGUI extends MCGuiAccessible {
     	
   		for ( GuiGradientTextField ggtf: listTextFields ) {
 			
-  			ggtf . mouseClicked ( p_73864_1_, p_73864_2_, p_73864_3_ ) ;		
+  			ggtf . mouseClicked ( x, y, k ) ;		
 
 		}
   			
-    	super . mouseClicked ( p_73864_1_, p_73864_2_, p_73864_3_ ) ;
+    	super . mouseClicked ( x, y, k ) ;
     	
     }
 
     @Override
-    protected void actionPerformed(GuiButton button) {
+    protected void actionPerformed ( GuiButton button ) {
 
     	if ( dbgFlag ) {
     		
@@ -440,13 +448,7 @@ public class ShopGUI extends MCGuiAccessible {
                     		searchField . setVisible ( false ) ;
                         	searchField . setEnabled ( false ) ;
 
-                			getCurrentCategory ( ) . search ( null ) ;
-                			
-                  			getCurrentCategory ( ) . unShow ( this ) ;
-                			getCurrentCategory ( ) . preShow ( this ) ;
-                			getCurrentCategory ( ) . postShow ( this ) ;
-                			
-                            updateGrid ( ) ;       
+                			getCurrentCategory ( ) . search ( null ) ;  		
                 			                            
                     	} else {
                     		
@@ -455,15 +457,15 @@ public class ShopGUI extends MCGuiAccessible {
                         	searchField . setFocused ( true ) ;
                         	
                 			getCurrentCategory ( ) . search ( searchField . getText ( ) ) ;
-                			
-                  			getCurrentCategory ( ) . unShow ( this ) ;
-                			getCurrentCategory ( ) . preShow ( this ) ;
-                			getCurrentCategory ( ) . postShow ( this ) ;
-                			
-                            updateGrid ( ) ;
                             
                     	}
-                    	       
+                    	   
+              			getCurrentCategory ( ) . unShow ( this ) ;
+            			getCurrentCategory ( ) . preShow ( this ) ;
+            			getCurrentCategory ( ) . postShow ( this ) ;
+            			
+                        updateGrid ( ) ;
+                        
             		}
             		
             	}
@@ -533,11 +535,11 @@ public class ShopGUI extends MCGuiAccessible {
         
 		GL11 . glTranslatef ( 0, 0, 1000f ) ;
 
-        ContextMenuManager . draw ( this, mouseX, mouseY ) ;
+        contextMenuManager . draw ( this, mouseX, mouseY ) ;
         
         if ( dbgFlag ) {
         	
-        	ContextMenuManager . drawDebug ( this, mouseX, mouseY ) ;
+        	contextMenuManager . drawDebug ( this, mouseX, mouseY ) ;
         	
         }
 		GL11 . glTranslatef ( 0, 0, -1000f ) ;
@@ -612,7 +614,7 @@ public class ShopGUI extends MCGuiAccessible {
     @Override
     public void onGuiClosed ( ) {
 
-    	ContextMenuManager . clean ( ) ;
+    	contextMenuManager . clean ( ) ;
 
 		if ( lastEntry != null && lastEntry . needUnShowWhenGuiClose ( ) ) {
 			
@@ -633,7 +635,7 @@ public class ShopGUI extends MCGuiAccessible {
     
     	if ( byBacked ) {
     		
-        	ContextMenuManager . clean ( ) ;
+    		contextMenuManager . clean ( ) ;
 
     	}
     	
@@ -766,23 +768,18 @@ public class ShopGUI extends MCGuiAccessible {
     	
     }
     
-    public FontRenderer getFontRenderer() {
-        return this.fontRendererObj;
+    public FontRenderer getFontRenderer ( ) {
+        
+    	return this.fontRendererObj;
+        
     }
 
-    public RenderItem getItemRender() {
-        return this.itemRender;
+    public RenderItem getItemRender ( ) {
+        
+    	return this.itemRender;
+        
     }
 
-    public void drawGradientRectAccess(int par1, int par2, int par3, int par4, int par5, int par6) {
-    	drawGradientRect(par1, par2, par3, par4, par5, par6) ;
-    }
-    
-    
-    public void renderToolTipAccess(ItemStack p_146285_1_, int p_146285_2_, int p_146285_3_){
-    	renderToolTip(p_146285_1_, p_146285_2_, p_146285_3_);
-    }
-    
 	public void drawTexturedModalRectNormal(int x, int y, int width, int height) {
 		
 	     Tessellator tessellator = Tessellator.instance;
@@ -795,6 +792,34 @@ public class ShopGUI extends MCGuiAccessible {
 	     
 	}
 
+	public void drawHoveringTextAccess(List<String> list, int mouseX, int mouseY, FontRenderer fontRenderer) {
+		
+		super.drawHoveringText(list, mouseX, mouseY, fontRenderer);
+		
+	}
+	
+    public void drawGradientRect(int par1, int par2, int par3, int par4, int par5, int par6) {
+   
+    	super.drawGradientRect(par1, par2, par3, par4, par5, par6) ;
+    
+    }
+    
+    
+    public void renderToolTip(ItemStack is, int x, int y){
+    	
+    	super.renderToolTip(is, x, y);
+    	
+    }
+    
+	public void refresh ( ) {
+		
+		if ( Minecraft . getMinecraft ( ) . currentScreen == this ) {
+			
+			initGui ( ) ;
+			
+		}
+		
+	}
 	public List < GuiButton > getButtonList ( ) {
 		
 		return this . buttonList ;
@@ -806,10 +831,6 @@ public class ShopGUI extends MCGuiAccessible {
 		return resolution ;
 
 	}
-
-	public void drawHoveringTextAccess(List<String> list, int mouseX, int mouseY, FontRenderer fontRenderer) {
-		this.drawHoveringText(list, mouseX, mouseY, fontRenderer);
-	}
 	
     @Override
     public boolean doesGuiPauseGame ( ) {
@@ -820,16 +841,6 @@ public class ShopGUI extends MCGuiAccessible {
 
 	@Override
 	public void drawDefaultBackground ( ) {
-		
-	}
-
-	public void refresh ( ) {
-		
-		if ( Minecraft . getMinecraft ( ) . currentScreen == this ) {
-			
-			initGui ( ) ;
-			
-		}
 		
 	}
 	

@@ -60,6 +60,7 @@ re7.1
 	+перенести деньги в Account
 	-[0]как-то сунуть в конфиг все enum'ы и их симбиозы
 	-[0]убрать buttonsList.clear()
+	
 22
 	-synchronized с деньгами..
 	+в контекстном меню.. текст багается при оверлее листа текстовых строк
@@ -70,3 +71,28 @@ re7.1
 	+баг при выходе из гуи фрейма, не выподают вещи
 	+фикс дефолтных денег...
 	+какого-то черта не меняется цена у итемов и кол-во...	
+	
+27
+	+- Загрузка мерчей из бд в самой категории мерчей
+	- Выделить линк на юзершопы (выделить линки на мерчи?)
+	+- Начать запил динамичных категорий
+	+- переместить абстрактн. класс мерча в пакет мерч
+	+- ModManager.canUppendAnotherItemInShop - uppendItemInShop
+	+- editShopEntryNumber - editShopEntryString and EditMerchNumberPacket - EditMerchStringPacket 
+	+- ModManager -> ModShopManager
+	+- create field root dir - https://github.com/Pishka/MineDonate/blob/master/forge%201.7.10/src/main/java/ru/alastar/minedonate/rtnl/ModShopLogger.java#L37 
+	+- redesign fields/methods https://github.com/Pishka/MineDonate/blob/master/forge%201.7.10/src/main/java/ru/alastar/minedonate/rtnl/common/ManageSession.java
+	+- add client comment https://github.com/Pishka/MineDonate/blob/master/forge%201.7.10/src/main/java/ru/alastar/minedonate/rtnl/common/Shop.java#L20
+	+- convert string to ExampleClass.class.getName() - https://github.com/Pishka/MineDonate/blob/master/forge%201.7.10/src/main/java/ru/alastar/minedonate/proxies/ServerProxy.java#L59
+	+- move to class fields - https://github.com/Pishka/MineDonate/blob/master/forge%201.7.10/src/main/java/ru/alastar/minedonate/plugin/PluginHelper.java#L108
+	+- double code - 69 and 79 - https://github.com/Pishka/MineDonate/blob/master/forge%201.7.10/src/main/java/ru/alastar/minedonate/network/handlers/CodeClientPacketHandler.java#L69
+	+- rename to functional name - https://github.com/Pishka/MineDonate/blob/master/forge%201.7.10/src/main/java/ru/alastar/minedonate/mproc/AbstractMoneyProcessor.java#L22
+	+- remove 36 & 42 - https://github.com/Pishka/MineDonate/blob/master/forge%201.7.10/src/main/java/ru/alastar/minedonate/mproc/AbstractMoneyProcessor.java#L36
+	+- onEvent -> on{EventName} - https://github.com/Pishka/MineDonate/tree/master/forge%201.7.10/src/main/java/ru/alastar/minedonate/events
+	+- remove https://github.com/Pishka/MineDonate/blob/master/forge%201.7.10/src/main/java/ru/alastar/minedonate/gui/ShopCategory.java#L342
+	+- rename method obf args - https://github.com/Pishka/MineDonate/blob/master/forge%201.7.10/src/main/java/ru/alastar/minedonate/gui/ShopGUI.java
+	+- move double code - https://github.com/Pishka/MineDonate/blob/master/forge%201.7.10/src/main/java/ru/alastar/minedonate/gui/ShopGUI.java#L445
+	+- override super? drawGradientRectAccess, renderToolTipAccess, drawHoveringTextAccess - https://github.com/Pishka/MineDonate/blob/master/forge%201.7.10/src/main/java/ru/alastar/minedonate/gui/ShopGUI.java#L777
+	+- ContextMenuManager to no-static field - https://github.com/Pishka/MineDonate/blob/master/forge%201.7.10/src/main/java/ru/alastar/minedonate/gui/ShopGUI.java
+	+- из ModManager переместить canUppendAnotherItemInShop в Account + переместить 10тку из метода в ItemInfo.maxLimit
+	+- из MineDonate переместить проверки добавления в Account + SideOnly

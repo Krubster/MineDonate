@@ -53,12 +53,6 @@ public class ItemNBlockCategory extends ShopCategory {
     	
     	super.draw(g, page, mouseX, mouseY, partialTicks, dt);
 
-        if ( subCats != null && subCats . length > 0 && subCatId == -1 && dt == DrawType . PRE ){        	
-        
-        	return ;
-        	
-        }
-        
     	if ( gi != null ) {
     		
     		gi.drawScreen(mouseX, mouseY, partialTicks, dt);
@@ -115,7 +109,7 @@ public class ItemNBlockCategory extends ShopCategory {
     			
     		}
 
-        	addButton . visible = addButton . enabled = MineDonate . canAdd ( g . getCurrentShopId ( ), catId ) && ( shopOwner == null ? true : MineDonate . getAccount ( ) . canEditShop ( shopOwner ) ) ;
+        	addButton . visible = addButton . enabled = MineDonate . getAccount ( ) == null ? false : MineDonate . getAccount ( ) . canAdd ( g . getCurrentShopId ( ), catId ) && ( shopOwner == null ? true : MineDonate . getAccount ( ) . canEditShop ( shopOwner ) ) ;
 
     	}
     	
@@ -203,12 +197,6 @@ public class ItemNBlockCategory extends ShopCategory {
 			return ;
 			
 		}
-		
-        if ( subCats != null && subCats . length > 0 && subCatId == -1 ) {
-        	
-        	return ;
-        	
-        }
         
 		if ( MineDonate . shops . containsKey ( gui . getCurrentShopId ( ) ) ) {
 	

@@ -3,8 +3,7 @@ package ru.log_inil.mc.minedonate.gui.frames;
 import net.minecraft.client.gui.GuiButton;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.gui.ShopGUI;
-import ru.alastar.minedonate.network.manage.packets.EditMerchNumberPacket;
-import ru.alastar.minedonate.network.manage.packets.EditMerchStringPacket;
+import ru.alastar.minedonate.network.manage.packets.EditMerchFieldPacket;
 import ru.alastar.minedonate.rtnl.ModNetworkRegistry;
 import ru.log_inil.mc.minedonate.localData.frames.DataOfUIFramEditObject;
 
@@ -33,7 +32,7 @@ public class GuiFrameEditEntity extends GuiFrameEditItem {
     					
     					hideFrame ( g ) ;
     			    		
-    					ModNetworkRegistry . sendToServerEditMerchNumberPacket ( shopId, catId, merch_id, EditMerchNumberPacket . Type . LIMIT, ( int ) n ) ;
+    					ModNetworkRegistry . sendToServerEditMerchFieldPacket ( shopId, catId, merch_id, EditMerchFieldPacket . FieldType . INTEGER, EditMerchFieldPacket . FieldName . LIMIT, n ) ;
     					
     					limit = n ;
     					    						
@@ -53,7 +52,7 @@ public class GuiFrameEditEntity extends GuiFrameEditItem {
 					
 					hideFrame ( g ) ;
 			        
-					ModNetworkRegistry . sendToServerEditMerchNumberPacket ( shopId, catId, merch_id, EditMerchNumberPacket . Type . COST, ( int ) n ) ;
+					ModNetworkRegistry . sendToServerEditMerchFieldPacket ( shopId, catId, merch_id, EditMerchFieldPacket . FieldType . INTEGER, EditMerchFieldPacket . FieldName . COST, n ) ;
 					
 					cost = n ;
 										
@@ -66,9 +65,11 @@ public class GuiFrameEditEntity extends GuiFrameEditItem {
     		if ( ! nameField . getText ( ) . trim ( ) . equals ( fieldText ) ) {
     			
 				hideFrame ( g ) ;
-		        
-    			ModNetworkRegistry . sendToServerEditMerchStringPacket ( shopId, catId, merch_id, EditMerchStringPacket . Type . NAME, ( fieldText = nameField . getText ( ) ) ) ;
-    			System.err.println(fieldText);
+				
+				fieldText = nameField . getText ( ) ;
+				
+    			ModNetworkRegistry . sendToServerEditMerchFieldPacket ( shopId, catId, merch_id, EditMerchFieldPacket . FieldType . STRING, EditMerchFieldPacket . FieldName . NAME, fieldText ) ;
+
     		}
     		
     	}

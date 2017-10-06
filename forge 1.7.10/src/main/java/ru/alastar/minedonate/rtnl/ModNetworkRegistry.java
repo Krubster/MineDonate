@@ -78,8 +78,7 @@ public class ModNetworkRegistry {
         //
         
         networkChannel . registerMessage ( DeleteShopMerchServerPacketHandler . class, DeleteShopMerchPacket . class, i ++, Side . SERVER ) ;
-        networkChannel . registerMessage ( EditMerchNumberServerPacketHandler . class, EditMerchNumberPacket . class, i ++, Side . SERVER ) ;
-        networkChannel . registerMessage ( EditMerchStringServerPacketHandler . class, EditMerchStringPacket . class, i ++, Side . SERVER ) ;
+        networkChannel . registerMessage ( EditMerchFieldServerPacketHandler . class, EditMerchFieldPacket . class, i ++, Side . SERVER ) ;
         
         //
         networkChannel . registerMessage ( FreezeObjectServerPacketHandler . class, FreezeObjectPacket . class, i ++, Side . SERVER ) ;
@@ -232,15 +231,17 @@ public class ModNetworkRegistry {
 		
 	}
 	
+	/*
 	public static void sendToServerEditMerchNumberPacket ( int shopId, int catId, int merchId, EditMerchNumberPacket . Type type, int number ) {
 		
 		networkChannel . sendToServer ( new EditMerchNumberPacket ( shopId, catId, merchId, type, number ) ) ;
 		
 	}
+	*/
 	
-	public static void sendToServerEditMerchStringPacket ( int shopId, int catId, int merchId, EditMerchStringPacket . Type type, String str ) {
+	public static void sendToServerEditMerchFieldPacket ( int shopId, int catId, int merchId, EditMerchFieldPacket . FieldType type, EditMerchFieldPacket . FieldName name, Object data ) {
 
-		networkChannel . sendToServer ( new EditMerchStringPacket ( shopId, catId, merchId, type, str ) ) ;
+		networkChannel . sendToServer ( new EditMerchFieldPacket ( shopId, catId, merchId, type, name, data ) ) ;
 		
 	}
 	

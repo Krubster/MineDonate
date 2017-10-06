@@ -10,7 +10,7 @@ import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.network.INetworkTask;
 import ru.alastar.minedonate.network.manage.packets.CreateNewShopPacket;
 import ru.alastar.minedonate.network.manage.packets.ManageResponsePacket;
-import ru.alastar.minedonate.rtnl.ModManager;
+import ru.alastar.minedonate.rtnl.ModShopManager;
 import ru.alastar.minedonate.rtnl.ModNetworkTaskProcessor;
 import ru.alastar.minedonate.rtnl.common.Account;
 
@@ -62,7 +62,7 @@ public class CreateNewShopServerPacketHandler implements IMessageHandler < Creat
 
 			}
 			
-			ModManager . createShop ( serverPlayer.getGameProfile().getId(), acc . name, message . name ) ;
+			ModShopManager . createShop ( serverPlayer.getGameProfile().getId(), acc . name, message . name ) ;
 			
 	        return new ManageResponsePacket ( ManageResponsePacket.ResponseType.SHOP, ManageResponsePacket.ResponseCode.CREATE, ManageResponsePacket.ResponseStatus.OK ) ;
 

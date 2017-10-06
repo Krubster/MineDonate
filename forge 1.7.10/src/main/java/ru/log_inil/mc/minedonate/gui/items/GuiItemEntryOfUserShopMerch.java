@@ -41,9 +41,7 @@ public class GuiItemEntryOfUserShopMerch extends GuiAbstractItemEntry {
 		if ( ! cElements . isEmpty ( ) ) {
 			
 			cmm = new ContextMenu ( 1, 1, cElements ) ;
-			
-			ContextMenuManager . addNewMenu ( cmm ) ;
-			
+						
 		}
 		
 	}
@@ -107,7 +105,9 @@ public class GuiItemEntryOfUserShopMerch extends GuiAbstractItemEntry {
 			freezText . add ( MineDonate.cfgUI.lang.shopFreezReason + info . freezReason ) ;
 
 		}
-					
+				
+		ShopGUI.instance.getContextMenuManager().addNewMenu(cmm);
+
 		updateDataNeed = true ;
 		
 		return this ;

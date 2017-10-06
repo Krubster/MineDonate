@@ -24,7 +24,7 @@ public class EntitySelectEventHandler {
 
  	@SideOnly ( Side . SERVER )
     @SubscribeEvent ( priority = EventPriority . NORMAL )
-    public void onEvent ( EntityInteractEvent e ) {
+    public void onEntityInteractEvent ( EntityInteractEvent e ) {
        
     	if ( e . entityPlayer instanceof EntityPlayerMP ) {
          
@@ -32,7 +32,7 @@ public class EntitySelectEventHandler {
     		
     		if ( acc != null ) {
     			
-    			if ( acc . ms . mobSelect ) {
+    			if ( acc .manageSession . mobSelect ) {
     				
     				if ( ! ( e . target instanceof EntityLivingBase ) ) {
                         
@@ -51,13 +51,13 @@ public class EntitySelectEventHandler {
 	                		ModNetworkRegistry . sendToManageResponsePacket ( ( EntityPlayerMP ) e . entityPlayer, ResponseType . ENTITY, ResponseCode . SELECT, ResponseStatus . ERROR_ENTITY_CHECK_INIT ) ;
 	                	
 	                		e . setCanceled ( true ) ;
-	                        acc . ms . mobSelect = false ;
+	                        acc .manageSession . setMobSelect ( false ) ;
 	
 	                		return;
 	                		
 	                	} 
 	                	
-	                	acc . ms . currentMob = e . target ;
+	                	acc .manageSession . setCurrentMob ( e . target ) ;
 
 	                	ModNetworkRegistry . sendToManageResponsePacket ( ( EntityPlayerMP ) e . entityPlayer, ResponseType . ENTITY, ResponseCode . SELECT, ResponseStatus . OK ) ;
 
@@ -66,7 +66,7 @@ public class EntitySelectEventHandler {
                 	}
     				
             		e . setCanceled ( true ) ;
-                    acc . ms . mobSelect = false ;
+                    acc .manageSession . setMobSelect ( false ) ;
     				
                 	ModNetworkRegistry . sendToManageResponsePacket ( ( EntityPlayerMP ) e . entityPlayer, ResponseType . ENTITY, ResponseCode . ADD, ResponseStatus . ENTITY_SELECT_STOP ) ;
 

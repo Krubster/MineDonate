@@ -4,8 +4,7 @@ import net.minecraft.client.gui.GuiButton;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.Utils;
 import ru.alastar.minedonate.gui.ShopGUI;
-import ru.alastar.minedonate.network.manage.packets.EditMerchNumberPacket;
-import ru.alastar.minedonate.network.manage.packets.EditMerchStringPacket;
+import ru.alastar.minedonate.network.manage.packets.EditMerchFieldPacket;
 import ru.alastar.minedonate.rtnl.ModNetworkRegistry;
 import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.gui.GuiFrame;
@@ -136,7 +135,7 @@ public class GuiFrameEditItem extends GuiFrame {
 		}
 		
 		nameField . setText ( fieldText != null ? fieldText : "" ) ;
-		nameField . setTextHolder ( MineDonate.getAccount().ms.currentItemStack != null ? MineDonate.getAccount().ms.currentItemStack.getDisplayName() : fieldHolder ) ;
+		nameField . setTextHolder ( MineDonate.getAccount().manageSession.currentItemStack != null ? MineDonate.getAccount().manageSession.currentItemStack.getDisplayName() : fieldHolder ) ;
 		
 		nameField . fieldBorderColor = fieldBorderColor ;
 
@@ -228,7 +227,7 @@ public class GuiFrameEditItem extends GuiFrame {
 	    					g . setLoading ( true ) ;
 	    					hideFrame ( g ) ;
 	    			    		
-	    					ModNetworkRegistry . sendToServerEditMerchNumberPacket ( shopId, catId, merch_id, EditMerchNumberPacket . Type . LIMIT, ( int ) n ) ;
+	    					ModNetworkRegistry . sendToServerEditMerchFieldPacket ( shopId, catId, merch_id, EditMerchFieldPacket . FieldType . INTEGER, EditMerchFieldPacket . FieldName . LIMIT, n ) ;
 	    					
 	    					limit = n ;
 	    					    						
@@ -253,7 +252,7 @@ public class GuiFrameEditItem extends GuiFrame {
 						g . setLoading ( true ) ;
 						hideFrame ( g ) ;
 				        
-						ModNetworkRegistry . sendToServerEditMerchNumberPacket ( shopId, catId, merch_id, EditMerchNumberPacket . Type . COST, ( int ) n ) ;
+						ModNetworkRegistry . sendToServerEditMerchFieldPacket ( shopId, catId, merch_id, EditMerchFieldPacket . FieldType . INTEGER, EditMerchFieldPacket . FieldName . COST, n ) ;
 						
 						cost = n ;
 											
@@ -269,9 +268,11 @@ public class GuiFrameEditItem extends GuiFrame {
     			
     			g . setLoading ( true ) ;
 				hideFrame ( g ) ;
-		        
-    			ModNetworkRegistry . sendToServerEditMerchStringPacket ( shopId, catId, merch_id, EditMerchStringPacket . Type . NAME, ( fieldText = nameField . getText ( ) ) ) ;
-    			
+				
+				fieldText = nameField . getText ( ) ;
+				
+    			ModNetworkRegistry . sendToServerEditMerchFieldPacket ( shopId, catId, merch_id, EditMerchFieldPacket . FieldType . STRING, EditMerchFieldPacket . FieldName . NAME, fieldText ) ;
+
     		}
     		
     		

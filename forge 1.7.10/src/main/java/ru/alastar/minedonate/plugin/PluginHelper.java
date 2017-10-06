@@ -24,7 +24,17 @@ public class PluginHelper {
 		
 	}
 	
-	public static void loadPlugins ( ) {
+	static Method mDefineClass = null ;
+	
+	public static void loadPlugins ( ) throws NoSuchMethodException, SecurityException {
+		
+		if ( mDefineClass == null ) {
+			
+			mDefineClass = ClassLoader . class . getDeclaredMethod ( "defineClass", new Class [ ] { String . class, byte [ ] . class, int . class, int . class } ) ;
+			
+			mDefineClass . setAccessible ( true ) ;
+			
+		}
 		
 		ClassLoader cl ;
 		Object oServerSide;
@@ -105,10 +115,7 @@ public class PluginHelper {
 			InputStream stream = PluginHelper . class . getClassLoader ( ) . getResourceAsStream ( cl . replace ( '.', '/' ) . concat ( ".class" ) ) ;
 			byte [ ] b =  ByteStreams . toByteArray ( stream ) ;
 			
-			Method m = ClassLoader . class . getDeclaredMethod ( "defineClass", new Class [ ] { String . class, byte [ ] . class, int . class, int . class } ) ;
-			
-			m . setAccessible ( true ) ;
-			m . invoke ( classLoader, null, b, 0, b . length ) ;
+			mDefineClass . invoke ( classLoader, null, b, 0, b . length ) ;
 						
 			if ( loadClass ) {
 				

@@ -34,17 +34,19 @@ public class ModShopLogger {
         	
             String fileName = dateFormat . format ( calendar . getTime ( ) ) ;
             
-            File dir = new File ( ( new File ( ".") ) . getAbsolutePath ( ) + File . separator + "minedonate" + File . separator + "donate" ) ;
+            File rootDir = new File ( new File ( "." ) . getAbsolutePath ( ) + File . separator + "minedonate" + File . separator + "donate" ) ;
+            
+            File dir = new File ( rootDir, "donate" ) ;
             if ( ! dir . exists ( ) ) { dir . mkdirs ( ) ; }
             
             m_log = new BufferedWriter ( new FileWriter ( dir . getAbsolutePath ( ) + File . separator + fileName + ".txt" ) ) ;
 
-            dir = new File ( ( new File ( ".") ) . getAbsolutePath ( ) + File . separator + "minedonate" + File . separator + "reverse" ) ;
+            dir = new File ( rootDir, "reverse" ) ;
             if ( ! dir . exists ( ) ) { dir . mkdir ( ) ; }
             
             logReverse = new BufferedWriter ( new FileWriter ( dir . getAbsolutePath ( ) + File . separator + fileName + ".txt" ) ) ;
 
-            dir = new File ( ( new File ( ".") ) . getAbsolutePath ( ) + File . separator + "minedonate" + File . separator + "money");
+            dir = new File ( rootDir, "money");
             if ( ! dir . exists ( ) ) { dir . mkdir ( ) ; }
             
             logMoney = new BufferedWriter ( new FileWriter ( dir . getAbsolutePath ( ) + File . separator + fileName + ".txt" ) ) ;

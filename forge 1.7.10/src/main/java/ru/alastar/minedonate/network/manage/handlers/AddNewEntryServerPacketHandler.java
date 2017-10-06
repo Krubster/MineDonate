@@ -8,7 +8,7 @@ import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.network.INetworkTask;
 import ru.alastar.minedonate.network.manage.packets.AddNewEntryPacket;
 import ru.alastar.minedonate.network.manage.packets.ManageResponsePacket;
-import ru.alastar.minedonate.rtnl.ModManager;
+import ru.alastar.minedonate.rtnl.ModShopManager;
 import ru.alastar.minedonate.rtnl.ModNetworkTaskProcessor;
 import ru.alastar.minedonate.rtnl.common.Account;
 import ru.alastar.minedonate.rtnl.common.Shop;
@@ -73,7 +73,7 @@ public class AddNewEntryServerPacketHandler implements IMessageHandler < AddNewE
 				
 				case ITEMS :
 					
-					if ( acc . ms . currentItemStack == null ) {
+					if ( acc .manageSession . currentItemStack == null ) {
 						
 						return new ManageResponsePacket ( ManageResponsePacket.ResponseType.OBJ, ManageResponsePacket.ResponseCode.ADD, ManageResponsePacket.ResponseStatus.ERROR_UNKNOWN ) ;
 
@@ -85,13 +85,13 @@ public class AddNewEntryServerPacketHandler implements IMessageHandler < AddNewE
 		
 					}		
 					
-					ModManager . addItemToShop ( acc, s, message . catId, message . limit, message . cost, message . name ) ;
+					ModShopManager . addItemToShop ( acc, s, message . catId, message . limit, message . cost, message . name ) ;
 
 				break ;
 				
 				case ENTITIES :
 					
-					if ( acc . ms . currentMob == null ) {
+					if ( acc .manageSession . currentMob == null ) {
 						
 						return new ManageResponsePacket ( ManageResponsePacket.ResponseType.OBJ, ManageResponsePacket.ResponseCode.ADD, ManageResponsePacket.ResponseStatus.ERROR_UNKNOWN ) ;
 
@@ -103,7 +103,7 @@ public class AddNewEntryServerPacketHandler implements IMessageHandler < AddNewE
 		
 					}
 					
-					ModManager . addEntityToShop ( acc, s, message . catId, message . limit, message . cost, message . name ) ;
+					ModShopManager . addEntityToShop ( acc, s, message . catId, message . limit, message . cost, message . name ) ;
 
 				break ;
 				

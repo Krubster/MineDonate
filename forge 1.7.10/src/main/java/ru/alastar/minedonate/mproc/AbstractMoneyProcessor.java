@@ -19,7 +19,7 @@ public abstract class AbstractMoneyProcessor {
 
     public abstract int canBuy ( Merch m, UUID buyer, int amount ) ;
 
-    public abstract int process ( Merch m, UUID buyer, int money ) ;
+    public abstract int processDeal ( Merch m, UUID buyer, int money ) ;
 
     public abstract void registerPlayer ( UUID id, String name, java . util . Collection < AbstractMoneyProcessor > pl ) ;
 
@@ -33,18 +33,6 @@ public abstract class AbstractMoneyProcessor {
 
     public abstract boolean existsAccount ( UUID id ) ;
 
-	public boolean isCustomMoneyType ( ) {
-		
-		return false ;
-		
-	}
-	
-	public String getClientMoneyType ( ) {
-		
-		return null ;
-		
-	}
-	
 	public String getMoneyType ( ) {
 		
 		return mtype ;

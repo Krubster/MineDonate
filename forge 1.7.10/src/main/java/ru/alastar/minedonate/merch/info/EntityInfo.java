@@ -15,8 +15,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import ru.alastar.minedonate.Utils;
 import ru.alastar.minedonate.merch.Merch;
-import ru.alastar.minedonate.network.manage.packets.EditMerchNumberPacket;
-import ru.alastar.minedonate.network.manage.packets.EditMerchStringPacket;
+import ru.alastar.minedonate.network.manage.packets.EditMerchFieldPacket;
 
 import java.io.IOException;
 import java.sql.Blob;
@@ -139,6 +138,58 @@ public class EntityInfo extends Merch {
     }
 
     @Override
+	public void updateField ( EditMerchFieldPacket . FieldType _type, EditMerchFieldPacket . FieldName _name, Object _data ) {	
+		
+    	super . updateField ( _type, _name, _data ) ;
+
+		switch ( _type ) { 
+		
+			case INTEGER:
+			
+				switch ( _name ) { 
+				
+					case LIMIT:
+						
+						this . limit = (Integer) _data;
+
+					break ;
+				
+					case COST:
+						
+						this . cost = (Integer) _data;
+
+					break ;
+					
+					default: break ;
+					
+				}
+				
+			break ;
+			
+			case STRING:
+			
+				switch ( _name ) { 
+				
+					case NAME:
+						
+						this . name = (String) _data;
+	
+					break ;
+					
+					default: break ;
+					
+				}
+				
+			break ;
+			
+			default: break ;
+			
+		}
+
+	}
+	
+    /*
+    @Override
 	public void updateNumber ( EditMerchNumberPacket . Type type, int number ) {	
 		
     	super . updateNumber ( type, number ) ;
@@ -165,7 +216,7 @@ public class EntityInfo extends Merch {
 	}
     
     @Override
-	public void updateString ( EditMerchStringPacket . Type type, String str ) {	
+	public void updateString ( EditMerchFieldPacket . Type type, String str ) {	
 		
     	super . updateString ( type, str ) ;
     	
@@ -180,6 +231,7 @@ public class EntityInfo extends Merch {
 		}
 			
 	}
+	*/
 	
     @Override
     public String getBoughtMessage() {

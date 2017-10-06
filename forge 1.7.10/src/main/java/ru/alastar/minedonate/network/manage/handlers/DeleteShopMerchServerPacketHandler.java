@@ -10,7 +10,7 @@ import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.network.INetworkTask;
 import ru.alastar.minedonate.network.manage.packets.DeleteShopMerchPacket;
 import ru.alastar.minedonate.network.manage.packets.ManageResponsePacket;
-import ru.alastar.minedonate.rtnl.ModManager;
+import ru.alastar.minedonate.rtnl.ModShopManager;
 import ru.alastar.minedonate.rtnl.ModNetworkTaskProcessor;
 import ru.alastar.minedonate.rtnl.common.Account;
 import ru.alastar.minedonate.rtnl.common.Shop;
@@ -65,7 +65,7 @@ public class DeleteShopMerchServerPacketHandler implements IMessageHandler < Del
 
 			}
 			
-			ModManager . removeEntryFromShop ( serverPlayer, s, message . catId, message . merchId ) ;
+			ModShopManager . removeEntryFromShop ( serverPlayer, s, message . catId, message . merchId ) ;
 			
 	        return new ManageResponsePacket ( ManageResponsePacket.ResponseType.OBJ, ManageResponsePacket.ResponseCode.REMOVE, ManageResponsePacket.ResponseStatus.OK ) ;
 

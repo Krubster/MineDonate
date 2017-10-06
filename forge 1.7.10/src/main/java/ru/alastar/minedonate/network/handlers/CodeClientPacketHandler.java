@@ -66,38 +66,29 @@ public class CodeClientPacketHandler implements IMessageHandler<CodePacket, IMes
     			
     	}
     	
-    	if ( message . code == CodePacket . Code . SERVER_ERROR_WAIT_OTHER_TASK ) {
-
-        	Minecraft . getMinecraft ( ) . thePlayer . addChatMessage ( new ChatComponentText ( EnumChatFormatting . AQUA + " [MineDonate] " + EnumChatFormatting.RESET + message . code ) ) ;
-        
-        	return null ;
-
-    	}
-    	
     	switch ( message . code ) {
     	
-    		case SERVER_ERROR_WAIT_OTHER_TASK :
+    		case SERVER_ERROR_WAIT_OTHER_TASK:
     			
             	Minecraft . getMinecraft ( ) . thePlayer . addChatMessage ( new ChatComponentText ( EnumChatFormatting . AQUA + " [MineDonate] " + EnumChatFormatting.RESET + message . code ) ) ;
                 
         	return null ;
     		
-    		case MOD_ENABLED :
-    		case MOD_DISABLED :
+    		case MOD_ENABLED:
+    		case MOD_DISABLED:
 
     			MineDonate . m_Enabled = message . code == CodePacket . Code . MOD_ENABLED ;
         	
 			return null ;
 
-    		default :
-			break ;
+    		default : break;
 			
     	}
+    	
     	ShopGUI . instance . initGui ( ) ;
 
         return null ;
         
     }
     
-
 }

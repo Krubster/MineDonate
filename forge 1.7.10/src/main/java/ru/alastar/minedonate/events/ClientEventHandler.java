@@ -19,7 +19,7 @@ import ru.alastar.minedonate.proxies.ClientProxy;
 public class ClientEventHandler {
 
     @SubscribeEvent
-    public void onEvent(PlayerEvent.PlayerLoggedOutEvent event) {
+    public void onPlayerLoggedOutEvent(PlayerEvent.PlayerLoggedOutEvent event) {
 
         if ( ShopGUI . instance != null ) {
 
@@ -31,7 +31,7 @@ public class ClientEventHandler {
 
 	@SideOnly(Side.CLIENT)
     @SubscribeEvent(priority= EventPriority.NORMAL, receiveCanceled=true)
-    public void onEvent(InputEvent.KeyInputEvent event) {
+    public void onKeyInputEvent(InputEvent.KeyInputEvent event) {
     	
     	if ( ClientProxy . openShop . isPressed ( ) ) {
     		

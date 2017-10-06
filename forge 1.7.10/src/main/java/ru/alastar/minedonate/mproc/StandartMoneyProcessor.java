@@ -35,7 +35,7 @@ public class StandartMoneyProcessor extends AbstractMoneyProcessor {
 	}
 	
 	@Override
-	public int process ( Merch m, UUID buyer, int procMoney) {
+	public int processDeal ( Merch m, UUID buyer, int procMoney ) {
 				
 		if ( domp . isTwoSideProcessor ) {
 			

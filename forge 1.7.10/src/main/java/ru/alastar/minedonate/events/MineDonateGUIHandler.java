@@ -48,10 +48,10 @@ public class MineDonateGUIHandler implements IGuiHandler {
 	        		
 	        	}
 	
-	        	if ( lastBacked != null && ( MineDonate . getAccount ( ) . ms . currentItemStack != null || MineDonate . getAccount ( ) . ms . mobSelect ) ) {
+	        	if ( lastBacked != null && ( MineDonate . getAccount ( ) . manageSession . currentItemStack != null || MineDonate . getAccount ( ) . manageSession . mobSelect ) ) {
 	        	
-	        		MineDonate . getAccount ( ) . ms . mobSelect = false ;
-	        		
+	        		MineDonate . getAccount ( ) . manageSession . setMobSelect ( false ) ;
+
 	        		lastOpened = lastBacked ;
 	        		
 	        		lastBacked = null ;

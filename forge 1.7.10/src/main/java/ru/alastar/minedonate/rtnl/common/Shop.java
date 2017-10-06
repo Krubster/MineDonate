@@ -1,6 +1,6 @@
 package ru.alastar.minedonate.rtnl.common;
 
-import ru.alastar.minedonate.merch.categories.MerchCategory;
+import ru.alastar.minedonate.merch.MerchCategory;
 
 public class Shop {
 
@@ -17,6 +17,7 @@ public class Shop {
 	public String freezer ;
 	public String freezReason ;
 	
+	// поле для клиента
 	public boolean canVisibleFreezedText ;
 	
 	public Shop ( int _sid, MerchCategory [ ] _cats, String _owner, String _ownerName, String _name, boolean _isFreezed, String _freezer, String _freezReason, boolean _canVisibleFreezedText ) {

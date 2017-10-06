@@ -6,8 +6,8 @@ import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.gui.ShopGUI;
+import ru.alastar.minedonate.merch.MerchCategory;
 import ru.alastar.minedonate.merch.categories.ItemNBlocks;
-import ru.alastar.minedonate.merch.categories.MerchCategory;
 import ru.alastar.minedonate.merch.info.ShopInfo;
 import ru.alastar.minedonate.network.packets.AddMerchPacket;
 import ru.alastar.minedonate.rtnl.common.Shop;

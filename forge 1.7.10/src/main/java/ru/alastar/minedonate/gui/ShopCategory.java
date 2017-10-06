@@ -153,7 +153,7 @@ public abstract class ShopCategory extends GuiEntry {
     	
     	if ( dt == DrawType.BG ) {
     		
-        	g . drawGradientRectAccess(30, (int) (g . getScaledResolution ( ).getScaledHeight() * 0.1) + 19 + 20, g . getScaledResolution ( ).getScaledWidth() - 30, (int) ((g . getScaledResolution ( ).getScaledHeight()) - (g . getScaledResolution ( ).getScaledHeight() * 0.1)) - 5, -1072689136, -804253680);
+        	g . drawGradientRect(30, (int) (g . getScaledResolution ( ).getScaledHeight() * 0.1) + 19 + 20, g . getScaledResolution ( ).getScaledWidth() - 30, (int) ((g . getScaledResolution ( ).getScaledHeight()) - (g . getScaledResolution ( ).getScaledHeight() * 0.1)) - 5, -1072689136, -804253680);
 
     	} else if ( dt == DrawType . POST ) {
     		
@@ -209,8 +209,6 @@ public abstract class ShopCategory extends GuiEntry {
     	
     }
     
-	SubCategory subCat ;
-	public SubCategory [ ] subCats ;
 	int xOffset, yOffset ;
 	GuiButton openSubCatButton ;
 	
@@ -339,18 +337,4 @@ public abstract class ShopCategory extends GuiEntry {
     	
     }
 
-	public static class SubCategory {
-        
-		public int subCatId ;
-		public String displayName ;
-    	
-    	public SubCategory ( int _subCatId, String _displayName ) {
-    		
-    		subCatId = _subCatId ;
-    		displayName = _displayName ;
-    		
-    	}
-    	
-    }
-    
 }

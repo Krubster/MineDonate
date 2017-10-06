@@ -1,13 +1,11 @@
 package ru.log_inil.mc.minedonate.gui.items;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.EntityLivingBase;
 
-import org.lwjgl.Sys;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 import ru.alastar.minedonate.MineDonate;
@@ -49,7 +47,7 @@ public class GuiItemEntryOfEntityMerch extends GuiAbstractItemEntry {
 	
 			cmm = new ContextMenu ( 1, 1, cElements ) ;
 			
-			ContextMenuManager . addNewMenu ( cmm ) ;
+			// ContextMenuManager . addNewMenu ( cmm ) ;
 			
 		}
 		
@@ -64,8 +62,11 @@ public class GuiItemEntryOfEntityMerch extends GuiAbstractItemEntry {
 		super . updateDrawData ( ) ;
 		
 		limitLine = MineDonate.cfgUI.cats.entities.itemLeft + info.limit;
-		updateDataNeed = true ;
 		
+		ShopGUI.instance.getContextMenuManager().addNewMenu(cmm);
+
+		updateDataNeed = true ;
+				
 		return this ;
 		
 	}
