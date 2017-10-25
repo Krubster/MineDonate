@@ -76,7 +76,7 @@ public abstract class GuiAbstractItemEntry extends MCGuiAccessible implements Co
 				
 		if ( ! unShowed ) {
 			
-			unShow ( null ) ;
+			unShow ( ShopGUI.instance ) ;
 			unShowed = true ;
 			
 		}
@@ -102,7 +102,7 @@ public abstract class GuiAbstractItemEntry extends MCGuiAccessible implements Co
 		
 		unShowed = false ;
 		
-		if ( cmm != null ) {
+		if ( cmm != null && gui != null ) {
 			
 			ShopGUI.instance.getContextMenuManager() . addNewMenu ( cmm ) ;
 		

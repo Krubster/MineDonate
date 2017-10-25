@@ -70,6 +70,8 @@ public class ShopGUI extends MCGuiAccessible {
     
     public ShopGUI ( ) {
 
+    	contextMenuManager = new ContextMenuManager ( ) ;
+    	
     	cats = new ShopCategory [ ] { new ItemNBlockCategory ( "cat.items.base" ), new PrivilegieCategory ( "cat.privilegies" ), new RegionsCategory ( "cat.regions" ), new EntitiesCategory ( "cat.entities" ), new UsersShopsCategory ( "cat.shops" ) } ;
     
     	for ( ShopCategory sc: cats ) {

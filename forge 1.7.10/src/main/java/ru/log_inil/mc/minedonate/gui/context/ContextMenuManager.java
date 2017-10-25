@@ -54,7 +54,7 @@ public class ContextMenuManager {
 			
 			for ( ContextMenu cmm : menus ) {
 
-				if ( cmm . coordContains ( x, y ) ) {
+				if ( cmm != null && cmm . coordContains ( x, y ) ) {
 
 					currentDrawMenu = true ;
 					
