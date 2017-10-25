@@ -1,16 +1,22 @@
 package ru.alastar.minedonate.rtnl.common;
 
 import ru.alastar.minedonate.MineDonate;
+import ru.alastar.minedonate.merch.Merch;
+import ru.alastar.minedonate.merch.info.ItemInfo;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.item.ItemStack;
+
 public class Account {
 
 	public String id, name ;
 	public List < String > permissions ;
-	public ManageSession ms = new ManageSession ( ) ;
+	public ManageSession manageSession = new ManageSession ( ) ;
 	
 	public boolean freezShopCreate ;
 	public String freezShopCreateFreezer ;
@@ -134,4 +140,37 @@ public class Account {
 
 	}
 	
+	public int canAppendAnotherItemInShop ( Shop _s, int _catId ) {
+		
+		if ( manageSession . currentItemStack == null ) {
+			
+			return -1 ;
+			
+		}
+		
+		ItemInfo ii ;
+
+		for ( Merch m : _s . cats [ _catId ] . m_Merch . values ( ) ) {
+			
+			ii = ( ItemInfo ) m ;
+
+			if ( ii . limit >= 0 && ii . limit < ii . maxLimit && ItemStack . areItemStacksEqual ( ii . m_stack, manageSession . currentItemStack ) ) {
+				
+				return ii . merchId ;
+				
+			}
+			
+		}
+		
+		return -1 ;
+		
+	}
+	
+	@SideOnly(Side.CLIENT)
+    public boolean canAdd ( int shopId, int catId ) {
+        
+    	return ( shopId == 0 ? canEditShop ( "SERVER" ) : true ) ;
+    	
+    }
+    
 }

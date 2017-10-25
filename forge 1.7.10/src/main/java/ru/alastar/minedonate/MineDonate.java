@@ -15,6 +15,7 @@ import net.minecraft.entity.player.*;
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.gui.merge.ShopInventoryContainer;
 import ru.alastar.minedonate.merch.Merch;
+import ru.alastar.minedonate.merch.MerchCategory;
 import ru.alastar.minedonate.merch.categories.*;
 import ru.alastar.minedonate.mproc.AbstractMoneyProcessor;
 import ru.alastar.minedonate.plugin.PluginHelper;
@@ -37,7 +38,7 @@ import java.util.*;
 public class MineDonate {
 
     public static final String MODID = "MineDonate" ;
-    public static final String VERSION = "0.7.1.25" ;
+    public static final String VERSION = "0.7.1.27" ;
 
     public static boolean m_Enabled = false;
 
@@ -108,31 +109,25 @@ public class MineDonate {
     	
         try {
         	
+        	Shop s ;
+        	
         	if ( shops . isEmpty ( ) ) {
         	
-        		Shop s = new Shop ( 0, new MerchCategory [ ] { new ItemNBlocks ( 0, 0, cfg . itemsMoneyType ), new Privelegies ( 0, 1, cfg . privelegiesMoneyType ), new Regions ( 0, 2, cfg . regionMoneyType ), new Entities ( 0, 3, cfg . entitiesMoneyType ), new UsersShops ( ) }, "SERVER", "SERVER","Server shop", false, null, null, false ) ;
+        		s = new Shop ( 0, new MerchCategory [ ] { new ItemNBlocks ( 0, 0, cfg . itemsMoneyType ), new Privelegies ( 0, 1, cfg . privelegiesMoneyType ), new Regions ( 0, 2, cfg . regionMoneyType ), new Entities ( 0, 3, cfg . entitiesMoneyType ), new UsersShops ( ) }, "SERVER", "SERVER","Server shop", false, null, null, false ) ;
         		shops . put ( 0, s ) ;
     			
+        	} else {
+        		
+        		s = shops . get ( 0 ) ;
+        		
         	}
      	
-        	Statement stat = ModDataBase . getNewStatement ( "main" ) ;
-        	ResultSet rs ;
-
-            for ( int i = 0; i < shops . get ( 0 ) . cats . length ; i ++ ) {
+            for ( MerchCategory mc : s . cats ) { 
             	
-                if ( shops . get ( 0 ) . cats [ i ] . isEnabled ( ) ) {
-          
-                    rs = stat . executeQuery ( "SELECT * FROM " + shops . get ( 0 ) . cats [ i ] . getDatabaseTable ( ) + ";" ) ;
-                    
-                    shops . get ( 0 ) . cats [ i ] . loadMerchFromDB ( rs ) ;
-                    
-                    rs . close ( ) ;
-                    
-                }
-                
+            	mc . clearCategory ( ) ;
+            	mc . loadCategory ( ) ;
+            	
             }
-            
-    		ModDataBase . closeStatementAndConnection ( stat ) ;
             
         } catch ( Exception ex ) {
         	
@@ -202,14 +197,6 @@ public class MineDonate {
 		return ( checkShopExists ( shopId ) ? shops . get ( shopId ) . cats . length > catId : false ) ;
     	
 	}
-
-    public static void modify ( int shopId, int category, int id, Merch info ) {
-
-    	if ( ! checkCatExists ( shopId, category ) ) { return ; }
-
-        shops . get ( shopId ) . cats [ category ] . updateMerch ( id, info ) ;
-
-    }
 
     public static boolean userShopExistsInDataBase ( int shopId ) {
 
@@ -326,7 +313,7 @@ public class MineDonate {
                 	                    
                     ResultSet rs = stat . executeQuery ( "SELECT * FROM " + shops . get ( shopId ) . cats [ i ] . getDatabaseTable ( ) + " WHERE shopId = " + shopId + ";" ) ;
                     
-                    shops . get ( shopId ) . cats [ i ] . loadMerchFromDB ( rs ) ;
+                    shops . get ( shopId ) . cats [ i ] . loadCategoryFromObject ( rs ) ;
                     
                     rs . close ( ) ;
                     
@@ -444,7 +431,7 @@ public class MineDonate {
 		
     }
 		
-	public static Account getAccount0 ( UUID user, boolean getWithRegister, boolean getWithMoneyRegister ) {
+	public static Account getAccount0 ( UUID user, boolean getWithRegister ) {
 
 		if ( users . containsKey ( user ) ) {
 			
@@ -536,25 +523,25 @@ public class MineDonate {
 	
 	public static Account getAccount ( EntityPlayer epmp ) {
 		
-    	return getAccount0 ( epmp . getGameProfile ( ) . getId ( ), false, false ) ;
+    	return getAccount0 ( epmp . getGameProfile ( ) . getId ( ), false ) ;
 		
 	}
     
 	public static Account getAccountWithRegister ( UUID uid ) {
 		
-    	return getAccount0 ( uid, true, true ) ;
+    	return getAccount0 ( uid, true ) ;
 		
 	}
 	
 	public static Account getAccountWithoutMoneyRegister ( UUID uid ) {
 		
-    	return getAccount0 ( uid, true, false ) ;
+    	return getAccount0 ( uid, true ) ;
 		
 	}
     
 	public static Account getAccountWithoutRegister ( UUID uid ) {
 		
-    	return getAccount0 ( uid, false, false ) ;
+    	return getAccount0 ( uid, false ) ;
 		
 	}
 	
@@ -658,11 +645,13 @@ public class MineDonate {
     	ShopGUI . instance . moneyArea . updateDrawData ( ) ;
     	
     }
-	
-    public static boolean canAdd ( int shopId, int catId ) {
     
-    	return acc == null ? false : ( shopId == 0 ? acc . canEditShop ( "SERVER" ) : true ) ;
-    	
+    public static void modify ( int shopId, int category, int id, Merch info ) {
+
+    	if ( ! checkCatExists ( shopId, category ) ) { return ; }
+
+        shops . get ( shopId ) . cats [ category ] . updateMerch ( id, info ) ;
+
     }
-    
+
 }

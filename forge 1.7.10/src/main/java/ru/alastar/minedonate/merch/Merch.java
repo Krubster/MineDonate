@@ -10,8 +10,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;
 
 import ru.alastar.minedonate.MineDonate;
-import ru.alastar.minedonate.network.manage.packets.EditMerchNumberPacket;
-import ru.alastar.minedonate.network.manage.packets.EditMerchStringPacket;
+import ru.alastar.minedonate.network.manage.packets.EditMerchFieldPacket;
 
 /**
  * Created by Alastar on 20.07.2017.
@@ -65,6 +64,11 @@ public abstract class Merch {
     	
     }
     
+	public void updateField ( EditMerchFieldPacket . FieldType _type, EditMerchFieldPacket . FieldName _name, Object _data ) {	
+		
+	}
+	
+    /*
 	public void updateNumber ( EditMerchNumberPacket . Type type, int number ) {	
 		
 		if ( type == EditMerchNumberPacket . Type . COST ) {
@@ -75,9 +79,9 @@ public abstract class Merch {
 			
 	}
 	
-	public void updateString ( EditMerchStringPacket . Type type, String str ) {
+	public void updateString ( EditMerchFieldPacket . Type type, String str ) {
 		
-	}
+	}*/
 	
     public String getBoughtMessage ( ) {
     	
@@ -142,7 +146,7 @@ public abstract class Merch {
 
 	public int withdrawMoney ( UUID buyer, int amount ) {
 
-        return MineDonate.getMoneyProcessor(getMoneyType()).process(this, buyer, amount);
+        return MineDonate.getMoneyProcessor(getMoneyType()).processDeal(this, buyer, amount);
 
     }
 	

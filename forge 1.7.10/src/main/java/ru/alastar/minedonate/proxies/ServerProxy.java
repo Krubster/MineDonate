@@ -13,6 +13,7 @@ import ru.alastar.minedonate.commands.AddMoneyCommand;
 import ru.alastar.minedonate.events.EntitySelectEventHandler;
 import ru.alastar.minedonate.events.PlayerJoinEventHandler;
 import ru.alastar.minedonate.plugin.PluginHelper;
+import ru.alastar.minedonate.rtnl.ModDataBase;
 import ru.alastar.minedonate.rtnl.ModShopLogger;
 
 /**
@@ -56,7 +57,7 @@ public class ServerProxy extends CommonProxy {
     	
         try {
 		
-        	Class . forName ( "ru.alastar.minedonate.rtnl.ModDataBase" ) . getMethod ( "initDataBase" ) . invoke ( null ) ;
+        	Class . forName ( ModDataBase . class . getName ( ) ) . getMethod ( "initDataBase" ) . invoke ( null ) ;
 		
         } catch ( Exception ex ) {
 			
@@ -89,7 +90,20 @@ public class ServerProxy extends CommonProxy {
         	
         }
         
-    	PluginHelper . loadPlugins ( ) ;
+    	try {
+			
+    		PluginHelper . loadPlugins ( ) ;
+			
+		} catch ( NoSuchMethodException | SecurityException ex ) {
+			
+			MineDonate . cfg . enable = false ;
+			 
+			ex . printStackTrace ( ) ;
+			
+			return ;
+			
+		}
+    	
     	MineDonate . loadMoneyProccessors ( ) ;
     	
         event . registerServerCommand ( new AddMoneyCommand ( ) ) ;

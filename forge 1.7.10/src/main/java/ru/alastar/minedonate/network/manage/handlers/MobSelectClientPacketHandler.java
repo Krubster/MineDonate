@@ -16,7 +16,7 @@ public class MobSelectClientPacketHandler implements IMessageHandler < MobSelect
     @Override
     public IMessage onMessage ( MobSelectPacket message, MessageContext ctx ) {
 
-    	MineDonate . getAccount ( ) . ms . mobSelect = true ;
+    	MineDonate . getAccount ( ) . manageSession . setMobSelect ( true ) ;
 
     	MineDonate . proxy . clientOpenGui ( MineDonateGUIHandler . SHOP_ID ) ;
   

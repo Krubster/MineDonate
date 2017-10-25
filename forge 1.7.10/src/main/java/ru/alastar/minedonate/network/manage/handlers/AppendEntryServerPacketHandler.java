@@ -8,7 +8,7 @@ import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.network.manage.packets.AppendEntryPacket;
 import ru.alastar.minedonate.network.INetworkTask;
 import ru.alastar.minedonate.network.manage.packets.ManageResponsePacket;
-import ru.alastar.minedonate.rtnl.ModManager;
+import ru.alastar.minedonate.rtnl.ModShopManager;
 import ru.alastar.minedonate.rtnl.ModNetworkTaskProcessor;
 import ru.alastar.minedonate.rtnl.common.Account;
 import ru.alastar.minedonate.rtnl.common.Shop;
@@ -61,13 +61,13 @@ public class AppendEntryServerPacketHandler implements IMessageHandler < AppendE
 				
 				case ITEMS :
 					
-					if ( acc . ms . currentItemStack == null ) {
+					if ( acc .manageSession . currentItemStack == null ) {
 						
 						return new ManageResponsePacket ( ManageResponsePacket.ResponseType.OBJ, ManageResponsePacket.ResponseCode.UPPEND, ManageResponsePacket.ResponseStatus.ERROR_UNKNOWN ) ;
 
 					}
 					
-					int merchId = ModManager . canUppendAnotherItemInShop ( acc, s, message . catId ) ;
+					int merchId = acc . canAppendAnotherItemInShop ( s, message . catId ) ;
 					
 					if ( merchId == -1 ) {
 						
@@ -75,7 +75,7 @@ public class AppendEntryServerPacketHandler implements IMessageHandler < AppendE
 		
 					}		
 					
-					ModManager . uppendItemInShop ( acc, s, message . catId, merchId ) ;
+					ModShopManager . appendItemInShop ( acc, s, message . catId, merchId ) ;
 
 				break ;	
 				

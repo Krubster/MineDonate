@@ -16,7 +16,7 @@ public class ItemMergedClientPacketHandler implements IMessageHandler < ItemMerg
     @Override
     public IMessage onMessage ( ItemMergedPacket message, MessageContext ctx ) {
     	
-    	MineDonate . acc . ms . currentItemStack = message . is ;
+    	MineDonate . acc . manageSession . setItemStack ( message . is ) ;
     	
     	if ( message . is != null && MineDonateGUIHandler . lastBacked != null ) {
     		

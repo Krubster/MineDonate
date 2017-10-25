@@ -20,7 +20,7 @@ public class AccountInfoPacketHandler implements IMessageHandler < AccountInfoPa
 
     @Override 
     public IMessage onMessage ( AccountInfoPacket message, MessageContext ctx ) {
-    	
+
     	MineDonate . setAccount ( new Account ( message . id, message . userName, message . permissions, message.freezShopCreate, message.freezShopCreateFreezer, message.freezShopCreateReason, message.shopsCount ) ) ;
 
     	for ( AccountInfoPacket . MoneySystem ms : message . mSystems ) {

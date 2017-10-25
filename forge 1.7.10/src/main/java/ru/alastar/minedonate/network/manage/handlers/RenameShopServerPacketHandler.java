@@ -10,7 +10,7 @@ import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.network.INetworkTask;
 import ru.alastar.minedonate.network.manage.packets.ManageResponsePacket;
 import ru.alastar.minedonate.network.manage.packets.RenameShopPacket;
-import ru.alastar.minedonate.rtnl.ModManager;
+import ru.alastar.minedonate.rtnl.ModShopManager;
 import ru.alastar.minedonate.rtnl.ModNetworkTaskProcessor;
 import ru.alastar.minedonate.rtnl.common.Shop;
 
@@ -56,7 +56,7 @@ public class RenameShopServerPacketHandler implements IMessageHandler < RenameSh
 
 			}
 			
-			ModManager . renameShop ( s, message . name ) ;
+			ModShopManager . renameShop ( s, message . name ) ;
 			
 	        return new ManageResponsePacket ( ManageResponsePacket.ResponseType.SHOP, ManageResponsePacket.ResponseCode.RENAME, ManageResponsePacket.ResponseStatus.OK ) ;
 

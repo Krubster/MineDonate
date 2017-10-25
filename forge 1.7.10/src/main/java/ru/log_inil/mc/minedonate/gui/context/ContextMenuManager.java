@@ -8,13 +8,13 @@ import java.util.List;
 
 public class ContextMenuManager {
 
-	static List < ContextMenu > menus = new ArrayList < > ( ) ;
-	static boolean currentDrawMenu = false ;
-	static ContextMenu currentMenu ;
+	List < ContextMenu > menus = new ArrayList < > ( ) ;
+	boolean currentDrawMenu = false ;
+	ContextMenu currentMenu ;
 	
-	static MCGuiAccessible gs ;
+	MCGuiAccessible gs ;
 	
-	public static void draw ( MCGuiAccessible _gs, int mouseX, int mouseY ) {
+	public void draw ( MCGuiAccessible _gs, int mouseX, int mouseY ) {
 		
 		gs = _gs ;
 		
@@ -26,7 +26,7 @@ public class ContextMenuManager {
 		
 	}
 	
-	public static void drawDebug ( MCGuiAccessible _gs, int mouseX, int mouseY ) {
+	public void drawDebug ( MCGuiAccessible _gs, int mouseX, int mouseY ) {
 		
 		gs = _gs ;
 		
@@ -44,7 +44,7 @@ public class ContextMenuManager {
 		
 	}
 
-	public static boolean click ( ShopGUI gs, int x, int y, int t ) {
+	public boolean click ( ShopGUI gs, int x, int y, int t ) {
 
 		if ( t == 1 ) {
 			
@@ -54,7 +54,7 @@ public class ContextMenuManager {
 			
 			for ( ContextMenu cmm : menus ) {
 
-				if ( cmm . coordContains ( x, y ) ) {
+				if ( cmm != null && cmm . coordContains ( x, y ) ) {
 
 					currentDrawMenu = true ;
 					
@@ -112,19 +112,19 @@ public class ContextMenuManager {
 		
 	}
 	
-	public static void addNewMenu ( ContextMenu cmm ) {
+	public void addNewMenu ( ContextMenu cmm ) {
 		
 		menus . add ( cmm ) ;
 		
 	}
 
-	public static void removeMenu ( ContextMenu cmm ) {
+	public void removeMenu ( ContextMenu cmm ) {
 
 		menus . remove ( cmm ) ;
 
 	}
 
-	public static void clean() {
+	public void clean ( ) {
 		
 		menus . clear ( ) ;
 		

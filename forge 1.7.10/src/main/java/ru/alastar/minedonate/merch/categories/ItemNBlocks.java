@@ -5,6 +5,7 @@ import net.minecraft.item.ItemStack;
 
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
+import ru.alastar.minedonate.merch.MerchCategory;
 import ru.alastar.minedonate.merch.info.ItemInfo;
 import ru.alastar.minedonate.rtnl.ModDataBase;
 import ru.alastar.minedonate.rtnl.ModNetworkRegistry;
@@ -21,7 +22,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 public class ItemNBlocks extends MerchCategory {
 
-	boolean enabled = MineDonate.cfg.sellItems ;
+	boolean enabled = MineDonate . cfg . sellItems ;
 
 	public ItemNBlocks ( int _shopId, int _catId, String _moneyType ) {
 	
@@ -30,7 +31,24 @@ public class ItemNBlocks extends MerchCategory {
 	}
 
     @Override
-    public void loadMerchFromDB(ResultSet rs) {
+    public void loadCategory ( ) throws Exception {
+    
+    	Statement stat = ModDataBase . getNewStatement ( getDatabaseLinkName ( ) ) ;
+    	
+    	ResultSet rs = stat . executeQuery ( "SELECT * FROM " + getDatabaseTable ( ) ) ;
+    	
+    	loadCategoryFromObject ( rs ) ;
+    	
+    	rs . close ( ) ;
+
+    	ModDataBase . closeStatementAndConnection ( stat ) ;
+    	
+    }
+    
+    @Override
+    public void loadCategoryFromObject ( Object o ) {
+    	
+    	ResultSet rs = ( ResultSet ) o ;
     	
         try {
         	

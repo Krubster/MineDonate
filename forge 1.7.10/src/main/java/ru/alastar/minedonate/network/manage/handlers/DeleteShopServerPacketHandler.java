@@ -10,7 +10,7 @@ import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.network.INetworkTask;
 import ru.alastar.minedonate.network.manage.packets.DeleteShopPacket;
 import ru.alastar.minedonate.network.manage.packets.ManageResponsePacket;
-import ru.alastar.minedonate.rtnl.ModManager;
+import ru.alastar.minedonate.rtnl.ModShopManager;
 import ru.alastar.minedonate.rtnl.ModNetworkTaskProcessor;
 import ru.alastar.minedonate.rtnl.common.Shop;
 
@@ -50,7 +50,7 @@ public class DeleteShopServerPacketHandler implements IMessageHandler < DeleteSh
 
 			}
 			
-			ModManager . deleteShop ( s ) ;
+			ModShopManager . deleteShop ( s ) ;
 			
 	        return new ManageResponsePacket ( ManageResponsePacket.ResponseType.SHOP, ManageResponsePacket.ResponseCode.REMOVE, ManageResponsePacket.ResponseStatus.OK ) ;
 

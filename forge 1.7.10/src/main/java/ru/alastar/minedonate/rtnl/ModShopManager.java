@@ -11,13 +11,12 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
-import ru.alastar.minedonate.merch.categories.MerchCategory;
+import ru.alastar.minedonate.merch.MerchCategory;
 import ru.alastar.minedonate.merch.categories.UsersShops;
 import ru.alastar.minedonate.merch.info.EntityInfo;
 import ru.alastar.minedonate.merch.info.ItemInfo;
 import ru.alastar.minedonate.merch.info.ShopInfo;
-import ru.alastar.minedonate.network.manage.packets.EditMerchNumberPacket;
-import ru.alastar.minedonate.network.manage.packets.EditMerchStringPacket;
+import ru.alastar.minedonate.network.manage.packets.EditMerchFieldPacket;
 import ru.alastar.minedonate.rtnl.common.Account;
 import ru.alastar.minedonate.rtnl.common.Shop;
 
@@ -32,7 +31,7 @@ import java.util.UUID;
  * 	Все вызовы делаются из network.manage.handlers
  */
 
-public class ModManager {
+public class ModShopManager {
 
 	public static void createShop ( UUID owner, String ownerName, String name ) {
 		
@@ -288,7 +287,7 @@ public class ModManager {
 
 	public static void addEntityToShop ( Account acc, Shop s, int catId, int limit, int cost, String name ) {
 
-		EntityInfo info = new EntityInfo(s.sid, catId, s.cats[catId].getNextMerchId(), 0, Integer.valueOf(cost), acc.ms.currentMob, name, limit);
+		EntityInfo info = new EntityInfo(s.sid, catId, s.cats[catId].getNextMerchId(), 0, Integer.valueOf(cost), acc.manageSession.currentMob, name, limit);
         
         s.cats[catId].addMerch(info);
        
@@ -323,39 +322,13 @@ public class ModManager {
 
 	}
 	
-	public static int canUppendAnotherItemInShop ( Account acc, Shop s, int catId ) {
-	
-		if ( acc . ms . currentItemStack == null ) {
-			
-			return -1 ;
-			
-		}
-		
-		ItemInfo ii ;
-
-		for ( Merch m : s . cats [ catId ] . m_Merch . values ( ) ) {
-			
-			ii = ( ItemInfo ) m ;
-
-			if ( ii . limit >= 0 && ii . limit < 10 && ItemStack . areItemStacksEqual ( ii . m_stack, acc . ms . currentItemStack ) ) {
-				
-				return ii . merchId ;
-				
-			}
-			
-		}
-		
-		return -1 ;
-		
-	}
-	
-	public static void uppendItemInShop ( Account acc, Shop s, int catId, int merchId ) {
+	public static void appendItemInShop ( Account acc, Shop s, int catId, int merchId ) {
 	
 		ItemInfo ii = ( ItemInfo ) s . cats [ catId ] . getMerch ( merchId ) ;
 
-		if ( ii . limit < 10 && ItemStack . areItemStacksEqual ( ii . m_stack, acc . ms . currentItemStack ) ) {
+		if ( ii . limit < 10 && ItemStack . areItemStacksEqual ( ii . m_stack, acc . manageSession . currentItemStack ) ) {
 			
-			acc . ms . currentItemStack = null ;
+			acc . manageSession . setItemStack ( null ) ;
 
 			ii . limit ++ ;
 
@@ -369,7 +342,7 @@ public class ModManager {
 	
 	public static void addItemToShop ( Account acc, Shop s, int catId, int limit, int cost, String name ) {
 		
-    	ItemInfo info = new ItemInfo(s.sid, catId, s.cats[catId].getNextMerchId(), 0, Integer.valueOf(cost), name, Integer.valueOf(limit), acc.ms.currentItemStack);
+    	ItemInfo info = new ItemInfo(s.sid, catId, s.cats[catId].getNextMerchId(), 0, Integer.valueOf(cost), name, Integer.valueOf(limit), acc.manageSession.currentItemStack);
 
         PreparedStatement pstat = null ;
 
@@ -379,8 +352,8 @@ public class ModManager {
          
             NBTTagCompound nbt = new NBTTagCompound ( ) ;
             
-            acc . ms . currentItemStack . writeToNBT ( nbt ) ;
-            acc . ms . currentItemStack = null ;
+            acc . manageSession . currentItemStack . writeToNBT ( nbt ) ;
+			acc . manageSession . setItemStack ( null ) ;
             
             s . cats [ catId ] . addMerch ( info ) ;
             
@@ -456,6 +429,21 @@ public class ModManager {
 		
 	}
 
+	public static void editShopEntryField ( EntityPlayerMP player, Shop s, int catId, int merchId, EditMerchFieldPacket . FieldType type, EditMerchFieldPacket . FieldName name, Object data ) {
+		
+		MerchCategory mc = s . cats [ catId ] ;
+		Merch m = mc . getMerch ( merchId ) ;
+		
+		m . updateField ( type, name, data ) ;
+		
+		mc . updateMerch ( m . getId ( ), m ) ;
+		
+        ModNetworkRegistry . sendToAllMerchInfoPacket ( m ) ;
+
+	}
+	
+	
+	/*
 	public static void editShopEntryNumber ( EntityPlayerMP player, Shop s, int catId, int merchId, EditMerchNumberPacket . Type type, int number) {
 		
 		MerchCategory mc = s . cats [ catId ] ;
@@ -469,7 +457,7 @@ public class ModManager {
 
 	}
 	
-	public static void editShopEntryString ( EntityPlayerMP player, Shop s, int catId, int merchId, EditMerchStringPacket . Type type, String str ) {
+	public static void editShopEntryString ( EntityPlayerMP player, Shop s, int catId, int merchId, EditMerchFieldPacket . Type type, String str ) {
 		
 		MerchCategory mc = s . cats [ catId ] ;
 		Merch m = mc . getMerch ( merchId ) ;
@@ -480,6 +468,6 @@ public class ModManager {
 		
         ModNetworkRegistry . sendToAllMerchInfoPacket ( m ) ;
 
-	}
+	}*/
 	
 }

@@ -76,7 +76,7 @@ public class EntitiesCategory extends ShopCategory {
     	
     	g . getButtonList ( ) . add ( addButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), rightButton . xPosition -  MineDonate . cfgUI . cats . entities . addButton . width, rightButton . yPosition, MineDonate . cfgUI . cats . entities . addButton . width, MineDonate . cfgUI . cats . entities . addButton . height, MineDonate . cfgUI . cats . entities . addButton . text, false ) ) ;
     	
-    	addButton . visible = addButton . enabled = MineDonate . canAdd ( g . getCurrentShopId ( ), catId ) ;
+    	addButton . visible = addButton . enabled = MineDonate . getAccount ( ) == null ? false : MineDonate . getAccount ( ) . canAdd ( g . getCurrentShopId ( ), catId ) ;
     	
     	super.updateButtons(g, page);
     	

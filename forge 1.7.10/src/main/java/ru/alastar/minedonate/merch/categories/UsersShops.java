@@ -4,10 +4,13 @@ import net.minecraft.entity.player.EntityPlayerMP;
 
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.merch.Merch;
+import ru.alastar.minedonate.merch.MerchCategory;
 import ru.alastar.minedonate.merch.info.ShopInfo;
+import ru.alastar.minedonate.rtnl.ModDataBase;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,6 +24,28 @@ public class UsersShops extends MerchCategory {
 		super ( 0, 4, null ) ;
 		
 	}
+
+    @Override
+    public String getDatabaseTable ( ) {
+        return MineDonate.cfg.dbShops;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
+    
+    @Override
+    public void setEnabled ( boolean _enabled ) {
+    	
+    	enabled = _enabled ;
+    	
+    }
+    
+    @Override
+    public Merch constructMerch() {
+        return new ShopInfo();
+    }
 
     public ShopInfo getShop ( int sid ) {
     
@@ -36,8 +61,26 @@ public class UsersShops extends MerchCategory {
         map . put ( ( ( ShopInfo ) m ) . shopId, ( ShopInfo ) m ) ;
 
     }
+
     @Override
-    public void loadMerchFromDB(ResultSet rs) {
+    public void loadCategory ( ) throws Exception {
+    
+    	Statement stat = ModDataBase . getNewStatement ( getDatabaseLinkName ( ) ) ;
+    	
+    	ResultSet rs = stat . executeQuery ( "SELECT * FROM " + getDatabaseTable ( ) ) ;
+    	
+    	loadCategoryFromObject ( rs ) ;
+    	
+    	rs . close ( ) ;
+
+    	ModDataBase . closeStatementAndConnection ( stat ) ;
+    	
+    }
+    
+    @Override
+    public void loadCategoryFromObject ( Object o ) {
+    	
+    	ResultSet rs = ( ResultSet ) o ;
     	
         try {        	
         	
@@ -59,28 +102,6 @@ public class UsersShops extends MerchCategory {
 
     }
 
-    @Override
-    public Merch constructMerch() {
-        return new ShopInfo();
-    }
-
-    @Override
-    public String getDatabaseTable ( ) {
-        return MineDonate.cfg.dbShops;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return enabled;
-    }
-    
-    @Override
-    public void setEnabled ( boolean _enabled ) {
-    	
-    	enabled = _enabled ;
-    	
-    }
-    
     @Override
     public void giveMerch(EntityPlayerMP player, Merch merch, int amount) {
 

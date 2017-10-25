@@ -3,7 +3,6 @@ package ru.log_inil.mc.minedonate.gui.items;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.item.ItemStack;
 
@@ -50,8 +49,6 @@ public class GuiItemEntryOfItemMerch extends GuiAbstractItemEntry {
 	
 			cmm = new ContextMenu ( 1, 1, cElements ) ;
 			
-			ContextMenuManager . addNewMenu ( cmm ) ;
-
 		}
 		
 	}
@@ -65,6 +62,8 @@ public class GuiItemEntryOfItemMerch extends GuiAbstractItemEntry {
 		limitLine = MineDonate . cfgUI . cats . itemsAndBlocks . itemLeft + info . limit ;
 		stackCountLine = Integer . toString ( info . modified * info.stack_data.getInteger("Count") ) ;
 		
+		ShopGUI.instance.getContextMenuManager().addNewMenu(cmm);
+
 		updateDataNeed = true ;
 		
 		return this ;
@@ -149,7 +148,7 @@ public class GuiItemEntryOfItemMerch extends GuiAbstractItemEntry {
 				
 				if ( mouseY >= y_offset - 2 && y_offset + 20 >= mouseY ) {
 					
-					gi.parent.renderToolTipAccess(info.m_stack, mouseX, mouseY);
+					gi.parent.renderToolTip(info.m_stack, mouseX, mouseY);
 					RenderHelper . disableStandardItemLighting ( ) ;
 
 				}

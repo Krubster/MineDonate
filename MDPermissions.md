@@ -26,4 +26,4 @@
 
 > \*2 \- Регистр не критичен 
 
-> Вписывать в бд таблицу(dbModPermissionsTable(дефолт: md_perms))
+> Вписывать в бд таблицу(dbModPermissionsTable(по умолчанию: md_perms))

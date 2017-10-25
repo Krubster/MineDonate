@@ -5,7 +5,7 @@ import net.minecraft.client.renderer.RenderHelper;
 import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.Utils;
 import ru.alastar.minedonate.gui.ShopGUI;
-import ru.alastar.minedonate.rtnl.ModManager;
+import ru.alastar.minedonate.rtnl.ModShopManager;
 import ru.alastar.minedonate.rtnl.ModNetworkRegistry;
 import ru.log_inil.mc.minedonate.gui.DrawType;
 import ru.log_inil.mc.minedonate.gui.GuiFrame;
@@ -59,12 +59,12 @@ public class GuiFrameAddItem extends GuiFrame {
     	costField . drawTextBox ( ) ;
     	limitField . drawTextBox ( ) ;
     	
-    	if ( drawItemStack && MineDonate . getAccount ( ) . ms . currentItemStack != null ) {
+    	if ( drawItemStack && MineDonate . getAccount ( ) . manageSession . currentItemStack != null ) {
     		
 			RenderHelper . enableGUIStandardItemLighting ( ) ;
 			
-    		g . getItemRender ( ) . renderItemAndEffectIntoGUI ( g . getFontRenderer ( ), g . mc . getTextureManager ( ), MineDonate.getAccount().ms.currentItemStack, posX + 8, posY + 16 ) ;
-			g . getItemRender ( ) . renderItemOverlayIntoGUI ( g . getFontRenderer ( ), g . mc . getTextureManager ( ), MineDonate.getAccount().ms.currentItemStack, posX + 8, posY + 16 , Integer.toString(MineDonate.getAccount().ms.currentItemStack.stackSize) ) ;
+    		g . getItemRender ( ) . renderItemAndEffectIntoGUI ( g . getFontRenderer ( ), g . mc . getTextureManager ( ), MineDonate.getAccount().manageSession.currentItemStack, posX + 8, posY + 16 ) ;
+			g . getItemRender ( ) . renderItemOverlayIntoGUI ( g . getFontRenderer ( ), g . mc . getTextureManager ( ), MineDonate.getAccount().manageSession.currentItemStack, posX + 8, posY + 16 , Integer.toString(MineDonate.getAccount().manageSession.currentItemStack.stackSize) ) ;
 
 			RenderHelper . disableStandardItemLighting ( ) ;
 
@@ -77,7 +77,7 @@ public class GuiFrameAddItem extends GuiFrame {
     GuiGradientTextField nameField, costField, limitField ; 
     
     String fieldText, fieldHolder ;
-    boolean canUppend, unShowDropFix ;
+    boolean canAppend, unShowDropFix ;
     
     @Override
 	public void postShow ( ShopGUI g ) {
@@ -90,9 +90,9 @@ public class GuiFrameAddItem extends GuiFrame {
 		
     	super . postShow ( g ) ;
     	
-    	if ( canUppend ) {
+    	if ( canAppend ) {
 
-    		canUppend = ModManager . canUppendAnotherItemInShop ( MineDonate . getAccount ( ), MineDonate . shops . get ( g . getCurrentShopId ( ) ), catId ) != -1 ;
+    		canAppend = MineDonate . getAccount ( ) . canAppendAnotherItemInShop ( MineDonate . shops . get ( g . getCurrentShopId ( ) ), catId ) != -1 ;
     		
     	}
     	
@@ -132,7 +132,7 @@ public class GuiFrameAddItem extends GuiFrame {
     	
     	if ( uppendChangesButton != null ) {
     	
-    		uppendChangesButton . visible = uppendChangesButton . enabled = canUppend ;
+    		uppendChangesButton . visible = uppendChangesButton . enabled = canAppend ;
     	
     	}
 
@@ -159,7 +159,7 @@ public class GuiFrameAddItem extends GuiFrame {
 		}
 		
 		nameField . setText ( fieldText != null ? fieldText : "" ) ;
-		nameField . setTextHolder ( MineDonate.getAccount().ms.currentItemStack != null ? MineDonate.getAccount().ms.currentItemStack.getDisplayName() : fieldHolder ) ;
+		nameField . setTextHolder ( MineDonate.getAccount().manageSession.currentItemStack != null ? MineDonate.getAccount().manageSession.currentItemStack.getDisplayName() : fieldHolder ) ;
 		
 		nameField . fieldBorderColor = fieldBorderColor ;
 
@@ -227,7 +227,7 @@ public class GuiFrameAddItem extends GuiFrame {
     	
     	if ( this . isVisible ( ) ) {
 
-    		if ( canUppend && uppendChangesButton != null ) {
+    		if ( canAppend && uppendChangesButton != null ) {
         		
     			g . addButton ( uppendChangesButton, false ) ;
     		
@@ -249,7 +249,7 @@ public class GuiFrameAddItem extends GuiFrame {
     	g . removeButton ( saveChangesButton ) ;
     	g . removeButton ( cancelChangesButton ) ;
 
-		if ( unShowDropFix && MineDonate . getAccount ( ) . ms . currentItemStack != null ) {
+		if ( unShowDropFix && MineDonate . getAccount ( ) . manageSession . currentItemStack != null ) {
 			new Exception().printStackTrace();
 			ModNetworkRegistry . sendToServerCancelShopInventoryPacket ( ) ;
 			
@@ -313,7 +313,7 @@ public class GuiFrameAddItem extends GuiFrame {
     			
     		} else {
     			
-    			limit = MineDonate . getAccount ( ) . ms . currentItemStack . stackSize ;
+    			limit = MineDonate . getAccount ( ) . manageSession . currentItemStack . stackSize ;
     			
     		}
     		
@@ -329,7 +329,7 @@ public class GuiFrameAddItem extends GuiFrame {
     	
     	if ( uppendChangesButton != null && b . id == uppendChangesButton . id ) {
         	        	
-    		if ( MineDonate . getAccount ( ) . ms . currentItemStack != null ) {
+    		if ( MineDonate . getAccount ( ) . manageSession . currentItemStack != null ) {
     			
     			ModNetworkRegistry . sendToServerUppendEntryPacket ( shopId, catId ) ;
     			
@@ -343,7 +343,7 @@ public class GuiFrameAddItem extends GuiFrame {
     	
     	if ( b . id == cancelChangesButton . id ) {
 
-    		if ( MineDonate . getAccount ( ) . ms . currentItemStack != null ) {
+    		if ( MineDonate . getAccount ( ) . manageSession . currentItemStack != null ) {
     			
     			ModNetworkRegistry . sendToServerCancelShopInventoryPacket ( ) ;
     			
@@ -473,7 +473,7 @@ public class GuiFrameAddItem extends GuiFrame {
 
 		shopId = _shopId ;
 		catId = _catId ;
-		canUppend = _canUppend ;
+		canAppend = _canUppend ;
 		
 	}
     

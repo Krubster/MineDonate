@@ -56,7 +56,7 @@ public class BuyPacketHandler implements IMessageHandler<BuyPacket, IMessage>, I
 
                     } else {
 
-                        if (info.canBuy(serverPlayer, message.amount)) {
+                        if ( info . canBuy ( serverPlayer, message . amount ) ) {
 
                             int procMoney = -1;
 

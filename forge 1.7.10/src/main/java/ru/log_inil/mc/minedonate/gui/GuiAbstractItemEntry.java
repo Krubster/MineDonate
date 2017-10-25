@@ -76,7 +76,7 @@ public abstract class GuiAbstractItemEntry extends MCGuiAccessible implements Co
 				
 		if ( ! unShowed ) {
 			
-			unShow ( null ) ;
+			unShow ( ShopGUI.instance ) ;
 			unShowed = true ;
 			
 		}
@@ -87,7 +87,7 @@ public abstract class GuiAbstractItemEntry extends MCGuiAccessible implements Co
 
 		if ( cmm != null ) {
 
-			ContextMenuManager . removeMenu ( cmm ) ;
+			g . getContextMenuManager ( ) . removeMenu ( cmm ) ;
 			
 		}
 		
@@ -102,10 +102,9 @@ public abstract class GuiAbstractItemEntry extends MCGuiAccessible implements Co
 		
 		unShowed = false ;
 		
-		if ( cmm != null ) {
+		if ( cmm != null && gui != null ) {
 			
-			//System.err.println("postShow????");
-			ContextMenuManager . addNewMenu ( cmm ) ;
+			ShopGUI.instance.getContextMenuManager() . addNewMenu ( cmm ) ;
 		
 		}
 		

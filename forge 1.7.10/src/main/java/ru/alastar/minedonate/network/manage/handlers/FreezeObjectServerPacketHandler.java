@@ -12,7 +12,7 @@ import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.network.INetworkTask;
 import ru.alastar.minedonate.network.manage.packets.FreezeObjectPacket;
 import ru.alastar.minedonate.network.manage.packets.ManageResponsePacket;
-import ru.alastar.minedonate.rtnl.ModManager;
+import ru.alastar.minedonate.rtnl.ModShopManager;
 import ru.alastar.minedonate.rtnl.ModNetworkTaskProcessor;
 import ru.alastar.minedonate.rtnl.common.Account;
 import ru.alastar.minedonate.rtnl.common.Shop;
@@ -69,11 +69,11 @@ public class FreezeObjectServerPacketHandler implements IMessageHandler < Freeze
     			    			
     			if ( message . bool ) {
     			
-    				ModManager . freezeShop ( s, serverPlayer . getDisplayName ( ), message . reason ) ;
+    				ModShopManager . freezeShop ( s, serverPlayer . getDisplayName ( ), message . reason ) ;
     			
     			} else {
 
-    				ModManager . unFreezeShop ( s, serverPlayer . getDisplayName ( ) ) ;
+    				ModShopManager . unFreezeShop ( s, serverPlayer . getDisplayName ( ) ) ;
 
     			}
     			
@@ -115,11 +115,11 @@ public class FreezeObjectServerPacketHandler implements IMessageHandler < Freeze
     			
     			if ( message . bool ) {
     			
-    				ModManager . freezePlayer ( accFreez, serverPlayer . getDisplayName ( ), message . reason ) ;
+    				ModShopManager . freezePlayer ( accFreez, serverPlayer . getDisplayName ( ), message . reason ) ;
     			
     			} else {
 
-    				ModManager . unFreezePlayer ( accFreez, serverPlayer . getDisplayName ( ) ) ;
+    				ModShopManager . unFreezePlayer ( accFreez, serverPlayer . getDisplayName ( ) ) ;
 
     			}
     			
