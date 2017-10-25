@@ -110,7 +110,7 @@ public class GuiItemEntryOfEntityMerch extends GuiAbstractItemEntry {
 
 			if (info.limit != -1) {
 
-				gi.parent.drawCenteredString(gi.getFontRenderer(), limitLine, xRightOffset - 80 - 50 - 50 - 10, y_offset + 8, 16777215); // - costLineWidth
+				gi.parent.drawCenteredString(gi.getFontRenderer(), limitLine, xRightOffset - MineDonate.cfgUI.offsets.entityLimitLine.x, y_offset - MineDonate.cfgUI.offsets.entityLimitLine.y, 16777215); // - costLineWidth
 
 			}
 

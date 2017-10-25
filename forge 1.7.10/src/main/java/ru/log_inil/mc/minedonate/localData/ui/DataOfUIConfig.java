@@ -20,7 +20,8 @@ public class DataOfUIConfig {
 	public DataOfUILang lang ;
 	
 	public DataOfUIElement mergeButton ;
-
+	public DataOfUIOffsets offsets ;
+	
 	public DataOfUIConfig ( ) {
 		
 		cats = new DataOfUICategories ( ) ;
@@ -41,7 +42,8 @@ public class DataOfUIConfig {
 		lang = new DataOfUILang ( ) ;
 		
 		mergeButton = new DataOfUIElement ( "Accept", 40, 20 ) ;
-
+		offsets = new DataOfUIOffsets ( ) ;
+		
 	}
 	
 	

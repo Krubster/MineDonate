@@ -46,7 +46,7 @@ public class ManageResponsePacket implements IMessage {
     
     public enum ResponseCode {
     	
-    	CREATE, ADD, UPPEND, SELECT, RENAME, REMOVE, EDIT, FREEZ, UNFREEZ
+    	CREATE, ADD, APPEND, SELECT, RENAME, REMOVE, EDIT, FREEZ, UNFREEZ
     	
     }
     

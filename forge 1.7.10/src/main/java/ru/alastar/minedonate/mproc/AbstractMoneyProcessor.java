@@ -33,6 +33,12 @@ public abstract class AbstractMoneyProcessor {
 
     public abstract boolean existsAccount ( UUID id ) ;
 
+    public DataOfMoneyProcessor getDataOfMoneyProcessor ( ) {
+    	
+    	return domp ;
+    	
+    }
+    
 	public String getMoneyType ( ) {
 		
 		return mtype ;
