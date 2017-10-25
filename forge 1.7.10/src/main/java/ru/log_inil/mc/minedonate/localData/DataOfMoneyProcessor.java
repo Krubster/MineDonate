@@ -25,6 +25,8 @@ public class DataOfMoneyProcessor {
 	// Процессор работает в обе стороны (т.е. совершена покупка в магазине, и со счета покупателя выполнен перевод на счет владельца магазина )
 	public boolean isTwoSideProcessor ;
 	
+	// Регистрировать игрока если его нет
+	public boolean registerUsersWhenNoExists ;
 	// Первичные деньги аккаунта
 	public int regMoney ;
 	
@@ -35,12 +37,14 @@ public class DataOfMoneyProcessor {
 		load = true ;
 		moneyType = "unknown" ;
 		className = "?" ;
+		registerUsersWhenNoExists = true ;
 		regMoney = 0 ;
 		
 	}
 
     public DataOfMoneyProcessor ( boolean _load, String _mt, String _className, String _dbTable, String _dbIdColumn, String _dbNameColumn, String _dbMoneyColumn, String _dbLinkName, boolean _isTwoSideProcessor) {
 
+    	this ( ) ;
     	load = _load ;
         moneyType = _mt ;
 		className = _className ;
@@ -50,7 +54,6 @@ public class DataOfMoneyProcessor {
         dbMoneyColumn = _dbMoneyColumn ;
 		isTwoSideProcessor = _isTwoSideProcessor; ;
 		dbLinkName = _dbLinkName ;
-		regMoney = 0 ;
 		
 	}
 	

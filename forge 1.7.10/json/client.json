@@ -400,5 +400,9 @@
     "unfreezeAccount": "Разблокировать владельца",
     "shopFreezer": "Заблокировал: ",
     "shopFreezReason": "Причина: "
+  },
+  "offsets":{
+	"itemLimitLine":{"x":"200", "y":"-8"},
+	"entityLimitLine":{"x":"190", "y":"-8"}
   }
 }

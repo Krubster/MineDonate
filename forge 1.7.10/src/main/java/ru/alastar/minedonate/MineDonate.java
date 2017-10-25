@@ -496,7 +496,11 @@ public class MineDonate {
 				
 	            for ( AbstractMoneyProcessor amp : MineDonate . moneyProcessors . values ( ) ) {
 		
-	                amp . registerPlayer ( user, acc . name, MineDonate . moneyProcessors . values ( ) ) ;
+	                if ( amp . getDataOfMoneyProcessor ( ) . registerUsersWhenNoExists ) {
+	                	
+	                	amp . registerPlayer ( user, acc . name, MineDonate . moneyProcessors . values ( ) ) ;
+	                	
+	                }
 	            	
 	            }
 	            

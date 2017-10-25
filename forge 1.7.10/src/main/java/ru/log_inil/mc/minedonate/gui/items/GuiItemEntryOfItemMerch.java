@@ -103,9 +103,9 @@ public class GuiItemEntryOfItemMerch extends GuiAbstractItemEntry {
 			gi . parent . drawString ( gi . getFontRenderer ( ), info . name, 67, y_offset + 8, 16777215 ) ;
 			gi . parent . moneyArea . drawPriceArea ( xRightOffset - 70 - 50 - 20, y_offset + 8, ( info . cost * info . modified ), info . getMoneyType ( ) ) ;
 
-			if ( info . limit != -1) {
-			  
-				gi . parent . drawCenteredString ( gi . getFontRenderer ( ), limitLine, xRightOffset - 80 - 50 - 50 - 20, y_offset + 8, 16777215 ) ; // - costLineWidth
+			if ( info . limit != -1 ) {
+			  //80 - 50 - 50 - 20
+				gi . parent . drawCenteredString ( gi . getFontRenderer ( ), limitLine, xRightOffset - MineDonate.cfgUI.offsets.itemLimitLine.x, y_offset - MineDonate.cfgUI.offsets.itemLimitLine.y, 16777215 ) ; // - costLineWidth
 
 			}
 			
