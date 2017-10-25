@@ -33,7 +33,7 @@ public class AppendEntryServerPacketHandler implements IMessageHandler < AppendE
 
     	if ( ! MineDonate . checkShopExists ( message . shopId ) ) {
     		
-			return new ManageResponsePacket ( ManageResponsePacket.ResponseType.OBJ, ManageResponsePacket.ResponseCode.UPPEND, ManageResponsePacket.ResponseStatus.ERROR_SHOP_NOTFOUND ) ;
+			return new ManageResponsePacket ( ManageResponsePacket.ResponseType.OBJ, ManageResponsePacket.ResponseCode.APPEND, ManageResponsePacket.ResponseStatus.ERROR_SHOP_NOTFOUND ) ;
 
     	}
     	
@@ -47,13 +47,13 @@ public class AppendEntryServerPacketHandler implements IMessageHandler < AppendE
 			
 			if ( s . isFreezed ) {
 
-				return new ManageResponsePacket ( ManageResponsePacket.ResponseType.OBJ, ManageResponsePacket.ResponseCode.UPPEND, ManageResponsePacket.ResponseStatus.ERROR_SHOP_FREEZED ) ;
+				return new ManageResponsePacket ( ManageResponsePacket.ResponseType.OBJ, ManageResponsePacket.ResponseCode.APPEND, ManageResponsePacket.ResponseStatus.ERROR_SHOP_FREEZED ) ;
 
 			}
 			
 			if ( ! MineDonate . checkCatExists ( s . sid, message . catId ) ) {
 				
-				return new ManageResponsePacket ( ManageResponsePacket.ResponseType.OBJ, ManageResponsePacket.ResponseCode.UPPEND, ManageResponsePacket.ResponseStatus.ERROR_CAT_NOTFOUND ) ;
+				return new ManageResponsePacket ( ManageResponsePacket.ResponseType.OBJ, ManageResponsePacket.ResponseCode.APPEND, ManageResponsePacket.ResponseStatus.ERROR_CAT_NOTFOUND ) ;
 
 			}
 			
@@ -63,7 +63,7 @@ public class AppendEntryServerPacketHandler implements IMessageHandler < AppendE
 					
 					if ( acc .manageSession . currentItemStack == null ) {
 						
-						return new ManageResponsePacket ( ManageResponsePacket.ResponseType.OBJ, ManageResponsePacket.ResponseCode.UPPEND, ManageResponsePacket.ResponseStatus.ERROR_UNKNOWN ) ;
+						return new ManageResponsePacket ( ManageResponsePacket.ResponseType.OBJ, ManageResponsePacket.ResponseCode.APPEND, ManageResponsePacket.ResponseStatus.ERROR_UNKNOWN ) ;
 
 					}
 					
@@ -71,7 +71,7 @@ public class AppendEntryServerPacketHandler implements IMessageHandler < AppendE
 					
 					if ( merchId == -1 ) {
 						
-				        return new ManageResponsePacket ( ManageResponsePacket.ResponseType.OBJ, ManageResponsePacket.ResponseCode.UPPEND, ManageResponsePacket.ResponseStatus.ERROR_ENTRY_NOTFOUND ) ;
+				        return new ManageResponsePacket ( ManageResponsePacket.ResponseType.OBJ, ManageResponsePacket.ResponseCode.APPEND, ManageResponsePacket.ResponseStatus.ERROR_ENTRY_NOTFOUND ) ;
 		
 					}		
 					
@@ -84,11 +84,11 @@ public class AppendEntryServerPacketHandler implements IMessageHandler < AppendE
 				
 			}
 						
-	        return new ManageResponsePacket ( ManageResponsePacket.ResponseType.OBJ, ManageResponsePacket.ResponseCode.UPPEND, ManageResponsePacket.ResponseStatus.OK ) ;
+	        return new ManageResponsePacket ( ManageResponsePacket.ResponseType.OBJ, ManageResponsePacket.ResponseCode.APPEND, ManageResponsePacket.ResponseStatus.OK ) ;
 
 		} else {
 		
-	        return new ManageResponsePacket ( ManageResponsePacket.ResponseType.OBJ, ManageResponsePacket.ResponseCode.UPPEND, ManageResponsePacket.ResponseStatus.ERROR_ACCESS_DENIED ) ;
+	        return new ManageResponsePacket ( ManageResponsePacket.ResponseType.OBJ, ManageResponsePacket.ResponseCode.APPEND, ManageResponsePacket.ResponseStatus.ERROR_ACCESS_DENIED ) ;
 
 		}
 		        
