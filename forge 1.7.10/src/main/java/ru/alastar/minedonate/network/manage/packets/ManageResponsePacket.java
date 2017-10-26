@@ -10,7 +10,6 @@ public class ManageResponsePacket implements IMessage {
 	public ResponseStatus status ;
 	
     public ManageResponsePacket ( ) { }
-    
 
     public ManageResponsePacket ( ResponseType _type, ResponseCode _code, ResponseStatus _status ) {
     	

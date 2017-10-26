@@ -8,6 +8,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
+import ru.alastar.minedonate.MineDonate;
 import ru.alastar.minedonate.network.packets.BuyResponsePacket;
 
 
@@ -22,7 +23,7 @@ public class BuyResponsePacketHandler implements IMessageHandler<BuyResponsePack
     @Override
     public IMessage onMessage ( BuyResponsePacket message, MessageContext ctx ) {
 
-    	Minecraft . getMinecraft ( ) . thePlayer . addChatMessage ( new ChatComponentText ( EnumChatFormatting . AQUA + " [MineDonate] " + EnumChatFormatting.RESET + message . status ) ) ;
+    	Minecraft . getMinecraft ( ) . thePlayer . addChatMessage ( new ChatComponentText ( EnumChatFormatting . AQUA + " [MineDonate] " + EnumChatFormatting.RESET + MineDonate.cfgUI.lang.get(message . status) ) ) ;
 
         return null ;
         

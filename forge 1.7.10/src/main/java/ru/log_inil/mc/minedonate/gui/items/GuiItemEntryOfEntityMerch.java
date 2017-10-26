@@ -63,7 +63,9 @@ public class GuiItemEntryOfEntityMerch extends GuiAbstractItemEntry {
 		
 		limitLine = MineDonate.cfgUI.cats.entities.itemLeft + info.limit;
 		
-		ShopGUI.instance.getContextMenuManager().addNewMenu(cmm);
+		if ( cmm != null ) {
+			ShopGUI.instance.getContextMenuManager().addNewMenu(cmm);
+		}
 
 		updateDataNeed = true ;
 				
