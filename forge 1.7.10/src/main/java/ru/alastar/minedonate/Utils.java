@@ -9,6 +9,7 @@ import net.minecraft.util.EnumChatFormatting;
 
 import java.awt.*;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
@@ -107,7 +108,7 @@ public class Utils {
 		
 		try { 
 
-			return cl . findResource ( name . replace ( ".", "/" ) . concat ( ".class" ) ) != null ;
+			return cl . findResource ( name. replace ( ".", "/" ) . concat ( ".class" ) ) != null ;
 			
 		} catch ( Throwable tw ) { tw . printStackTrace ( ) ; }
 		
@@ -141,8 +142,8 @@ public class Utils {
 
         		URL url ;
         		
-        		InputStream is = Utils . class . getResourceAsStream ( args [ 1 ] ) ;
-        		
+        		InputStream is = Utils . class . getResourceAsStream ( "/" + args [ 1 ] ) ;
+
         		if ( is == null ) {
         			
         			String p = Utils . class . getProtectionDomain ( ) . getCodeSource ( ) . getLocation ( ) . getPath ( ) ;
@@ -150,20 +151,31 @@ public class Utils {
         			p = p . split ( "!" ) [ 0 ] ;
         			p = p . substring ( p . indexOf ( ":/" ) + 2 ) ;
 
-        			p = ( new File ( p ) . getParentFile ( ) . getAbsolutePath ( ) + File . separator + "libs" + File . separator + args [ 1 ]  ) ;
-
+        			p = ( new File ( p ) . getParentFile ( ) . getAbsolutePath ( ) + File . separator + "libs" + File . separator + args [ 1 ] ) ;
+        			
+        			File f = new File ( p ) ;
+        			
+        			if ( ! f . exists ( ) ) {
+        				
+        				throw new FileNotFoundException ( ) ;
+        				
+        			}
+        			
         			url = new File ( p ) . toURI ( ) . toURL ( ) ;
 
         		} else {
         			
-        			url = Utils . class . getResource ( args [ 1 ] ) ;
-        			
+        			url = Utils . class . getResource ( "/" + args [ 1 ] ) ;
+
         			is . close ( ) ;
         			
         		}
-        		        		
+        		System.err.println(url);    
         		cl . addURL ( url ) ;
 
+        		for(URL u:cl.getURLs()){
+        			System.err.println(u);
+        		}
         	} catch ( Exception ex ) {
         		
         		MineDonate . logError ( "Error load library[" + args [ 1 ] + "]!" ) ;
