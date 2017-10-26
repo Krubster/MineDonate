@@ -32,7 +32,9 @@ public class ContextMenuManager {
 		
 		for ( ContextMenu cmm : menus ) {
 
-			cmm . drawDebug ( _gs, mouseX, mouseY ) ;
+			if ( cmm != null ) {
+				cmm . drawDebug ( _gs, mouseX, mouseY ) ;		
+			}
 			
 		}
 	

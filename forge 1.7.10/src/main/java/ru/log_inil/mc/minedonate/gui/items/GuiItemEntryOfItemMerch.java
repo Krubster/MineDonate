@@ -62,8 +62,10 @@ public class GuiItemEntryOfItemMerch extends GuiAbstractItemEntry {
 		limitLine = MineDonate . cfgUI . cats . itemsAndBlocks . itemLeft + info . limit ;
 		stackCountLine = Integer . toString ( info . modified * info.stack_data.getInteger("Count") ) ;
 		
-		ShopGUI.instance.getContextMenuManager().addNewMenu(cmm);
-
+		if ( cmm != null ) {
+			ShopGUI.instance.getContextMenuManager().addNewMenu(cmm);
+		}
+		
 		updateDataNeed = true ;
 		
 		return this ;

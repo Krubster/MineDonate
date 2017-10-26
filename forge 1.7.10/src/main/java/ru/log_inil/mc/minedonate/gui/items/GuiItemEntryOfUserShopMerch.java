@@ -106,8 +106,10 @@ public class GuiItemEntryOfUserShopMerch extends GuiAbstractItemEntry {
 
 		}
 				
-		ShopGUI.instance.getContextMenuManager().addNewMenu(cmm);
-
+		if ( cmm != null ) {
+			ShopGUI.instance.getContextMenuManager().addNewMenu(cmm);
+		}
+		
 		updateDataNeed = true ;
 		
 		return this ;
