@@ -87,9 +87,9 @@ public class Utils {
         
     }
 
-    public static void sendModMessage(EntityPlayerMP player, String msg) {
+    public static void sendModMessage ( EntityPlayerMP player, String msg ) {
     	
-        player.addChatMessage(new ChatComponentText(EnumChatFormatting.AQUA + " [MineDonate] " + EnumChatFormatting.RESET + msg));
+        player . addChatMessage ( new ChatComponentText ( EnumChatFormatting . AQUA + " [MineDonate] " + EnumChatFormatting . RESET + msg ) ) ;
         
     }
     
@@ -170,12 +170,9 @@ public class Utils {
         			is . close ( ) ;
         			
         		}
-        		System.err.println(url);    
+
         		cl . addURL ( url ) ;
 
-        		for(URL u:cl.getURLs()){
-        			System.err.println(u);
-        		}
         	} catch ( Exception ex ) {
         		
         		MineDonate . logError ( "Error load library[" + args [ 1 ] + "]!" ) ;

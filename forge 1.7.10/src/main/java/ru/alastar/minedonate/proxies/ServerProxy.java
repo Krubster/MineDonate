@@ -94,7 +94,7 @@ public class ServerProxy extends CommonProxy {
 			
     		PluginHelper . loadPlugins ( ) ;
 			
-		} catch ( NoSuchMethodException | SecurityException ex ) {
+		} catch ( Throwable ex ) {
 			
 			MineDonate . cfg . enable = false ;
 			 

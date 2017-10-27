@@ -52,6 +52,7 @@ public class DataOfConfig {
 	public int maxUsersShopsCount ;
 	public boolean defaultUserAllowShopCreate ;
 	
+	public boolean forceMoneyUpdatesEveryTime ;
 	public DataOfMoneyProcessor [ ] moneyProcessors ;
 	
 	// Включить режим разрешений
@@ -118,7 +119,9 @@ public class DataOfConfig {
 		defaultUserShopMoneyType = "coin" ;
 		maxUsersShopsCount = 3 ;
 		defaultUserAllowShopCreate = true ;
-			
+		
+		forceMoneyUpdatesEveryTime = false ;
+		
 		Map < String, Object > vaultMPXProps = new HashMap < > ( ) ;
 		vaultMPXProps . put ( "modPluginName", "money.vault" ) ;
 		
@@ -140,9 +143,6 @@ public class DataOfConfig {
 			
 		} ;
 	
-		//Map < String, Object > vaultAPXProps = new HashMap < > ( ) ;
-		// vaultAPXProps . put ( "serviceClassName", "Essentials Economy" ) ;
-		
 		accessPlugins = new DataOfAccessorPlugin [ ] { 
 				
 			new DataOfAccessorPlugin ( "permissionsManager", sellPrivelegies || enablePermissionsMode, "PermissionsEx", PermissionsBukkitPlugin . class . getName ( ), PermissionsPluginReflection . class . getName ( ), PermissionsPlugin . class . getName ( ) ),

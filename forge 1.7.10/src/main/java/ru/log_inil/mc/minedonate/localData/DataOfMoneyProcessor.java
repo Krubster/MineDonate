@@ -22,11 +22,16 @@ public class DataOfMoneyProcessor {
 	// Имя используемой базы
 	public String dbLinkName ;
 	
+	// Использовать отдельную бд для чтения данных
+	public boolean useOnlyReadDBForGetInformation ;
+	public String dbOnlyReadLinkName ;
+	
 	// Процессор работает в обе стороны (т.е. совершена покупка в магазине, и со счета покупателя выполнен перевод на счет владельца магазина )
 	public boolean isTwoSideProcessor ;
 	
 	// Регистрировать игрока если его нет
 	public boolean registerUsersWhenNoExists ;
+	
 	// Первичные деньги аккаунта
 	public int regMoney ;
 	
@@ -39,6 +44,9 @@ public class DataOfMoneyProcessor {
 		className = "?" ;
 		registerUsersWhenNoExists = true ;
 		regMoney = 0 ;
+		
+		useOnlyReadDBForGetInformation = false ;
+		dbOnlyReadLinkName = "" ;
 		
 	}
 
