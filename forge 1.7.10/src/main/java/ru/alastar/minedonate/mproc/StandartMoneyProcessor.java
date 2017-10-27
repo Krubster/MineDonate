@@ -20,7 +20,7 @@ public class StandartMoneyProcessor extends AbstractMoneyProcessor {
 	}
 
 	@Override
-	public int canBuy(Merch m, UUID buyer, int amount) {
+	public int canBuy ( Merch m, UUID buyer, int amount ) {
 		
 		int procMoney = m . getCost ( ) * amount ;
 		
@@ -105,7 +105,7 @@ public class StandartMoneyProcessor extends AbstractMoneyProcessor {
 		
 		try {
 			
-			stat = ModDataBase . getNewStatement ( domp . dbLinkName ) ;
+			stat = ModDataBase . getNewStatement ( domp . useOnlyReadDBForGetInformation ? domp . dbOnlyReadLinkName : domp . dbLinkName ) ;
 
 			ResultSet rs = stat . executeQuery ( "SELECT " + domp.dbMoneyColumn + " FROM " + domp.dbTable + " WHERE " + domp.dbIdColumn + "='" + id . toString ( ) + "';");
 
@@ -192,7 +192,7 @@ public class StandartMoneyProcessor extends AbstractMoneyProcessor {
 		
 		try {
 		
-			stat = ModDataBase . getNewStatement ( domp . dbLinkName ) ;
+			stat = ModDataBase . getNewStatement ( domp . useOnlyReadDBForGetInformation ? domp . dbOnlyReadLinkName : domp . dbLinkName ) ;
 			ResultSet rs = stat.executeQuery("SELECT id FROM " + domp . dbTable + " WHERE " + domp.dbIdColumn + "='" + id . toString ( ) + "';");
 
 			while ( rs . next ( ) ) {

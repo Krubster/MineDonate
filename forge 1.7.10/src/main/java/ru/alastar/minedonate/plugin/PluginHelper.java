@@ -1,9 +1,9 @@
 package ru.alastar.minedonate.plugin;
 
 import com.google.common.io.ByteStreams;
-import org.bukkit.Bukkit;
 
 import ru.alastar.minedonate.MineDonate;
+import ru.alastar.minedonate.plugin.server.*;
 import ru.log_inil.mc.minedonate.localData.DataOfAccessorPlugin;
 
 import java.io.InputStream;
@@ -18,25 +18,29 @@ public class PluginHelper {
 	
 	public static Map < String, AccessorPlugin > accessorPlugins = new HashMap < > ( ) ;
 	
-	public static boolean hasExistsOnServer ( String name ) {
+	public static ServerPluginLoader serverPL ;
 		
-		return Bukkit . getPluginManager ( ) . isPluginEnabled ( name ) ;
+	public static void loadPlugins ( ) throws Throwable {
 		
-	}
-	
-	static Method mDefineClass = null ;
-	
-	public static void loadPlugins ( ) throws NoSuchMethodException, SecurityException {
-		
-		if ( mDefineClass == null ) {
+		MineDonate . logInfo ( "Detect server plugin loader..." ) ;
 			
-			mDefineClass = ClassLoader . class . getDeclaredMethod ( "defineClass", new Class [ ] { String . class, byte [ ] . class, int . class, int . class } ) ;
+		IServerDetector [ ] detectors = new IServerDetector [ ] { new BukkitServer . Detector ( ) } ;
+		
+		for ( IServerDetector isd : detectors ) {
+		
+			if ( isd . detect ( ) ) {
 			
-			mDefineClass . setAccessible ( true ) ;
+				MineDonate . logInfo ( "Detected server plugin loader[" + isd . getServerPluginLoaderClassName ( ) + "]!" ) ;
+
+				serverPL = ( ServerPluginLoader ) PluginHelper . class . getClassLoader ( ) . loadClass ( isd . getServerPluginLoaderClassName ( ) ) . newInstance ( ) ;
+				
+				break ;
+				
+			}
 			
 		}
 		
-		ClassLoader cl ;
+		// ClassLoader cl ;
 		Object oServerSide;
 		AccessorPlugin oModSide ;
 		
@@ -44,18 +48,16 @@ public class PluginHelper {
 		
 		for ( DataOfAccessorPlugin doap : MineDonate . cfg . accessPlugins ) {
 			
-			if ( doap . load && hasExistsOnServer ( doap . serverPluginName ) ) {
+			if ( doap . load && serverPL . pluginExists ( doap . serverPluginName ) ) {
 			
-				MineDonate . logInfo ( "[MineDonate] Try init AccessorPlugin[" + doap . modPluginName + "], server name: " + doap . serverPluginName ) ;
+				MineDonate . logInfo ( "Try init AccessorPlugin[" + doap . modPluginName + "], server name: " + doap . serverPluginName ) ;
 
 				try {
-					
-					cl = Bukkit . getPluginManager ( ) . getPlugin ( doap . serverPluginName ) . getClass ( ) . getClassLoader ( ) ;
-					
+										
 					// Проверяем и загружаем родительский класс плагинов доступа
 					if ( ! abstractAccessorClassLoaded ) {
 						
-						defineClassInClassLoader ( cl, AccessorPlugin . class . getName ( ), false ) ;
+						serverPL . defineClassFromBytes ( getClassBytes ( AccessorPlugin . class . getName ( ) ), false ) ;
 
 						abstractAccessorClassLoaded = true ;
 						
@@ -64,13 +66,13 @@ public class PluginHelper {
 					if ( doap . cleanInterfaceClassName != null && doap . cleanInterfaceClassName . equals ( "" ) ) {
 						
 						// загружаем в класс лоадер "чистый" класс плагина доступа
-						defineClassInClassLoader ( cl, doap . cleanInterfaceClassName, false ) ;
-						
+						serverPL . defineClassFromBytes ( getClassBytes ( doap . cleanInterfaceClassName ), false ) ;
+
 					}
 					
 					// загружаем дочернийх[cleanInterfaceClassName] класс с реализацией методов
-					oServerSide = defineClassInClassLoader ( cl , doap . serverInterfaceClassName, true ) . newInstance ( ) ;
-					
+					oServerSide = ( serverPL . defineClassFromBytes ( getClassBytes ( doap . serverInterfaceClassName ), true ) ) . newInstance ( )  ;
+
 					// получаем конечный, дочерный класс с доступом к классу[serverInterfaceClassName] с реализацией методов
 					oModSide = ( AccessorPlugin ) Class . forName ( doap . reflectionInterfaceClassName ) . newInstance ( ) ;
 					
@@ -78,7 +80,7 @@ public class PluginHelper {
 					
 					accessorPlugins . put ( doap . modPluginName, oModSide ) ;
 									
-					MineDonate . logInfo ( "[MineDonate] AccessorPlugin[" + doap . modPluginName + "] inited!" ) ;
+					MineDonate . logInfo ( "AccessorPlugin[" + doap . modPluginName + "] inited!" ) ;
 					
 				} catch ( Exception ex ) {
 					
@@ -92,11 +94,11 @@ public class PluginHelper {
 		
 		for ( String k : accessorPlugins . keySet ( ) ) {
 		
-			MineDonate . logInfo ( "[MineDonate] Try load AccessorPlugin[" + k + "]" ) ;
+			MineDonate . logInfo ( "Try load AccessorPlugin[" + k + "]" ) ;
 			
 			accessorPlugins . get ( k ) . load ( accessorPlugins . get ( k ) . getConfigPluginData ( ) . xProperties ) ;
 			
-			MineDonate . logInfo ( "[MineDonate] AccessorPlugin[" + k + "] loaded!" ) ;
+			MineDonate . logInfo ( "AccessorPlugin[" + k + "] loaded!" ) ;
 
 		}
 
@@ -107,19 +109,26 @@ public class PluginHelper {
 		return accessorPlugins . get ( modPluginName ) ;
 		
 	}
-        
-	private static Class<?> defineClassInClassLoader ( ClassLoader classLoader, String cl, boolean loadClass ) {
+     
+	static Method mDefineClass = null ;
+
+	public static Class<?> defineClassInClassLoader ( ClassLoader classLoader, byte [ ] clazz, boolean loadClass ) {
 		
 		try {
 			
-			InputStream stream = PluginHelper . class . getClassLoader ( ) . getResourceAsStream ( cl . replace ( '.', '/' ) . concat ( ".class" ) ) ;
-			byte [ ] b =  ByteStreams . toByteArray ( stream ) ;
+			if ( mDefineClass == null ) {
+				
+				mDefineClass = ClassLoader . class . getDeclaredMethod ( "defineClass", new Class [ ] { String . class, byte [ ] . class, int . class, int . class } ) ;
+				
+				mDefineClass . setAccessible ( true ) ;
+				
+			}
 			
-			mDefineClass . invoke ( classLoader, null, b, 0, b . length ) ;
+			Class < ? > cl = ( Class < ? > ) mDefineClass . invoke ( classLoader, null, clazz, 0, clazz . length ) ;
 						
 			if ( loadClass ) {
 				
-				return classLoader . loadClass ( cl ) ;
+				return classLoader . loadClass ( cl . getName ( ) ) ;
 				
 			}
 			
@@ -133,4 +142,15 @@ public class PluginHelper {
 		
 	}
 
+	static byte [ ] getClassBytes ( String cl ) throws Throwable {
+		
+		InputStream stream = PluginHelper . class . getClassLoader ( ) . getResourceAsStream ( cl . replace ( '.', '/' ) . concat ( ".class" ) ) ;
+		byte [ ] b =  ByteStreams . toByteArray ( stream ) ;
+		
+		stream . close ( ) ;
+		
+		return b ;
+		
+	}
+	
 }
