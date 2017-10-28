@@ -29,8 +29,7 @@ public class ClientEventHandler {
 
     }
 
-	@SideOnly(Side.CLIENT)
-    @SubscribeEvent(priority= EventPriority.NORMAL, receiveCanceled=true)
+    @SubscribeEvent
     public void onKeyInputEvent(InputEvent.KeyInputEvent event) {
     	
     	if ( ClientProxy . openShop . isPressed ( ) ) {

@@ -36,7 +36,7 @@ public abstract class Merch {
 	
     public int getCategory ( ) {
         
-    	return -1 ;
+    	return catId ;
         
     }
 
@@ -122,7 +122,7 @@ public abstract class Merch {
 
     public int getShopId ( ) {
         
-    	return shopId;
+    	return shopId ;
         
     }
 

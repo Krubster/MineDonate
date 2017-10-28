@@ -32,7 +32,7 @@ public class EntitySelectEventHandler {
     		
     		if ( acc != null ) {
     			
-    			if ( acc .manageSession . mobSelect ) {
+    			if ( acc . manageSession . mobSelect ) {
     				
     				if ( ! ( e . target instanceof EntityLivingBase ) ) {
                         

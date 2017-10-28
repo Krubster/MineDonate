@@ -72,7 +72,7 @@ public class GuiFrameAddItem extends GuiFrame {
         	
     }
     
-    GuiButton saveChangesButton, uppendChangesButton ;
+    GuiButton saveChangesButton, appendChangesButton ;
     GuiButton cancelChangesButton ;
     GuiGradientTextField nameField, costField, limitField ; 
     
@@ -123,16 +123,16 @@ public class GuiFrameAddItem extends GuiFrame {
     	posX = (g.getScaledResolution().getScaledWidth()/2) - widthCenter;
     	posY = (g.getScaledResolution().getScaledHeight()/2) - heightCenter;
 
-    	if ( uppendChangesButton == null && douifcs . okExistsButton != null ) {
+    	if ( appendChangesButton == null && douifcs . okExistsButton != null ) {
         	
-    		uppendChangesButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), posX, posY + height, 
+    		appendChangesButton = new GuiGradientButton ( ShopGUI . getNextButtonId ( ), posX, posY + height, 
     				douifcs.okExistsButton.width, douifcs.okExistsButton.height, douifcs.okExistsButton.text, false ) ;
     	
     	}
     	
-    	if ( uppendChangesButton != null ) {
+    	if ( appendChangesButton != null ) {
     	
-    		uppendChangesButton . visible = uppendChangesButton . enabled = canAppend ;
+    		appendChangesButton . visible = appendChangesButton . enabled = canAppend ;
     	
     	}
 
@@ -219,17 +219,18 @@ public class GuiFrameAddItem extends GuiFrame {
     	cancelChangesButton . xPosition = posX + width - cancelChangesButton . width ;
     	saveChangesButton . xPosition = cancelChangesButton . xPosition - saveChangesButton . width ;
     	
-    	if ( uppendChangesButton != null ) {
+    	if ( appendChangesButton != null ) {
 
-    		uppendChangesButton . xPosition = saveChangesButton . xPosition - uppendChangesButton . width ;
-    	
+    		appendChangesButton . xPosition = saveChangesButton . xPosition - appendChangesButton . width ;
+    		appendChangesButton . yPosition = saveChangesButton . yPosition ;
+
     	}
     	
     	if ( this . isVisible ( ) ) {
 
-    		if ( canAppend && uppendChangesButton != null ) {
+    		if ( canAppend && appendChangesButton != null ) {
         		
-    			g . addButton ( uppendChangesButton, false ) ;
+    			g . addButton ( appendChangesButton, false ) ;
     		
     		}
     		
@@ -245,7 +246,7 @@ public class GuiFrameAddItem extends GuiFrame {
 		
     	super . unShow ( g ) ;
     	
-    	g . removeButton ( uppendChangesButton ) ;
+    	g . removeButton ( appendChangesButton ) ;
     	g . removeButton ( saveChangesButton ) ;
     	g . removeButton ( cancelChangesButton ) ;
 
@@ -327,7 +328,7 @@ public class GuiFrameAddItem extends GuiFrame {
            
     	}
     	
-    	if ( uppendChangesButton != null && b . id == uppendChangesButton . id ) {
+    	if ( appendChangesButton != null && b . id == appendChangesButton . id ) {
         	        	
     		if ( MineDonate . getAccount ( ) . manageSession . currentItemStack != null ) {
     			
@@ -429,7 +430,7 @@ public class GuiFrameAddItem extends GuiFrame {
 	
 	public boolean isOwnerButton ( GuiButton gb ) {
 		
-		return ( ( uppendChangesButton != null && gb == uppendChangesButton ) || gb == saveChangesButton || gb == cancelChangesButton ) ;
+		return ( ( appendChangesButton != null && gb == appendChangesButton ) || gb == saveChangesButton || gb == cancelChangesButton ) ;
 		
 	}
 	

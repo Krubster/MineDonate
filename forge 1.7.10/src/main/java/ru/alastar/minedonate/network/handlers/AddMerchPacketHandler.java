@@ -44,7 +44,7 @@ public class AddMerchPacketHandler implements IMessageHandler<AddMerchPacket, IM
         	
         }
 
-        MineDonate . addMerch ( message . shopId, message . m_category, message . info ) ;
+        MineDonate . addMerch ( message . shopId, message . catId, message . info ) ;
 
         if ( ShopGUI . instance != null ) {
         

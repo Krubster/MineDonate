@@ -38,7 +38,7 @@ import java.util.*;
 public class MineDonate {
 
     public static final String MODID = "MineDonate" ;
-    public static final String VERSION = "0.7.1.29" ;
+    public static final String VERSION = "0.7.1.30" ;
 
     public static boolean m_Enabled = false;
 
@@ -349,7 +349,7 @@ public class MineDonate {
 		
 		List < String > l = new ArrayList < > ( ) ;
 
-		if ( cfg . enablePermissionsMode ) {
+		if ( cfg . enablePermissionsMode && PluginHelper . getPlugin ( "permissionsManager" ) != null ) {
 			
 			// Получаем все объекты пермишенов
 			for ( DataOfPermissionEntry dopl : cfg . permissionsTriggerList ) {

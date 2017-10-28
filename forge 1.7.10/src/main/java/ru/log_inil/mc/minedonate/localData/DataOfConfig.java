@@ -29,6 +29,7 @@ public class DataOfConfig {
 	public String dbUsersNameColumn ;
 	public String dbUsersLinkName ;
 
+	
 	public boolean sellItems ;
 	public String dbItems ;
 	public String itemsMoneyType ;
