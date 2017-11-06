@@ -481,7 +481,7 @@ public class MineDonate {
 			if ( registerMoney = ( acc == null && getWithRegister ) ) {
 				
 				// Создаем объект и выдаем блок, если нужен
-				acc = new Account ( user . toString ( ), Utils . getNameFromUUID ( user ), permissions, ! cfg . defaultUserAllowShopCreate, cfg.defaultUserAllowShopCreate ? "SERVER" : null, cfg.defaultUserAllowShopCreate ? "Properties policy" : null, 0 ) ;
+				acc = new Account ( user . toString ( ), Utils . getNameFromUUID ( user ), permissions, ! cfg . defaultUserAllowShopCreate, cfg.defaultUserAllowShopCreate ? null : "SERVER", cfg.defaultUserAllowShopCreate ? null : "Properties policy", 0 ) ;
 
 				stat = ModDataBase . getNewStatement ( "main" ) ;
 		        
