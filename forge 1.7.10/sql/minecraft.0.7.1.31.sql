@@ -2,8 +2,8 @@
 -- version 4.6.4deb1
 -- https://www.phpmyadmin.net/
 --
--- Хост: localhost:3306
--- Время создания: Сен 02 2017 г., 11:00
+-- Хост: localhost
+-- Время создания: Ноя 17 2017 г., 21:11
 -- Версия сервера: 5.7.18-0ubuntu0.16.10.1
 -- Версия PHP: 7.0.18-0ubuntu0.16.10.1
 
@@ -145,6 +145,7 @@ INSERT INTO `md_perms` (`id`, `groupName`, `permission`) VALUES
 
 CREATE TABLE `md_privelegies` (
   `name` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `pic_url` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `cost` int(11) NOT NULL,
@@ -157,8 +158,8 @@ CREATE TABLE `md_privelegies` (
 -- Дамп данных таблицы `md_privelegies`
 --
 
-INSERT INTO `md_privelegies` (`name`, `description`, `pic_url`, `cost`, `time`, `id`, `worlds`) VALUES
-('PREMIUUUM2', 'asdasdasddfsdaf\r\nsadg\r\nfag\r\n\r\nafg\r\nf\r\ndgdhgfhf\r\ngh\r\nfdj\r\nfd\r\nhj\r\n', 'http://www.mkyong.com/image/mypic.jpg', 1278654, 10, 4, '*');
+INSERT INTO `md_privelegies` (`name`, `title`, `description`, `pic_url`, `cost`, `time`, `id`, `worlds`) VALUES
+('prem', 'Premium', 'asdasdasddfsdaf\r\nsadg\r\nfag\r\n\r\nafg\r\nf\r\ndgdhgfhf\r\ngh\r\nfdj\r\nfd\r\nhj\r\n', 'http://www.mkyong.com/image/mypic.jpg', 1278654, 10, 4, '*');
 
 -- --------------------------------------------------------
 
