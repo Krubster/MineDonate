@@ -17,6 +17,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Alastar on 01.04.2017.
@@ -50,7 +52,17 @@ public class ClientProxy extends CommonProxy {
         Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.func_147675_a(res, x, y, z));
     }
 
+    Map < String, DynamicTexture> cache = new HashMap<>();
+    
     public void loadIcon(String url, int id) {
+    	
+    	if ( cache.get(url) != null ) {
+    	     if (id >= m_Privelegies_Icons.length)
+                 m_Privelegies_Icons = Arrays.copyOf(m_Privelegies_Icons, id + 1);
+    	     m_Privelegies_Icons[id] = cache.get(url);
+    	     return;
+    	}
+    	
         BufferedImage image = null;
         System.out.println("Icon url: " + url);
 
@@ -60,6 +72,7 @@ public class ClientProxy extends CommonProxy {
                 DynamicTexture dyn_tex = new DynamicTexture(image);
                 if (id >= m_Privelegies_Icons.length)
                     m_Privelegies_Icons = Arrays.copyOf(m_Privelegies_Icons, id + 1);
+                cache.put(url, dyn_tex);
                 m_Privelegies_Icons[id] = dyn_tex;
             } else {
                 System.out.println("Null image!!");

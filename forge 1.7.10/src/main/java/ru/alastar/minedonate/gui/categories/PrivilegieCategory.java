@@ -90,7 +90,7 @@ public class PrivilegieCategory extends ShopCategory {
        GL11.glBindTexture(GL11.GL_TEXTURE_2D, ClientProxy.getImage(_info.getId()).getGlTextureId());
        relative.drawTexturedModalRectNormal(x_offset, y_offset, 75, 75);
        
-       relative.drawString(relative.getFontRenderer(), _info.name, x_offset + (75/2)- relative.getFontRenderer().getStringWidth(_info.name)/2, y_offset + 80, 0xFFFFFF);
+       relative.drawString(relative.getFontRenderer(), _info.title, x_offset + (75/2)- relative.getFontRenderer().getStringWidth(_info.title)/2, y_offset + 80, 0xFFFFFF);
        relative . moneyArea . drawPriceArea ( x_offset+(65/2), y_offset + 75+20+24, _info . cost, _info . getMoneyType ( ) ) ;
 
        listDescription . clear ( ) ;

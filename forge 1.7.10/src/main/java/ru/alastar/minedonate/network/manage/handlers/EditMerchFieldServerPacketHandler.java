@@ -69,6 +69,12 @@ public class EditMerchFieldServerPacketHandler implements IMessageHandler < Edit
 			
 				case INTEGER:
 				
+					if ( message . name == EditMerchFieldPacket . FieldName . COST && ( int ) message . data < 0 ) {
+						
+						return new ManageResponsePacket ( ManageResponsePacket.ResponseType.OBJ, ManageResponsePacket.ResponseCode.EDIT, ManageResponsePacket.ResponseStatus.ERROR_NEGATIVE_INTEGER ) ;
+
+					}
+					
 					if ( message . name == EditMerchFieldPacket . FieldName . LIMIT ) {
 						
 						switch ( s . cats [ message . catId ] . getCatType ( ) ) {

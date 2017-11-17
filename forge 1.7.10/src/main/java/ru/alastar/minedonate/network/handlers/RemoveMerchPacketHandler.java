@@ -21,7 +21,7 @@ public class RemoveMerchPacketHandler  implements IMessageHandler<RemoveMerchPac
         
         if(ShopGUI.instance != null){
         
-        	ShopGUI.instance.updateButtons(true);
+        	ShopGUI . instance . updateButtons ( true ) ;
             ShopGUI . instance . refresh ( ) ;
         
         }

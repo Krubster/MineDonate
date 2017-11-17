@@ -87,6 +87,9 @@ public class DataOfConfig {
 	
 	public Map < String, Object > xProperties ;
 
+	// Разрешить авто-оп прав магазина при выключеном enablePermissionsMode
+	public boolean allowAdminOp;
+
 	public DataOfConfig ( ) {
 		
 		dataBases = new HashMap < > ( ) ;

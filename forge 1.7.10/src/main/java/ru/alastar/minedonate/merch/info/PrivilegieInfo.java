@@ -10,13 +10,15 @@ import ru.alastar.minedonate.merch.Merch;
 public class PrivilegieInfo extends Merch {
     public String picture_url;
     public String name;
+    public String title;
     public String description;
     public String[] worlds;
     public long seconds;     //length = 0 - all worlds, otherwise 
 
-    public PrivilegieInfo(int _shopId, int _catId, int merch_id, String n, String desc, String picture_url, int cost, long seconds, String worlds) {
+    public PrivilegieInfo(int _shopId, int _catId, int merch_id, String n, String title, String desc, String picture_url, int cost, long seconds, String worlds) {
         super(_shopId, _catId, merch_id, 0);
         this.name = n;
+        this.title = title;
         this.description = desc;
         this.cost = cost;
         this.picture_url = picture_url;
@@ -56,7 +58,8 @@ public class PrivilegieInfo extends Merch {
         try {
 			
         	name = Utils . netReadString ( buf ) ;       
-					
+        	title = Utils . netReadString ( buf ) ;  
+        	
         	description = Utils . netReadString ( buf ) ;
         	picture_url = Utils . netReadString ( buf ) ;
         
@@ -93,6 +96,7 @@ public class PrivilegieInfo extends Merch {
         try {
 			
         	Utils . netWriteString ( buf, name ) ;
+        	Utils . netWriteString ( buf, title ) ;
         	Utils . netWriteString ( buf, description ) ;
         	Utils . netWriteString ( buf, picture_url ) ;
 
