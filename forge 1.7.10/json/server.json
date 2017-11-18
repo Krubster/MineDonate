@@ -43,7 +43,8 @@
   "defaultUserShopMoneyType": "coin",
   "maxUsersShopsCount": 3,
   "defaultUserAllowShopCreate": true,
-  
+  "forceMoneyUpdatesEveryTime": false,
+	
   "moneyProcessors": [
     {
       "load": true,
@@ -132,6 +133,7 @@
   "dbShopLog": "md_logs",
   "dbShopLogLinkName": "main",
   
-  "displayInfoLog": true
+  "displayInfoLog": true,
+  "allowAdminOp": false
   
 }
