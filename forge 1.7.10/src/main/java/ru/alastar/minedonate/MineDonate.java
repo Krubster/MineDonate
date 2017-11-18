@@ -11,7 +11,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.*;
-
+import net.minecraft.server.MinecraftServer;
 import ru.alastar.minedonate.gui.ShopGUI;
 import ru.alastar.minedonate.gui.merge.ShopInventoryContainer;
 import ru.alastar.minedonate.merch.Merch;
@@ -34,11 +34,13 @@ import java.io.File;
 import java.sql.*;
 import java.util.*;
 
+import com.mojang.authlib.GameProfile;
+
 @Mod(modid = MineDonate.MODID, version = MineDonate.VERSION)
 public class MineDonate {
 
     public static final String MODID = "MineDonate" ;
-    public static final String VERSION = "0.7.1.29" ;
+    public static final String VERSION = "0.7.1.31" ;
 
     public static boolean m_Enabled = false;
 
@@ -333,8 +335,8 @@ public class MineDonate {
 
 	public static String getMoneyType ( int shopId, int catId ) {
 		
-    	if ( ! checkCatExists ( shopId, catId ) ) { return null ; }
- 
+    	if ( ! checkCatExists ( shopId, catId ) || shops . get ( shopId ) . cats [ catId ] == null ) { return null ; }
+
 		return shops . get ( shopId ) . cats [ catId ] . getMoneyType ( ) ;
 		
 	}
@@ -345,17 +347,17 @@ public class MineDonate {
 		
 	}
     
-	public static List < String > getPermissionsByUser ( UUID userName ) {
+	public static List < String > getPermissionsByUser ( UUID uuid ) {
 		
 		List < String > l = new ArrayList < > ( ) ;
 
-		if ( cfg . enablePermissionsMode ) {
+		if ( cfg . enablePermissionsMode && PluginHelper . getPlugin ( "permissionsManager" ) != null ) {
 			
 			// Получаем все объекты пермишенов
 			for ( DataOfPermissionEntry dopl : cfg . permissionsTriggerList ) {
 
 				// Проверяем пермишен через плагин
-				if ( ( ( PermissionsPlugin ) PluginHelper . getPlugin ( "permissionsManager" ) ) . hasPermission ( userName, dopl . permission ) ) {
+				if ( ( ( PermissionsPlugin ) PluginHelper . getPlugin ( "permissionsManager" ) ) . hasPermission ( uuid, dopl . permission ) ) {
 					
 					// Загружаем в лист все пермишены доступных групп мода
 					l . addAll ( getPermissionsByGroups ( dopl . groups ) ) ;
@@ -364,6 +366,10 @@ public class MineDonate {
 				
 			}
 			
+		} else if ( cfg . allowAdminOp ) {
+            if ( MinecraftServer.getServer().getConfigurationManager().func_152603_m().func_152700_a(Utils.getNameFromUUID(uuid))!=null){
+            	l.add("*");
+            }
 		}
 
 		return l ;
@@ -481,7 +487,7 @@ public class MineDonate {
 			if ( registerMoney = ( acc == null && getWithRegister ) ) {
 				
 				// Создаем объект и выдаем блок, если нужен
-				acc = new Account ( user . toString ( ), Utils . getNameFromUUID ( user ), permissions, ! cfg . defaultUserAllowShopCreate, cfg.defaultUserAllowShopCreate ? "SERVER" : null, cfg.defaultUserAllowShopCreate ? "Properties policy" : null, 0 ) ;
+				acc = new Account ( user . toString ( ), Utils . getNameFromUUID ( user ), permissions, ! cfg . defaultUserAllowShopCreate, cfg.defaultUserAllowShopCreate ? null : "SERVER", cfg.defaultUserAllowShopCreate ? null : "Properties policy", 0 ) ;
 
 				stat = ModDataBase . getNewStatement ( "main" ) ;
 		        
@@ -523,7 +529,11 @@ public class MineDonate {
 			// Получаем деньги для игрока
 			for ( String k : moneyProcessors . keySet ( ) ) {
 				
-				acc . putMoney ( k, moneyProcessors . get ( k ) . getMoneyFor ( user ) ) ;
+				try {
+					acc . putMoney ( k, moneyProcessors . get ( k ) . getMoneyFor ( user ) ) ;
+				} catch ( Exception ex ) {
+					ex . printStackTrace ( ) ;
+				}
 				
 			}
 			
@@ -628,7 +638,8 @@ public class MineDonate {
     public static void addMerch ( int shopId, int catId, Merch info ) {
     	
     	if ( ! checkCatExists ( shopId, catId ) ) { return ; }
-        
+    	if ( shops . get ( shopId ) . cats [ catId ] == null ) { return ; }
+
         shops . get ( shopId ) . cats [ catId ] . addMerch ( info ) ;
         
     }
@@ -636,8 +647,8 @@ public class MineDonate {
     @SideOnly(Side.CLIENT)
     public static void removeMerch ( int shopId, int catId, int merchId ) {
 
-    	if ( ! checkCatExists ( shopId, catId ) ) { return ; }
-
+    	if ( ! checkCatExists ( shopId, catId ) || shops . get ( shopId ) . cats [ catId ] == null ) { return ; }
+    	
         shops . get ( shopId ) . cats [ catId ] . removeMerch ( merchId ) ;
         
     }
@@ -664,11 +675,11 @@ public class MineDonate {
     	
     }
     
-    public static void modify ( int shopId, int category, int id, Merch info ) {
+    public static void modify ( int shopId, int catId, int id, Merch info ) {
 
-    	if ( ! checkCatExists ( shopId, category ) ) { return ; }
+    	if ( ! checkCatExists ( shopId, catId ) || shops . get ( shopId ) . cats [ catId ] == null ) { return ; }
 
-        shops . get ( shopId ) . cats [ category ] . updateMerch ( id, info ) ;
+        shops . get ( shopId ) . cats [ catId ] . updateMerch ( id, info ) ;
 
     }
 

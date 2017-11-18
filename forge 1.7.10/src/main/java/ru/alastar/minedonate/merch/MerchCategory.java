@@ -167,7 +167,7 @@ public abstract class MerchCategory {
     
     public enum Type { 
     	
-    	ITEMS, PRIVELEGIES, REGIONS, ENTITIES, SHOPS
+    	ITEMS, PRIVELEGIES, REGIONS, ENTITIES, SHOPS, CUSTOM
     	
     }
 

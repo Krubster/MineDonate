@@ -96,3 +96,17 @@ re7.1
 	+- ContextMenuManager to no-static field - https://github.com/Pishka/MineDonate/blob/master/forge%201.7.10/src/main/java/ru/alastar/minedonate/gui/ShopGUI.java
 	+- из ModManager переместить canUppendAnotherItemInShop в Account + переместить 10тку из метода в ItemInfo.maxLimit
 	+- из MineDonate переместить проверки добавления в Account + SideOnly
+30
+	+ регистрация в таблице при входе
+	+ не регистрация опред. денег
+	+ ?фикс? какого-то бага с действиями
+	+ фикс контекст. меню
+	+ сообщения в клиентском конфиге lang
+31
+	+ отриц. цена
+	+ allowAdminOp - работа без плагина на пермишены
+	+ сброс данных при смене сервера
+	- список категории в пакетах
+	- катогории в конфиге
+	+ в мерче пермишенах добавить новую колонку с именем группы + добавить в базу md_privelegies новую колонку title
+	- замерить кол-во потоков при обработке пакетов

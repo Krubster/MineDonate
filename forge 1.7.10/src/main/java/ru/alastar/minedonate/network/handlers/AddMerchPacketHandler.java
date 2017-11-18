@@ -24,6 +24,12 @@ public class AddMerchPacketHandler implements IMessageHandler<AddMerchPacket, IM
     @Override
     public IMessage onMessage ( AddMerchPacket message, MessageContext ctx ) {
     	
+    	if ( message . info == null ) {
+    		
+    		return null ;
+    		
+    	}
+    	
         if ( message . info instanceof ShopInfo ) {
         	
         	ShopInfo us = ( ShopInfo ) message . info ;
@@ -44,7 +50,7 @@ public class AddMerchPacketHandler implements IMessageHandler<AddMerchPacket, IM
         	
         }
 
-        MineDonate . addMerch ( message . shopId, message . m_category, message . info ) ;
+        MineDonate . addMerch ( message . shopId, message . catId, message . info ) ;
 
         if ( ShopGUI . instance != null ) {
         

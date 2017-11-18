@@ -16,7 +16,13 @@ public class PlayerJoinEventHandler {
 	public void onPlayerLoggedInEvent ( PlayerEvent . PlayerLoggedInEvent event ) {
    
 		ModNetworkRegistry . sendTo ( ( EntityPlayerMP ) event . player, new CodePacket ( MineDonate . m_Enabled ? CodePacket . Code . MOD_ENABLED : CodePacket . Code . MOD_DISABLED ) ) ;
-	
+		
+		if ( MineDonate . m_Enabled && MineDonate . getAccountFromCache ( event . player ) == null ) {
+			
+			MineDonate . getAccountWithRegister ( event . player . getGameProfile ( ) . getId ( ) ) ;
+			
+		}
+		
 	}
 	   
 }

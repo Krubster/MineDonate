@@ -48,7 +48,7 @@ public class GuiFrameEditEntity extends GuiFrameEditItem {
 				
 				Integer n = Integer . parseInt ( costField . getText ( ) ) ;
     			
-				if ( cost != n ) {
+				if ( cost != n && cost > 0 ) {
 					
 					hideFrame ( g ) ;
 			        

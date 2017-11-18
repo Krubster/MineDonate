@@ -29,6 +29,7 @@ public class DataOfConfig {
 	public String dbUsersNameColumn ;
 	public String dbUsersLinkName ;
 
+	
 	public boolean sellItems ;
 	public String dbItems ;
 	public String itemsMoneyType ;
@@ -85,6 +86,9 @@ public class DataOfConfig {
 	public boolean displayInfoLog ;
 	
 	public Map < String, Object > xProperties ;
+
+	// Разрешить авто-оп прав магазина при выключеном enablePermissionsMode
+	public boolean allowAdminOp;
 
 	public DataOfConfig ( ) {
 		

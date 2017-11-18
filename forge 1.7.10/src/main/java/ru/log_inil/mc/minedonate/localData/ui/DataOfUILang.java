@@ -121,8 +121,9 @@ public class DataOfUILang {
 		add ( actions, type, code, ResponseStatus.ERROR_ACCESS_DENIED, "Access denied!" ) ;
 		add ( actions, type, code, ResponseStatus.ERROR_CAT_NOTFOUND, "Category not found!" ) ;
 		add ( actions, type, code, ResponseStatus.ERROR_ENTRY_NOTFOUND, "Object not found!" ) ;
+		add ( actions, type, code, ResponseStatus.ERROR_NEGATIVE_INTEGER, "Negative integer!" ) ;
 		add ( actions, type, code, ResponseStatus.OK, "Edited!" ) ;
-
+		
 		//
 		
 		type = ManageResponsePacket.ResponseType.SHOP;

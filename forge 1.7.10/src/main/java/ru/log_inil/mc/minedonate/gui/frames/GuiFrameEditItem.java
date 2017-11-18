@@ -247,7 +247,7 @@ public class GuiFrameEditItem extends GuiFrame {
 					
 					Integer n = Integer . parseInt ( costField . getText ( ) ) ;
 	    			
-					if ( cost != n ) {
+					if ( cost != n && cost > 0 ) {
 						
 						g . setLoading ( true ) ;
 						hideFrame ( g ) ;

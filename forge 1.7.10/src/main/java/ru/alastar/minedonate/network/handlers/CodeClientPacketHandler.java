@@ -1,5 +1,7 @@
 package ru.alastar.minedonate.network.handlers;
 
+import java.util.HashMap;
+
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
@@ -78,7 +80,11 @@ public class CodeClientPacketHandler implements IMessageHandler<CodePacket, IMes
     		case MOD_DISABLED:
 
     			MineDonate . m_Enabled = message . code == CodePacket . Code . MOD_ENABLED ;
-        	
+    			
+    			// reload data
+    			MineDonate.acc = null ;
+    			MineDonate.shops = new HashMap<>();
+    			
 			return null ;
 
     		default : break;
