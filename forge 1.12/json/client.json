@@ -1,0 +1,404 @@
+{
+  "cats": {
+    "entities": {
+      "itemLeft": "Осталось: ",
+      "categoryButtonText": "Мобы",
+      "categoryButtonWidth": 45,
+      "itemBuyButton": {
+        "text": "Купить",
+        "width": 44,
+        "height": 20
+      },
+      "addButton": {
+        "text": "Добавить",
+        "width": 50,
+        "height": 20
+      }
+    },
+    "itemsAndBlocks": {
+      "itemLeft": "Осталось: ",
+      "categoryButtonText": "Предметы",
+      "categoryButtonWidth": 50,
+      "itemBuyButton": {
+        "text": "Купить",
+        "width": 44,
+        "height": 20
+      },
+      "addButton": {
+        "text": "Добавить",
+        "width": 50,
+        "height": 20
+      }
+    },
+    "privelegies": {
+      "categoryButtonText": "Привилегии",
+      "categoryButtonWidth": 70,
+      "itemBuyButton": {
+        "text": "Купить",
+        "width": 75,
+        "height": 20
+      }
+    },
+    "regions": {
+      "categoryButtonText": "Регионы",
+      "categoryButtonWidth": 55,
+      "itemBuyButton": {
+        "text": "Купить",
+        "width": 44,
+        "height": 20
+      }
+    },
+    "shops": {
+      "dontShowFreezed": false,
+      "lockGoShopButtonWhenFreezed": true,
+      "itemBuyButton": {
+        "text": "Перейти",
+        "width": 44,
+        "height": 20
+      },
+      "dontShowFreezed": false,
+      "lockGoShopButtonWhenFreezed": true,
+      "lockedGoButton": {
+        "text": "Заблокирован",
+        "width": 64,
+        "height": 20
+      },
+      "viewMyShopsButton": {
+        "text": "Мои магазины",
+        "width": 64,
+        "height": 20
+      },
+      "createNewShopButton": {
+        "text": "Создать магазин",
+        "width": 75,
+        "height": 20
+      },
+      "categoryButtonText": "Другие магазины",
+      "categoryButtonWidth": 80
+    }
+  },
+  "frames": {
+    "createShop": {
+      "okButton": {
+        "text": "Создать",
+        "width": 50,
+        "height": 20
+      },
+      "cancelButton": {
+        "text": "Отмена",
+        "width": 40,
+        "height": 20
+      },
+      "title": "Создание нового магазина",
+      "textField": {
+        "textHolder": "Введите имя",
+        "text": "",
+        "width": 160,
+        "height": 20
+      }
+    },
+    "renameShop": {
+      "okButton": {
+        "text": "Ок",
+        "width": 27,
+        "height": 20
+      },
+      "cancelButton": {
+        "text": "Отмена",
+        "width": 40,
+        "height": 20
+      },
+      "title": "Переименование магазина",
+      "textField": {
+        "textHolder": "Введите имя",
+        "text": "",
+        "width": 160,
+        "height": 20
+      }
+    },
+    "deleteShop": {
+      "deleteButton": {
+        "text": "Удалить",
+        "width": 55,
+        "height": 20
+      },
+      "cancelButton": {
+        "text": "Отмена",
+        "width": 40,
+        "height": 20
+      },
+      "title": "Удалить предмет",
+      "codeField": {
+        "textHolder": "Код",
+        "text": "",
+        "width": 160,
+        "height": 20
+      },
+      "text": "Введите код подтверждения[%code%]"
+    },
+    "freezeShop": {
+      "okButton": {
+        "text": "Заблокировать",
+        "width": 77,
+        "height": 20
+      },
+      "cancelButton": {
+        "text": "Отмена",
+        "width": 40,
+        "height": 20
+      },
+      "title": "Блокировка магазина",
+      "textField": {
+        "textHolder": "Причина",
+        "text": "",
+        "width": 160,
+        "height": 20
+      }
+    },
+    "addItem": {
+      "createButton": {
+        "text": "Добавить",
+        "width": 60,
+        "height": 20
+      },
+      "cancelButton": {
+        "text": "Отмена",
+        "width": 40,
+        "height": 20
+      },
+      "title": "Добавить новый предмет",
+      "nameField": {
+        "textHolder": "Имя товара",
+        "text": "",
+        "width": 120,
+        "height": 20
+      },
+      "limitField": {
+        "textHolder": "Лимит",
+        "text": "",
+        "width": 40,
+        "height": 20
+      },
+      "costField": {
+        "textHolder": "Цена",
+        "text": "",
+        "width": 40,
+        "height": 20
+      }
+    },
+    "editItem": {
+      "editButton": {
+        "text": "Ок",
+        "width": 27,
+        "height": 20
+      },
+      "cancelButton": {
+        "text": "Отмена",
+        "width": 40,
+        "height": 20
+      },
+      "title": "Редактировать предмет",
+      "nameField": {
+        "textHolder": "Имя",
+        "text": "",
+        "width": 120,
+        "height": 20
+      },
+      "limitField": {
+        "textHolder": "Лимит",
+        "text": "",
+        "width": 40,
+        "height": 20
+      },
+      "costField": {
+        "textHolder": "Цена",
+        "text": "",
+        "width": 40,
+        "height": 20
+      }
+    },
+    "deleteItem": {
+      "deleteButton": {
+        "text": "Удалить",
+        "width": 55,
+        "height": 20
+      },
+      "cancelButton": {
+        "text": "Отмена",
+        "width": 40,
+        "height": 20
+      },
+      "title": "Удалить предмет",
+      "codeField": {
+        "textHolder": "Код",
+        "text": "",
+        "width": 160,
+        "height": 20
+      },
+      "text": "Введите код подтверждения[%code%]"
+    },
+    "addEntity": {
+      "createButton": {
+        "text": "Добавить",
+        "width": 60,
+        "height": 20
+      },
+      "cancelButton": {
+        "text": "Отмена",
+        "width": 40,
+        "height": 20
+      },
+      "title": "Добавление нового моба",
+      "nameField": {
+        "textHolder": "Имя",
+        "text": "",
+        "width": 120,
+        "height": 20
+      },
+      "limitField": {
+        "textHolder": "Лимит",
+        "text": "",
+        "width": 40,
+        "height": 20
+      },
+      "costField": {
+        "textHolder": "Цена",
+        "text": "",
+        "width": 40,
+        "height": 20
+      }
+    },
+    "editEntity": {
+      "editButton": {
+        "text": "Ок",
+        "width": 27,
+        "height": 20
+      },
+      "cancelButton": {
+        "text": "Отмена",
+        "width": 40,
+        "height": 20
+      },
+      "title": "Редактирование моба",
+      "nameField": {
+        "textHolder": "Имя",
+        "text": "",
+        "width": 120,
+        "height": 20
+      },
+      "limitField": {
+        "textHolder": "Лимит",
+        "text": "",
+        "width": 40,
+        "height": 20
+      },
+      "costField": {
+        "textHolder": "Цена",
+        "text": "",
+        "width": 40,
+        "height": 20
+      }
+    },
+    "deleteEntity": {
+      "deleteButton": {
+        "text": "Удалить",
+        "width": 55,
+        "height": 20
+      },
+      "cancelButton": {
+        "text": "Отмена",
+        "width": 40,
+        "height": 20
+      },
+      "title": "Удаление моба",
+      "codeField": {
+        "textHolder": "Код",
+        "text": "",
+        "width": 160,
+        "height": 20
+      },
+      "text": "Введите код подтверждения[%code%]"
+    },
+    "freezeAccount": {
+      "okButton": {
+        "text": "Заблокировать",
+        "width": 77,
+        "height": 20
+      },
+      "cancelButton": {
+        "text": "Отмена",
+        "width": 40,
+        "height": 20
+      },
+      "title": "Блокировка аккаунта",
+      "textField": {
+        "textHolder": "Причина",
+        "text": "",
+        "width": 160,
+        "height": 20
+      }
+    }
+  },
+  "exitButton": {
+    "text": "Выход",
+    "width": 44,
+    "height": 20
+  },
+  "returnButton": {
+    "text": "Обратно",
+    "width": 46,
+    "height": 20
+  },
+  "loadingText": "Загрузка данных...",
+  "addSearchButton": true,
+  "searchButton": {
+    "text": "Поиск",
+    "width": 40,
+    "height": 20
+  },
+  "searchField": {
+    "textHolder": "Введите искомое имя",
+    "text": "",
+    "width": 160,
+    "height": 20
+  },
+  "mergeButton": {
+    "text": "Далее",
+    "width": 40,
+    "height": 20
+  },
+  "moneyGroups": [
+    {
+      "id": "rub",
+      "pricePref": "",
+      "priceSuff": "",
+      "balancePref": "",
+      "balanceSuff": "",
+      "imageIsResource": true,
+      "image": "minedonate:images/rub.png"
+    },
+    {
+      "id": "coin",
+      "pricePref": "",
+      "priceSuff": "",
+      "balancePref": "",
+      "balanceSuff": "",
+      "imageIsResource": true,
+      "image": "minedonate:images/coin.png"
+    }
+  ],
+  "lang": {
+    "editEntityMerch": "Редактировать",
+    "deleteEntityMerch": "Удалить",
+    "editItemMerch": "Редактировать",
+    "deleteItemMerch": "Удалить",
+    "freezeShop": "Заблокировать",
+    "unfreezeShop": "Разблокировать",
+    "renameShop": "Переименовать",
+    "deleteShop": "Удалить",
+    "freezeAccount": "Заблокировать владельца",
+    "unfreezeAccount": "Разблокировать владельца",
+    "shopFreezer": "Заблокировал: ",
+    "shopFreezReason": "Причина: "
+  }
+}

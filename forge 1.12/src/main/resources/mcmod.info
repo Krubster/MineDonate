@@ -1,0 +1,16 @@
+[
+{
+  "modid": "minedonate",
+  "name": "Donate UI",
+  "description": "Allows to monetize your server",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Alastar", "log_inil"],
+  "credits": "Thanks to rubukkit guys for this mod",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

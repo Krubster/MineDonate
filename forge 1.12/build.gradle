@@ -1,0 +1,85 @@
+buildscript {
+    
+    repositories {
+        jcenter()
+        mavenCentral()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+    }
+    
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.3'
+    }
+}
+apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'java' // or 'groovy'. Must be explicitly applied
+apply plugin: 'com.github.johnrengelman.shadow'
+
+def getDate() {
+    return new Date().format('yyyy.MM.dd')
+}
+
+version = getDate()
+group = "minedonate"
+archivesBaseName = "minedonate"
+
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+sourceCompatibility = targetCompatibility = '1.8'
+compileJava {
+    sourceCompatibility = targetCompatibility = '1.8'
+}
+
+minecraft {
+    version = "1.12.2-14.23.0.2491"
+    runDir = "run"
+    mappings = "snapshot_20170624"
+    makeObfSourceJar = false
+}
+
+configurations {
+    shadow
+    compile.extendsFrom shadow
+}
+
+dependencies {
+    shadow   'org.apache.commons:commons-dbcp2:2.1.1'
+    shadow   'org.apache.commons:commons-pool2:2.4.2'
+    shadow   'mysql:mysql-connector-java:8.0.11'
+}
+shadowJar {
+    archiveName = tasks.jar.archiveName
+    configurations = [project.configurations.shadow]
+    relocate 'org.apache.commons', 'ru.alastar.org.shadowedlibs.org.apache.commons'
+}
+
+jar {
+    configurations.shadow.each { dep ->
+        from(project.zipTree(dep)){
+            exclude 'META-INF', 'META-INF/**'
+        }
+    }
+}
+jar.dependsOn shadowJar
+jar.enabled = false
+
+processResources {
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+        expand 'version': project.version, 'mcversion': project.minecraft.version
+    }
+
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
